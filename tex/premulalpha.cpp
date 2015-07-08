@@ -115,7 +115,7 @@ bool Test13()
                     printe( "Failed comparing premultiply alpha [single] of image data (HRESULT %08X)\n", hr );
                 }
 
-                if ( !IsEqual( mse, 0.005246f ) )
+                if ( !IsEqual( mse, 0.005031f ) )
                 {
                     success = false;
                     printe( "Failed comparing premultiply alpha [single] of image data (%f)\n", mse );
@@ -166,7 +166,7 @@ bool Test13()
                     printe( "Failed comparing premultiply alpha [single sRGB] of image data (HRESULT %08X)\n", hr );
                 }
 
-                if ( !IsEqual( mse, 0.002352f ) )
+                if ( !IsEqual( mse, 0.002190f ) )
                 {
                     success = false;
                     printe( "Failed comparing premultiply alpha [single sRGB] of image data (%f)\n", mse );
@@ -254,8 +254,7 @@ bool Test13()
                 }
                 else
                 {
-                    static float result[9] = { 0.005246f, 0.005675f, 0.006069f, 0.006719f, 0.007541f, 0.009025f, 0.012920f, 0.018651f, 0.020023f };
-
+                    static float result[9] = { 0.005031f, 0.005441f, 0.005821f, 0.006450f, 0.007194f, 0.008633f, 0.012355f, 0.018454f, 0.020023f };
                     for( size_t j = 0; j < metadata.mipLevels; ++j )
                     {
                         float mse, mseV[4];
