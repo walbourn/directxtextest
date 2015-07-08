@@ -27,7 +27,7 @@ extern bool Test03();
 
 TestInfo g_Tests[] =
 {
-//    { "Resize", Test01 },
+    { "Resize", Test01 },
     { "GenerateMipMaps", Test02 },
     { "GenerateMipMaps3D", Test03 },
 };
