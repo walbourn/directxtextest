@@ -754,7 +754,7 @@ bool Test02()
                     const uint8_t* expected2 = nullptr;
                     if ( g_MipMapMedia[index].options & FLAGS_ALTMD5_MASK )
                     {
-                        expected2 = g_AltMD5[ ((g_MipMapMedia[index].options & FLAGS_ALTMD5_MASK) >> 4) - 1 ].md5_cubic;
+                        expected2 = g_AltMD5[ ((g_MipMapMedia[index].options & FLAGS_ALTMD5_MASK) >> 4) - 1 ].md5_tri;
                     }
 
                     hr = MD5Checksum( mipChainTriangle, digest );
@@ -1801,7 +1801,7 @@ bool Test03()
                     const uint8_t* expected2 = nullptr;
                     if ( g_MipMapMedia3D[index].options & FLAGS_ALTMD5_MASK )
                     {
-                        expected2 = g_AltMD5[ ((g_MipMapMedia3D[index].options & FLAGS_ALTMD5_MASK) >> 4) - 1 ].md5_cubic;
+                        expected2 = g_AltMD5[ ((g_MipMapMedia3D[index].options & FLAGS_ALTMD5_MASK) >> 4) - 1 ].md5_tri;
                     }
 
                     hr = MD5Checksum( mipChainTriangle, digest );
