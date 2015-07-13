@@ -23,7 +23,7 @@
 #define printmetachk(md) print( "...\n(check) w: %Iu x h: %Iu x d: %Iu\narraySize: %Iu  mips: %Iu\nmiscFlags: %08X miscFlags2: %08X format: %u dimension: %u\n", \
                               (md)->width, (md)->height, (md)->depth, (md)->arraySize, (md)->mipLevels, (md)->miscFlags, (md)->miscFlags2, (md)->format, (md)->dimension );
 
-#define printdigest(str,digest) print( "%s: {0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x},\n", str, \
+#define printdigest(str,digest) print( "%s:\n0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x\n", str, \
                                        digest[0], digest[1], digest[2], digest[3], digest[4], digest[5], digest[6], digest[7], \
                                        digest[8], digest[9], digest[10], digest[11], digest[12], digest[13], digest[14], digest[15] );
 
