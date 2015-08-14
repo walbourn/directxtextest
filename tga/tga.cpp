@@ -107,7 +107,12 @@ bool Test01()
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( g_TestMedia[index].fname, szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
 #ifdef DEBUG
         OutputDebugString(szPath);
@@ -156,7 +161,12 @@ bool Test02()
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( g_TestMedia[index].fname, szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
 #ifdef DEBUG
         OutputDebugString(szPath);
@@ -235,7 +245,12 @@ bool Test03()
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( g_TestMedia[index].fname, szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
 #ifdef DEBUG
         OutputDebugString(szPath);
@@ -302,7 +317,12 @@ bool Test04()
     for( size_t index=0; index < _countof(g_SaveMedia); ++index )
     {
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( g_SaveMedia[index].source, szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(g_SaveMedia[index].source, szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
 #ifdef DEBUG
         OutputDebugString(szPath);
@@ -333,61 +353,63 @@ bool Test04()
                 success = false;
                 printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
             }
-
-            Blob blob;
-            hr = SaveToTGAMemory( *image.GetImage(0,0,0), blob );
-            if ( FAILED(hr) )
-            {
-                success = false;
-                printe( "Failed writing tga to memory (HRESULT %08X):\n%S\n", hr, szPath );
-            }
             else
             {
-                //TESTEST- { HANDLE h = CreateFileW( L"C:\\TEMP\\XXX.TGA", GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, 0, 0 ); DWORD bytesWritten; WriteFile( h, blob.GetBufferPointer(), static_cast<DWORD>( blob.GetBufferSize() ), &bytesWritten, 0 ); CloseHandle(h); }
-                TexMetadata metadata2;
-                ScratchImage image2;
-                hr = LoadFromTGAMemory( blob.GetBufferPointer(), blob.GetBufferSize(), &metadata2, image2 );
+                Blob blob;
+                hr = SaveToTGAMemory( *image.GetImage(0,0,0), blob );
                 if ( FAILED(hr) )
                 {
                     success = false;
-                    printe( "Failed reading back written tga to memory (HRESULT %08X):\n%S\n", hr, szPath );
-                }
-                else if ( metadata.width != metadata2.width
-                          || metadata.height != metadata2.height
-                          || metadata.arraySize != metadata2.arraySize
-                          || metadata2.mipLevels != 1
-                          || metadata.dimension != metadata2.dimension
-                          || g_SaveMedia[index].sav_format != metadata2.format )
-                { // Formats can vary for readback, and miplevel is going to be 1 for TGA images
-                    success = false;
-                    printe( "Metadata error in tga memory readback:\n%S\n", szPath );
-                    printmeta( &metadata2 );
-                    printmetachk( &metadata );
+                    printe( "Failed writing tga to memory (HRESULT %08X):\n%S\n", hr, szPath );
                 }
                 else
                 {
-// TESTTEST- SaveScratchImage( L"C:\\Temp\\XXX1.DDS", DDS_FLAGS_NONE, image2 );
-
-                    const uint8_t* expected = digest;
-                    if ( g_SaveMedia[index].options & FLAGS_ALTMD5_MASK )
-                    {
-                        expected = g_AltMD5[ ((g_SaveMedia[index].options & 0xf0) >> 4) - 1 ].md5;
-                    }
-
-                    uint8_t digest2[16];
-                    hr = MD5Checksum( image2, digest2 );
+                    //TESTEST- { HANDLE h = CreateFileW( L"C:\\TEMP\\XXX.TGA", GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, 0, 0 ); DWORD bytesWritten; WriteFile( h, blob.GetBufferPointer(), static_cast<DWORD>( blob.GetBufferSize() ), &bytesWritten, 0 ); CloseHandle(h); }
+                    TexMetadata metadata2;
+                    ScratchImage image2;
+                    hr = LoadFromTGAMemory( blob.GetBufferPointer(), blob.GetBufferSize(), &metadata2, image2 );
                     if ( FAILED(hr) )
                     {
                         success = false;
-                        printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed reading back written tga to memory (HRESULT %08X):\n%S\n", hr, szPath );
                     }
-                    else if ( memcmp( expected, digest2, 16 ) != 0 )
-                    {
+                    else if ( metadata.width != metadata2.width
+                              || metadata.height != metadata2.height
+                              || metadata.arraySize != metadata2.arraySize
+                              || metadata2.mipLevels != 1
+                              || metadata.dimension != metadata2.dimension
+                              || g_SaveMedia[index].sav_format != metadata2.format )
+                    { // Formats can vary for readback, and miplevel is going to be 1 for TGA images
                         success = false;
-                        printe( "MD5 checksum of reloaded data doesn't match original:\n%S\n", szPath );
+                        printe( "Metadata error in tga memory readback:\n%S\n", szPath );
+                        printmeta( &metadata2 );
+                        printmetachk( &metadata );
                     }
                     else
-                        ++npass;
+                    {
+    // TESTTEST- SaveScratchImage( L"C:\\Temp\\XXX1.DDS", DDS_FLAGS_NONE, image2 );
+
+                        const uint8_t* expected = digest;
+                        if ( g_SaveMedia[index].options & FLAGS_ALTMD5_MASK )
+                        {
+                            expected = g_AltMD5[ ((g_SaveMedia[index].options & 0xf0) >> 4) - 1 ].md5;
+                        }
+
+                        uint8_t digest2[16];
+                        hr = MD5Checksum( image2, digest2 );
+                        if ( FAILED(hr) )
+                        {
+                            success = false;
+                            printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%S\n", hr, szPath );
+                        }
+                        else if ( memcmp( expected, digest2, 16 ) != 0 )
+                        {
+                            success = false;
+                            printe( "MD5 checksum of reloaded data doesn't match original:\n%S\n", szPath );
+                        }
+                        else
+                            ++npass;
+                    }
                 }
             }
         }
@@ -413,7 +435,12 @@ bool Test05()
     for( size_t index=0; index < _countof(g_SaveMedia); ++index )
     {
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( g_SaveMedia[index].source, szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(g_SaveMedia[index].source, szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
 #ifdef DEBUG
         OutputDebugString(szPath);
@@ -426,7 +453,12 @@ bool Test05()
         _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
         WCHAR tempDir[MAX_PATH];
-        ExpandEnvironmentStringsW( TEMP_PATH L"tga", tempDir, MAX_PATH );
+        ret = ExpandEnvironmentStringsW(TEMP_PATH L"tga", tempDir, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
         CreateDirectoryW( tempDir, NULL );
 
@@ -457,59 +489,61 @@ bool Test05()
                 success = false;
                 printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
             }
-
-            hr = SaveToTGAFile( *image.GetImage(0,0,0), szDestPath );
-            if ( FAILED(hr) )
-            {
-                success = false;
-                printe( "Failed writing tga to (HRESULT %08X):\n%S\n", hr, szDestPath );
-            }
             else
             {
-                TexMetadata metadata2;
-                ScratchImage image2;
-                hr = LoadFromTGAFile( szDestPath, &metadata2, image2 );
+                hr = SaveToTGAFile( *image.GetImage(0,0,0), szDestPath );
                 if ( FAILED(hr) )
                 {
                     success = false;
-                    printe( "Failed reading back written tga to (HRESULT %08X):\n%S\n", hr, szDestPath );
-                }
-                else if ( metadata.width != metadata2.width
-                          || metadata.height != metadata2.height
-                          || metadata.arraySize != metadata2.arraySize
-                          || metadata2.mipLevels != 1
-                          || metadata.dimension != metadata2.dimension
-                          || g_SaveMedia[index].sav_format != metadata2.format  )
-                {   // Formats can vary for readback, and miplevel is going to be 1 for TGA images
-                    success = false;
-                    printe( "Metadata error in tga readback:\n%S\n", szDestPath );
-                    printmeta( &metadata2 );
-                    printmetachk( &metadata );
+                    printe( "Failed writing tga to (HRESULT %08X):\n%S\n", hr, szDestPath );
                 }
                 else
                 {
-// TESTTEST- SaveScratchImage( L"C:\\Temp\\XXX2.DDS", DDS_FLAGS_NONE, image2 );
-
-                    const uint8_t* expected = digest;
-                    if ( g_SaveMedia[index].options & FLAGS_ALTMD5_MASK )
-                    {
-                        expected = g_AltMD5[ ((g_SaveMedia[index].options & 0xf0) >> 4) - 1 ].md5;
-                    }
-
-                    uint8_t digest2[16];
-                    hr = MD5Checksum( image2, digest2 );
+                    TexMetadata metadata2;
+                    ScratchImage image2;
+                    hr = LoadFromTGAFile( szDestPath, &metadata2, image2 );
                     if ( FAILED(hr) )
                     {
                         success = false;
-                        printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed reading back written tga to (HRESULT %08X):\n%S\n", hr, szDestPath );
                     }
-                    else if ( memcmp( expected, digest2, 16 ) != 0 )
-                    {
+                    else if ( metadata.width != metadata2.width
+                              || metadata.height != metadata2.height
+                              || metadata.arraySize != metadata2.arraySize
+                              || metadata2.mipLevels != 1
+                              || metadata.dimension != metadata2.dimension
+                              || g_SaveMedia[index].sav_format != metadata2.format  )
+                    {   // Formats can vary for readback, and miplevel is going to be 1 for TGA images
                         success = false;
-                        printe( "MD5 checksum of reloaded data doesn't match original:\n%S\n", szPath );
+                        printe( "Metadata error in tga readback:\n%S\n", szDestPath );
+                        printmeta( &metadata2 );
+                        printmetachk( &metadata );
                     }
                     else
-                        ++npass;
+                    {
+    // TESTTEST- SaveScratchImage( L"C:\\Temp\\XXX2.DDS", DDS_FLAGS_NONE, image2 );
+
+                        const uint8_t* expected = digest;
+                        if ( g_SaveMedia[index].options & FLAGS_ALTMD5_MASK )
+                        {
+                            expected = g_AltMD5[ ((g_SaveMedia[index].options & 0xf0) >> 4) - 1 ].md5;
+                        }
+
+                        uint8_t digest2[16];
+                        hr = MD5Checksum( image2, digest2 );
+                        if ( FAILED(hr) )
+                        {
+                            success = false;
+                            printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%S\n", hr, szPath );
+                        }
+                        else if ( memcmp( expected, digest2, 16 ) != 0 )
+                        {
+                            success = false;
+                            printe( "MD5 checksum of reloaded data doesn't match original:\n%S\n", szPath );
+                        }
+                        else
+                            ++npass;
+                    }
                 }
             }
         }

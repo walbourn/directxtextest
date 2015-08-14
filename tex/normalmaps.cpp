@@ -23,7 +23,12 @@ bool Test11()
 
     // Heightmap
     WCHAR szPath[MAX_PATH];
-    ExpandEnvironmentStringsW( MEDIA_PATH L"heightmap.dds", szPath, MAX_PATH );
+    DWORD ret = ExpandEnvironmentStringsW(MEDIA_PATH L"heightmap.dds", szPath, MAX_PATH);
+    if ( !ret || ret > MAX_PATH )
+    {
+        printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+        return false;
+    }
 
 #ifdef DEBUG
     OutputDebugString(szPath);
@@ -36,7 +41,12 @@ bool Test11()
     _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
     WCHAR tempDir[MAX_PATH];
-    ExpandEnvironmentStringsW( TEMP_PATH L"nmap", tempDir, MAX_PATH );
+    ret = ExpandEnvironmentStringsW(TEMP_PATH L"nmap", tempDir, MAX_PATH);
+    if ( !ret || ret > MAX_PATH )
+    {
+        printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+        return false;
+    }
 
     CreateDirectoryW( tempDir, NULL );
 
@@ -47,15 +57,15 @@ bool Test11()
     HRESULT hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, &metadata, imagehmap );
     if ( FAILED(hr) )
     {
-        success = false;
         printe( "Failed loading dds (HRESULT %08X):\n%S\n", hr, szPath );
+        return false;
     }
     else if ( memcmp( &metadata, &checkhmap, sizeof(TexMetadata) ) != 0 )
     {
-        success = false;
         printe( "Metadata error in DDS:\n%S\n", szPath );
         printmeta( &metadata );
         printmetachk( &checkhmap );
+        return false;
     }
 
     // ComputeNormalMap (single)
@@ -92,7 +102,7 @@ bool Test11()
         {
             // TODO - Verify the image data (perhaps MD5 checksum)
 
-            WCHAR tname[MAX_PATH];
+            WCHAR tname[MAX_PATH] = { 0 };
             wcscpy_s( tname, fname );
             wcscat_s( tname, L"_c" );
 

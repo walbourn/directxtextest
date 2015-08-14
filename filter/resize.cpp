@@ -10,6 +10,8 @@
 
 using namespace DirectX;
 
+#pragma warning(disable:6262) // test code doesn't need conservative stack size
+
 enum
 {
     FLAGS_NONE              = 0x0,
@@ -317,7 +319,12 @@ bool Test01()
     for( size_t index=0; index < _countof(g_ResizeMedia); ++index )
     {
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( g_ResizeMedia[index].fname, szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(g_ResizeMedia[index].fname, szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
 #ifdef DEBUG
         OutputDebugString(szPath);
@@ -335,7 +342,12 @@ bool Test01()
         }
 
         WCHAR tempDir[MAX_PATH];
-        ExpandEnvironmentStringsW( TEMP_PATH L"resize", tempDir, MAX_PATH );
+        ret = ExpandEnvironmentStringsW(TEMP_PATH L"resize", tempDir, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
         CreateDirectoryW( tempDir, NULL );
 
@@ -1352,7 +1364,7 @@ bool Test01()
                             }
                         }
 
-                        WCHAR tname[MAX_PATH];
+                        WCHAR tname[MAX_PATH] = { 0 };
                         wcscpy_s( tname, fname2 );
                         wcscat_s( tname, L"_complex" );
 

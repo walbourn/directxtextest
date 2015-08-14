@@ -44,7 +44,12 @@ bool Test15()
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( g_TestMedia[index].fname, szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
 #ifdef DEBUG
         OutputDebugString(szPath);
@@ -57,7 +62,12 @@ bool Test15()
         _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
         WCHAR tempDir[MAX_PATH];
-        ExpandEnvironmentStringsW( TEMP_PATH L"plane", tempDir, MAX_PATH );
+        ret = ExpandEnvironmentStringsW(TEMP_PATH L"plane", tempDir, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
         CreateDirectoryW( tempDir, NULL );
 
@@ -105,7 +115,7 @@ bool Test15()
             {
                 // TODO - Verify the image data (perhaps MD5 checksum)
 
-                WCHAR tname[MAX_PATH];
+                WCHAR tname[MAX_PATH] = { 0 };
                 wcscpy_s( tname, fname );
                 wcscat_s( tname, L"_" );
                 wcscat_s( tname, GetName(g_TestMedia[index].tformat) );

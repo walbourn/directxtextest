@@ -6,7 +6,7 @@
 
 #include "directxtest.h"
 
-#include "directxtex.h"
+#include "directxtexp.h"
 
 using namespace DirectX;
 
@@ -624,8 +624,8 @@ static const TestMedia g_TestMedia[] =
 { FLAGS_YUV, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_P010, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaP010.dds", { 0xca,0xab,0x57,0xea,0x8b,0xdf,0x5f,0xc1,0x99,0x54,0xa5,0xe2,0x73,0xc6,0x83,0x09 } },
 { FLAGS_YUV, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_P016, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaP016.dds", { 0xca,0xab,0x57,0xea,0x8b,0xdf,0x5f,0xc1,0x99,0x54,0xa5,0xe2,0x73,0xc6,0x83,0x09 } },
 { FLAGS_YUV, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_NV11, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenanv11.dds", { 0x12,0x34,0xaa,0x1b,0xd2,0x55,0x64,0xdc,0xe0,0xf2,0xee,0x74,0x7c,0xf7,0xc5,0x95 } },
-{ FLAGS_XBOX, { 1920, 1485, 1, 1, 1, 0, 0, DXGI_FORMAT(116) /* DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT */, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"7E3_1920x1485.dds", { 0xab,0x84,0xa2,0x18,0x2c,0xa9,0x09,0x5a,0x13,0x5e,0x73,0x4d,0x21,0x04,0xbe,0xce } },
-{ FLAGS_XBOX, { 1920, 1485, 1, 1, 1, 0, 0, DXGI_FORMAT(117) /* DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT */, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"6E4_1920x1485.dds", { 0x97,0x5f,0x49,0x43,0x48,0x5a,0xdd,0xc7,0x51,0x0d,0x56,0x1c,0x3c,0x29,0x79,0x81 } },
+{ FLAGS_XBOX, { 1920, 1485, 1, 1, 1, 0, 0, XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"7E3_1920x1485.dds", { 0xab,0x84,0xa2,0x18,0x2c,0xa9,0x09,0x5a,0x13,0x5e,0x73,0x4d,0x21,0x04,0xbe,0xce } },
+{ FLAGS_XBOX, { 1920, 1485, 1, 1, 1, 0, 0, XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"6E4_1920x1485.dds", { 0x97,0x5f,0x49,0x43,0x48,0x5a,0xdd,0xc7,0x51,0x0d,0x56,0x1c,0x3c,0x29,0x79,0x81 } },
 { FLAGS_NONE, { 512, 512, 1, 1, 10, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"TooBig1.dds", {0x10,0x70,0xc7,0xa5,0x79,0x9f,0x5c,0xcb,0x5d,0xaa,0x56,0xb8,0x05,0x4a,0x35,0xdc} },
 { FLAGS_NONE, { 512, 512, 1, 1, 10, 0, 0, DXGI_FORMAT_BC1_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"TooBig2.dds", {0x2d,0x4f,0xaa,0xbf,0xf9,0xe5,0x83,0x7f,0xa9,0x7a,0x8d,0x8f,0x30,0xd7,0x60,0x09} },
 };
@@ -732,7 +732,12 @@ bool Test01()
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( g_TestMedia[index].fname, szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
 #ifdef DEBUG
         OutputDebugString(szPath);
@@ -841,7 +846,12 @@ bool Test02()
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( g_TestMedia[index].fname, szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
 #ifdef DEBUG
         OutputDebugString(szPath);
@@ -1107,7 +1117,12 @@ bool Test03()
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( g_TestMedia[index].fname, szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
 #ifdef DEBUG
         OutputDebugString(szPath);
@@ -1363,7 +1378,12 @@ bool Test04()
     for( size_t index=0; index < _countof(g_SaveMedia); ++index )
     {
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( g_SaveMedia[index].fname, szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(g_SaveMedia[index].fname, szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
 #ifdef DEBUG
         OutputDebugString(szPath);
@@ -1391,279 +1411,68 @@ bool Test04()
                 pass = false;
                 printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
             }
-
-            Blob blob;
-            hr = SaveToDDSMemory( image.GetImages(), image.GetImageCount(), image.GetMetadata(), DDS_FLAGS_NONE, blob );
-            if ( FAILED(hr) )
-            {
-                success = false;
-                pass = false;
-                printe( "Failed writing DDS to memory (HRESULT %08X):\n%S\n", hr, szPath );
-            }
             else
             {
-                TexMetadata metadata2;
-                ScratchImage image2;
-                hr = LoadFromDDSMemory( blob.GetBufferPointer(), blob.GetBufferSize(), DDS_FLAGS_NONE, &metadata2, image2 );
+                Blob blob;
+                hr = SaveToDDSMemory( image.GetImages(), image.GetImageCount(), image.GetMetadata(), DDS_FLAGS_NONE, blob );
                 if ( FAILED(hr) )
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed reading back written DDS to memory (HRESULT %08X):\n%S\n", hr, szPath );
+                    printe( "Failed writing DDS to memory (HRESULT %08X):\n%S\n", hr, szPath );
                 }
                 else
                 {
-                    TexMetadata chk = metadata;
-
-                    // For legacy headers, we lose miscFlags2 information except for the case of PM alpha for BC2/BC3
-                    if ( chk.miscFlags2 != 0 )
-                    {
-                        if ( chk.IsPMAlpha() && ((chk.format == DXGI_FORMAT_BC2_UNORM) || (chk.format == DXGI_FORMAT_BC3_UNORM)) )
-                        {
-                            chk.miscFlags2 = TEX_ALPHA_MODE_PREMULTIPLIED;
-                        }
-                        else
-                        {
-                            chk.miscFlags2 = 0;
-                        }
-                    }
-
-                    if ( ( chk.dimension == TEX_DIMENSION_TEXTURE1D
-                           && metadata2.dimension != TEX_DIMENSION_TEXTURE1D
-                           && metadata2.dimension != TEX_DIMENSION_TEXTURE2D )
-                         || ( chk.dimension != TEX_DIMENSION_TEXTURE1D
-                              && chk.dimension != metadata2.dimension ) )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Metadata error in dds dim memory readback:\n%S\n", szPath );
-                        printmeta( &metadata2 );
-                        printmetachk( &chk );
-                    }
-                    else if ( chk.width != metadata2.width
-                              || chk.height != metadata2.height
-                              || chk.arraySize != metadata2.arraySize
-                              || chk.mipLevels != metadata2.mipLevels
-                              || chk.miscFlags != metadata2.miscFlags
-                              || chk.miscFlags2 != metadata2.miscFlags2 )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Metadata error in dds memory readback:\n%S\n", szPath );
-                        printmeta( &metadata2 );
-                        printmetachk( &chk );
-                    }
-                    else
-                    {
-                        uint8_t digest2[16];
-                        hr = MD5Checksum( image2, digest2 );
-                        if ( FAILED(hr) )
-                        {
-                            success = false;
-                            pass = false;
-                            printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%S\n", hr, szPath );
-                        }
-                        else if ( memcmp( digest, digest2, 16 ) != 0 )
-                        {
-                            success = false;
-                            pass = false;
-                            printe( "MD5 checksum of reloaded data doesn't match original:\n%S\n", szPath );
-                        }
-                    }
-                }
-            }
-
-            // Test flag to force DX10 extended header use
-            Blob blob2;
-            hr = SaveToDDSMemory( image.GetImages(), image.GetImageCount(), image.GetMetadata(), DDS_FLAGS_FORCE_DX10_EXT, blob2 );
-            if ( FAILED(hr) )
-            {
-                success = false;
-                pass = false;
-                printe( "Failed writing DDS with DDS_FLAGS_FORCE_DX10_EXT to memory (HRESULT %08X):\n%S\n", hr, szPath );
-            }
-            else
-            {
-                TexMetadata metadata2;
-                ScratchImage image2;
-                hr = LoadFromDDSMemory( blob2.GetBufferPointer(), blob2.GetBufferSize(), DDS_FLAGS_NONE, &metadata2, image2 );
-                if ( FAILED(hr) )
-                {
-                    success = false;
-                    pass = false;
-                    printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_DX10_EXT to memory (HRESULT %08X):\n%S\n", hr, szPath );
-                }
-                else if ( metadata.width != metadata2.width
-                          || metadata.height != metadata2.height
-                          || metadata.arraySize != metadata2.arraySize
-                          || metadata.mipLevels != metadata2.mipLevels
-                          || metadata.dimension != metadata2.dimension
-                          || metadata.miscFlags != metadata2.miscFlags
-                          || metadata2.miscFlags2 != 0 ) // For "DX10" headers compatible with D3DX10/D3DX11, we always lose miscFlags2
-                {
-                    success = false;
-                    pass = false;
-                    printe( "Metadata error in dds with DDS_FLAGS_FORCE_DX10_EXT readback from memory:\n%S\n", szPath );
-                    printmeta( &metadata2 );
-                    printmetachk( &metadata );
-                }
-                else
-                {
-                    hr = IsDDSHeaderPresent( blob2.GetBufferPointer(), blob2.GetBufferSize() );
+                    TexMetadata metadata2;
+                    ScratchImage image2;
+                    hr = LoadFromDDSMemory( blob.GetBufferPointer(), blob.GetBufferSize(), DDS_FLAGS_NONE, &metadata2, image2 );
                     if ( FAILED(hr) )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed checking DDS header type in memory (HRESULT %08X):\n%S\n", hr, szPath );
-                    }
-                    else if ( hr == S_FALSE )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Write with DDS_FLAGS_FORCE_DX10_EXT did not result in DX10 extended header in memory:\n%S\n", szPath );
+                        printe( "Failed reading back written DDS to memory (HRESULT %08X):\n%S\n", hr, szPath );
                     }
                     else
                     {
-                        uint8_t digest2[16];
-                        hr = MD5Checksum( image2, digest2 );
-                        if ( FAILED(hr) )
-                        {
-                            success = false;
-                            pass = false;
-                            printe( "Failed computing MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT reloaded image data (HRESULT %08X):\n%S\n", hr, szPath );
-                        }
-                        else if ( memcmp( digest, digest2, 16 ) != 0 )
-                        {
-                            success = false;
-                            pass = false;
-                            printe( "MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT reloaded data doesn't match original:\n%S\n", szPath );
-                        }
-                    }
-                }
-            }
+                        TexMetadata chk = metadata;
 
-            // Test flag to force DX10 extended header with miscflags2 data use
-            blob2.Release();
-            hr = SaveToDDSMemory( image.GetImages(), image.GetImageCount(), image.GetMetadata(), DDS_FLAGS_FORCE_DX10_EXT_MISC2, blob2 );
-            if ( FAILED(hr) )
-            {
-                success = false;
-                pass = false;
-                printe( "Failed writing DDS with DDS_FLAGS_FORCE_DX10_EXT_MISC2 to memory (HRESULT %08X):\n%S\n", hr, szPath );
-            }
-            else
-            {
-                TexMetadata metadata2;
-                ScratchImage image2;
-                hr = LoadFromDDSMemory( blob2.GetBufferPointer(), blob2.GetBufferSize(), DDS_FLAGS_NONE, &metadata2, image2 );
-                if ( FAILED(hr) )
-                {
-                    success = false;
-                    pass = false;
-                    printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_DX10_EXT_MISC2 to memory (HRESULT %08X):\n%S\n", hr, szPath );
-                }
-                else if ( metadata.width != metadata2.width
-                          || metadata.height != metadata2.height
-                          || metadata.arraySize != metadata2.arraySize
-                          || metadata.mipLevels != metadata2.mipLevels
-                          || metadata.dimension != metadata2.dimension
-                          || metadata.miscFlags != metadata2.miscFlags
-                          || metadata.miscFlags2 != metadata.miscFlags2 )
-                {
-                    success = false;
-                    pass = false;
-                    printe( "Metadata error in dds with DDS_FLAGS_FORCE_DX10_EXT_MISC2 readback from memory:\n%S\n", szPath );
-                    printmeta( &metadata2 );
-                    printmetachk( &metadata );
-                }
-                else
-                {
-                    hr = IsDDSHeaderPresent( blob2.GetBufferPointer(), blob2.GetBufferSize() );
-                    if ( FAILED(hr) )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed checking DDS header type in memory (HRESULT %08X):\n%S\n", hr, szPath );
-                    }
-                    else if ( hr == S_FALSE )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Write with DDS_FLAGS_FORCE_DX10_EXT_MISC2 did not result in DX10 extended header in memory:\n%S\n", szPath );
-                    }
-                    else
-                    {
-                        uint8_t digest2[16];
-                        hr = MD5Checksum( image2, digest2 );
-                        if ( FAILED(hr) )
+                        // For legacy headers, we lose miscFlags2 information except for the case of PM alpha for BC2/BC3
+                        if ( chk.miscFlags2 != 0 )
                         {
-                            success = false;
-                            pass = false;
-                            printe( "Failed computing MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT_MISC2 reloaded image data (HRESULT %08X):\n%S\n", hr, szPath );
+                            if ( chk.IsPMAlpha() && ((chk.format == DXGI_FORMAT_BC2_UNORM) || (chk.format == DXGI_FORMAT_BC3_UNORM)) )
+                            {
+                                chk.miscFlags2 = TEX_ALPHA_MODE_PREMULTIPLIED;
+                            }
+                            else
+                            {
+                                chk.miscFlags2 = 0;
+                            }
                         }
-                        else if ( memcmp( digest, digest2, 16 ) != 0 )
-                        {
-                            success = false;
-                            pass = false;
-                            printe( "MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT_MISC2 reloaded data doesn't match original:\n%S\n", szPath );
-                        }
-                    }
-                }
-            }
 
-            // Test larger case of a row pitch that is larger than 1-byte alignment
-            if ( !IsCompressed( metadata.format ) && !IsPacked( metadata.format ) && !IsPlanar( metadata.format ) )
-            {
-                blob2.Release();
-                ScratchImage imageWide;
-                hr = CreateWideImage( image.GetImages(), image.GetImageCount(), image.GetMetadata(), imageWide ); 
-                if ( FAILED(hr) )
-                {
-                    success = false;
-                    pass = false;
-                    printe( "Failed creating wide test image (HRESULT %08X):\n%S\n", hr, szPath );
-                }
-                else if ( image.GetImage(0,0,0)->rowPitch >= imageWide.GetImage(0,0,0)->rowPitch )
-                {
-                    success = false;
-                    pass = false;
-                    printe( "Failed creating wide test image - result is same as source: %u %u\n%S\n", image.GetImage(0,0,0)->rowPitch, imageWide.GetImage(0,0,0)->rowPitch, szPath );
-                }
-                else
-                {
-                    DWORD ddsflags = ( metadata.dimension == TEX_DIMENSION_TEXTURE1D ) ? DDS_FLAGS_FORCE_DX10_EXT : DDS_FLAGS_NONE;
-
-                    hr = SaveToDDSMemory( imageWide.GetImages(), imageWide.GetImageCount(), imageWide.GetMetadata(), ddsflags, blob2 );
-                    if ( FAILED(hr) )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed writing DDS with wide image to memory (HRESULT %08X):\n%S\n", hr, szPath );
-                    }
-                    else
-                    {
-                        TexMetadata metadata2;
-                        ScratchImage image2;
-                        hr = LoadFromDDSMemory( blob2.GetBufferPointer(), blob2.GetBufferSize(), DDS_FLAGS_NONE, &metadata2, image2 );
-                        if ( FAILED(hr) )
+                        if ( ( chk.dimension == TEX_DIMENSION_TEXTURE1D
+                               && metadata2.dimension != TEX_DIMENSION_TEXTURE1D
+                               && metadata2.dimension != TEX_DIMENSION_TEXTURE2D )
+                             || ( chk.dimension != TEX_DIMENSION_TEXTURE1D
+                                  && chk.dimension != metadata2.dimension ) )
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed reading back written DDS with wide image to memory (HRESULT %08X):\n%S\n", hr, szPath );
-                        }
-                        else if ( metadata.width != metadata2.width
-                                  || metadata.height != metadata2.height
-                                  || metadata.arraySize != metadata2.arraySize
-                                  || metadata.mipLevels != metadata2.mipLevels
-                                  || metadata.dimension != metadata2.dimension
-                                  || metadata.miscFlags != metadata2.miscFlags
-                                  || metadata.miscFlags2 != metadata.miscFlags2 )
-                        {
-                            success = false;
-                            pass = false;
-                            printe( "Metadata error in dds with wide image readback from memory:\n%S\n", szPath );
+                            printe( "Metadata error in dds dim memory readback:\n%S\n", szPath );
                             printmeta( &metadata2 );
-                            printmetachk( &metadata );
+                            printmetachk( &chk );
+                        }
+                        else if ( chk.width != metadata2.width
+                                  || chk.height != metadata2.height
+                                  || chk.arraySize != metadata2.arraySize
+                                  || chk.mipLevels != metadata2.mipLevels
+                                  || chk.miscFlags != metadata2.miscFlags
+                                  || chk.miscFlags2 != metadata2.miscFlags2 )
+                        {
+                            success = false;
+                            pass = false;
+                            printe( "Metadata error in dds memory readback:\n%S\n", szPath );
+                            printmeta( &metadata2 );
+                            printmetachk( &chk );
                         }
                         else
                         {
@@ -1673,13 +1482,226 @@ bool Test04()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed computing MD5 checksum of wide image reloaded image data (HRESULT %08X):\n%S\n", hr, szPath );
+                                printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%S\n", hr, szPath );
                             }
                             else if ( memcmp( digest, digest2, 16 ) != 0 )
                             {
                                 success = false;
                                 pass = false;
-                                printe( "MD5 checksum of wide image reloaded data doesn't match original:\n%S\n", szPath );
+                                printe( "MD5 checksum of reloaded data doesn't match original:\n%S\n", szPath );
+                            }
+                        }
+                    }
+                }
+
+                // Test flag to force DX10 extended header use
+                Blob blob2;
+                hr = SaveToDDSMemory( image.GetImages(), image.GetImageCount(), image.GetMetadata(), DDS_FLAGS_FORCE_DX10_EXT, blob2 );
+                if ( FAILED(hr) )
+                {
+                    success = false;
+                    pass = false;
+                    printe( "Failed writing DDS with DDS_FLAGS_FORCE_DX10_EXT to memory (HRESULT %08X):\n%S\n", hr, szPath );
+                }
+                else
+                {
+                    TexMetadata metadata2;
+                    ScratchImage image2;
+                    hr = LoadFromDDSMemory( blob2.GetBufferPointer(), blob2.GetBufferSize(), DDS_FLAGS_NONE, &metadata2, image2 );
+                    if ( FAILED(hr) )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_DX10_EXT to memory (HRESULT %08X):\n%S\n", hr, szPath );
+                    }
+                    else if ( metadata.width != metadata2.width
+                              || metadata.height != metadata2.height
+                              || metadata.arraySize != metadata2.arraySize
+                              || metadata.mipLevels != metadata2.mipLevels
+                              || metadata.dimension != metadata2.dimension
+                              || metadata.miscFlags != metadata2.miscFlags
+                              || metadata2.miscFlags2 != 0 ) // For "DX10" headers compatible with D3DX10/D3DX11, we always lose miscFlags2
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Metadata error in dds with DDS_FLAGS_FORCE_DX10_EXT readback from memory:\n%S\n", szPath );
+                        printmeta( &metadata2 );
+                        printmetachk( &metadata );
+                    }
+                    else
+                    {
+                        hr = IsDDSHeaderPresent( blob2.GetBufferPointer(), blob2.GetBufferSize() );
+                        if ( FAILED(hr) )
+                        {
+                            success = false;
+                            pass = false;
+                            printe( "Failed checking DDS header type in memory (HRESULT %08X):\n%S\n", hr, szPath );
+                        }
+                        else if ( hr == S_FALSE )
+                        {
+                            success = false;
+                            pass = false;
+                            printe( "Write with DDS_FLAGS_FORCE_DX10_EXT did not result in DX10 extended header in memory:\n%S\n", szPath );
+                        }
+                        else
+                        {
+                            uint8_t digest2[16];
+                            hr = MD5Checksum( image2, digest2 );
+                            if ( FAILED(hr) )
+                            {
+                                success = false;
+                                pass = false;
+                                printe( "Failed computing MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT reloaded image data (HRESULT %08X):\n%S\n", hr, szPath );
+                            }
+                            else if ( memcmp( digest, digest2, 16 ) != 0 )
+                            {
+                                success = false;
+                                pass = false;
+                                printe( "MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT reloaded data doesn't match original:\n%S\n", szPath );
+                            }
+                        }
+                    }
+                }
+
+                // Test flag to force DX10 extended header with miscflags2 data use
+                blob2.Release();
+                hr = SaveToDDSMemory( image.GetImages(), image.GetImageCount(), image.GetMetadata(), DDS_FLAGS_FORCE_DX10_EXT_MISC2, blob2 );
+                if ( FAILED(hr) )
+                {
+                    success = false;
+                    pass = false;
+                    printe( "Failed writing DDS with DDS_FLAGS_FORCE_DX10_EXT_MISC2 to memory (HRESULT %08X):\n%S\n", hr, szPath );
+                }
+                else
+                {
+                    TexMetadata metadata2;
+                    ScratchImage image2;
+                    hr = LoadFromDDSMemory( blob2.GetBufferPointer(), blob2.GetBufferSize(), DDS_FLAGS_NONE, &metadata2, image2 );
+                    if ( FAILED(hr) )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_DX10_EXT_MISC2 to memory (HRESULT %08X):\n%S\n", hr, szPath );
+                    }
+                    else if ( metadata.width != metadata2.width
+                              || metadata.height != metadata2.height
+                              || metadata.arraySize != metadata2.arraySize
+                              || metadata.mipLevels != metadata2.mipLevels
+                              || metadata.dimension != metadata2.dimension
+                              || metadata.miscFlags != metadata2.miscFlags
+                              || metadata.miscFlags2 != metadata.miscFlags2 )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Metadata error in dds with DDS_FLAGS_FORCE_DX10_EXT_MISC2 readback from memory:\n%S\n", szPath );
+                        printmeta( &metadata2 );
+                        printmetachk( &metadata );
+                    }
+                    else
+                    {
+                        hr = IsDDSHeaderPresent( blob2.GetBufferPointer(), blob2.GetBufferSize() );
+                        if ( FAILED(hr) )
+                        {
+                            success = false;
+                            pass = false;
+                            printe( "Failed checking DDS header type in memory (HRESULT %08X):\n%S\n", hr, szPath );
+                        }
+                        else if ( hr == S_FALSE )
+                        {
+                            success = false;
+                            pass = false;
+                            printe( "Write with DDS_FLAGS_FORCE_DX10_EXT_MISC2 did not result in DX10 extended header in memory:\n%S\n", szPath );
+                        }
+                        else
+                        {
+                            uint8_t digest2[16];
+                            hr = MD5Checksum( image2, digest2 );
+                            if ( FAILED(hr) )
+                            {
+                                success = false;
+                                pass = false;
+                                printe( "Failed computing MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT_MISC2 reloaded image data (HRESULT %08X):\n%S\n", hr, szPath );
+                            }
+                            else if ( memcmp( digest, digest2, 16 ) != 0 )
+                            {
+                                success = false;
+                                pass = false;
+                                printe( "MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT_MISC2 reloaded data doesn't match original:\n%S\n", szPath );
+                            }
+                        }
+                    }
+                }
+
+                // Test larger case of a row pitch that is larger than 1-byte alignment
+                if ( !IsCompressed( metadata.format ) && !IsPacked( metadata.format ) && !IsPlanar( metadata.format ) )
+                {
+                    blob2.Release();
+                    ScratchImage imageWide;
+                    hr = CreateWideImage( image.GetImages(), image.GetImageCount(), image.GetMetadata(), imageWide ); 
+                    if ( FAILED(hr) )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Failed creating wide test image (HRESULT %08X):\n%S\n", hr, szPath );
+                    }
+                    else if ( image.GetImage(0,0,0)->rowPitch >= imageWide.GetImage(0,0,0)->rowPitch )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Failed creating wide test image - result is same as source: %Iu %Iu\n%S\n", image.GetImage(0,0,0)->rowPitch, imageWide.GetImage(0,0,0)->rowPitch, szPath );
+                    }
+                    else
+                    {
+                        DWORD ddsflags = ( metadata.dimension == TEX_DIMENSION_TEXTURE1D ) ? DDS_FLAGS_FORCE_DX10_EXT : DDS_FLAGS_NONE;
+
+                        hr = SaveToDDSMemory( imageWide.GetImages(), imageWide.GetImageCount(), imageWide.GetMetadata(), ddsflags, blob2 );
+                        if ( FAILED(hr) )
+                        {
+                            success = false;
+                            pass = false;
+                            printe( "Failed writing DDS with wide image to memory (HRESULT %08X):\n%S\n", hr, szPath );
+                        }
+                        else
+                        {
+                            TexMetadata metadata2;
+                            ScratchImage image2;
+                            hr = LoadFromDDSMemory( blob2.GetBufferPointer(), blob2.GetBufferSize(), DDS_FLAGS_NONE, &metadata2, image2 );
+                            if ( FAILED(hr) )
+                            {
+                                success = false;
+                                pass = false;
+                                printe( "Failed reading back written DDS with wide image to memory (HRESULT %08X):\n%S\n", hr, szPath );
+                            }
+                            else if ( metadata.width != metadata2.width
+                                      || metadata.height != metadata2.height
+                                      || metadata.arraySize != metadata2.arraySize
+                                      || metadata.mipLevels != metadata2.mipLevels
+                                      || metadata.dimension != metadata2.dimension
+                                      || metadata.miscFlags != metadata2.miscFlags
+                                      || metadata.miscFlags2 != metadata.miscFlags2 )
+                            {
+                                success = false;
+                                pass = false;
+                                printe( "Metadata error in dds with wide image readback from memory:\n%S\n", szPath );
+                                printmeta( &metadata2 );
+                                printmetachk( &metadata );
+                            }
+                            else
+                            {
+                                uint8_t digest2[16];
+                                hr = MD5Checksum( image2, digest2 );
+                                if ( FAILED(hr) )
+                                {
+                                    success = false;
+                                    pass = false;
+                                    printe( "Failed computing MD5 checksum of wide image reloaded image data (HRESULT %08X):\n%S\n", hr, szPath );
+                                }
+                                else if ( memcmp( digest, digest2, 16 ) != 0 )
+                                {
+                                    success = false;
+                                    pass = false;
+                                    printe( "MD5 checksum of wide image reloaded data doesn't match original:\n%S\n", szPath );
+                                }
                             }
                         }
                     }
@@ -1713,7 +1735,12 @@ bool Test05()
     for( size_t index=0; index < _countof(g_SaveMedia); ++index )
     {
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( g_SaveMedia[index].fname, szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(g_SaveMedia[index].fname, szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
 #ifdef DEBUG
         OutputDebugString(szPath);
@@ -1726,7 +1753,12 @@ bool Test05()
         _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
         WCHAR tempDir[MAX_PATH];
-        ExpandEnvironmentStringsW( TEMP_PATH L"dds", tempDir, MAX_PATH );
+        ret = ExpandEnvironmentStringsW(TEMP_PATH L"dds", tempDir, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
         CreateDirectoryW( tempDir, NULL );
 
@@ -1734,7 +1766,7 @@ bool Test05()
         _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, fname, L".dds" );
 
         // Form second dest path
-        WCHAR fname2[_MAX_FNAME];
+        WCHAR fname2[_MAX_FNAME] = { 0 };
         wcscpy_s( fname2, fname );
         wcscat_s( fname2, L"_DX10" );
 
@@ -1776,268 +1808,66 @@ bool Test05()
                 pass = false;
                 printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
             }
-
-            hr = SaveToDDSFile( image.GetImages(), image.GetImageCount(), image.GetMetadata(), DDS_FLAGS_NONE, szDestPath );
-            if ( FAILED(hr) )
-            {
-                success = false;
-                pass = false;
-                printe( "Failed writing DDS to (HRESULT %08X):\n%S\n", hr, szDestPath );
-            }
             else
             {
-                TexMetadata metadata2;
-                ScratchImage image2;
-                hr = LoadFromDDSFile( szDestPath, DDS_FLAGS_NONE, &metadata2, image2 );
+                hr = SaveToDDSFile( image.GetImages(), image.GetImageCount(), image.GetMetadata(), DDS_FLAGS_NONE, szDestPath );
                 if ( FAILED(hr) )
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed reading back written DDS to (HRESULT %08X):\n%S\n", hr, szDestPath );
+                    printe( "Failed writing DDS to (HRESULT %08X):\n%S\n", hr, szDestPath );
                 }
                 else
                 {
-                    TexMetadata chk = metadata;
-
-                    // For legacy headers, we lose miscFlags2 information except for the case of PM alpha for BC2/BC3
-                    if ( chk.miscFlags2 != 0 )
-                    {
-                        if ( chk.IsPMAlpha() && ((chk.format == DXGI_FORMAT_BC2_UNORM) || (chk.format == DXGI_FORMAT_BC3_UNORM)) )
-                        {
-                            chk.miscFlags2 = TEX_ALPHA_MODE_PREMULTIPLIED;
-                        }
-                        else
-                        {
-                            chk.miscFlags2 = 0;
-                        }
-                    }
-
-                    if ( ( chk.dimension == TEX_DIMENSION_TEXTURE1D
-                           && metadata2.dimension != TEX_DIMENSION_TEXTURE1D
-                           && metadata2.dimension != TEX_DIMENSION_TEXTURE2D )
-                         || ( chk.dimension != TEX_DIMENSION_TEXTURE1D
-                              && chk.dimension != metadata2.dimension ) )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Metadata error in dds readback:\n%S\n", szDestPath );
-                        printmeta( &metadata2 );
-                        printmetachk( &chk );
-                    }
-                    else if ( chk.width != metadata2.width
-                              || chk.height != metadata2.height
-                              || chk.arraySize != metadata2.arraySize
-                              || chk.mipLevels != metadata2.mipLevels
-                              || chk.miscFlags != metadata2.miscFlags
-                              || chk.miscFlags2 != metadata2.miscFlags2 )
-                    {
-                        success = false;
-                        pass = false;
-                        printmeta( &metadata2 );
-                        printmetachk( &chk );
-                    }
-                    else
-                    {
-                        uint8_t digest2[16];
-                        hr = MD5Checksum( image2, digest2 );
-                        if ( FAILED(hr) )
-                        {
-                            success = false;
-                            pass = false;
-                            printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%S\n", hr, szDestPath );
-                        }
-                        else if ( memcmp( digest, digest2, 16 ) != 0 )
-                        {
-                            success = false;
-                            pass = false;
-                            printe( "MD5 checksum of reloaded data doesn't match original:\n%S\n", szDestPath );
-                        }
-                    }
-                }
-            }
-
-            // Test flag to force DX10 extended header use
-            hr = SaveToDDSFile( image.GetImages(), image.GetImageCount(), image.GetMetadata(), DDS_FLAGS_FORCE_DX10_EXT, szDestPathDX10 );
-            if ( FAILED(hr) )
-            {
-                success = false;
-                pass = false;
-                printe( "Failed writing DDS with DDS_FLAGS_FORCE_DX10_EXT to (HRESULT %08X):\n%S\n", hr, szDestPathDX10 );
-            }
-            else
-            {
-                TexMetadata metadata2;
-                ScratchImage image2;
-                hr = LoadFromDDSFile( szDestPathDX10, DDS_FLAGS_NONE, &metadata2, image2 );
-                if ( FAILED(hr) )
-                {
-                    success = false;
-                    pass = false;
-                    printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_DX10_EXT to (HRESULT %08X):\n%S\n", hr, szDestPathDX10 );
-                }
-                else if ( metadata.width != metadata2.width
-                          || metadata.height != metadata2.height
-                          || metadata.arraySize != metadata2.arraySize
-                          || metadata.mipLevels != metadata2.mipLevels
-                          || metadata.dimension != metadata2.dimension
-                          || metadata.miscFlags != metadata2.miscFlags
-                          || metadata2.miscFlags2 != 0 ) // For "DX10" headers compatible with D3DX10/D3DX11, we always lose miscFlags2
-                {
-                    success = false;
-                    pass = false;
-                    printe( "Metadata error in dds with DDS_FLAGS_FORCE_DX10_EXT readback:\n%S\n", szDestPathDX10 );
-                    printmeta( &metadata2 );
-                    printmetachk( &metadata );
-                }
-                else
-                {
-                    hr = IsDDSHeaderPresent( szDestPathDX10 );
+                    TexMetadata metadata2;
+                    ScratchImage image2;
+                    hr = LoadFromDDSFile( szDestPath, DDS_FLAGS_NONE, &metadata2, image2 );
                     if ( FAILED(hr) )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed checking DDS header type (HRESULT %08X):\n%S\n", hr, szDestPathDX10 );
-                    }
-                    else if ( hr == S_FALSE )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Write with DDS_FLAGS_FORCE_DX10_EXT did not result in DX10 extended header:\n%S\n", szDestPathDX10 );
+                        printe( "Failed reading back written DDS to (HRESULT %08X):\n%S\n", hr, szDestPath );
                     }
                     else
                     {
-                        uint8_t digest2[16];
-                        hr = MD5Checksum( image2, digest2 );
-                        if ( FAILED(hr) )
-                        {
-                            success = false;
-                            pass = false;
-                            printe( "Failed computing MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT reloaded image data (HRESULT %08X):\n%S\n", hr, szDestPathDX10 );
-                        }
-                        else if ( memcmp( digest, digest2, 16 ) != 0 )
-                        {
-                            success = false;
-                            pass = false;
-                            printe( "MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT reloaded data doesn't match original:\n%S\n", szDestPathDX10 );
-                        }
-                    }
-                }
-            }
+                        TexMetadata chk = metadata;
 
-            // Test flag to force DX10 extended header with miscflags2 data use
-            hr = SaveToDDSFile( image.GetImages(), image.GetImageCount(), image.GetMetadata(), DDS_FLAGS_FORCE_DX10_EXT_MISC2, szDestPathDX10_2 );
-            if ( FAILED(hr) )
-            {
-                success = false;
-                pass = false;
-                printe( "Failed writing DDS with DDS_FLAGS_FORCE_DX10_EXT_MISC2 to (HRESULT %08X):\n%S\n", hr, szDestPathDX10_2 );
-            }
-            else
-            {
-                TexMetadata metadata2;
-                ScratchImage image2;
-                hr = LoadFromDDSFile( szDestPathDX10_2, DDS_FLAGS_NONE, &metadata2, image2 );
-                if ( FAILED(hr) )
-                {
-                    success = false;
-                    pass = false;
-                    printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_DX10_EXT_MISC2 to (HRESULT %08X):\n%S\n", hr, szDestPathDX10_2 );
-                }
-                else if ( metadata.width != metadata2.width
-                          || metadata.height != metadata2.height
-                          || metadata.arraySize != metadata2.arraySize
-                          || metadata.mipLevels != metadata2.mipLevels
-                          || metadata.dimension != metadata2.dimension
-                          || metadata.miscFlags != metadata2.miscFlags
-                          || metadata.miscFlags2 != metadata2.miscFlags2 )
-                {
-                    success = false;
-                    pass = false;
-                    printe( "Metadata error in dds with DDS_FLAGS_FORCE_DX10_EXT_MISC2 readback:\n%S\n", szDestPathDX10_2 );
-                    printmeta( &metadata2 );
-                    printmetachk( &metadata );
-                }
-                else
-                {
-                    hr = IsDDSHeaderPresent( szDestPathDX10_2 );
-                    if ( FAILED(hr) )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed checking DDS header type (HRESULT %08X):\n%S\n", hr, szDestPathDX10_2 );
-                    }
-                    else if ( hr == S_FALSE )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Write with DDS_FLAGS_FORCE_DX10_EXT_MISC2 did not result in DX10 extended header:\n%S\n", szDestPathDX10_2 );
-                    }
-                    else
-                    {
-                        uint8_t digest2[16];
-                        hr = MD5Checksum( image2, digest2 );
-                        if ( FAILED(hr) )
+                        // For legacy headers, we lose miscFlags2 information except for the case of PM alpha for BC2/BC3
+                        if ( chk.miscFlags2 != 0 )
                         {
-                            success = false;
-                            pass = false;
-                            printe( "Failed computing MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT_MISC2 reloaded image data (HRESULT %08X):\n%S\n", hr, szDestPathDX10_2 );
+                            if ( chk.IsPMAlpha() && ((chk.format == DXGI_FORMAT_BC2_UNORM) || (chk.format == DXGI_FORMAT_BC3_UNORM)) )
+                            {
+                                chk.miscFlags2 = TEX_ALPHA_MODE_PREMULTIPLIED;
+                            }
+                            else
+                            {
+                                chk.miscFlags2 = 0;
+                            }
                         }
-                        else if ( memcmp( digest, digest2, 16 ) != 0 )
-                        {
-                            success = false;
-                            pass = false;
-                            printe( "MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT_MISC2 reloaded data doesn't match original:\n%S\n", szDestPathDX10_2 );
-                        }
-                    }
-                }
-            }
 
-            // Test larger case of a row pitch that is larger than 1-byte alignment
-            if ( !IsCompressed( metadata.format ) && !IsPacked( metadata.format ) && !IsPlanar( metadata.format ) )
-            {
-                ScratchImage imageWide;
-                hr = CreateWideImage( image.GetImages(), image.GetImageCount(), image.GetMetadata(), imageWide ); 
-                if ( FAILED(hr) )
-                {
-                    success = false;
-                    pass = false;
-                    printe( "Failed creating wide test image (HRESULT %08X):\n%S\n", hr, szPath );
-                }
-                else
-                {
-                    DWORD ddsflags = ( metadata.dimension == TEX_DIMENSION_TEXTURE1D ) ? DDS_FLAGS_FORCE_DX10_EXT : DDS_FLAGS_NONE;
-
-                    hr = SaveToDDSFile( imageWide.GetImages(), imageWide.GetImageCount(), imageWide.GetMetadata(), ddsflags, szDestPathWide );
-                    if ( FAILED(hr) )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed writing DDS with wide image to (HRESULT %08X):\n%S\n", hr, szDestPathWide );
-                    }
-                    else
-                    {
-                        TexMetadata metadata2;
-                        ScratchImage image2;
-                        hr = LoadFromDDSFile( szDestPathWide, DDS_FLAGS_NONE, &metadata2, image2 );
-                        if ( FAILED(hr) )
+                        if ( ( chk.dimension == TEX_DIMENSION_TEXTURE1D
+                               && metadata2.dimension != TEX_DIMENSION_TEXTURE1D
+                               && metadata2.dimension != TEX_DIMENSION_TEXTURE2D )
+                             || ( chk.dimension != TEX_DIMENSION_TEXTURE1D
+                                  && chk.dimension != metadata2.dimension ) )
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed reading back written DDS with wide image to (HRESULT %08X):\n%S\n", hr, szDestPathWide );
-                        }
-                        else if ( metadata.width != metadata2.width
-                                  || metadata.height != metadata2.height
-                                  || metadata.arraySize != metadata2.arraySize
-                                  || metadata.mipLevels != metadata2.mipLevels
-                                  || metadata.dimension != metadata2.dimension
-                                  || metadata.miscFlags != metadata2.miscFlags
-                                  || metadata.miscFlags2 != metadata.miscFlags2 )
-                        {
-                            success = false;
-                            pass = false;
-                            printe( "Metadata error in dds with wide image readback:\n%S\n", szDestPathWide );
+                            printe( "Metadata error in dds readback:\n%S\n", szDestPath );
                             printmeta( &metadata2 );
-                            printmetachk( &metadata );
+                            printmetachk( &chk );
+                        }
+                        else if ( chk.width != metadata2.width
+                                  || chk.height != metadata2.height
+                                  || chk.arraySize != metadata2.arraySize
+                                  || chk.mipLevels != metadata2.mipLevels
+                                  || chk.miscFlags != metadata2.miscFlags
+                                  || chk.miscFlags2 != metadata2.miscFlags2 )
+                        {
+                            success = false;
+                            pass = false;
+                            printmeta( &metadata2 );
+                            printmetachk( &chk );
                         }
                         else
                         {
@@ -2047,13 +1877,217 @@ bool Test05()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed computing MD5 checksum of wide image reloaded image data (HRESULT %08X):\n%S\n", hr, szDestPathWide );
+                                printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%S\n", hr, szDestPath );
                             }
                             else if ( memcmp( digest, digest2, 16 ) != 0 )
                             {
                                 success = false;
                                 pass = false;
-                                printe( "MD5 checksum of wide image reloaded data doesn't match original:\n%S\n", szDestPathWide );
+                                printe( "MD5 checksum of reloaded data doesn't match original:\n%S\n", szDestPath );
+                            }
+                        }
+                    }
+                }
+
+                // Test flag to force DX10 extended header use
+                hr = SaveToDDSFile( image.GetImages(), image.GetImageCount(), image.GetMetadata(), DDS_FLAGS_FORCE_DX10_EXT, szDestPathDX10 );
+                if ( FAILED(hr) )
+                {
+                    success = false;
+                    pass = false;
+                    printe( "Failed writing DDS with DDS_FLAGS_FORCE_DX10_EXT to (HRESULT %08X):\n%S\n", hr, szDestPathDX10 );
+                }
+                else
+                {
+                    TexMetadata metadata2;
+                    ScratchImage image2;
+                    hr = LoadFromDDSFile( szDestPathDX10, DDS_FLAGS_NONE, &metadata2, image2 );
+                    if ( FAILED(hr) )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_DX10_EXT to (HRESULT %08X):\n%S\n", hr, szDestPathDX10 );
+                    }
+                    else if ( metadata.width != metadata2.width
+                              || metadata.height != metadata2.height
+                              || metadata.arraySize != metadata2.arraySize
+                              || metadata.mipLevels != metadata2.mipLevels
+                              || metadata.dimension != metadata2.dimension
+                              || metadata.miscFlags != metadata2.miscFlags
+                              || metadata2.miscFlags2 != 0 ) // For "DX10" headers compatible with D3DX10/D3DX11, we always lose miscFlags2
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Metadata error in dds with DDS_FLAGS_FORCE_DX10_EXT readback:\n%S\n", szDestPathDX10 );
+                        printmeta( &metadata2 );
+                        printmetachk( &metadata );
+                    }
+                    else
+                    {
+                        hr = IsDDSHeaderPresent( szDestPathDX10 );
+                        if ( FAILED(hr) )
+                        {
+                            success = false;
+                            pass = false;
+                            printe( "Failed checking DDS header type (HRESULT %08X):\n%S\n", hr, szDestPathDX10 );
+                        }
+                        else if ( hr == S_FALSE )
+                        {
+                            success = false;
+                            pass = false;
+                            printe( "Write with DDS_FLAGS_FORCE_DX10_EXT did not result in DX10 extended header:\n%S\n", szDestPathDX10 );
+                        }
+                        else
+                        {
+                            uint8_t digest2[16];
+                            hr = MD5Checksum( image2, digest2 );
+                            if ( FAILED(hr) )
+                            {
+                                success = false;
+                                pass = false;
+                                printe( "Failed computing MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT reloaded image data (HRESULT %08X):\n%S\n", hr, szDestPathDX10 );
+                            }
+                            else if ( memcmp( digest, digest2, 16 ) != 0 )
+                            {
+                                success = false;
+                                pass = false;
+                                printe( "MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT reloaded data doesn't match original:\n%S\n", szDestPathDX10 );
+                            }
+                        }
+                    }
+                }
+
+                // Test flag to force DX10 extended header with miscflags2 data use
+                hr = SaveToDDSFile( image.GetImages(), image.GetImageCount(), image.GetMetadata(), DDS_FLAGS_FORCE_DX10_EXT_MISC2, szDestPathDX10_2 );
+                if ( FAILED(hr) )
+                {
+                    success = false;
+                    pass = false;
+                    printe( "Failed writing DDS with DDS_FLAGS_FORCE_DX10_EXT_MISC2 to (HRESULT %08X):\n%S\n", hr, szDestPathDX10_2 );
+                }
+                else
+                {
+                    TexMetadata metadata2;
+                    ScratchImage image2;
+                    hr = LoadFromDDSFile( szDestPathDX10_2, DDS_FLAGS_NONE, &metadata2, image2 );
+                    if ( FAILED(hr) )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_DX10_EXT_MISC2 to (HRESULT %08X):\n%S\n", hr, szDestPathDX10_2 );
+                    }
+                    else if ( metadata.width != metadata2.width
+                              || metadata.height != metadata2.height
+                              || metadata.arraySize != metadata2.arraySize
+                              || metadata.mipLevels != metadata2.mipLevels
+                              || metadata.dimension != metadata2.dimension
+                              || metadata.miscFlags != metadata2.miscFlags
+                              || metadata.miscFlags2 != metadata2.miscFlags2 )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Metadata error in dds with DDS_FLAGS_FORCE_DX10_EXT_MISC2 readback:\n%S\n", szDestPathDX10_2 );
+                        printmeta( &metadata2 );
+                        printmetachk( &metadata );
+                    }
+                    else
+                    {
+                        hr = IsDDSHeaderPresent( szDestPathDX10_2 );
+                        if ( FAILED(hr) )
+                        {
+                            success = false;
+                            pass = false;
+                            printe( "Failed checking DDS header type (HRESULT %08X):\n%S\n", hr, szDestPathDX10_2 );
+                        }
+                        else if ( hr == S_FALSE )
+                        {
+                            success = false;
+                            pass = false;
+                            printe( "Write with DDS_FLAGS_FORCE_DX10_EXT_MISC2 did not result in DX10 extended header:\n%S\n", szDestPathDX10_2 );
+                        }
+                        else
+                        {
+                            uint8_t digest2[16];
+                            hr = MD5Checksum( image2, digest2 );
+                            if ( FAILED(hr) )
+                            {
+                                success = false;
+                                pass = false;
+                                printe( "Failed computing MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT_MISC2 reloaded image data (HRESULT %08X):\n%S\n", hr, szDestPathDX10_2 );
+                            }
+                            else if ( memcmp( digest, digest2, 16 ) != 0 )
+                            {
+                                success = false;
+                                pass = false;
+                                printe( "MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT_MISC2 reloaded data doesn't match original:\n%S\n", szDestPathDX10_2 );
+                            }
+                        }
+                    }
+                }
+
+                // Test larger case of a row pitch that is larger than 1-byte alignment
+                if ( !IsCompressed( metadata.format ) && !IsPacked( metadata.format ) && !IsPlanar( metadata.format ) )
+                {
+                    ScratchImage imageWide;
+                    hr = CreateWideImage( image.GetImages(), image.GetImageCount(), image.GetMetadata(), imageWide ); 
+                    if ( FAILED(hr) )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Failed creating wide test image (HRESULT %08X):\n%S\n", hr, szPath );
+                    }
+                    else
+                    {
+                        DWORD ddsflags = ( metadata.dimension == TEX_DIMENSION_TEXTURE1D ) ? DDS_FLAGS_FORCE_DX10_EXT : DDS_FLAGS_NONE;
+
+                        hr = SaveToDDSFile( imageWide.GetImages(), imageWide.GetImageCount(), imageWide.GetMetadata(), ddsflags, szDestPathWide );
+                        if ( FAILED(hr) )
+                        {
+                            success = false;
+                            pass = false;
+                            printe( "Failed writing DDS with wide image to (HRESULT %08X):\n%S\n", hr, szDestPathWide );
+                        }
+                        else
+                        {
+                            TexMetadata metadata2;
+                            ScratchImage image2;
+                            hr = LoadFromDDSFile( szDestPathWide, DDS_FLAGS_NONE, &metadata2, image2 );
+                            if ( FAILED(hr) )
+                            {
+                                success = false;
+                                pass = false;
+                                printe( "Failed reading back written DDS with wide image to (HRESULT %08X):\n%S\n", hr, szDestPathWide );
+                            }
+                            else if ( metadata.width != metadata2.width
+                                      || metadata.height != metadata2.height
+                                      || metadata.arraySize != metadata2.arraySize
+                                      || metadata.mipLevels != metadata2.mipLevels
+                                      || metadata.dimension != metadata2.dimension
+                                      || metadata.miscFlags != metadata2.miscFlags
+                                      || metadata.miscFlags2 != metadata.miscFlags2 )
+                            {
+                                success = false;
+                                pass = false;
+                                printe( "Metadata error in dds with wide image readback:\n%S\n", szDestPathWide );
+                                printmeta( &metadata2 );
+                                printmetachk( &metadata );
+                            }
+                            else
+                            {
+                                uint8_t digest2[16];
+                                hr = MD5Checksum( image2, digest2 );
+                                if ( FAILED(hr) )
+                                {
+                                    success = false;
+                                    pass = false;
+                                    printe( "Failed computing MD5 checksum of wide image reloaded image data (HRESULT %08X):\n%S\n", hr, szDestPathWide );
+                                }
+                                else if ( memcmp( digest, digest2, 16 ) != 0 )
+                                {
+                                    success = false;
+                                    pass = false;
+                                    printe( "MD5 checksum of wide image reloaded data doesn't match original:\n%S\n", szDestPathWide );
+                                }
                             }
                         }
                     }

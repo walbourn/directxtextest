@@ -305,7 +305,12 @@ bool Test01()
     for( size_t index=0; index < _countof(g_BCMedia); ++index )
     {
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( g_BCMedia[index].fname, szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(g_BCMedia[index].fname, szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
 #ifdef DEBUG
         OutputDebugString(szPath);
@@ -318,7 +323,12 @@ bool Test01()
         _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
         WCHAR tempDir[MAX_PATH];
-        ExpandEnvironmentStringsW( TEMP_PATH L"bc_dec", tempDir, MAX_PATH );
+        ret = ExpandEnvironmentStringsW(TEMP_PATH L"bc_dec", tempDir, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
         CreateDirectoryW( tempDir, NULL );
 
@@ -368,64 +378,17 @@ bool Test01()
             else
             {
                 // TODO - Verify the image data (perhaps MD5 checksum)
-            }
 
-            if ( metadata.mipLevels > 1 || metadata.arraySize > 1 || metadata.depth > 1 )
-            {
-                // Test complex image decompress
-                ScratchImage image2;
-                hr = Decompress( srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), DXGI_FORMAT_UNKNOWN, image2 );
-                if ( FAILED(hr) )
+                if ( metadata.mipLevels > 1 || metadata.arraySize > 1 || metadata.depth > 1 )
                 {
-                    success = false;
-                    pass = false;
-                    printe( "Failed decompress [complex] (HRESULT %08X):\n%S\n", hr, szPath );
-                }
-                else if ( image2.GetMetadata().format != g_BCMedia[index].format
-                          || image2.GetMetadata().width != metadata.width
-                          || image2.GetMetadata().height != metadata.height )
-                {
-                    success = false;
-                    pass = false;
-                    printe( "Unexpected decompress [complex] result %Iu x %Iu %S\n... %Iu x %Iu %S:\n%S\n",
-                            image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ),
-                            metadata.width, metadata.height, GetName( g_BCMedia[index].format ), szPath );
-                }
-                else
-                {
-                    // TODO - Verify the image data (perhaps MD5 checksum)
-                    SaveScratchImage( szDestPath, DDS_FLAGS_NONE, image2 );
-                }
-            }
-            else
-            {
-                SaveScratchImage( szDestPath, DDS_FLAGS_NONE, image );
-
-                // Wide image test
-                ScratchImage imageWide;
-                hr = CreateWideImage( srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), imageWide ); 
-                if ( FAILED(hr) )
-                {
-                    success = false;
-                    pass = false;
-                    printe( "Failed creating wide test image (HRESULT %08X):\n%S\n", hr, szPath );
-                }
-                else if ( srcimage.GetImage(0,0,0)->rowPitch >= imageWide.GetImage(0,0,0)->rowPitch
-                          || srcimage.GetImage(0,0,0)->format != imageWide.GetImage(0,0,0)->format )
-                {
-                    success = false;
-                    pass = false;
-                    printe( "Failed creating wide test image - result is same as source: %u %u\n%S\n", srcimage.GetImage(0,0,0)->rowPitch, imageWide.GetImage(0,0,0)->rowPitch, szPath );
-                }
-                else
-                {
+                    // Test complex image decompress
                     ScratchImage image2;
-                    hr = Decompress( *imageWide.GetImage(0,0,0), DXGI_FORMAT_UNKNOWN, image2 );
+                    hr = Decompress( srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), DXGI_FORMAT_UNKNOWN, image2 );
                     if ( FAILED(hr) )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed decompress [wide] (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed decompress [complex] (HRESULT %08X):\n%S\n", hr, szPath );
                     }
                     else if ( image2.GetMetadata().format != g_BCMedia[index].format
                               || image2.GetMetadata().width != metadata.width
@@ -433,25 +396,72 @@ bool Test01()
                     {
                         success = false;
                         pass = false;
-                        printe( "Unexpected decompress [wide] result %Iu x %Iu %S\n... %Iu x %Iu %S:\n%S\n",
+                        printe( "Unexpected decompress [complex] result %Iu x %Iu %S\n... %Iu x %Iu %S:\n%S\n",
                                 image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ),
                                 metadata.width, metadata.height, GetName( g_BCMedia[index].format ), szPath );
                     }
                     else
                     {
-                        float targMSE = 0.00000001f;
-                        float mse = 0, mseV[4] = {0};
-                        hr = ComputeMSE( *image.GetImage(0,0,0), *image2.GetImage(0,0,0), mse, mseV );
+                        // TODO - Verify the image data (perhaps MD5 checksum)
+                        SaveScratchImage( szDestPath, DDS_FLAGS_NONE, image2 );
+                    }
+                }
+                else
+                {
+                    SaveScratchImage( szDestPath, DDS_FLAGS_NONE, image );
+
+                    // Wide image test
+                    ScratchImage imageWide;
+                    hr = CreateWideImage( srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), imageWide ); 
+                    if ( FAILED(hr) )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Failed creating wide test image (HRESULT %08X):\n%S\n", hr, szPath );
+                    }
+                    else if ( srcimage.GetImage(0,0,0)->rowPitch >= imageWide.GetImage(0,0,0)->rowPitch
+                              || srcimage.GetImage(0,0,0)->format != imageWide.GetImage(0,0,0)->format )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Failed creating wide test image - result is same as source: %Iu %Iu\n%S\n", srcimage.GetImage(0,0,0)->rowPitch, imageWide.GetImage(0,0,0)->rowPitch, szPath );
+                    }
+                    else
+                    {
+                        ScratchImage image2;
+                        hr = Decompress( *imageWide.GetImage(0,0,0), DXGI_FORMAT_UNKNOWN, image2 );
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed comparing decompress vs. decompress wide image data (HRESULT %08X):\n%S\n", hr, szPath );
+                            pass = false;
+                            printe( "Failed decompress [wide] (HRESULT %08X):\n%S\n", hr, szPath );
                         }
-                        else if ( IsErrorTooLarge( mse, targMSE ) )
+                        else if ( image2.GetMetadata().format != g_BCMedia[index].format
+                                  || image2.GetMetadata().width != metadata.width
+                                  || image2.GetMetadata().height != metadata.height )
                         {
                             success = false;
-                            printe( "Failed comparing decompress vs. decompress wide MSE = %f (%f %f %f %f)... %f:\n%S\n",
-                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
+                            pass = false;
+                            printe( "Unexpected decompress [wide] result %Iu x %Iu %S\n... %Iu x %Iu %S:\n%S\n",
+                                    image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ),
+                                    metadata.width, metadata.height, GetName( g_BCMedia[index].format ), szPath );
+                        }
+                        else
+                        {
+                            float targMSE = 0.00000001f;
+                            float mse = 0, mseV[4] = {0};
+                            hr = ComputeMSE( *image.GetImage(0,0,0), *image2.GetImage(0,0,0), mse, mseV );
+                            if ( FAILED(hr) )
+                            {
+                                success = false;
+                                printe( "Failed comparing decompress vs. decompress wide image data (HRESULT %08X):\n%S\n", hr, szPath );
+                            }
+                            else if ( IsErrorTooLarge( mse, targMSE ) )
+                            {
+                                success = false;
+                                printe( "Failed comparing decompress vs. decompress wide MSE = %f (%f %f %f %f)... %f:\n%S\n",
+                                        mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
+                            }
                         }
                     }
                 }
@@ -493,7 +503,12 @@ bool Test02()
     for( size_t index=0; index < _countof(g_CompressMedia); ++index )
     {
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( g_CompressMedia[index].fname, szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(g_CompressMedia[index].fname, szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
 #ifdef DEBUG
         OutputDebugString(szPath);
@@ -506,7 +521,12 @@ bool Test02()
         _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
         WCHAR tempDir[MAX_PATH];
-        ExpandEnvironmentStringsW( TEMP_PATH L"bc_enc", tempDir, MAX_PATH );
+        ret = ExpandEnvironmentStringsW(TEMP_PATH L"bc_enc", tempDir, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
         CreateDirectoryW( tempDir, NULL );
 
@@ -839,7 +859,7 @@ bool Test02()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed creating wide test image - result is same as source: %u %u\n%S\n", srcimage.GetImage(0,0,0)->rowPitch, imageWide.GetImage(0,0,0)->rowPitch, szPath );
+                                printe( "Failed creating wide test image - result is same as source: %Iu %Iu\n%S\n", srcimage.GetImage(0,0,0)->rowPitch, imageWide.GetImage(0,0,0)->rowPitch, szPath );
                             }
                             else
                             {
@@ -885,7 +905,7 @@ bool Test02()
                         break;
                     }
 
-                    WCHAR tname[MAX_PATH];
+                    WCHAR tname[MAX_PATH] = { 0 };
                     wcscpy_s( tname, fname );
                     wcscat_s( tname, L"_" );
                     wcscat_s( tname, GetName(cformat) );
@@ -918,7 +938,7 @@ bool Test02()
                             pass = false;
                             printe( "Unexpected compress [complex] result %Iu x %Iu %S %Iu\n... %Iu x %Iu %S %Iu:\n%S\n",
                                     image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ), image2.GetImageCount(),
-                                    metadata.width, metadata.height, GetName( cformat ), srcimage.GetImages(), szPath );
+                                    metadata.width, metadata.height, GetName( cformat ), srcimage.GetImageCount(), szPath );
                         }
                         else
                         {
@@ -996,7 +1016,12 @@ bool Test03()
     for( size_t index=0; index < _countof(g_CompressMedia); ++index )
     {
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( g_CompressMedia[index].fname, szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(g_CompressMedia[index].fname, szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
 #ifdef DEBUG
         OutputDebugString(szPath);
@@ -1009,7 +1034,12 @@ bool Test03()
         _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
         WCHAR tempDir[MAX_PATH];
-        ExpandEnvironmentStringsW( TEMP_PATH L"bc_gpu", tempDir, MAX_PATH );
+        ret = ExpandEnvironmentStringsW(TEMP_PATH L"bc_gpu", tempDir, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
         CreateDirectoryW( tempDir, NULL );
 
@@ -1096,7 +1126,7 @@ bool Test03()
                                 mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName(cformat), szPath );
                     }
 
-                    WCHAR tname[MAX_PATH];
+                    WCHAR tname[MAX_PATH] = { 0 };
                     wcscpy_s( tname, fname );
                     wcscat_s( tname, L"_" );
                     wcscat_s( tname, GetName(cformat) );
@@ -1124,7 +1154,7 @@ bool Test03()
                             pass = false;
                             printe( "Unexpected GPU compress [complex] result %Iu x %Iu %S %Iu\n... %Iu x %Iu %S %Iu:\n%S\n",
                                     image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ), image2.GetImageCount(),
-                                    metadata.width, metadata.height, GetName( cformat ), srcimage.GetImages(), szPath );
+                                    metadata.width, metadata.height, GetName( cformat ), srcimage.GetImageCount(), szPath );
                         }
                         else
                         {
@@ -1262,7 +1292,7 @@ bool Test03()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed creating wide test image - result is same as source: %u %u\n%S\n", srcimage.GetImage(0,0,0)->rowPitch, imageWide.GetImage(0,0,0)->rowPitch, szPath );
+                            printe( "Failed creating wide test image - result is same as source: %Iu %Iu\n%S\n", srcimage.GetImage(0,0,0)->rowPitch, imageWide.GetImage(0,0,0)->rowPitch, szPath );
                         }
                         else
                         {

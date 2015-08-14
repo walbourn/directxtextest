@@ -30,7 +30,12 @@ bool Test13()
 
     // Alpha image
     WCHAR szPath[MAX_PATH];
-    ExpandEnvironmentStringsW( MEDIA_PATH L"tree02S.dds", szPath, MAX_PATH );
+    DWORD ret = ExpandEnvironmentStringsW(MEDIA_PATH L"tree02S.dds", szPath, MAX_PATH);
+    if ( !ret || ret > MAX_PATH )
+    {
+        printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+        return false;
+    }
 
 #ifdef DEBUG
     OutputDebugString(szPath);
@@ -43,7 +48,12 @@ bool Test13()
     _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
     WCHAR tempDir[MAX_PATH];
-    ExpandEnvironmentStringsW( TEMP_PATH L"premul", tempDir, MAX_PATH );
+    ret = ExpandEnvironmentStringsW(TEMP_PATH L"premul", tempDir, MAX_PATH);
+    if ( !ret || ret > MAX_PATH )
+    {
+        printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+        return false;
+    }
 
     CreateDirectoryW( tempDir, NULL );
 
@@ -54,38 +64,38 @@ bool Test13()
     HRESULT hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, &metadata, imagealpha );
     if ( FAILED(hr) )
     {
-        success = false;
         printe( "Failed loading dds (HRESULT %08X):\n%S\n", hr, szPath );
+        return false;
     }
     else if ( memcmp( &metadata, &checkai, sizeof(TexMetadata) ) != 0 )
     {
-        success = false;
         printe( "Metadata error in DDS:\n%S\n", szPath );
         printmeta( &metadata );
         printmetachk( &checkai );
+        return false;
     }
 
     uint8_t srcdigest1[16];
     hr = MD5Checksum( imagealpha, srcdigest1, 1 );
     if ( FAILED(hr) )
     {
-        success = false;
         printe( "Failed computing MD5 checksum (HRESULT %08X):\n%S\n", hr, szPath );
+        return false;
     }
 
     uint8_t srcdigestall[16];
     hr = MD5Checksum( imagealpha, srcdigestall );
     if ( FAILED(hr) )
     {
-        success = false;
         printe( "Failed computing MD5 checksum (HRESULT %08X):\n%S\n", hr, szPath );
+        return false;
     }
 
     // PremultiplyAlpha (single)
     {
         ScratchImage pmAlpha;
         hr = PremultiplyAlpha( *imagealpha.GetImage(0,0,0), TEX_PMALPHA_DEFAULT, pmAlpha );
-        uint8_t digestDefault[16];
+        uint8_t digestDefault[16] = { 0 };
         if ( FAILED(hr) )
         {
             success = false;
@@ -165,15 +175,14 @@ bool Test13()
                     success = false;
                     printe( "Failed comparing premultiply alpha [single sRGB] of image data (HRESULT %08X)\n", hr );
                 }
-
-                if ( !IsEqual( mse, 0.002190f ) )
+                else if ( !IsEqual( mse, 0.002190f ) )
                 {
                     success = false;
                     printe( "Failed comparing premultiply alpha [single sRGB] of image data (%f)\n", mse );
                 }
             }
 
-            WCHAR tname[MAX_PATH];
+            WCHAR tname[MAX_PATH] = { 0 };
             wcscpy_s( tname, fname );
             wcscat_s( tname, L"_sRGB" );
 
@@ -264,8 +273,7 @@ bool Test13()
                             success = false;
                             printe( "Failed comparing premultiply alpha [complex] of image data (HRESULT %08X, %Iu)\n", hr, j );
                         }
-
-                        if ( !IsEqual( mse, result[j] ) )
+                        else if ( !IsEqual( mse, result[j] ) )
                         {
                             success = false;
                             printe( "Failed comparing premultiply alpha [complex] of image data (%f, %Iu)\n", mse, j );
@@ -273,7 +281,7 @@ bool Test13()
                     }
                 }
 
-                WCHAR tname[MAX_PATH];
+                WCHAR tname[MAX_PATH] = { 0 };
                 wcscpy_s( tname, fname );
                 wcscat_s( tname, L"_c" );
 

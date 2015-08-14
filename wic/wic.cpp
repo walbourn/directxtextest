@@ -281,7 +281,12 @@ bool Test01()
             continue;
 
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( g_TestMedia[index].fname, szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
 #ifdef DEBUG
         OutputDebugString(szPath);
@@ -443,7 +448,12 @@ bool Test02()
             continue;
 
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( g_TestMedia[index].fname, szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
 #ifdef DEBUG
         OutputDebugString(szPath);
@@ -595,7 +605,12 @@ bool Test03()
             continue;
 
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( g_TestMedia[index].fname, szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
 #ifdef DEBUG
         OutputDebugString(szPath);
@@ -693,7 +708,12 @@ bool Test04()
             continue;
 
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( g_TestMedia[index].fname, szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
 #ifdef DEBUG
         OutputDebugString(szPath);
@@ -778,7 +798,12 @@ bool Test05()
     for( size_t index=0; index < _countof(g_SaveMedia); ++index )
     {
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( g_SaveMedia[index].source, szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(g_SaveMedia[index].source, szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
 #ifdef DEBUG
         OutputDebugString(szPath);
@@ -840,67 +865,16 @@ bool Test05()
                     printmeta( &metadata2 );
                     printmetachk( &metadata );
                 }
-            }
 
-            size_t original = blob.GetBufferSize();
+                size_t original = blob.GetBufferSize();
 
-            // Providing a pixel format target 
-            hr = SaveToWICMemory( *image.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( g_SaveMedia[index].tcodec ), blob, &GUID_WICPixelFormat24bppBGR );
-            if ( FAILED(hr) )
-            {
-                success = false;
-                pass = false;
-                printe( "Failed writing wic 24bpp (%S) to memory (HRESULT %08X):\n%S\n", g_SaveMedia[index].ext, hr, szPath );
-            }
-            else
-            {
-                TexMetadata metadata2;
-                ScratchImage image2;
-                hr = LoadFromWICMemory( blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO, &metadata2, image2 );
+                // Providing a pixel format target 
+                hr = SaveToWICMemory( *image.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( g_SaveMedia[index].tcodec ), blob, &GUID_WICPixelFormat24bppBGR );
                 if ( FAILED(hr) )
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed reading back written wic 24bpp (%S) from memory (HRESULT %08X):\n%S\n", g_SaveMedia[index].ext, hr, szPath );
-                }
-                else if ( metadata.width != metadata2.width
-                          || metadata.height != metadata2.height
-                          || metadata.arraySize != metadata2.arraySize
-                          || metadata.dimension != metadata2.dimension
-                          || (metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM && metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM_SRGB) )
-                { // miplevel is going to be 1 for WIC images
-                    success = false;
-                    pass = false;
-                    printe( "Metadata error in wic 24bpp (%S) memory readback:\n%S\n", g_SaveMedia[index].ext, szPath );
-                    printmeta( &metadata2 );
-                    printmetachk( &metadata );
-                }
-            }
-
-            // Custom encoder properties
-            if ( g_SaveMedia[index].tcodec == WIC_CODEC_TIFF )
-            {
-                hr = SaveToWICMemory( *image.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( g_SaveMedia[index].tcodec ), blob, nullptr,
-                                        [&](IPropertyBag2* props)
-                                        {
-                                            PROPBAG2 options[2] = { 0, 0 };
-                                            options[0].pstrName = L"CompressionQuality";
-                                            options[1].pstrName = L"TiffCompressionMethod";
-
-                                            VARIANT varValues[2];
-                                            varValues[0].vt = VT_R4;
-                                            varValues[0].fltVal = 0.25f;
-
-                                            varValues[1].vt = VT_UI1;
-                                            varValues[1].bVal = WICTiffCompressionNone;
-
-                                            (void)props->Write( 2, options, varValues ); 
-                                        });
-                if ( FAILED(hr) )
-                {
-                    success = false;
-                    pass = false;
-                    printe( "Failed writing wic with custom props (%S) to memory (HRESULT %08X):\n%S\n", g_SaveMedia[index].ext, hr, szPath );
+                    printe( "Failed writing wic 24bpp (%S) to memory (HRESULT %08X):\n%S\n", g_SaveMedia[index].ext, hr, szPath );
                 }
                 else
                 {
@@ -911,24 +885,75 @@ bool Test05()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed reading back written wic custom props (%S) from memory (HRESULT %08X):\n%S\n", g_SaveMedia[index].ext, hr, szPath );
+                        printe( "Failed reading back written wic 24bpp (%S) from memory (HRESULT %08X):\n%S\n", g_SaveMedia[index].ext, hr, szPath );
                     }
                     else if ( metadata.width != metadata2.width
-                                || metadata.height != metadata2.height
-                                || metadata.arraySize != metadata2.arraySize
-                                || metadata.dimension != metadata2.dimension )
-                    { // miplevel is going to be 1 for WIC images, format changes
+                              || metadata.height != metadata2.height
+                              || metadata.arraySize != metadata2.arraySize
+                              || metadata.dimension != metadata2.dimension
+                              || (metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM && metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM_SRGB) )
+                    { // miplevel is going to be 1 for WIC images
                         success = false;
                         pass = false;
-                        printe( "Metadata error in wic custom props (%S) memory readback:\n%S\n", g_SaveMedia[index].ext, szPath );
+                        printe( "Metadata error in wic 24bpp (%S) memory readback:\n%S\n", g_SaveMedia[index].ext, szPath );
                         printmeta( &metadata2 );
                         printmetachk( &metadata );
                     }
-                    else if ( blob.GetBufferSize() <= original )
-                    { // We are forcing uncompressed in the custom props, so new image should be strictly larger than original
+                }
+
+                // Custom encoder properties
+                if ( g_SaveMedia[index].tcodec == WIC_CODEC_TIFF )
+                {
+                    hr = SaveToWICMemory( *image.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( g_SaveMedia[index].tcodec ), blob, nullptr,
+                                            [&](IPropertyBag2* props)
+                                            {
+                                                PROPBAG2 options[2] = { 0, 0 };
+                                                options[0].pstrName = L"CompressionQuality";
+                                                options[1].pstrName = L"TiffCompressionMethod";
+
+                                                VARIANT varValues[2];
+                                                varValues[0].vt = VT_R4;
+                                                varValues[0].fltVal = 0.25f;
+
+                                                varValues[1].vt = VT_UI1;
+                                                varValues[1].bVal = WICTiffCompressionNone;
+
+                                                (void)props->Write( 2, options, varValues ); 
+                                            });
+                    if ( FAILED(hr) )
+                    {
                         success = false;
                         pass = false;
-                        printe( "Failed wic custom props (%S) from memory sizes unchanged (%Iu ... %Iu):\n%S\n", g_SaveMedia[index].ext, blob.GetBufferSize(), original, szPath );
+                        printe( "Failed writing wic with custom props (%S) to memory (HRESULT %08X):\n%S\n", g_SaveMedia[index].ext, hr, szPath );
+                    }
+                    else
+                    {
+                        TexMetadata metadata2;
+                        ScratchImage image2;
+                        hr = LoadFromWICMemory( blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO, &metadata2, image2 );
+                        if ( FAILED(hr) )
+                        {
+                            success = false;
+                            pass = false;
+                            printe( "Failed reading back written wic custom props (%S) from memory (HRESULT %08X):\n%S\n", g_SaveMedia[index].ext, hr, szPath );
+                        }
+                        else if ( metadata.width != metadata2.width
+                                    || metadata.height != metadata2.height
+                                    || metadata.arraySize != metadata2.arraySize
+                                    || metadata.dimension != metadata2.dimension )
+                        { // miplevel is going to be 1 for WIC images, format changes
+                            success = false;
+                            pass = false;
+                            printe( "Metadata error in wic custom props (%S) memory readback:\n%S\n", g_SaveMedia[index].ext, szPath );
+                            printmeta( &metadata2 );
+                            printmetachk( &metadata );
+                        }
+                        else if ( blob.GetBufferSize() <= original )
+                        { // We are forcing uncompressed in the custom props, so new image should be strictly larger than original
+                            success = false;
+                            pass = false;
+                            printe( "Failed wic custom props (%S) from memory sizes unchanged (%Iu ... %Iu):\n%S\n", g_SaveMedia[index].ext, blob.GetBufferSize(), original, szPath );
+                        }
                     }
                 }
             }
@@ -943,7 +968,12 @@ bool Test05()
     // Multiframe
     {
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( MEDIA_PATH L"testvol8888.dds", szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(MEDIA_PATH L"testvol8888.dds", szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
         TexMetadata metadata;
         ScratchImage image;
@@ -1010,7 +1040,12 @@ bool Test06()
     for( size_t index=0; index < _countof(g_SaveMedia); ++index )
     {
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( g_SaveMedia[index].source, szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(g_SaveMedia[index].source, szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
         // Form dest path
         WCHAR ext[_MAX_EXT];
@@ -1018,7 +1053,12 @@ bool Test06()
         _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
         WCHAR tempDir[MAX_PATH];
-        ExpandEnvironmentStringsW( TEMP_PATH L"wic", tempDir, MAX_PATH );
+        ret = ExpandEnvironmentStringsW(TEMP_PATH L"wic", tempDir, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
         CreateDirectoryW( tempDir, NULL );
 
@@ -1026,7 +1066,7 @@ bool Test06()
         _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, fname, g_SaveMedia[index].ext );
 
         WCHAR szDestPath2[MAX_PATH];
-        WCHAR tname[_MAX_FNAME];
+        WCHAR tname[_MAX_FNAME] = { 0 };
         wcscpy_s( tname, fname );
         wcscat_s( tname, L"_tf" );
         _wmakepath_s( szDestPath2, MAX_PATH, NULL, tempDir, tname, g_SaveMedia[index].ext );
@@ -1203,10 +1243,20 @@ bool Test06()
     // Multiframe
     {
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( MEDIA_PATH L"testvol8888.dds", szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(MEDIA_PATH L"testvol8888.dds", szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
         WCHAR szDestPath[MAX_PATH];
-        ExpandEnvironmentStringsW( TEMP_PATH L"wic\\multiframe.tif", szDestPath, MAX_PATH );
+        ret = ExpandEnvironmentStringsW(TEMP_PATH L"wic\\multiframe.tif", szDestPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
         TexMetadata metadata;
         ScratchImage image;

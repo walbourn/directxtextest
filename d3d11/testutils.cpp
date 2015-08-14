@@ -497,8 +497,8 @@ static void Render()
 {
     // Update our time
     static float t = 0.0f;
-    static DWORD dwTimeStart = 0;
-    DWORD dwTimeCur = GetTickCount();
+    static ULONGLONG dwTimeStart = 0;
+    ULONGLONG dwTimeCur = GetTickCount64();
     if( dwTimeStart == 0 )
         dwTimeStart = dwTimeCur;
     t = ( dwTimeCur - dwTimeStart ) / 1000.0f;
@@ -580,7 +580,7 @@ void RenderTest( const TexMetadata& metadata, ID3D11ShaderResourceView* pSRV )
     // Main message loop
     MSG msg = {0};
 
-    DWORD end = GetTickCount() + RENDER_TEST_MS_DELAY;
+    ULONGLONG end = GetTickCount64() + RENDER_TEST_MS_DELAY;
 
     for(;;)
     {
@@ -594,7 +594,7 @@ void RenderTest( const TexMetadata& metadata, ID3D11ShaderResourceView* pSRV )
             Render();
         }
 
-        if ( GetTickCount() > end )
+        if ( GetTickCount64() > end )
             break;
     }
 

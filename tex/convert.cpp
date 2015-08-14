@@ -109,8 +109,8 @@ static const TestMedia g_TestMedia[] =
 { FLAGS_YUV, { 1280, 1024, 1, 1, 1, 0, 0, DXGI_FORMAT_Y416, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testpatternY416.dds" },
 { FLAGS_YUV, { 200, 200, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaCubeYUY2.dds" },
 { FLAGS_YUV, { 200, 200, 4, 1, 1, 0, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"lenaVolYUY2.dds" },
-{ FLAGS_XBOX, { 1920, 1485, 1, 1, 1, 0, 0, DXGI_FORMAT(116) /* DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT */, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"7E3_1920x1485.dds" },
-{ FLAGS_XBOX, { 1920, 1485, 1, 1, 1, 0, 0, DXGI_FORMAT(117) /* DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT */, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"6E4_1920x1485.dds" },
+{ FLAGS_XBOX, { 1920, 1485, 1, 1, 1, 0, 0, XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"7E3_1920x1485.dds" },
+{ FLAGS_XBOX, { 1920, 1485, 1, 1, 1, 0, 0, XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"6E4_1920x1485.dds" },
 };
 
 struct TestTargetFormat
@@ -190,8 +190,10 @@ static const TestTargetFormat g_TargetFormats[] =
     { FLAGS_NONE, DXGI_FORMAT_Y416 },
     { FLAGS_NONE, DXGI_FORMAT_Y210 },
     { FLAGS_NONE, DXGI_FORMAT_Y216 },
-    { FLAGS_NONE, DXGI_FORMAT(116) /* DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT */ },
-    { FLAGS_NONE, DXGI_FORMAT(117) /* DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT */ },
+    { FLAGS_NONE, XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT },
+    { FLAGS_NONE, XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT },
+    { FLAGS_DITHER, XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM },
+    { FLAGS_DITHER, XBOX_DXGI_FORMAT_R4G4_UNORM }
 };
 
 //-------------------------------------------------------------------------------------
@@ -605,26 +607,38 @@ static const TestPixels g_TestPixels[] =
     { DXGI_FORMAT_Y216, XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f), 8, 0xC9, 0x7D, 0x00, 0x80, 0x00, 0x10, 0x00, 0x80 },
     { DXGI_FORMAT_Y216, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 8, 0x91, 0xEB, 0x00, 0x80, 0x00, 0x10, 0x00, 0x80 },
 // DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT [Xbox]
-    { DXGI_FORMAT(116), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 4, 0x00, 0x00, 0x00, 0x00 },
-    { DXGI_FORMAT(116), XMFLOAT4(0.001953125f, 0.001953125f, 0.001953125f, 1.0f), 4, 0x01, 0x04, 0x10, 0xC0 },
-    { DXGI_FORMAT(116), XMFLOAT4(0.248046875f, 0.248046875f, 0.248046875f, 1.0f), 4, 0x7F, 0xFC, 0xF1, 0xC7 },
-    { DXGI_FORMAT(116), XMFLOAT4(0.25f, 0.25f, 0.25f, 1.0f), 4, 0x80, 0x00, 0x02, 0xC8 },
-    { DXGI_FORMAT(116), XMFLOAT4(0.5f, 0.5f, 0.5f, 0.666667f), 4, 0x00, 0x01, 0x04, 0x90 },
-    { DXGI_FORMAT(116), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 4, 0x80, 0x01, 0x06, 0xD8 },
-    { DXGI_FORMAT(116), XMFLOAT4(1.0078125f, 1.0078125f, 1.0078125f, 1.0f), 4, 0x81, 0x05, 0x16, 0xD8 },
-    { DXGI_FORMAT(116), XMFLOAT4(0.25f, 0.5f, 0.75f, 1.0f), 4, 0x80, 0x00, 0x04, 0xD4 },
-    { DXGI_FORMAT(116), XMFLOAT4(31.875f, 31.875f, 31.875f, 1.0f), 4, 0xFF, 0xFF, 0xFF, 0xFF },
+    { XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 4, 0x00, 0x00, 0x00, 0x00 },
+    { XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT, XMFLOAT4(0.001953125f, 0.001953125f, 0.001953125f, 1.0f), 4, 0x01, 0x04, 0x10, 0xC0 },
+    { XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT, XMFLOAT4(0.248046875f, 0.248046875f, 0.248046875f, 1.0f), 4, 0x7F, 0xFC, 0xF1, 0xC7 },
+    { XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT, XMFLOAT4(0.25f, 0.25f, 0.25f, 1.0f), 4, 0x80, 0x00, 0x02, 0xC8 },
+    { XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT, XMFLOAT4(0.5f, 0.5f, 0.5f, 0.666667f), 4, 0x00, 0x01, 0x04, 0x90 },
+    { XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 4, 0x80, 0x01, 0x06, 0xD8 },
+    { XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT, XMFLOAT4(1.0078125f, 1.0078125f, 1.0078125f, 1.0f), 4, 0x81, 0x05, 0x16, 0xD8 },
+    { XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT, XMFLOAT4(0.25f, 0.5f, 0.75f, 1.0f), 4, 0x80, 0x00, 0x04, 0xD4 },
+    { XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT, XMFLOAT4(31.875f, 31.875f, 31.875f, 1.0f), 4, 0xFF, 0xFF, 0xFF, 0xFF },
 // DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT [Xbox]
-    { DXGI_FORMAT(117), XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 4, 0x00, 0x00, 0x00, 0x00 },
-    { DXGI_FORMAT(117), XMFLOAT4(0.000244140625f, 0.000244140625f, 0.000244140625f, 1.0f), 4, 0x01, 0x04, 0x10, 0xC0 },
-    { DXGI_FORMAT(117), XMFLOAT4(0.0153808594f, 0.0153808594f, 0.0153808594f, 1.0f), 4, 0x3F, 0xFC, 0xF0, 0xC3 },
-    { DXGI_FORMAT(117), XMFLOAT4(0.015625f, 0.015625f, 0.015625f, 1.0f), 4, 0x40, 0x00, 0x01, 0xC4 },
-    { DXGI_FORMAT(117), XMFLOAT4(0.25f, 0.25f, 0.25f, 1.0f), 4, 0x40, 0x01, 0x05, 0xD4 },
-    { DXGI_FORMAT(117), XMFLOAT4(0.5f, 0.5f, 0.5f, 0.666667f), 4, 0x80, 0x01, 0x06, 0x98 },
-    { DXGI_FORMAT(117), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 4, 0xC0, 0x01, 0x07, 0xDC },
-    { DXGI_FORMAT(117), XMFLOAT4(1.015625f, 1.015625f, 1.015625f, 1.0f), 4, 0xC1, 0x05, 0x17, 0xDC },
-    { DXGI_FORMAT(117), XMFLOAT4(0.25f, 0.5f, 0.75f, 1.0f), 4, 0x40, 0x01, 0x06, 0xDA },
-    { DXGI_FORMAT(117), XMFLOAT4(508.f, 508.f, 508.f, 1.0f), 4, 0xFF, 0xFF, 0xFF, 0xFF },
+    { XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 4, 0x00, 0x00, 0x00, 0x00 },
+    { XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT, XMFLOAT4(0.000244140625f, 0.000244140625f, 0.000244140625f, 1.0f), 4, 0x01, 0x04, 0x10, 0xC0 },
+    { XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT, XMFLOAT4(0.0153808594f, 0.0153808594f, 0.0153808594f, 1.0f), 4, 0x3F, 0xFC, 0xF0, 0xC3 },
+    { XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT, XMFLOAT4(0.015625f, 0.015625f, 0.015625f, 1.0f), 4, 0x40, 0x00, 0x01, 0xC4 },
+    { XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT, XMFLOAT4(0.25f, 0.25f, 0.25f, 1.0f), 4, 0x40, 0x01, 0x05, 0xD4 },
+    { XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT, XMFLOAT4(0.5f, 0.5f, 0.5f, 0.666667f), 4, 0x80, 0x01, 0x06, 0x98 },
+    { XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 4, 0xC0, 0x01, 0x07, 0xDC },
+    { XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT, XMFLOAT4(1.015625f, 1.015625f, 1.015625f, 1.0f), 4, 0xC1, 0x05, 0x17, 0xDC },
+    { XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT, XMFLOAT4(0.25f, 0.5f, 0.75f, 1.0f), 4, 0x40, 0x01, 0x06, 0xDA },
+    { XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT, XMFLOAT4(508.f, 508.f, 508.f, 1.0f), 4, 0xFF, 0xFF, 0xFF, 0xFF },
+// DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM [Xbox]
+    { XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, XMFLOAT4(0.5f, 0.5f, 0.5f, 0.666667f), 4, 0x00, 0xFD, 0xF3, 0x8F },
+    { XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 4, 0xFF, 0xFD, 0xF7, 0xDF },
+    { XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, XMFLOAT4(0.25f, 0.5f, 0.75f, 0.0f), 4, 0x80, 0xFC, 0xF3, 0x17 },
+    { XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, XMFLOAT4(-0.500978f, -0.500978f, -0.500978f, 0.666667f), 4, 0x00, 0x03, 0x0C, 0xB0 },
+    { XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, XMFLOAT4(-1.0f, -1.0f, -1.0f, 1.0f), 4, 0x01, 0x06, 0x18, 0xE0 },
+    { XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, XMFLOAT4(-0.25f, -0.5f, -0.75f, 0.0f), 4, 0x80, 0x03, 0x0C, 0x28 },
+// DXGI_FORMAT_R4G4_UNORM [Xbox]
+    { XBOX_DXGI_FORMAT_R4G4_UNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f), 1, 0x0 },
+    { XBOX_DXGI_FORMAT_R4G4_UNORM, XMFLOAT4(0.533333f, 0.533333f, 0.f, 1.0f), 1, 0x88 },
+    { XBOX_DXGI_FORMAT_R4G4_UNORM, XMFLOAT4(1.0f, 1.0f, 0.f, 1.0f), 1, 0xFF },
+    { XBOX_DXGI_FORMAT_R4G4_UNORM, XMFLOAT4(0.266667f, 0.533333f, 0.f, 1.0f), 1, 0x84 },
 };
 
 static const XMVECTORF32 g_PixelEpsilon = { 0.01f, 0.01f, 0.01f, 0.01f };
@@ -912,7 +926,12 @@ bool Test05B()
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( g_TestMedia[index].fname, szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
 #ifdef DEBUG
         OutputDebugString(szPath);
@@ -925,7 +944,12 @@ bool Test05B()
         _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
         WCHAR tempDir[MAX_PATH];
-        ExpandEnvironmentStringsW( TEMP_PATH L"cvt_i", tempDir, MAX_PATH );
+        ret = ExpandEnvironmentStringsW(TEMP_PATH L"cvt_i", tempDir, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
         CreateDirectoryW( tempDir, NULL );
 
@@ -2618,7 +2642,12 @@ bool Test06()
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( g_TestMedia[index].fname, szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
+        if ( !ret ||  ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
 #ifdef DEBUG
         OutputDebugString(szPath);
@@ -2631,7 +2660,12 @@ bool Test06()
         _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
         WCHAR tempDir[MAX_PATH];
-        ExpandEnvironmentStringsW( TEMP_PATH L"cvt", tempDir, MAX_PATH );
+        ret = ExpandEnvironmentStringsW(TEMP_PATH L"cvt", tempDir, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
         CreateDirectoryW( tempDir, NULL );
 
@@ -2670,13 +2704,14 @@ bool Test06()
 
                 if ( g_TestMedia[index].options & FLAGS_YUV )
                 {
-                    switch ( tformat )
+                    switch ( static_cast<int>(tformat) )
                     {
                     case DXGI_FORMAT_R32G32B32A32_FLOAT:
                     case DXGI_FORMAT_R16G16B16A16_UNORM:
                     case DXGI_FORMAT_R10G10B10A2_UNORM:
                     case DXGI_FORMAT_R8G8B8A8_UNORM:
                     case DXGI_FORMAT_YUY2:
+                    case XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM:
                         break;
 
                     default:
@@ -2686,13 +2721,14 @@ bool Test06()
 
                 if ( g_TestMedia[index].options & FLAGS_XBOX )
                 {
-                    switch ( tformat )
+                    switch ( static_cast<int>(tformat) )
                     {
                     case DXGI_FORMAT_R32G32B32A32_FLOAT:
                     case DXGI_FORMAT_R16G16B16A16_UNORM:
                     case DXGI_FORMAT_R10G10B10A2_UNORM:
                     case DXGI_FORMAT_R8G8B8A8_UNORM:
                     case DXGI_FORMAT_B8G8R8X8_UNORM:
+                    case XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM:
                         break;
 
                     default:
@@ -2794,14 +2830,15 @@ bool Test06()
                             targMSE = 3.f;
                         else if ( tformat == DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM )
                             targMSE = 0.02f;
-                        else if ( tformat == DXGI_FORMAT_B4G4R4A4_UNORM )
+                        else if ( tformat == DXGI_FORMAT_B4G4R4A4_UNORM || tformat == XBOX_DXGI_FORMAT_R4G4_UNORM )
                             targMSE = 0.03f;
                         DWORD flags = 0;
-                        switch( tformat )
+                        switch( static_cast<int>(tformat) )
                         {
                         case DXGI_FORMAT_R10G10B10A2_UNORM:
                         case DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM:
                         case DXGI_FORMAT_B5G5R5A1_UNORM:
+                        case XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM:
                             flags |= CMSE_IGNORE_ALPHA;
                             break;
                         }
@@ -2875,11 +2912,12 @@ bool Test06()
                         else if ( tformat == DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM )
                             targMSE = 0.4f;
                         DWORD flags = 0;
-                        switch( tformat )
+                        switch( static_cast<int>(tformat) )
                         {
                         case DXGI_FORMAT_R10G10B10A2_UNORM:
                         case DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM:
                         case DXGI_FORMAT_B5G5R5A1_UNORM:
+                        case XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM:
                             flags |= CMSE_IGNORE_ALPHA;
                             break;
                         }
@@ -3051,11 +3089,12 @@ bool Test06()
                         else if ( tformat == DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM )
                             targMSE = 0.02f;
                         DWORD flags = 0;
-                        switch( tformat )
+                        switch( static_cast<int>(tformat) )
                         {
                         case DXGI_FORMAT_R10G10B10A2_UNORM:
                         case DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM:
                         case DXGI_FORMAT_B5G5R5A1_UNORM:
+                        case XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM:
                             flags |= CMSE_IGNORE_ALPHA;
                             break;
                         }
@@ -3130,11 +3169,12 @@ bool Test06()
                         else if ( tformat == DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM )
                             targMSE = 0.4f;
                         DWORD flags = 0;
-                        switch( tformat )
+                        switch( static_cast<int>(tformat) )
                         {
                         case DXGI_FORMAT_R10G10B10A2_UNORM:
                         case DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM:
                         case DXGI_FORMAT_B5G5R5A1_UNORM:
+                        case XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM:
                             flags |= CMSE_IGNORE_ALPHA;
                             break;
                         }
@@ -3244,7 +3284,7 @@ bool Test06()
                         break;
                     }
 
-                    switch( tformat )
+                    switch( static_cast<int>(tformat) )
                     {
                     case DXGI_FORMAT_R8_UNORM:
                     case DXGI_FORMAT_R16_UNORM:
@@ -3260,6 +3300,7 @@ bool Test06()
                     case DXGI_FORMAT_R16G16_UNORM:
                     case DXGI_FORMAT_R16G16_FLOAT:
                     case DXGI_FORMAT_R32G32_FLOAT:
+                    case XBOX_DXGI_FORMAT_R4G4_UNORM:
                         flags |= CMSE_IGNORE_BLUE | CMSE_IGNORE_ALPHA;
                         break;
 
@@ -3308,6 +3349,7 @@ bool Test06()
                     case DXGI_FORMAT_Y416:
                     case DXGI_FORMAT_Y210:
                     case DXGI_FORMAT_Y216:
+                    case XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM:
                         // These types are too different to really directly compare...
                         flags = (DWORD)-1;
                         break;

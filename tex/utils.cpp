@@ -6,7 +6,7 @@
 
 #include "directxtest.h"
 
-#include "directxtex.h"
+#include "directxtexp.h"
 
 // VS 2010's stdint.h conflicts with intsafe.h
 #pragma warning(push)
@@ -20,7 +20,7 @@ using Microsoft::WRL::ComPtr;
 using namespace DirectX;
 
 static const UINT DXGI_START = 1;
-static const UINT DXGI_END = 120; // as of DXGI 1.2 + Xbox One
+static const UINT DXGI_END = 190; // as of DXGI 1.3
 
 //-------------------------------------------------------------------------------------
 
@@ -69,15 +69,13 @@ bool Test01()
         DXGI_FORMAT_X24_TYPELESS_G8_UINT, DXGI_FORMAT_R8G8_TYPELESS, DXGI_FORMAT_R16_TYPELESS, DXGI_FORMAT_R8_TYPELESS,
         DXGI_FORMAT_BC1_TYPELESS, DXGI_FORMAT_BC2_TYPELESS, DXGI_FORMAT_BC3_TYPELESS, DXGI_FORMAT_BC4_TYPELESS, DXGI_FORMAT_BC5_TYPELESS, 
         DXGI_FORMAT_B8G8R8A8_TYPELESS, DXGI_FORMAT_B8G8R8X8_TYPELESS, DXGI_FORMAT_BC6H_TYPELESS, DXGI_FORMAT_BC7_TYPELESS,
-        DXGI_FORMAT(119) /* DXGI_FORMAT_R16_UNORM_X8_TYPELESS */,
-        DXGI_FORMAT(120) /* DXGI_FORMAT_X16_TYPELESS_G8_UINT */,
+        XBOX_DXGI_FORMAT_R16_UNORM_X8_TYPELESS, XBOX_DXGI_FORMAT_X16_TYPELESS_G8_UINT,
     };
     static const DXGI_FORMAT partialTypeless[] = 
     {
         DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS, DXGI_FORMAT_X32_TYPELESS_G8X24_UINT, 
         DXGI_FORMAT_R24_UNORM_X8_TYPELESS, DXGI_FORMAT_X24_TYPELESS_G8_UINT, 
-        DXGI_FORMAT(119) /* DXGI_FORMAT_R16_UNORM_X8_TYPELESS */,
-        DXGI_FORMAT(120) /* DXGI_FORMAT_X16_TYPELESS_G8_UINT */,
+        XBOX_DXGI_FORMAT_R16_UNORM_X8_TYPELESS, XBOX_DXGI_FORMAT_X16_TYPELESS_G8_UINT,
     };
     static const DXGI_FORMAT alpha[] =
     {
@@ -95,8 +93,7 @@ bool Test01()
         DXGI_FORMAT_BC7_TYPELESS, DXGI_FORMAT_BC7_UNORM, DXGI_FORMAT_BC7_UNORM_SRGB,
         DXGI_FORMAT_AYUV, DXGI_FORMAT_Y410, DXGI_FORMAT_Y416, DXGI_FORMAT_A8P8, DXGI_FORMAT_AI44, DXGI_FORMAT_IA44,
         DXGI_FORMAT_B4G4R4A4_UNORM,
-        DXGI_FORMAT(116) /* DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT */,
-        DXGI_FORMAT(117) /* DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT */,
+        XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT, XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT, XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM,
     };
     static const DXGI_FORMAT video[] = 
     {
@@ -104,13 +101,13 @@ bool Test01()
         DXGI_FORMAT_YUY2, DXGI_FORMAT_Y210, DXGI_FORMAT_Y216,
         DXGI_FORMAT_NV12, DXGI_FORMAT_P010, DXGI_FORMAT_P016, DXGI_FORMAT_420_OPAQUE, DXGI_FORMAT_NV11,
         DXGI_FORMAT_AI44, DXGI_FORMAT_IA44, DXGI_FORMAT_P8, DXGI_FORMAT_A8P8,
+        WIN10_DXGI_FORMAT_P208, WIN10_DXGI_FORMAT_V208, WIN10_DXGI_FORMAT_V408,
     };
     static const DXGI_FORMAT planar[] = 
     {
         DXGI_FORMAT_NV12, DXGI_FORMAT_P010, DXGI_FORMAT_P016, DXGI_FORMAT_420_OPAQUE, DXGI_FORMAT_NV11,
-        DXGI_FORMAT(118) /* DXGI_FORMAT_D16_UNORM_S8_UINT */,
-        DXGI_FORMAT(119) /* DXGI_FORMAT_R16_UNORM_X8_TYPELESS */,
-        DXGI_FORMAT(120) /* DXGI_FORMAT_X16_TYPELESS_G8_UINT */,
+        XBOX_DXGI_FORMAT_D16_UNORM_S8_UINT, XBOX_DXGI_FORMAT_R16_UNORM_X8_TYPELESS, XBOX_DXGI_FORMAT_X16_TYPELESS_G8_UINT,
+        WIN10_DXGI_FORMAT_P208, WIN10_DXGI_FORMAT_V208, WIN10_DXGI_FORMAT_V408,
     };
     static const DXGI_FORMAT pal[] =
     {
@@ -122,9 +119,7 @@ bool Test01()
         DXGI_FORMAT_D32_FLOAT,
         DXGI_FORMAT_D24_UNORM_S8_UINT, DXGI_FORMAT_R24_UNORM_X8_TYPELESS, DXGI_FORMAT_X24_TYPELESS_G8_UINT, 
         DXGI_FORMAT_D16_UNORM,
-        DXGI_FORMAT(118) /* DXGI_FORMAT_D16_UNORM_S8_UINT */,
-        DXGI_FORMAT(119) /* DXGI_FORMAT_R16_UNORM_X8_TYPELESS */,
-        DXGI_FORMAT(120) /* DXGI_FORMAT_X16_TYPELESS_G8_UINT */,
+        XBOX_DXGI_FORMAT_D16_UNORM_S8_UINT, XBOX_DXGI_FORMAT_R16_UNORM_X8_TYPELESS, XBOX_DXGI_FORMAT_X16_TYPELESS_G8_UINT,
     };
     bool success = true;
 
@@ -218,6 +213,18 @@ bool Test01()
         {
             printe( "ERROR: IsDepthStencil failed on DXGI Format %u (%S)\n", f, GetName( DXGI_FORMAT(f) )  );
             success = false;
+        }
+
+        if (f >= 121 && f <= 129)
+        {
+            // Skip 'holes' in DXGI formats
+            continue;
+        }
+
+        if ( f >= 133 && f <= 188 )
+        {
+            // Skip 'holes' in DXGI formats
+            continue;
         }
 
         if ( BitsPerPixel( (DXGI_FORMAT)f ) == 0 )
@@ -327,6 +334,7 @@ static void GetSurfaceInfo( _In_ size_t width,
 
     case DXGI_FORMAT_NV12:
     case DXGI_FORMAT_420_OPAQUE:
+    case WIN10_DXGI_FORMAT_P208:
         planar = true;
         bpe = 2;
         break;
@@ -337,9 +345,9 @@ static void GetSurfaceInfo( _In_ size_t width,
         bpe = 4;
         break;
 
-    case 118 /* DXGI_FORMAT_D16_UNORM_S8_UINT */:
-    case 119 /* DXGI_FORMAT_R16_UNORM_X8_TYPELESS */:
-    case 120 /* DXGI_FORMAT_X16_TYPELESS_G8_UINT */:
+    case XBOX_DXGI_FORMAT_D16_UNORM_S8_UINT:
+    case XBOX_DXGI_FORMAT_R16_UNORM_X8_TYPELESS:
+    case XBOX_DXGI_FORMAT_X16_TYPELESS_G8_UINT:
         planar = true;
         bpe = 4;
         break;
@@ -412,117 +420,149 @@ bool Test02()
 
     bool success = true;
 
+    // DXGI_FORMAT_B5G6R5_UNORM
     ComputePitch( DXGI_FORMAT_B5G6R5_UNORM, 1, 6, rowPitch, slicePitch );
     if ( rowPitch != 2 || slicePitch != 12 )
     {
-        printf("ERROR: CP RGB565 1x1 failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: CP RGB565 1x1 failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
         success = false;
     }
 
     ComputePitch( DXGI_FORMAT_B5G6R5_UNORM, 1, 6, rowPitch, slicePitch, CP_FLAGS_LEGACY_DWORD );
     if ( rowPitch != 4 || slicePitch != 24 )
     {
-        printf("ERROR: CP RGB565 1x1 DWORD failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: CP RGB565 1x1 DWORD failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
         success = false;
     }
 
     ComputePitch( DXGI_FORMAT_B5G6R5_UNORM, 1, 6, rowPitch, slicePitch, CP_FLAGS_PARAGRAPH );
     if ( rowPitch != 16 || slicePitch != 96 )
     {
-        printf("ERROR: CP RGB565 1x1 PARAGRAPH failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: CP RGB565 1x1 PARAGRAPH failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
         success = false;
     }
 
     ComputePitch( DXGI_FORMAT_B5G6R5_UNORM, 1, 6, rowPitch, slicePitch, CP_FLAGS_YMM );
     if ( rowPitch != 32 || slicePitch != 192 )
     {
-        printf("ERROR: CP RGB565 1x1 YMM failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: CP RGB565 1x1 YMM failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
         success = false;
     }
 
     ComputePitch( DXGI_FORMAT_B5G6R5_UNORM, 1, 6, rowPitch, slicePitch, CP_FLAGS_ZMM );
     if ( rowPitch != 64 || slicePitch != 384 )
     {
-        printf("ERROR: CP RGB565 1x1 ZMM failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: CP RGB565 1x1 ZMM failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
         success = false;
     }
 
     ComputePitch( DXGI_FORMAT_B5G6R5_UNORM, 1, 6, rowPitch, slicePitch, CP_FLAGS_PAGE4K );
     if ( rowPitch != 4096 || slicePitch != 24576 )
     {
-        printf("ERROR: CP RGB565 1x1 PAGE4K failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: CP RGB565 1x1 PAGE4K failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
         success = false;
     }
 
+    size_t rows = ComputeScanlines(DXGI_FORMAT_B5G6R5_UNORM, 6);
+    if (rows != 6)
+    {
+        printe("ERROR: CS RGB565 6 failed rows %Iu\n", rows );
+        success = false;
+    }
+
+    // DXGI_FORMAT_R8G8B8A8_UNORM
     ComputePitch( DXGI_FORMAT_R8G8B8A8_UNORM, 2, 1, rowPitch, slicePitch, CP_FLAGS_NONE );
     if ( rowPitch != 8 || slicePitch != 8 )
     {
-        printf("ERROR: CP R8G8B8A8_UNORM failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: CP R8G8B8A8_UNORM failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
         success = false;
     }
 
     ComputePitch( DXGI_FORMAT_R8G8B8A8_UNORM, 2, 1, rowPitch, slicePitch, CP_FLAGS_24BPP );
     if ( rowPitch != 6 || slicePitch != 6 )
     {
-        printf("ERROR: CP 24BPP failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: CP 24BPP failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
         success = false;
     }
 
     ComputePitch( DXGI_FORMAT_R8G8B8A8_UNORM, 2, 1, rowPitch, slicePitch, CP_FLAGS_16BPP );
     if ( rowPitch != 4 || slicePitch != 4 )
     {
-        printf("ERROR: CP 16BPP failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: CP 16BPP failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
         success = false;
     }
 
     ComputePitch( DXGI_FORMAT_R8G8B8A8_UNORM, 2, 1, rowPitch, slicePitch, CP_FLAGS_8BPP );
     if ( rowPitch != 2 || slicePitch != 2 )
     {
-        printf("ERROR: CP 8PP failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: CP 8PP failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
         success = false;
     }
 
-    ComputePitch( DXGI_FORMAT(116), 2, 1, rowPitch, slicePitch );
+    rows = ComputeScanlines(DXGI_FORMAT_R8G8B8A8_UNORM, 1);
+    if (rows != 1)
+    {
+        printe("ERROR: CS R8G8B8A8_UNORM failed rows %Iu\n", rows );
+        success = false;
+    }
+
+    // XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT
+    ComputePitch( XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT, 2, 1, rowPitch, slicePitch );
     if ( rowPitch != 8 || slicePitch != 8 )
     {
-        printf("ERROR: R10G10B10_7E3_A2_FLOAT [Xbox] A failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: R10G10B10_7E3_A2_FLOAT [Xbox] A failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
         success = false;
     }
 
-    ComputePitch( DXGI_FORMAT(116), 128, 64, rowPitch, slicePitch );
+    ComputePitch( XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT, 128, 64, rowPitch, slicePitch );
     if ( rowPitch != 512 || slicePitch != 32768 )
     {
-        printf("ERROR: R10G10B10_7E3_A2_FLOAT [Xbox] B failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: R10G10B10_7E3_A2_FLOAT [Xbox] B failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
         success = false;
     }
 
-    ComputePitch( DXGI_FORMAT(117), 2, 1, rowPitch, slicePitch );
+    rows = ComputeScanlines(XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT, 64);
+    if (rows != 64)
+    {
+        printe("ERROR: CS R10G10B10_7E3_A2_FLOAT [Xbox] failed rows %Iu\n", rows );
+        success = false;
+    }
+
+    // XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT
+    ComputePitch( XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT, 2, 1, rowPitch, slicePitch );
     if ( rowPitch != 8 || slicePitch != 8 )
     {
-        printf("ERROR: R10G10B10_6E4_A2_FLOAT [Xbox] A failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: R10G10B10_6E4_A2_FLOAT [Xbox] A failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
         success = false;
     }
 
-    ComputePitch( DXGI_FORMAT(117), 128, 64, rowPitch, slicePitch );
+    ComputePitch( XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT, 128, 64, rowPitch, slicePitch );
     if ( rowPitch != 512 || slicePitch != 32768 )
     {
-        printf("ERROR: R10G10B10_6E4_A2_FLOAT [Xbox] B failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: R10G10B10_6E4_A2_FLOAT [Xbox] B failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
         success = false;
     }
 
-    for( unsigned int j = 118; j <= 120; ++j )
+    rows = ComputeScanlines(XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT, 64);
+    if (rows != 64)
+    {
+        printe("ERROR: CS R10G10B10_6E4_A2_FLOAT [Xbox] failed rows %Iu\n", rows );
+        success = false;
+    }
+
+    for( unsigned int j = XBOX_DXGI_FORMAT_D16_UNORM_S8_UINT; j <= XBOX_DXGI_FORMAT_X16_TYPELESS_G8_UINT; ++j )
     {
         ComputePitch( DXGI_FORMAT(j), 4, 2, rowPitch, slicePitch );
         if ( rowPitch != 8 || slicePitch != 24 )
         {
-            printf("ERROR: %S A failed rowPitch %Iu, slicePitch %Iu\n", GetName( DXGI_FORMAT(j) ), rowPitch, slicePitch );
+            printe("ERROR: CP %S A failed rowPitch %Iu, slicePitch %Iu\n", GetName( DXGI_FORMAT(j) ), rowPitch, slicePitch );
             success = false;
         }
 
         ComputePitch( DXGI_FORMAT(j), 128, 64, rowPitch, slicePitch );
         if ( rowPitch != 256 || slicePitch != 24576 )
         {
-            printf("ERROR: %S B failed rowPitch %Iu, slicePitch %Iu\n", GetName( DXGI_FORMAT(j) ), rowPitch, slicePitch );
+            printe("ERROR: CP %S B failed rowPitch %Iu, slicePitch %Iu\n", GetName( DXGI_FORMAT(j) ), rowPitch, slicePitch );
             success = false;
         }
 
@@ -532,14 +572,197 @@ bool Test02()
         GetSurfaceInfo( 4, 2, DXGI_FORMAT(j), &numBytes, &rowBytes, &numRows );
         if ( rowBytes != 8 || numBytes != 24 || numRows != 3 )
         {
-            printf("ERROR: %S A failed rowBytes %Iu, numBytes %Iu, numRows %Iu\n", GetName( DXGI_FORMAT(j) ), rowBytes, numBytes, numRows );
+            printe("ERROR: CP %S A failed rowBytes %Iu, numBytes %Iu, numRows %Iu\n", GetName( DXGI_FORMAT(j) ), rowBytes, numBytes, numRows );
+            success = false;
+        }
+
+        rows = ComputeScanlines(DXGI_FORMAT(j), 2);
+        if ( rows != 3 )
+        {
+            printe("ERROR: CS %S A failed rows %Iu\n", GetName( DXGI_FORMAT(j) ), rows );
             success = false;
         }
 
         GetSurfaceInfo( 128, 64, DXGI_FORMAT(j), &numBytes, &rowBytes, &numRows );
         if ( rowBytes != 256 || numBytes != 24576 || numRows != (64+32) )
         {
-            printf("ERROR: %S B failed rowBytes %Iu, numBytes %Iu, numRows %Iu\n", GetName( DXGI_FORMAT(j) ), rowBytes, numBytes, numRows );
+            printe("ERROR: CP %S B failed rowBytes %Iu, numBytes %Iu, numRows %Iu\n", GetName( DXGI_FORMAT(j) ), rowBytes, numBytes, numRows );
+            success = false;
+        }
+
+        rows = ComputeScanlines(DXGI_FORMAT(j), 64);
+        if ( rows != 96 )
+        {
+            printe("ERROR: CS %S B failed rows %Iu\n", GetName( DXGI_FORMAT(j) ), rows );
+            success = false;
+        }
+    }
+
+    // DXGI_FORMAT_P208
+    ComputePitch( WIN10_DXGI_FORMAT_P208, 2, 1, rowPitch, slicePitch );
+    if ( rowPitch != 2 || slicePitch != 4 )
+    {
+        printe("ERROR: JPEG HW P208: CP A failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        success = false;
+    }
+
+    ComputePitch( WIN10_DXGI_FORMAT_P208, 128, 64, rowPitch, slicePitch );
+    if ( rowPitch != 128 || slicePitch != 16384 )
+    {
+        printe("ERROR: JPEG HW P208: CP B failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        success = false;
+    }
+
+    ComputePitch( WIN10_DXGI_FORMAT_P208, 128, 65, rowPitch, slicePitch );
+    if ( rowPitch != 128 || slicePitch != 16640 )
+    {
+        printe("ERROR: JPEG HW P208: CP C failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        success = false;
+    }
+
+    rows = ComputeScanlines(WIN10_DXGI_FORMAT_P208, 64);
+    if (rows != 128)
+    {
+        printe("ERROR: CS JPEG HW P208 failed rows %Iu\n", rows );
+        success = false;
+    }
+
+    // DXGI_FORMAT_V208
+    ComputePitch( WIN10_DXGI_FORMAT_V208, 2, 1, rowPitch, slicePitch );
+    if ( rowPitch != 2 || slicePitch != 6 )
+    {
+        printe("ERROR: JPEG HW V208: CP A failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        success = false;
+    }
+
+    ComputePitch( WIN10_DXGI_FORMAT_V208, 128, 64, rowPitch, slicePitch );
+    if ( rowPitch != 128 || slicePitch != 16384 )
+    {
+        printe("ERROR: JPEG HW V208: CP B failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        success = false;
+    }
+
+    ComputePitch( WIN10_DXGI_FORMAT_V208, 128, 65, rowPitch, slicePitch );
+    if ( rowPitch != 128 || slicePitch != 16768 )
+    {
+        printe("ERROR: JPEG HW V208: CP C failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        success = false;
+    }
+
+    rows = ComputeScanlines(WIN10_DXGI_FORMAT_V208, 64);
+    if (rows != 128)
+    {
+        printe("ERROR: CS JPEG HW V208 failed rows %Iu\n", rows );
+        success = false;
+    }
+
+    // DXGI_FORMAT_V408
+    ComputePitch( WIN10_DXGI_FORMAT_V408, 2, 1, rowPitch, slicePitch );
+    if ( rowPitch != 2 || slicePitch != 2 )
+    {
+        printe("ERROR: JPEG HW V408: CP A failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        success = false;
+    }
+
+    ComputePitch( WIN10_DXGI_FORMAT_V408, 128, 64, rowPitch, slicePitch );
+    if ( rowPitch != 128 || slicePitch != 24576 )
+    {
+        printe("ERROR: JPEG HW V408: CP B failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        success = false;
+    }
+
+    ComputePitch( WIN10_DXGI_FORMAT_V408, 128, 65, rowPitch, slicePitch );
+    if ( rowPitch != 128 || slicePitch != 24704 )
+    {
+        printe("ERROR: JPEG HW V408: CP C failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        success = false;
+    }
+
+    rows = ComputeScanlines(WIN10_DXGI_FORMAT_V408, 64);
+    if (rows != 192)
+    {
+        printe("ERROR: CS JPEG HW V408 failed rows %Iu\n", rows );
+        success = false;
+    }
+
+    // DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM
+    {
+        ComputePitch( XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, 2, 1, rowPitch, slicePitch );
+        if ( rowPitch != 8 || slicePitch != 8 )
+        {
+            printe("ERROR: R10G10B10_SNORM_A2_UNORM [Xbox] CP A failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+            success = false;
+        }
+
+        ComputePitch( XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, 128, 64, rowPitch, slicePitch );
+        if ( rowPitch != 512 || slicePitch != 32768 )
+        {
+            printe("ERROR: R10G10B10_SNORM_A2_UNORM [Xbox] CP B failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+            success = false;
+        }
+
+        size_t numBytes = 0;
+        size_t rowBytes = 0;
+        size_t numRows = 0;
+        GetSurfaceInfo( 4, 2, XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, &numBytes, &rowBytes, &numRows );
+        if ( rowBytes != 16 || numBytes != 32 || numRows != 2 )
+        {
+            printe("ERROR: R10G10B10_SNORM_A2_UNORM [Xbox] CP A failed rowBytes %Iu, numBytes %Iu, numRows %Iu\n", rowBytes, numBytes, numRows );
+            success = false;
+        }
+
+        GetSurfaceInfo( 128, 64, XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, &numBytes, &rowBytes, &numRows );
+        if ( rowBytes != 512 || numBytes != 32768 || numRows != 64 )
+        {
+            printe("ERROR: R10G10B10_SNORM_A2_UNORM [Xbox] CP B failed rowBytes %Iu, numBytes %Iu, numRows %Iu\n", rowBytes, numBytes, numRows );
+            success = false;
+        }
+
+        rows = ComputeScanlines(XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, 64);
+        if (rows != 64)
+        {
+            printe("ERROR: CS R10G10B10_SNORM_A2_UNORM [Xbox] failed rows %Iu\n", rows );
+            success = false;
+        }
+    }
+
+    // DXGI_FORMAT_R4G4_UNORM
+    {
+        ComputePitch( XBOX_DXGI_FORMAT_R4G4_UNORM, 2, 1, rowPitch, slicePitch );
+        if ( rowPitch != 2 || slicePitch != 2 )
+        {
+            printe("ERROR: R4G4_UNORM [Xbox] CP A failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+            success = false;
+        }
+
+        ComputePitch( XBOX_DXGI_FORMAT_R4G4_UNORM, 128, 64, rowPitch, slicePitch );
+        if ( rowPitch != 128 || slicePitch != 8192 )
+        {
+            printe("ERROR: R4G4_UNORM [Xbox] CP B failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+            success = false;
+        }
+
+        size_t numBytes = 0;
+        size_t rowBytes = 0;
+        size_t numRows = 0;
+        GetSurfaceInfo( 4, 2, XBOX_DXGI_FORMAT_R4G4_UNORM, &numBytes, &rowBytes, &numRows );
+        if ( rowBytes != 4 || numBytes != 8 || numRows != 2 )
+        {
+            printe("ERROR: R4G4_UNORM [Xbox] CP A failed rowBytes %Iu, numBytes %Iu, numRows %Iu\n", rowBytes, numBytes, numRows );
+            success = false;
+        }
+
+        GetSurfaceInfo( 128, 64, XBOX_DXGI_FORMAT_R4G4_UNORM, &numBytes, &rowBytes, &numRows );
+        if ( rowBytes != 128 || numBytes != 8192 || numRows != 64 )
+        {
+            printe("ERROR: R4G4_UNORM [Xbox] CP B failed rowBytes %Iu, numBytes %Iu, numRows %Iu\n", rowBytes, numBytes, numRows );
+            success = false;
+        }
+
+        rows = ComputeScanlines(XBOX_DXGI_FORMAT_R4G4_UNORM, 64);
+        if (rows != 64)
+        {
+            printe("ERROR: CS R4G4_UNORM [Xbox] failed rows %Iu\n", rows );
             success = false;
         }
     }
@@ -591,20 +814,40 @@ bool Test02()
 
     for (UINT f = DXGI_START; f <= DXGI_END; ++f )
     {
-        switch ( f )
+        switch ( static_cast<int>(f) )
         {
         case DXGI_FORMAT_R1_UNORM:
             continue;
 
-        case DXGI_FORMAT(116) /* DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT */:
-        case DXGI_FORMAT(117) /* DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT */:
+        case XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT:
+        case XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT:
+        case XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM:
+        case XBOX_DXGI_FORMAT_R4G4_UNORM:
             // Only supported for Xbox One platform
             continue;
 
-        case DXGI_FORMAT(118) /* DXGI_FORMAT_D16_UNORM_S8_UINT */:
-        case DXGI_FORMAT(119) /* DXGI_FORMAT_R16_UNORM_X8_TYPELESS */:
-        case DXGI_FORMAT(120) /* DXGI_FORMAT_X16_TYPELESS_G8_UINT */:
+        case XBOX_DXGI_FORMAT_D16_UNORM_S8_UINT:
+        case XBOX_DXGI_FORMAT_R16_UNORM_X8_TYPELESS:
+        case XBOX_DXGI_FORMAT_X16_TYPELESS_G8_UINT:
             // Special use case formats for Xbox One platform
+            continue;
+
+        case WIN10_DXGI_FORMAT_P208:
+        case WIN10_DXGI_FORMAT_V208:
+        case WIN10_DXGI_FORMAT_V408:
+            // JPEG hardware decode formats
+            continue;
+        }
+
+        if (f >= 121 && f <= 129)
+        {
+            // Skip 'holes' in DXGI formats
+            continue;
+        }
+
+        if ( f >= 133 && f <= 188 )
+        {
+            // Skip 'holes' in DXGI formats
             continue;
         }
 
@@ -641,7 +884,6 @@ bool Test02()
                     // Planar formats require even width and height
                     continue;
                 }
-
 
                 CD3D11_TEXTURE2D_DESC desc( ( f == DXGI_FORMAT_420_OPAQUE ) ? DXGI_FORMAT_NV12 : DXGI_FORMAT(f), vals[i], vals[j], 1, 1, 0, D3D11_USAGE_STAGING, D3D11_CPU_ACCESS_WRITE );
 
@@ -711,9 +953,9 @@ bool Test02()
                     {
                         targetRows = vals[j] * 2; // Direct3D makes this simplifying assumption, although it is larger than the 4:1:1 data
                     }
-                    else if ( f == 118 /* DXGI_FORMAT_D16_UNORM_S8_UINT */
-                              || f == 119 /* DXGI_FORMAT_R16_UNORM_X8_TYPELESS */
-                              || f == 120 /* DXGI_FORMAT_X16_TYPELESS_G8_UINT */ )
+                    else if ( f == XBOX_DXGI_FORMAT_D16_UNORM_S8_UINT
+                              || f == XBOX_DXGI_FORMAT_R16_UNORM_X8_TYPELESS
+                              || f == XBOX_DXGI_FORMAT_X16_TYPELESS_G8_UINT )
                     {
                         targetRows = 0;
                     }
@@ -827,6 +1069,10 @@ bool Test12()
         DXGI_FORMAT_BC1_UNORM, DXGI_FORMAT_BC1_UNORM_SRGB, DXGI_FORMAT_BC2_UNORM, DXGI_FORMAT_BC2_UNORM_SRGB, DXGI_FORMAT_BC3_UNORM, DXGI_FORMAT_BC3_UNORM_SRGB,
         DXGI_FORMAT_BC4_UNORM, DXGI_FORMAT_BC4_SNORM, DXGI_FORMAT_BC5_UNORM, DXGI_FORMAT_BC5_SNORM,
         DXGI_FORMAT_BC6H_UF16, DXGI_FORMAT_BC6H_SF16, DXGI_FORMAT_BC7_UNORM, DXGI_FORMAT_BC7_UNORM_SRGB,
+        XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT,
+        XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT,
+        XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM,
+        XBOX_DXGI_FORMAT_R4G4_UNORM,
     };
 
     for( size_t i = 0; i < _countof(hasTypeless); ++i )

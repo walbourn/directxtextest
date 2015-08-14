@@ -31,7 +31,12 @@ bool Test09()
 
     // Test image
     WCHAR szPath[MAX_PATH];
-    ExpandEnvironmentStringsW( MEDIA_PATH L"test8888.dds", szPath, MAX_PATH );
+    DWORD ret = ExpandEnvironmentStringsW(MEDIA_PATH L"test8888.dds", szPath, MAX_PATH);
+    if ( !ret || ret > MAX_PATH )
+    {
+        printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+        return false;
+    }
 
 #ifdef DEBUG
     OutputDebugString(szPath);
@@ -44,7 +49,12 @@ bool Test09()
     _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
     WCHAR tempDir[MAX_PATH];
-    ExpandEnvironmentStringsW( TEMP_PATH L"cpy", tempDir, MAX_PATH );
+    ret = ExpandEnvironmentStringsW(TEMP_PATH L"cpy", tempDir, MAX_PATH);
+    if ( !ret || ret > MAX_PATH )
+    {
+        printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+        return false;
+    }
 
     CreateDirectoryW( tempDir, NULL );
 
@@ -55,19 +65,24 @@ bool Test09()
     HRESULT hr = LoadFromDDSFile( szPath, DDS_FLAGS_FORCE_RGB, &metadata, imageTest );
     if ( FAILED(hr) )
     {
-        success = false;
         printe( "Failed loading dds (HRESULT %08X):\n%S\n", hr, szPath );
+        return false;
     }
     else if ( memcmp( &metadata, &checkTest, sizeof(TexMetadata) ) != 0 )
     {
-        success = false;
         printe( "Metadata error in DDS:\n%S\n", szPath );
         printmeta( &metadata );
         printmetachk( &checkTest );
+        return false;
     }
 
     // Windows Logo
-    ExpandEnvironmentStringsW( MEDIA_PATH L"windowslogo_X8R8G8B8.dds", szPath, MAX_PATH );
+    ret = ExpandEnvironmentStringsW(MEDIA_PATH L"windowslogo_X8R8G8B8.dds", szPath, MAX_PATH);
+    if ( !ret || ret > MAX_PATH )
+    {
+        printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+        return false;
+    }
 
 #ifdef DEBUG
     OutputDebugString(szPath);
@@ -80,19 +95,24 @@ bool Test09()
     hr = LoadFromDDSFile( szPath, DDS_FLAGS_FORCE_RGB, &metadata, imageLogo );
     if ( FAILED(hr) )
     {
-        success = false;
         printe( "Failed loading dds (HRESULT %08X):\n%S\n", hr, szPath );
+        return false;
     }
     else if ( memcmp( &metadata, &checkLogo, sizeof(TexMetadata) ) != 0 )
     {
-        success = false;
         printe( "Metadata error in DDS:\n%S\n", szPath );
         printmeta( &metadata );
         printmetachk( &checkLogo );
+        return false;
     }
 
     // Earth
-    ExpandEnvironmentStringsW( MEDIA_PATH L"earth_A2B10G10R10.dds", szPath, MAX_PATH );
+    ret = ExpandEnvironmentStringsW(MEDIA_PATH L"earth_A2B10G10R10.dds", szPath, MAX_PATH);
+    if ( !ret || ret > MAX_PATH )
+    {
+        printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+        return false;
+    }
 
 #ifdef DEBUG
     OutputDebugString(szPath);
@@ -105,15 +125,15 @@ bool Test09()
     hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, &metadata, imageEarth );
     if ( FAILED(hr) )
     {
-        success = false;
         printe( "Failed loading dds (HRESULT %08X):\n%S\n", hr, szPath );
+        return false;
     }
     else if ( memcmp( &metadata, &checkEarth, sizeof(TexMetadata) ) != 0 )
     {
-        success = false;
         printe( "Metadata error in DDS:\n%S\n", szPath );
         printmeta( &metadata );
         printmetachk( &checkEarth );
+        return false;
     }
 
     // Copy (same format)
@@ -282,7 +302,12 @@ bool Test10()
 
     // Windows Logo
     WCHAR szPath[MAX_PATH];
-    ExpandEnvironmentStringsW( MEDIA_PATH L"windowslogo_X8R8G8B8.dds", szPath, MAX_PATH );
+    DWORD ret = ExpandEnvironmentStringsW(MEDIA_PATH L"windowslogo_X8R8G8B8.dds", szPath, MAX_PATH);
+    if ( !ret || ret > MAX_PATH )
+    {
+        printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+        return false;
+    }
 
 #ifdef DEBUG
     OutputDebugString(szPath);
@@ -293,12 +318,17 @@ bool Test10()
     HRESULT hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, NULL, imageLogo );
     if ( FAILED(hr) )
     {
-        success = false;
         printe( "Failed loading dds (HRESULT %08X):\n%S\n", hr, szPath );
+        return false;
     }
 
     // Windows 95 Logo
-    ExpandEnvironmentStringsW( MEDIA_PATH L"win95.dds", szPath, MAX_PATH );
+    ret = ExpandEnvironmentStringsW(MEDIA_PATH L"win95.dds", szPath, MAX_PATH);
+    if ( !ret || ret > MAX_PATH )
+    {
+        printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+        return false;
+    }
 
 #ifdef DEBUG
     OutputDebugString(szPath);
@@ -309,12 +339,17 @@ bool Test10()
     hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, NULL, imageWin95 );
     if ( FAILED(hr) )
     {
-        success = false;
         printe( "Failed loading dds (HRESULT %08X):\n%S\n", hr, szPath );
+        return false;
     }
 
     // DX logo
-    ExpandEnvironmentStringsW( MEDIA_PATH L"dx5_logo.dds", szPath, MAX_PATH );
+    ret = ExpandEnvironmentStringsW(MEDIA_PATH L"dx5_logo.dds", szPath, MAX_PATH);
+    if ( !ret || ret > MAX_PATH )
+    {
+        printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+        return false;
+    }
 
 #ifdef DEBUG
     OutputDebugString(szPath);
@@ -325,12 +360,17 @@ bool Test10()
     hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, NULL, imageDX );
     if ( FAILED(hr) )
     {
-        success = false;
         printe( "Failed loading dds (HRESULT %08X):\n%S\n", hr, szPath );
+        return false;
     }
 
     // Alpha Edge
-    ExpandEnvironmentStringsW( MEDIA_PATH L"alphaedge.dds", szPath, MAX_PATH );
+    ret = ExpandEnvironmentStringsW(MEDIA_PATH L"alphaedge.dds", szPath, MAX_PATH);
+    if ( !ret || ret > MAX_PATH )
+    {
+        printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+        return false;
+    }
 
 #ifdef DEBUG
     OutputDebugString(szPath);
@@ -341,8 +381,8 @@ bool Test10()
     hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, NULL, imageAlpha );
     if ( FAILED(hr) )
     {
-        success = false;
         printe( "Failed loading dds (HRESULT %08X):\n%S\n", hr, szPath );
+        return false;
     }
 
     // Compute MSE between various images
@@ -355,8 +395,7 @@ bool Test10()
         success = false;
         printe( "Failed computing first MSE (HRESULT %08X):\n", hr );
     }
-
-    if ( !IsEqual( mse, 0.f ) )
+    else if ( !IsEqual( mse, 0.f ) )
     {
         success = false;
         printe( "MSE = %f (%f %f %f %f)... 0.f\n", mse, mseV[0], mseV[1], mseV[2], mseV[3] );
@@ -369,8 +408,7 @@ bool Test10()
         success = false;
         printe( "Failed computing second MSE (HRESULT %08X):\n", hr );
     }
-
-    if ( !IsEqual( mse, 0.435924f ) )
+    else if ( !IsEqual( mse, 0.435924f ) )
     {
         success = false;
         printe( "MSE = %f (%f %f %f %f)... 0.435924\n", mse, mseV[0], mseV[1], mseV[2], mseV[3] );
@@ -383,8 +421,7 @@ bool Test10()
         success = false;
         printe( "Failed computing third MSE (HRESULT %08X):\n", hr );
     }
-
-    if ( !IsEqual( mse, 0.728756f ) )
+    else if ( !IsEqual( mse, 0.728756f ) )
     {
         success = false;
         printe( "MSE = %f (%f %f %f %f)... 0.728756\n", mse, mseV[0], mseV[1], mseV[2], mseV[3] );
@@ -456,7 +493,12 @@ bool Test14()
     for( size_t index=0; index < _countof(s_TestMedia); ++index )
     {
         WCHAR szPath[MAX_PATH];
-        ExpandEnvironmentStringsW( s_TestMedia[index].fname, szPath, MAX_PATH );
+        DWORD ret = ExpandEnvironmentStringsW(s_TestMedia[index].fname, szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
 
 #ifdef DEBUG
         OutputDebugString(szPath);

@@ -76,7 +76,12 @@ int __cdecl main()
         return -1;
     }
 
-    CoInitializeEx( NULL,  COINIT_MULTITHREADED );
+    HRESULT hr = CoInitializeEx( NULL,  COINIT_MULTITHREADED );
+    if (FAILED(hr))
+    {
+        printe("ERROR: CoInitializeEx fails (%08X)\n", hr);
+        return -1;
+    }
 
     if ( !RunTests() )
         return -1;
