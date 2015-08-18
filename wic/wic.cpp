@@ -10,9 +10,16 @@
 
 #include "directxtexp.h"
 
+// VS 2010's stdint.h conflicts with intsafe.h
+#pragma warning(push)
+#pragma warning(disable : 4005)
+#include <wrl.h>
+#pragma warning(pop)
+
 DEFINE_GUID(GUID_WICPixelFormat24bppBGR, 0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x0c);
 
 using namespace DirectX;
+using Microsoft::WRL::ComPtr;
 
 enum
 {
@@ -266,6 +273,73 @@ extern size_t DetermineFileSize( _In_z_ LPCWSTR szFile );
 extern HRESULT MD5Checksum( _In_ const ScratchImage& image, _Out_bytecap_x_(16) uint8_t *digest );
 extern HRESULT SaveScratchImage( _In_z_ LPCWSTR szFile, _In_ DWORD flags, _In_ const ScratchImage& image );
 
+
+//-------------------------------------------------------------------------------------
+// GetWICFactory/SetWICFactory
+bool Test00()
+{
+    bool systemSupportsWIC2 = false;
+
+    {
+        ComPtr<IWICImagingFactory> wic;
+        HRESULT hr = CoCreateInstance( CLSID_WICImagingFactory2, nullptr, CLSCTX_INPROC_SERVER,
+                                       __uuidof(IWICImagingFactory2), reinterpret_cast<LPVOID*>( wic.GetAddressOf() ) );
+        if (SUCCEEDED(hr))
+        {
+            systemSupportsWIC2 = true;
+
+            SetWICFactory(wic.Get());
+
+            bool iswic2 = false;
+            IWICImagingFactory* pWIC = GetWICFactory(iswic2);
+            if (pWIC != wic.Get() || !iswic2)
+            {
+                printe("SetWICFactory failed (WIC2)\n");
+                return false;
+            }
+        }
+        else
+        {
+            hr = CoCreateInstance( CLSID_WICImagingFactory1, nullptr, CLSCTX_INPROC_SERVER,
+                                   __uuidof(IWICImagingFactory2), reinterpret_cast<LPVOID*>( wic.GetAddressOf() ) );
+            if (SUCCEEDED(hr))
+            {
+                SetWICFactory(wic.Get());
+
+                bool iswic2 = false;
+                IWICImagingFactory* pWIC = GetWICFactory(iswic2);
+                if (pWIC != wic.Get() || iswic2)
+                {
+                    printe("SetWICFactory failed (WIC1)\n");
+                    return false;
+                }
+            }
+        }
+
+        SetWICFactory(nullptr);
+    }
+
+    {
+        bool iswic2 = false;
+        IWICImagingFactory* pWIC = GetWICFactory(iswic2);
+
+        if (!pWIC)
+        {
+            printe("GetWICFactory failed test\n");
+            return false;
+        }
+
+        if (iswic2 != systemSupportsWIC2)
+        {
+            printe("GetWICFactory failed with wrong WIC type\n");
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
 //-------------------------------------------------------------------------------------
 // GetMetadataFromWICMemory
 bool Test01()
@@ -275,9 +349,12 @@ bool Test01()
     size_t ncount = 0;
     size_t npass = 0;
 
+    bool iswic2;
+    (void)GetWICFactory(iswic2);
+
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
-        if ( (g_TestMedia[index].options & FLAGS_WIC2) && !_IsWIC2() )
+        if ( (g_TestMedia[index].options & FLAGS_WIC2) && iswic2 )
             continue;
 
         WCHAR szPath[MAX_PATH];
@@ -442,9 +519,12 @@ bool Test02()
     size_t ncount = 0;
     size_t npass = 0;
 
+    bool iswic2;
+    (void)GetWICFactory(iswic2);
+
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
-        if ( (g_TestMedia[index].options & FLAGS_WIC2) && !_IsWIC2() )
+        if ( (g_TestMedia[index].options & FLAGS_WIC2) && iswic2 )
             continue;
 
         WCHAR szPath[MAX_PATH];
@@ -599,9 +679,12 @@ bool Test03()
     size_t ncount = 0;
     size_t npass = 0;
 
+    bool iswic2;
+    (void)GetWICFactory(iswic2);
+
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
-        if ( (g_TestMedia[index].options & FLAGS_WIC2) && !_IsWIC2() )
+        if ( (g_TestMedia[index].options & FLAGS_WIC2) && iswic2 )
             continue;
 
         WCHAR szPath[MAX_PATH];
@@ -702,9 +785,12 @@ bool Test04()
     size_t ncount = 0;
     size_t npass = 0;
 
+    bool iswic2;
+    (void)GetWICFactory(iswic2);
+
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
-        if ( (g_TestMedia[index].options & FLAGS_WIC2) && !_IsWIC2() )
+        if ( (g_TestMedia[index].options & FLAGS_WIC2) && iswic2 )
             continue;
 
         WCHAR szPath[MAX_PATH];

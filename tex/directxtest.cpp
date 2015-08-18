@@ -108,6 +108,8 @@ int __cdecl main()
 
     if ( !RunTests() )
         return -1;
-       
+
+    SetWICFactory(nullptr);
+
     return 0;
 }

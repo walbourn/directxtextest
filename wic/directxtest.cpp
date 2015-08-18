@@ -21,6 +21,7 @@ struct TestInfo
     TestFN func;
 };
 
+extern bool Test00();
 extern bool Test01();
 extern bool Test02();
 extern bool Test03();
@@ -30,6 +31,7 @@ extern bool Test06();
 
 TestInfo g_Tests[] =
 {
+    { "Get/SetWICFactory", Test00 },
     { "GetMetadataFromWICMemory", Test01 },
     { "GetMetadataFromWICFile", Test02 },
     { "LoadFromWICMemory", Test03 },
@@ -90,6 +92,8 @@ int __cdecl main()
 
     if ( !RunTests() )
         return -1;
+
+    SetWICFactory(nullptr);
        
     return 0;
 }
