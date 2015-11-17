@@ -89,7 +89,7 @@ bool RunTests()
 int __cdecl main()
 {
     print("**************************************************************\n");
-    print("*** " _DIRECTX_TEST_NAME_ " test built on " __DATE__ "\n" );
+    print("*** " _DIRECTX_TEST_NAME_ " test\n" );
     print("*** Library Version %03d\n", DIRECTX_TEX_VERSION );
     print("**************************************************************\n");
 
