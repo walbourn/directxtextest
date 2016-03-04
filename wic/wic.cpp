@@ -23,9 +23,10 @@ using Microsoft::WRL::ComPtr;
 
 enum
 {
-    FLAGS_NONE  = 0x0,
-    FLAGS_WIC2  = 0x1, // Requires WIC factory 2 to function
+    FLAGS_NONE          = 0x0,
+    FLAGS_WIC2          = 0x1, // Requires WIC factory 2 to function
     FLAGS_ALTMD5_MASK   = 0xf0,
+    FLAGS_MQR_ORIENT    = 0x100,
 };
 
 #define ALTMD5(n) (n << 4)
@@ -51,9 +52,9 @@ static const TestMedia g_TestMedia[] =
 { ALTMD5(2), { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lena.jpg", { 0x35,0x8b,0x3f,0xdb,0x55,0x97,0x32,0xbc,0xa2,0x15,0x86,0x78,0xf7,0x18,0xf3,0x4b } },
 #endif
 
-{ FLAGS_NONE, { 512, 512, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"baboon.tiff", { 0x5b,0x60,0x5c,0xb3,0x59,0x6e,0xb1,0x05,0xba,0x49,0xb9,0xe1,0x0f,0xfe,0x97,0x5f } },
-{ FLAGS_NONE, { 512, 512, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"f16.tiff", { 0xcf,0x54,0xa2,0xb6,0x06,0xf0,0x25,0x68,0x03,0x02,0xe2,0xb6,0xba,0x44,0xdf,0x3f } },
-{ FLAGS_NONE, { 512, 512, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"peppers.tiff", { 0x71,0xe3,0xf1,0x0f,0xfe,0xb1,0x4d,0x00,0x45,0xa5,0xfb,0x87,0x88,0x7d,0x36,0x24 } },
+{ FLAGS_MQR_ORIENT, { 512, 512, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"baboon.tiff", { 0x5b,0x60,0x5c,0xb3,0x59,0x6e,0xb1,0x05,0xba,0x49,0xb9,0xe1,0x0f,0xfe,0x97,0x5f } },
+{ FLAGS_MQR_ORIENT, { 512, 512, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"f16.tiff", { 0xcf,0x54,0xa2,0xb6,0x06,0xf0,0x25,0x68,0x03,0x02,0xe2,0xb6,0xba,0x44,0xdf,0x3f } },
+{ FLAGS_MQR_ORIENT, { 512, 512, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"peppers.tiff", { 0x71,0xe3,0xf1,0x0f,0xfe,0xb1,0x4d,0x00,0x45,0xa5,0xfb,0x87,0x88,0x7d,0x36,0x24 } },
 { FLAGS_NONE, { 1024, 1024, 1, 1, 1, 0, 0, DXGI_FORMAT_R8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"pentagon.tiff", { 0xb9,0x45,0x3d,0xa2,0x13,0xdc,0xe0,0x64,0xe2,0x6c,0x5c,0xb4,0x08,0xe2,0x1e,0xb8 } },
 
 // PNG Test Suite sample files
@@ -125,7 +126,7 @@ static const TestMedia g_TestMedia[] =
 
 // Multi-frame example files
 { FLAGS_NONE, { 500, 350, 1, 15, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"Animated.gif", {0xa7,0xdb,0x2e,0x1e,0x35,0x50,0xb0,0xb1,0x4c,0xe7,0x37,0x2e,0xce,0x9e,0x9d,0x95} },
-{ ALTMD5(13), { 512, 512, 1, 4, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"MultiFrame.tif", {0xfb,0x22,0x3e,0x83,0x13,0x99,0x17,0x64,0x5c,0x76,0xde,0x16,0xf7,0xbd,0xff,0x58} },
+{ FLAGS_MQR_ORIENT | ALTMD5(13), { 512, 512, 1, 4, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"MultiFrame.tif", {0xfb,0x22,0x3e,0x83,0x13,0x99,0x17,0x64,0x5c,0x76,0xde,0x16,0xf7,0xbd,0xff,0x58} },
 { FLAGS_NONE, { 500, 500, 1, 24, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"SpinCube.gif", {0x3b,0x32,0x85,0x22,0xc5,0xb9,0x48,0x4b,0xa6,0x93,0xba,0x9d,0x30,0xd4,0x6a,0x0e} },
 
 // Direct2D Test Images
@@ -139,20 +140,20 @@ static const TestMedia g_TestMedia[] =
 { FLAGS_NONE, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8X8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"rgb32table888td.bmp", { 0x7e,0xfe,0x6a,0x59,0xbc,0xdd,0xb4,0xd4,0x35,0x56,0x60,0xab,0x71,0x3b,0x39,0xb9 } },
 
 #ifdef _M_AMD64
-{ ALTMD5(8), { 1024, 768, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"Dock.jpg", { 0x38,0x1e,0xd2,0x54,0x50,0xa3,0x7a,0xa9,0x06,0x48,0xce,0x78,0x91,0x77,0x3d,0xce } },
-{ ALTMD5(9), { 162, 80, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"Glee_Newscorp_rev.jpg", { 0x2b,0xf0,0xb9,0xf7,0xa6,0x68,0x68,0x71,0x22,0x5f,0xce,0x84,0x04,0x0d,0x9f,0xab } },
+{ FLAGS_MQR_ORIENT | ALTMD5(8), { 1024, 768, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"Dock.jpg", { 0x38,0x1e,0xd2,0x54,0x50,0xa3,0x7a,0xa9,0x06,0x48,0xce,0x78,0x91,0x77,0x3d,0xce } },
+{ FLAGS_MQR_ORIENT | ALTMD5(9), { 162, 80, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"Glee_Newscorp_rev.jpg", { 0x2b,0xf0,0xb9,0xf7,0xa6,0x68,0x68,0x71,0x22,0x5f,0xce,0x84,0x04,0x0d,0x9f,0xab } },
 { ALTMD5(10), { 640, 480, 1, 1, 1, 0, 0, DXGI_FORMAT_R8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"image.127839287370267572.jpg", { 0xde,0xff,0x04,0x06,0x82,0xdc,0x05,0x76,0x66,0x56,0xd0,0x8d,0xfd,0xc3,0x1b,0xaa } },
-{ ALTMD5(11), { 500, 500, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"progressivehuffman.jpg", { 0x5e,0x89,0x13,0x94,0xe5,0x4b,0x58,0xa1,0x03,0xc0,0x13,0xe4,0x32,0xea,0x42,0x8c } },
+{ FLAGS_MQR_ORIENT | ALTMD5(11), { 500, 500, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"progressivehuffman.jpg", { 0x5e,0x89,0x13,0x94,0xe5,0x4b,0x58,0xa1,0x03,0xc0,0x13,0xe4,0x32,0xea,0x42,0x8c } },
 { ALTMD5(12), { 512, 384, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"quad-jpeg.tif", { 0x4b,0x50,0xcb,0x88,0x6e,0xbf,0x85,0xe4,0xd0,0xd9,0x02,0x1b,0x9f,0x6b,0xd4,0xe0 } },
 #else
-{ ALTMD5(8), { 1024, 768, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"Dock.jpg", { 0xeb,0x05,0x4e,0x02,0x81,0x22,0xfd,0x3a,0x35,0xe7,0xe2,0x80,0x54,0xfd,0x85,0xf5 } },
-{ ALTMD5(9), { 162, 80, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"Glee_Newscorp_rev.jpg", { 0x7f,0x64,0x3e,0xe9,0x27,0xd8,0x4f,0x6b,0x59,0x76,0x28,0xdf,0xc5,0x03,0x6b,0x0d } },
+{ FLAGS_MQR_ORIENT | ALTMD5(8), { 1024, 768, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"Dock.jpg", { 0xeb,0x05,0x4e,0x02,0x81,0x22,0xfd,0x3a,0x35,0xe7,0xe2,0x80,0x54,0xfd,0x85,0xf5 } },
+{ FLAGS_MQR_ORIENT | ALTMD5(9), { 162, 80, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"Glee_Newscorp_rev.jpg", { 0x7f,0x64,0x3e,0xe9,0x27,0xd8,0x4f,0x6b,0x59,0x76,0x28,0xdf,0xc5,0x03,0x6b,0x0d } },
 { ALTMD5(10), { 640, 480, 1, 1, 1, 0, 0, DXGI_FORMAT_R8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"image.127839287370267572.jpg", { 0xa6,0xfb,0x0c,0xae,0x75,0xeb,0xca,0xce,0xed,0x6d,0x88,0x6b,0x2c,0x62,0xb7,0xc4 } },
-{ ALTMD5(11), { 500, 500, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"progressivehuffman.jpg", { 0x57,0x72,0x29,0x57,0x51,0x49,0xf3,0xdc,0xa1,0x4d,0x3b,0x23,0x42,0x49,0x2a,0xf8 } },
+{ FLAGS_MQR_ORIENT | ALTMD5(11), { 500, 500, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"progressivehuffman.jpg", { 0x57,0x72,0x29,0x57,0x51,0x49,0xf3,0xdc,0xa1,0x4d,0x3b,0x23,0x42,0x49,0x2a,0xf8 } },
 { ALTMD5(12), { 512, 384, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"quad-jpeg.tif", { 0x53,0x52,0xa4,0x0d,0xe0,0x5a,0xe9,0x0d,0x83,0x6c,0xbd,0x27,0xd1,0xa6,0x3e,0x1e } },
 #endif
 
-{ FLAGS_NONE, { 73, 43, 1, 1, 1, 0, 0, DXGI_FORMAT_R8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"flower-minisblack-06.tif", { 0xa7,0x55,0x69,0xf5,0xde,0xbc,0x71,0xfd,0x20,0x03,0xe5,0x73,0x9f,0x45,0x2e,0x2e } },
+{ FLAGS_MQR_ORIENT, { 73, 43, 1, 1, 1, 0, 0, DXGI_FORMAT_R8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"flower-minisblack-06.tif", { 0xa7,0x55,0x69,0xf5,0xde,0xbc,0x71,0xfd,0x20,0x03,0xe5,0x73,0x9f,0x45,0x2e,0x2e } },
 { FLAGS_NONE, { 760, 399, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"H3_06.TIF", { 0xd8,0x53,0x57,0x40,0x34,0x2e,0xf6,0x61,0x61,0xe1,0x08,0x38,0xb5,0x84,0x47,0x11 } },
 
 { FLAGS_NONE, { 1920, 1200, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"abstract-test-pattern.jpg", { 0xe7,0xf0,0xda,0x83,0x80,0x05,0x5d,0x66,0x86,0xb7,0xce,0x35,0xce,0x2d,0x3c,0x61 } },
@@ -165,7 +166,7 @@ static const TestMedia g_TestMedia[] =
 { FLAGS_NONE, { 1280, 1024, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D  }, MEDIA_PATH L"testpattern.png", { 0x1e,0x85,0xd6,0xef,0xe1,0xa9,0x24,0x58,0xb4,0x00,0x6d,0x12,0xf8,0x1c,0xf6,0x44 } },
 { FLAGS_NONE, { 64, 24, 1, 1, 1, 0, 0, DXGI_FORMAT_R8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"p99sr.png", {0x32,0xd0,0xe2,0x92,0x5d,0x00,0x43,0xbb,0xaa,0xbd,0xa2,0x52,0xc4,0xcf,0x9f,0xdd} },
 { FLAGS_NONE, { 976, 800, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"chip_lagrange_o3_400_sigm_6p5x50.png", {0x24,0x02,0xa9,0x6b,0x21,0x17,0x30,0xbc,0x65,0x8c,0x3e,0x1d,0x29,0x8d,0x52,0x73} },
-{ FLAGS_NONE, { 512, 683, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"cup_small.jpg", {0x2f,0x7c,0x2d,0xa6,0x8e,0x25,0x10,0x26,0xcc,0x05,0xb6,0x70,0x63,0xd2,0x44,0x7b} },
+{ FLAGS_MQR_ORIENT, { 512, 683, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"cup_small.jpg", {0x2f,0x7c,0x2d,0xa6,0x8e,0x25,0x10,0x26,0xcc,0x05,0xb6,0x70,0x63,0xd2,0x44,0x7b} },
 { FLAGS_NONE, { 800, 600, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"livingrobot-rear.tiff", {0xf0,0xa0,0x56,0xc3,0xda,0x17,0x4e,0x8a,0x79,0x44,0xa3,0xa1,0x5f,0x96,0x84,0xc2} },
 { FLAGS_NONE, { 2048, 2048, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"tex4.png", {0x37,0x6c,0x85,0xd5,0x20,0x4e,0xab,0xbd,0xf1,0x98,0xa3,0x07,0xde,0x7b,0x2d,0xb1} },
 { FLAGS_NONE, { 21600, 10800, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthdiffuse.png", {0x26,0x00,0xa1,0x94,0x33,0xe7,0x36,0x46,0x03,0xb6,0xe0,0xf8,0x1c,0xfb,0x56,0x6c} },
@@ -180,6 +181,9 @@ static const TestMedia g_TestMedia[] =
 #if (_WIN32_WINNT >= 0x0602 /*_WIN32_WINNT_WIN8*/)
 // TODO - test images for GUID_WICPixelFormat32bppRGB, GUID_WICPixelFormat64bppRGB, GUID_WICPixelFormat64bppPRGBAHalf
 #endif
+
+// orientation test cases
+{ FLAGS_MQR_ORIENT, { 640, 480, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"JpegWithOrientation.JPG", { 0xe0,0x0b,0x5f,0xe6,0x16,0xfc,0x58,0xf2,0x32,0xae,0x22,0xd7,0xd2,0xe7,0x68,0x6b } },
 };
 
 //-------------------------------------------------------------------------------------
@@ -380,7 +384,37 @@ bool Test01()
         else
         {
             TexMetadata metadata;
-            hr = GetMetadataFromWICMemory( blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO | WIC_FLAGS_ALL_FRAMES, metadata );
+            hr = GetMetadataFromWICMemory( blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO | WIC_FLAGS_ALL_FRAMES, metadata,
+                                           [&](IWICMetadataQueryReader* reader)
+                                           {
+                                               if ( !reader )
+                                               {
+                                                   success = false;
+                                                   printe( "Failed metadata query reader from memory:\n%S\n", szPath );
+                                               }
+#if !defined(_XBOX_ONE) || !defined(_TITLE)
+                                               else if ( g_TestMedia[index].options & FLAGS_MQR_ORIENT )
+                                               {
+                                                   PROPVARIANT value;
+                                                   PropVariantInit( &value );
+
+                                                   bool orient = false;
+                                                   if ( SUCCEEDED(reader->GetMetadataByName( L"System.Photo.Orientation", &value ) )
+                                                        && value.vt == VT_UI2 )
+                                                   {
+                                                       orient = true;
+                                                   }
+
+                                                   if ( !orient )
+                                                   {
+                                                       success = false;
+                                                       printe( "Failed metadata query read of orientation from memory:\n%S\n", szPath );
+                                                   }
+                                                   
+                                                   PropVariantClear( &value );
+                                               }
+#endif
+                                           } );
 
             const TexMetadata* check = &g_TestMedia[index].metadata;
             if ( FAILED(hr) )
@@ -541,7 +575,37 @@ bool Test02()
 #endif
 
         TexMetadata metadata;
-        HRESULT hr = GetMetadataFromWICFile( szPath, WIC_FLAGS_ALLOW_MONO | WIC_FLAGS_ALL_FRAMES, metadata );
+        HRESULT hr = GetMetadataFromWICFile( szPath, WIC_FLAGS_ALLOW_MONO | WIC_FLAGS_ALL_FRAMES, metadata,
+                                             [&](IWICMetadataQueryReader* reader)
+                                             {
+                                                if ( !reader )
+                                                {
+                                                    success = false;
+                                                    printe( "Failed metadata query reader from file:\n%S\n", szPath );
+                                                }
+#if !defined(_XBOX_ONE) || !defined(_TITLE)
+                                                else if ( g_TestMedia[index].options & FLAGS_MQR_ORIENT )
+                                                {
+                                                    PROPVARIANT value;
+                                                    PropVariantInit( &value );
+
+                                                    bool orient = false;
+                                                    if ( SUCCEEDED(reader->GetMetadataByName( L"System.Photo.Orientation", &value ) )
+                                                         && value.vt == VT_UI2 )
+                                                    {
+                                                        orient = true;
+                                                    }
+
+                                                    if ( !orient )
+                                                    {
+                                                        success = false;
+                                                        printe( "Failed metadata query read of orientation from file:\n%S\n", szPath );
+                                                    }
+                                                   
+                                                    PropVariantClear( &value );
+                                                }
+#endif
+                                             } );
 
         const TexMetadata* check = &g_TestMedia[index].metadata;
         if ( FAILED(hr) )
