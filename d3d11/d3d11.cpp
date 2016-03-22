@@ -8,11 +8,7 @@
 
 #include "directxtex.h"
 
-// VS 2010's stdint.h conflicts with intsafe.h
-#pragma warning(push)
-#pragma warning(disable : 4005)
 #include <wrl.h>
-#pragma warning(pop)
 
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
