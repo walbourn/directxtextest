@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="d3d11.cpp" />
+    <ClCompile Include="directxtest.cpp" />
+    <ClCompile Include="testutils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{ec7fda7b-9889-436f-b5f3-e7a4c800c0e0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="shaders\ps1D.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="shaders\ps2D.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="shaders\ps3D.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="shaders\psCube.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="shaders\vs2D.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="shaders\vs3D.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="shaders\vsCube.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\directxtest.h" />
+  </ItemGroup>
+</Project>
