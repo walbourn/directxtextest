@@ -70,7 +70,7 @@ bool Test01()
 
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
-        WCHAR szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH];
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -83,7 +83,7 @@ bool Test01()
         OutputDebugStringA("\n");
 #endif
 
-        WCHAR ext[_MAX_EXT];
+        wchar_t ext[_MAX_EXT];
         _wsplitpath_s( szPath, NULL, 0, NULL, 0, NULL, 0, ext, _MAX_EXT );
 
         TexMetadata metadata;
@@ -148,7 +148,7 @@ bool Test02()
 
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
-        WCHAR szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH];
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -161,7 +161,7 @@ bool Test02()
         OutputDebugStringA("\n");
 #endif
 
-        WCHAR ext[_MAX_EXT];
+        wchar_t ext[_MAX_EXT];
         _wsplitpath_s( szPath, NULL, 0, NULL, 0, NULL, 0, ext, _MAX_EXT );
 
         TexMetadata metadata;
@@ -246,7 +246,7 @@ bool Test03()
 
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
-        WCHAR szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH];
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -259,7 +259,7 @@ bool Test03()
         OutputDebugStringA("\n");
 #endif
 
-        WCHAR ext[_MAX_EXT];
+        wchar_t ext[_MAX_EXT];
         _wsplitpath_s( szPath, NULL, 0, NULL, 0, NULL, 0, ext, _MAX_EXT );
 
         TexMetadata metadata;
@@ -351,7 +351,7 @@ bool Test04()
 
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
-        WCHAR szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH];
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -364,11 +364,11 @@ bool Test04()
         OutputDebugStringA("\n");
 #endif
         // Form dest path
-        WCHAR ext[_MAX_EXT];
-        WCHAR fname[_MAX_FNAME];
+        wchar_t ext[_MAX_EXT];
+        wchar_t fname[_MAX_FNAME];
         _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
-        WCHAR tempDir[MAX_PATH];
+        wchar_t tempDir[MAX_PATH];
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"d3d11", tempDir, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -378,7 +378,7 @@ bool Test04()
 
         CreateDirectoryW( tempDir, NULL );
 
-        WCHAR szDestPath[MAX_PATH];
+        wchar_t szDestPath[MAX_PATH];
         _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, fname, L".dds" );
 
         TexMetadata metadata;

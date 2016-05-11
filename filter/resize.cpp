@@ -326,7 +326,7 @@ bool Test01()
 
     for( size_t index=0; index < _countof(g_ResizeMedia); ++index )
     {
-        WCHAR szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH];
         DWORD ret = ExpandEnvironmentStringsW(g_ResizeMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -340,8 +340,8 @@ bool Test01()
 #endif
 
         // Form dest path
-        WCHAR ext[_MAX_EXT];
-        WCHAR fname[_MAX_FNAME];
+        wchar_t ext[_MAX_EXT];
+        wchar_t fname[_MAX_FNAME];
         _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
         if ( g_ResizeMedia[index].options & FLAGS_NAMECONFLICT )
@@ -349,7 +349,7 @@ bool Test01()
             wcscat_s( fname, L"B" );
         }
 
-        WCHAR tempDir[MAX_PATH];
+        wchar_t tempDir[MAX_PATH];
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"resize", tempDir, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -394,7 +394,7 @@ bool Test01()
             UINT twidth = g_ResizeMedia[index].twidth;
             UINT theight = g_ResizeMedia[index].theight;
 
-            WCHAR fname2[MAX_PATH];
+            wchar_t fname2[MAX_PATH];
             swprintf_s( fname2, L"%s_%ux%u", fname, twidth, theight );
 
             //--- Simple resize -------------------------------------------------------
@@ -458,7 +458,7 @@ bool Test01()
                     }
                 }
 
-                WCHAR szDestPath[MAX_PATH];
+                wchar_t szDestPath[MAX_PATH];
                 _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, fname2, L".dds" );
 
                 SaveScratchImage( szDestPath, DDS_FLAGS_NONE, image );
@@ -525,11 +525,11 @@ bool Test01()
                         }
                     }
 
-                    WCHAR tname[MAX_PATH];
+                    wchar_t tname[MAX_PATH];
                     wcscpy_s( tname, fname2 );
                     wcscat_s( tname, L"_POINT" );
 
-                    WCHAR szDestPath[MAX_PATH];
+                    wchar_t szDestPath[MAX_PATH];
                     _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, imagePoint );
@@ -603,11 +603,11 @@ bool Test01()
                                 mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, twidth, theight, szPath );
                     }
 
-                    WCHAR tname[MAX_PATH];
+                    wchar_t tname[MAX_PATH];
                     wcscpy_s( tname, fname2 );
                     wcscat_s( tname, L"_LINEAR" );
 
-                    WCHAR szDestPath[MAX_PATH];
+                    wchar_t szDestPath[MAX_PATH];
                     _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, imageLinear );
@@ -696,11 +696,11 @@ bool Test01()
                                 mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, twidth, theight, szPath );
                     }
 
-                    WCHAR tname[MAX_PATH];
+                    wchar_t tname[MAX_PATH];
                     wcscpy_s( tname, fname2 );
                     wcscat_s( tname, L"_CUBIC" );
 
-                    WCHAR szDestPath[MAX_PATH];
+                    wchar_t szDestPath[MAX_PATH];
                     _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, imageCubic );
@@ -758,11 +758,11 @@ bool Test01()
                         }
                     }
 
-                    WCHAR tname[MAX_PATH];
+                    wchar_t tname[MAX_PATH];
                     wcscpy_s( tname, fname2 );
                     wcscat_s( tname, L"_TRIANGLE" );
 
-                    WCHAR szDestPath[MAX_PATH];
+                    wchar_t szDestPath[MAX_PATH];
                     _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, imageTriangle );
@@ -824,11 +824,11 @@ bool Test01()
                         }
                     }
 
-                    WCHAR tname[MAX_PATH];
+                    wchar_t tname[MAX_PATH];
                     wcscpy_s( tname, fname2 );
                     wcscat_s( tname, L"_SEPALPHA" );
 
-                    WCHAR szDestPath[MAX_PATH];
+                    wchar_t szDestPath[MAX_PATH];
                     _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, imageSepAlpha );
@@ -881,11 +881,11 @@ bool Test01()
                                 mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, twidth, theight, szPath );
                     }
 
-                    WCHAR tname[MAX_PATH];
+                    wchar_t tname[MAX_PATH];
                     wcscpy_s( tname, fname2 );
                     wcscat_s( tname, L"_nowic" );
 
-                    WCHAR szDestPath[MAX_PATH];
+                    wchar_t szDestPath[MAX_PATH];
                     _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, nwimage );
@@ -936,11 +936,11 @@ bool Test01()
                             }
                         }
 
-                        WCHAR tname[MAX_PATH];
+                        wchar_t tname[MAX_PATH];
                         wcscpy_s( tname, fname2 );
                         wcscat_s( tname, L"_POINT_nowic" );
 
-                        WCHAR szDestPath[MAX_PATH];
+                        wchar_t szDestPath[MAX_PATH];
                         _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                         SaveScratchImage( szDestPath, DDS_FLAGS_NONE, nwimagePoint );
@@ -985,11 +985,11 @@ bool Test01()
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, twidth, theight, szPath );
                         }
 
-                        WCHAR tname[MAX_PATH];
+                        wchar_t tname[MAX_PATH];
                         wcscpy_s( tname, fname2 );
                         wcscat_s( tname, L"_LINEAR_nowic" );
 
-                        WCHAR szDestPath[MAX_PATH];
+                        wchar_t szDestPath[MAX_PATH];
                         _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                         SaveScratchImage( szDestPath, DDS_FLAGS_NONE, nwimageLinear );
@@ -1067,11 +1067,11 @@ bool Test01()
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, twidth, theight, szPath );
                         }
 
-                        WCHAR tname[MAX_PATH];
+                        wchar_t tname[MAX_PATH];
                         wcscpy_s( tname, fname2 );
                         wcscat_s( tname, L"_CUBIC_nowic" );
 
-                        WCHAR szDestPath[MAX_PATH];
+                        wchar_t szDestPath[MAX_PATH];
                         _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                         SaveScratchImage( szDestPath, DDS_FLAGS_NONE, nwimageCubic );
@@ -1128,11 +1128,11 @@ bool Test01()
                                 mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, twidth, theight, szPath );
                     }
 
-                    WCHAR tname[MAX_PATH];
+                    wchar_t tname[MAX_PATH];
                     wcscpy_s( tname, fname2 );
                     wcscat_s( tname, L"_srgb" );
 
-                    WCHAR szDestPath[MAX_PATH];
+                    wchar_t szDestPath[MAX_PATH];
                     _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, srgbimage );
@@ -1186,11 +1186,11 @@ bool Test01()
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, twidth, theight, szPath );
                         }
 
-                        WCHAR tname[MAX_PATH];
+                        wchar_t tname[MAX_PATH];
                         wcscpy_s( tname, fname2 );
                         wcscat_s( tname, L"_LINEAR_srgb" );
 
-                        WCHAR szDestPath[MAX_PATH];
+                        wchar_t szDestPath[MAX_PATH];
                         _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                         SaveScratchImage( szDestPath, DDS_FLAGS_NONE, srgbimageLinear );
@@ -1242,11 +1242,11 @@ bool Test01()
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, twidth, theight, szPath );
                         }
 
-                        WCHAR tname[MAX_PATH];
+                        wchar_t tname[MAX_PATH];
                         wcscpy_s( tname, fname2 );
                         wcscat_s( tname, L"_CUBIC_srgb" );
 
-                        WCHAR szDestPath[MAX_PATH];
+                        wchar_t szDestPath[MAX_PATH];
                         _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                         SaveScratchImage( szDestPath, DDS_FLAGS_NONE, srgbimageCubic );
@@ -1298,11 +1298,11 @@ bool Test01()
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, twidth, theight, szPath );
                         }
 
-                        WCHAR tname[MAX_PATH];
+                        wchar_t tname[MAX_PATH];
                         wcscpy_s( tname, fname2 );
                         wcscat_s( tname, L"_TRIANGLE_srgb" );
 
-                        WCHAR szDestPath[MAX_PATH];
+                        wchar_t szDestPath[MAX_PATH];
                         _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                         SaveScratchImage( szDestPath, DDS_FLAGS_NONE, srgbimageTriangle );
@@ -1383,11 +1383,11 @@ bool Test01()
                             }
                         }
 
-                        WCHAR tname[MAX_PATH] = { 0 };
+                        wchar_t tname[MAX_PATH] = { 0 };
                         wcscpy_s( tname, fname2 );
                         wcscat_s( tname, L"_complex" );
 
-                        WCHAR szDestPath[MAX_PATH];
+                        wchar_t szDestPath[MAX_PATH];
                         _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                         SaveToDDSFile( imageComplex.GetImages(), imageComplex.GetImageCount(), imageComplex.GetMetadata(), DDS_FLAGS_NONE, szDestPath );

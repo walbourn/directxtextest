@@ -63,7 +63,7 @@ bool Test04()
 
     for( size_t index=0; index < _countof(g_FlipRotateMedia); ++index )
     {
-        WCHAR szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH];
         DWORD ret = ExpandEnvironmentStringsW(g_FlipRotateMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -77,11 +77,11 @@ bool Test04()
 #endif
 
         // Form dest path
-        WCHAR ext[_MAX_EXT];
-        WCHAR fname[_MAX_FNAME];
+        wchar_t ext[_MAX_EXT];
+        wchar_t fname[_MAX_FNAME];
         _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
-        WCHAR tempDir[MAX_PATH];
+        wchar_t tempDir[MAX_PATH];
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"flip", tempDir, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -149,7 +149,7 @@ bool Test04()
                 {
                     // TODO - Verify the image data (perhaps MD5 checksum)
 
-                    WCHAR szDestPath[MAX_PATH];
+                    wchar_t szDestPath[MAX_PATH];
                     _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, fname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, image );
@@ -208,11 +208,11 @@ bool Test04()
                     {
                         // TODO - Verify the image data (perhaps MD5 checksum)
 
-                        WCHAR tname[MAX_PATH] = { 0 };
+                        wchar_t tname[MAX_PATH] = { 0 };
                         wcscpy_s( tname, fname );
                         wcscat_s( tname, L"_complex" );
 
-                        WCHAR szDestPath[MAX_PATH];
+                        wchar_t szDestPath[MAX_PATH];
                         _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                         SaveToDDSFile( imageComplex.GetImages(), imageComplex.GetImageCount(), imageComplex.GetMetadata(), DDS_FLAGS_NONE, szDestPath );

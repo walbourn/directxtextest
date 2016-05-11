@@ -732,7 +732,7 @@ bool Test01()
 
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
-        WCHAR szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH];
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -846,7 +846,7 @@ bool Test02()
 
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
-        WCHAR szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH];
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -1117,7 +1117,7 @@ bool Test03()
 
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
-        WCHAR szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH];
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -1378,7 +1378,7 @@ bool Test04()
 
     for( size_t index=0; index < _countof(g_SaveMedia); ++index )
     {
-        WCHAR szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH];
         DWORD ret = ExpandEnvironmentStringsW(g_SaveMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -1735,7 +1735,7 @@ bool Test05()
     
     for( size_t index=0; index < _countof(g_SaveMedia); ++index )
     {
-        WCHAR szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH];
         DWORD ret = ExpandEnvironmentStringsW(g_SaveMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -1749,11 +1749,11 @@ bool Test05()
 #endif
 
         // Form dest path
-        WCHAR ext[_MAX_EXT];
-        WCHAR fname[_MAX_FNAME];
+        wchar_t ext[_MAX_EXT];
+        wchar_t fname[_MAX_FNAME];
         _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
-        WCHAR tempDir[MAX_PATH];
+        wchar_t tempDir[MAX_PATH];
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"dds", tempDir, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -1763,29 +1763,29 @@ bool Test05()
 
         CreateDirectoryW( tempDir, NULL );
 
-        WCHAR szDestPath[MAX_PATH];
+        wchar_t szDestPath[MAX_PATH];
         _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, fname, L".dds" );
 
         // Form second dest path
-        WCHAR fname2[_MAX_FNAME] = { 0 };
+        wchar_t fname2[_MAX_FNAME] = { 0 };
         wcscpy_s( fname2, fname );
         wcscat_s( fname2, L"_DX10" );
 
-        WCHAR szDestPathDX10[MAX_PATH];
+        wchar_t szDestPathDX10[MAX_PATH];
         _wmakepath_s( szDestPathDX10, MAX_PATH, NULL, tempDir, fname2, L".dds" );
 
         // Form third dest path
         wcscpy_s( fname2, fname );
         wcscat_s( fname2, L"_DX10_2" );
 
-        WCHAR szDestPathDX10_2[MAX_PATH];
+        wchar_t szDestPathDX10_2[MAX_PATH];
         _wmakepath_s( szDestPathDX10_2, MAX_PATH, NULL, tempDir, fname2, L".dds" );
 
         // Form fourth dest path
         wcscpy_s( fname2, fname );
         wcscat_s( fname2, L"_WIDE" );
 
-        WCHAR szDestPathWide[MAX_PATH];
+        wchar_t szDestPathWide[MAX_PATH];
         _wmakepath_s( szDestPathWide, MAX_PATH, NULL, tempDir, fname2, L".dds" );
 
         TexMetadata metadata;

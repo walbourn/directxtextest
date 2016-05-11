@@ -300,7 +300,7 @@ bool Test01()
 
     for( size_t index=0; index < _countof(g_BCMedia); ++index )
     {
-        WCHAR szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH];
         DWORD ret = ExpandEnvironmentStringsW(g_BCMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -314,11 +314,11 @@ bool Test01()
 #endif
 
         // Form dest path
-        WCHAR ext[_MAX_EXT];
-        WCHAR fname[_MAX_FNAME];
+        wchar_t ext[_MAX_EXT];
+        wchar_t fname[_MAX_FNAME];
         _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
-        WCHAR tempDir[MAX_PATH];
+        wchar_t tempDir[MAX_PATH];
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"bc_dec", tempDir, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -328,7 +328,7 @@ bool Test01()
 
         CreateDirectoryW( tempDir, NULL );
 
-        WCHAR szDestPath[MAX_PATH];
+        wchar_t szDestPath[MAX_PATH];
         _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, fname, L".dds" );
 
         TexMetadata metadata;
@@ -498,7 +498,7 @@ bool Test02()
 
     for( size_t index=0; index < _countof(g_CompressMedia); ++index )
     {
-        WCHAR szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH];
         DWORD ret = ExpandEnvironmentStringsW(g_CompressMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -512,11 +512,11 @@ bool Test02()
 #endif
 
         // Form dest path
-        WCHAR ext[_MAX_EXT];
-        WCHAR fname[_MAX_FNAME];
+        wchar_t ext[_MAX_EXT];
+        wchar_t fname[_MAX_FNAME];
         _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
-        WCHAR tempDir[MAX_PATH];
+        wchar_t tempDir[MAX_PATH];
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"bc_enc", tempDir, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -901,12 +901,12 @@ bool Test02()
                         break;
                     }
 
-                    WCHAR tname[MAX_PATH] = { 0 };
+                    wchar_t tname[MAX_PATH] = { 0 };
                     wcscpy_s( tname, fname );
                     wcscat_s( tname, L"_" );
                     wcscat_s( tname, GetName(cformat) );
 
-                    WCHAR szDestPath[MAX_PATH];
+                    wchar_t szDestPath[MAX_PATH];
                     _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                     if ( metadata.mipLevels > 1 || metadata.arraySize > 1 || metadata.depth > 1 )
@@ -1011,7 +1011,7 @@ bool Test03()
 
     for( size_t index=0; index < _countof(g_CompressMedia); ++index )
     {
-        WCHAR szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH];
         DWORD ret = ExpandEnvironmentStringsW(g_CompressMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -1025,11 +1025,11 @@ bool Test03()
 #endif
 
         // Form dest path
-        WCHAR ext[_MAX_EXT];
-        WCHAR fname[_MAX_FNAME];
+        wchar_t ext[_MAX_EXT];
+        wchar_t fname[_MAX_FNAME];
         _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
-        WCHAR tempDir[MAX_PATH];
+        wchar_t tempDir[MAX_PATH];
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"bc_gpu", tempDir, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -1122,12 +1122,12 @@ bool Test03()
                                 mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName(cformat), szPath );
                     }
 
-                    WCHAR tname[MAX_PATH] = { 0 };
+                    wchar_t tname[MAX_PATH] = { 0 };
                     wcscpy_s( tname, fname );
                     wcscat_s( tname, L"_" );
                     wcscat_s( tname, GetName(cformat) );
 
-                    WCHAR szDestPath[MAX_PATH];
+                    wchar_t szDestPath[MAX_PATH];
                     _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                     if ( metadata.mipLevels > 1 || metadata.arraySize > 1 || metadata.depth > 1 )
