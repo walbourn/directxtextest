@@ -166,8 +166,7 @@ HRESULT SetupRenderTest( ID3D11Device** pDev, ID3D11DeviceContext** pContext )
     static bool s_classExists;
     if ( !s_classExists )
     {
-        WNDCLASSEX wcex;
-        memset( &wcex, 0, sizeof(wcex) );
+        WNDCLASSEX wcex = {};
         wcex.cbSize = sizeof( WNDCLASSEX );
         wcex.style = CS_HREDRAW | CS_VREDRAW | CS_NOCLOSE;
         wcex.lpfnWndProc = WndProc;
