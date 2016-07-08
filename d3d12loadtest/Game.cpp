@@ -448,13 +448,13 @@ void Game::CreateDeviceDependentResources()
             srvDesc.Texture2D.MipLevels = desc.MipLevels;
 
             device->CreateShaderResourceView(m_cup.Get(), &srvDesc, cpuHandle.Offset(1, m_strideSRV));
-
-            DX::ThrowIfFailed(commandList->Close());
-            m_deviceResources->GetCommandQueue()->ExecuteCommandLists(1, CommandListCast(&commandList));
-
-            // Wait until assets have been uploaded to the GPU.
-            m_deviceResources->WaitForGpu();
         }
+
+        DX::ThrowIfFailed(commandList->Close());
+        m_deviceResources->GetCommandQueue()->ExecuteCommandLists(1, CommandListCast(&commandList));
+
+        // Wait until assets have been uploaded to the GPU.
+        m_deviceResources->WaitForGpu();
     }
 }
 
