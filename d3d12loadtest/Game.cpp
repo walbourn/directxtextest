@@ -372,7 +372,9 @@ void Game::CreateDeviceDependentResources()
         m_indexBufferView.BufferLocation = m_indexBuffer->GetGPUVirtualAddress();
         m_indexBufferView.Format = DXGI_FORMAT_R16_UINT;
         m_indexBufferView.SizeInBytes = sizeof(s_indexData);
+    }
 
+    {
         auto commandList = m_deviceResources->GetCommandList();
         commandList->Reset(m_deviceResources->GetCommandAllocator(), nullptr);
 
@@ -398,9 +400,9 @@ void Game::CreateDeviceDependentResources()
                     nullptr,
                     IID_PPV_ARGS(ddsUploadHeap.GetAddressOf())));
 
-            UpdateSubresources(commandList, m_dx5logo.Get(), ddsUploadHeap.Get(), 0, 0, 1, subresources.data());
+            UpdateSubresources(commandList, m_dx5logo.Get(), ddsUploadHeap.Get(), 0, 0, static_cast<UINT>(subresources.size()), subresources.data());
             commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_dx5logo.Get(),
-                                         D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
+                D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
 
             auto desc = m_dx5logo->GetDesc();
 
@@ -408,7 +410,7 @@ void Game::CreateDeviceDependentResources()
             srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
             srvDesc.Format = desc.Format;
             srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-            srvDesc.Texture2D.MipLevels = 1;
+            srvDesc.Texture2D.MipLevels = desc.MipLevels;
 
             device->CreateShaderResourceView(m_dx5logo.Get(), &srvDesc, cpuHandle.Offset(0, m_strideSRV));
         }
@@ -443,17 +445,16 @@ void Game::CreateDeviceDependentResources()
             srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
             srvDesc.Format = desc.Format;
             srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-            srvDesc.Texture2D.MipLevels = 1;
+            srvDesc.Texture2D.MipLevels = desc.MipLevels;
 
             device->CreateShaderResourceView(m_cup.Get(), &srvDesc, cpuHandle.Offset(1, m_strideSRV));
+
+            DX::ThrowIfFailed(commandList->Close());
+            m_deviceResources->GetCommandQueue()->ExecuteCommandLists(1, CommandListCast(&commandList));
+
+            // Wait until assets have been uploaded to the GPU.
+            m_deviceResources->WaitForGpu();
         }
-
-        DX::ThrowIfFailed(commandList->Close());
-        m_deviceResources->GetCommandQueue()->ExecuteCommandLists(1, CommandListCast(&commandList));
-
-        // Wait until assets have been uploaded to the GPU.
-        m_deviceResources->WaitForGpu();
-
     }
 }
 
