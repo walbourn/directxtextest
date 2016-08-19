@@ -15,3 +15,5 @@
 
 # Explicitly declare resource files as binary
 *.pdb binary
+*.dds binary
+*.jpg binary
