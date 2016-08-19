@@ -112,12 +112,11 @@ struct SaveMedia
 static const SaveMedia g_SaveMedia[] = 
 {
 // flags | source-dxgi-format save-dxgi-format | source-filename
-//{ ALTMD5(1), DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"windowslogo_X8B8G8R8.dds" },
 { ALTMD5(2), DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"test8888.dds" },
-//{ ALTMD5(3), DXGI_FORMAT_B8G8R8X8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"windowslogo_X8R8G8B8.dds" },
-//{ FLAGS_NONE, DXGI_FORMAT_B5G5R5A1_UNORM, DXGI_FORMAT_B5G5R5A1_UNORM, MEDIA_PATH L"test555.dds" },
-//{ FLAGS_NONE, DXGI_FORMAT_R8_UNORM, DXGI_FORMAT_R8_UNORM, MEDIA_PATH L"windowslogo_L8.dds" },
-//{ FLAGS_NONE, DXGI_FORMAT_A8_UNORM, DXGI_FORMAT_R8_UNORM, MEDIA_PATH L"alphaedge.dds" },
+{ ALTMD5(3), DXGI_FORMAT_B8G8R8X8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"windowslogo_X8R8G8B8.dds" },
+{ FLAGS_NONE, DXGI_FORMAT_B5G5R5A1_UNORM, DXGI_FORMAT_B5G5R5A1_UNORM, MEDIA_PATH L"test555.dds" },
+{ FLAGS_NONE, DXGI_FORMAT_R8_UNORM, DXGI_FORMAT_R8_UNORM, MEDIA_PATH L"windowslogo_L8.dds" },
+{ FLAGS_NONE, DXGI_FORMAT_A8_UNORM, DXGI_FORMAT_R8_UNORM, MEDIA_PATH L"alphaedge.dds" },
 };
 
 struct AltMD5
@@ -433,6 +432,8 @@ bool Test04()
                     else
                     {
     // TESTTEST- SaveScratchImage( L"C:\\Temp\\XXX1.DDS", DDS_FLAGS_NONE, image2 );
+
+
 
                         const uint8_t* expected = digest;
                         if ( g_SaveMedia[index].options & FLAGS_ALTMD5_MASK )
