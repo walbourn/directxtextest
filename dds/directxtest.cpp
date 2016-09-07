@@ -26,6 +26,7 @@ extern bool Test02();
 extern bool Test03();
 extern bool Test04();
 extern bool Test05();
+extern bool Test06();
 
 TestInfo g_Tests[] =
 {
@@ -34,6 +35,7 @@ TestInfo g_Tests[] =
     { "LoadFromDDSFile", Test03 },
     { "SaveDDSToMemory", Test04 },
     { "SaveDDSToFile", Test05 },
+    { "Fuzz", Test06 },
 };
 
 
