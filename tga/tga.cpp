@@ -8,6 +8,15 @@
 
 #include "directxtex.h"
 
+#include "scoped.h"
+
+namespace
+{
+    struct find_closer { void operator()(HANDLE h) { assert(h != INVALID_HANDLE_VALUE); if (h) FindClose(h); } };
+
+    typedef public std::unique_ptr<void, find_closer> ScopedFindHandle;
+}
+
 using namespace DirectX;
 
 struct TestMedia
@@ -150,7 +159,7 @@ bool Test01()
 
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -204,7 +213,7 @@ bool Test02()
 
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -288,7 +297,7 @@ bool Test03()
 
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -360,7 +369,7 @@ bool Test04()
 
     for( size_t index=0; index < _countof(g_SaveMedia); ++index )
     {
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_SaveMedia[index].source, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -480,7 +489,7 @@ bool Test05()
 
     for( size_t index=0; index < _countof(g_SaveMedia); ++index )
     {
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_SaveMedia[index].source, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -498,7 +507,7 @@ bool Test05()
         wchar_t fname[_MAX_FNAME];
         _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
-        wchar_t tempDir[MAX_PATH];
+        wchar_t tempDir[MAX_PATH] = {};
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"tga", tempDir, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -508,7 +517,7 @@ bool Test05()
 
         CreateDirectoryW( tempDir, NULL );
 
-        wchar_t szDestPath[MAX_PATH];
+        wchar_t szDestPath[MAX_PATH] = {};
         _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, fname, L".tga" );
 
         TexMetadata metadata;
@@ -598,6 +607,90 @@ bool Test05()
     }
 
     print("%Iu images tested, %Iu images passed ", ncount, npass );
+
+    return success;
+}
+
+
+//-------------------------------------------------------------------------------------
+// Fuzz
+bool Test06()
+{
+    bool success = true;
+
+    wchar_t szMediaPath[MAX_PATH] = {};
+    DWORD ret = ExpandEnvironmentStringsW(MEDIA_PATH, szMediaPath, MAX_PATH);
+    if (!ret || ret > MAX_PATH)
+    {
+        printe("ERROR: ExpandEnvironmentStrings FAILED\n");
+        return false;
+    }
+
+    wchar_t szPath[MAX_PATH] = {};
+    wcscpy_s(szPath, szMediaPath);
+    wcscat_s(szPath, L"*.*");
+
+    WIN32_FIND_DATA findData = {};
+    ScopedFindHandle hFile(safe_handle(FindFirstFileEx(szPath, FindExInfoBasic, &findData, FindExSearchNameMatch, nullptr,
+        FIND_FIRST_EX_LARGE_FETCH)));
+    if (!hFile)
+    {
+        printe("ERROR: FindFirstFileEx FAILED (%u)\n", GetLastError());
+        return false;
+    }
+
+    size_t ncount = 0;
+
+    for (;;)
+    {
+        if (!(findData.dwFileAttributes & (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM)))
+        {
+            ++ncount;
+
+            if (!(ncount % 100))
+            {
+                print(".");
+            }
+
+            wcscpy_s(szPath, szMediaPath);
+            wcscat_s(szPath, findData.cFileName);
+
+            bool istga = false;
+            {
+                wchar_t ext[_MAX_EXT];
+                wchar_t fname[_MAX_FNAME];
+                _wsplitpath_s(findData.cFileName, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT);
+
+                istga = (_wcsicmp(ext, L".tga") == 0);
+            }
+
+            TexMetadata metadata;
+            ScratchImage image;
+            HRESULT hr = LoadFromTGAFile(szPath, &metadata, image);
+
+            if (FAILED(hr) && istga)
+            {
+                success = false;
+                printe("ERROR: expected success! (%08X)\n%S\n", hr, szPath);
+            }
+            else if (SUCCEEDED(hr) && !istga)
+            {
+                success = false;
+                printe("ERROR: expected failure\n%S\n", szPath);
+            }
+        }
+
+        if (!FindNextFile(hFile.get(), &findData))
+            break;
+    }
+
+    if (!ncount)
+    {
+        printe("ERROR: expected to find test images\n");
+        return false;
+    }
+
+    print(" %Iu images tested ", ncount);
 
     return success;
 }

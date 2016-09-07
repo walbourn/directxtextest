@@ -26,6 +26,7 @@ extern bool Test02();
 extern bool Test03();
 extern bool Test04();
 extern bool Test05();
+extern bool Test06();
 
 TestInfo g_Tests[] =
 {
@@ -34,6 +35,7 @@ TestInfo g_Tests[] =
     { "LoadFromTGAFile", Test03 },
     { "SaveTGAToMemory", Test04 },
     { "SaveTGAToFile", Test05 },
+    { "Fuzz", Test06 },
 };
 
 
@@ -78,8 +80,6 @@ int __cdecl main()
         printe("ERROR: XMVerifyCPUSupport fails on this system, not a supported platform\n");
         return -1;
     }
-
-    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
     if ( !RunTests() )
         return -1;
