@@ -78,7 +78,7 @@ int __cdecl main()
 
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-    HRESULT hr = CoInitializeEx( NULL,  COINIT_MULTITHREADED );
+    HRESULT hr = CoInitializeEx( nullptr, COINIT_MULTITHREADED );
     if (FAILED(hr))
     {
         printe("ERROR: CoInitializeEx fails (%08X)\n", hr);

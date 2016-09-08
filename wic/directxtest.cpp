@@ -28,6 +28,7 @@ extern bool Test03();
 extern bool Test04();
 extern bool Test05();
 extern bool Test06();
+extern bool Test07();
 
 TestInfo g_Tests[] =
 {
@@ -38,6 +39,7 @@ TestInfo g_Tests[] =
     { "LoadFromWICFile", Test04 },
     { "SaveWICToMemory", Test05 },
     { "SaveWICToFile", Test06 },
+    { "Fuzz", Test07 },
 };
 
 
@@ -85,7 +87,7 @@ int __cdecl main()
 
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-    HRESULT hr = CoInitializeEx( NULL,  COINIT_MULTITHREADED );
+    HRESULT hr = CoInitializeEx( nullptr, COINIT_MULTITHREADED );
     if (FAILED(hr))
     {
         printe("ERROR: CoInitializeEx fails (%08X)\n", hr);

@@ -10,13 +10,6 @@
 
 #include "scoped.h"
 
-namespace
-{
-    struct find_closer { void operator()(HANDLE h) { assert(h != INVALID_HANDLE_VALUE); if (h) FindClose(h); } };
-
-    typedef public std::unique_ptr<void, find_closer> ScopedFindHandle;
-}
-
 using namespace DirectX;
 
 struct TestMedia
@@ -152,6 +145,13 @@ static const AltMD5 g_AltMD5[] =
 extern HRESULT LoadBlobFromFile( _In_z_ LPCWSTR szFile, Blob& blob );
 extern HRESULT MD5Checksum( _In_ const ScratchImage& image, _Out_bytecap_x_(16) uint8_t *digest );
 extern HRESULT SaveScratchImage( _In_z_ LPCWSTR szFile, _In_ DWORD flags, _In_ const ScratchImage& image );
+
+namespace
+{
+    struct find_closer { void operator()(HANDLE h) { assert(h != INVALID_HANDLE_VALUE); if (h) FindClose(h); } };
+
+    typedef public std::unique_ptr<void, find_closer> ScopedFindHandle;
+}
 
 //-------------------------------------------------------------------------------------
 // GetMetadataFromTGAMemory/File
