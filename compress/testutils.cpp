@@ -50,7 +50,7 @@ HRESULT CreateDevice( ID3D11Device** pDev, ID3D11DeviceContext** pContext )
 }
 
 //-------------------------------------------------------------------------------------
-HRESULT SaveScratchImage( _In_z_ LPCWSTR szFile, _In_ DWORD flags, _In_ const ScratchImage& image )
+HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags, _In_ const ScratchImage& image )
 {
     if ( szFile == NULL || image.GetPixels() == NULL || image.GetPixelsSize() == 0 )
         return E_INVALIDARG;
@@ -97,7 +97,7 @@ HRESULT SaveScratchImage( _In_z_ LPCWSTR szFile, _In_ DWORD flags, _In_ const Sc
 
 
 //-------------------------------------------------------------------------------------
-HRESULT CreateWideImage( _In_count_(nimages) const Image* images, _In_ size_t nimages, _In_ const TexMetadata& metadata, _Out_ ScratchImage& result )
+HRESULT CreateWideImage( _In_count_(nimages) const Image* images, size_t nimages, _In_ const TexMetadata& metadata, _Out_ ScratchImage& result )
 {
     if ( !images || !nimages )
         return E_INVALIDARG;

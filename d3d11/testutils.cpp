@@ -238,7 +238,7 @@ HRESULT SetupRenderTest( ID3D11Device** pDev, ID3D11DeviceContext** pContext )
 
     // Create a render target view
     ID3D11Texture2D* pBackBuffer = NULL;
-    hr = g_pSwapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), ( LPVOID* )&pBackBuffer );
+    hr = g_pSwapChain->GetBuffer( 0, IID_PPV_ARGS(&pBackBuffer) );
     if( FAILED( hr ) )
         return hr;
 

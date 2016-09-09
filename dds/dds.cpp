@@ -747,12 +747,12 @@ static const SaveMedia g_SaveMedia[] =
 
 //-------------------------------------------------------------------------------------
 
-extern HRESULT LoadBlobFromFile( _In_z_ LPCWSTR szFile, Blob& blob );
+extern HRESULT LoadBlobFromFile( _In_z_ const wchar_t* szFile, Blob& blob );
 extern HRESULT MD5Checksum( _In_ const ScratchImage& image, _Out_bytecap_x_(16) uint8_t *digest );
-extern HRESULT SaveScratchImage( _In_z_ LPCWSTR szFile, _In_ DWORD flags, _In_ const ScratchImage& image );
-extern HRESULT CreateWideImage( _In_count_(nimages) const Image* images, _In_ size_t nimages, _In_ const TexMetadata& metadata, _Out_ ScratchImage& result ); 
-extern HRESULT IsDDSHeaderPresent( _In_bytecount_(size) LPCVOID pSource, _In_ size_t size );
-extern HRESULT IsDDSHeaderPresent( _In_z_ LPCWSTR szFile );
+extern HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags, _In_ const ScratchImage& image );
+extern HRESULT CreateWideImage( _In_count_(nimages) const Image* images, size_t nimages, _In_ const TexMetadata& metadata, _Out_ ScratchImage& result ); 
+extern HRESULT IsDDSHeaderPresent( _In_bytecount_(size) const void* pSource, size_t size );
+extern HRESULT IsDDSHeaderPresent( _In_z_ const wchar_t* szFile );
 
 namespace
 {

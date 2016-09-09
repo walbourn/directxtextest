@@ -650,7 +650,7 @@ static const XMVECTORF32 g_PixelEpsilon = { 0.01f, 0.01f, 0.01f, 0.01f };
 
 //-------------------------------------------------------------------------------------
 
-extern HRESULT SaveScratchImage( _In_z_ LPCWSTR szFile, _In_ DWORD flags, _In_ const ScratchImage& image );
+extern HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags, _In_ const ScratchImage& image );
 extern HRESULT CopyViaLoadStoreScanline( const Image& srcImage, ScratchImage& image );
 extern const wchar_t* GetName( DXGI_FORMAT fmt );
 
@@ -2775,12 +2775,12 @@ bool Test06()
                 {
                     // TODO - Verify the image data (perhaps MD5 checksum)
 
-                    wchar_t tname[MAX_PATH];
+                    wchar_t tname[MAX_PATH] = {};
                     wcscpy_s( tname, fname );
                     wcscat_s( tname, L"_" );
                     wcscat_s( tname, GetName(tformat) );
 
-                    wchar_t szDestPath[MAX_PATH];
+                    wchar_t szDestPath[MAX_PATH] = {};
                     _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, image );
@@ -2861,13 +2861,13 @@ bool Test06()
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName( metadata.format), GetName( tformat ), szPath );
                         }
 
-                        wchar_t tname[MAX_PATH];
+                        wchar_t tname[MAX_PATH] = {};
                         wcscpy_s( tname, fname );
                         wcscat_s( tname, L"_" );
                         wcscat_s( tname, GetName(tformat) );
                         wcscat_s( tname, L"_DITHER" );
 
-                        wchar_t szDestPath[MAX_PATH];
+                        wchar_t szDestPath[MAX_PATH] = {};
                         _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                         SaveScratchImage( szDestPath, DDS_FLAGS_NONE, imageDither );
@@ -2940,13 +2940,13 @@ bool Test06()
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName( metadata.format), GetName( tformat ), szPath );
                         }
 
-                        wchar_t tname[MAX_PATH];
+                        wchar_t tname[MAX_PATH] = {};
                         wcscpy_s( tname, fname );
                         wcscat_s( tname, L"_" );
                         wcscat_s( tname, GetName(tformat) );
                         wcscat_s( tname, L"_DIFFUSION_DITHER" );
 
-                        wchar_t szDestPath[MAX_PATH];
+                        wchar_t szDestPath[MAX_PATH] = {};
                         _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                         SaveScratchImage( szDestPath, DDS_FLAGS_NONE, imageDitherDiffusion );
@@ -3037,13 +3037,13 @@ bool Test06()
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName( metadata.format), GetName( tformat ), szPath );
                         }
 
-                        wchar_t tname[MAX_PATH];
+                        wchar_t tname[MAX_PATH] = {};
                         wcscpy_s( tname, fname );
                         wcscat_s( tname, L"_" );
                         wcscat_s( tname, GetName(tformat) );
                         wcscat_s( tname, L"_nowic" );
 
-                        wchar_t szDestPath[MAX_PATH];
+                        wchar_t szDestPath[MAX_PATH] = {};
                         _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                         SaveToDDSFile( nwimage.GetImages(), nwimage.GetImageCount(), nwimage.GetMetadata(), DDS_FLAGS_NONE, szDestPath );
@@ -3117,13 +3117,13 @@ bool Test06()
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName( metadata.format), GetName( tformat ), szPath );
                         }
 
-                        wchar_t tname[MAX_PATH];
+                        wchar_t tname[MAX_PATH] = {};
                         wcscpy_s( tname, fname );
                         wcscat_s( tname, L"_" );
                         wcscat_s( tname, GetName(tformat) );
                         wcscat_s( tname, L"_DITHER_nowic" );
 
-                        wchar_t szDestPath[MAX_PATH];
+                        wchar_t szDestPath[MAX_PATH] = {};
                         _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                         SaveScratchImage( szDestPath, DDS_FLAGS_NONE, nwimageDither );
@@ -3197,13 +3197,13 @@ bool Test06()
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName( metadata.format), GetName( tformat ), szPath );
                         }
 
-                        wchar_t tname[MAX_PATH];
+                        wchar_t tname[MAX_PATH] = {};
                         wcscpy_s( tname, fname );
                         wcscat_s( tname, L"_" );
                         wcscat_s( tname, GetName(tformat) );
                         wcscat_s( tname, L"_DIFFUSION_DITHER_nowic" );
 
-                        wchar_t szDestPath[MAX_PATH];
+                        wchar_t szDestPath[MAX_PATH] = {};
                         _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                         SaveScratchImage( szDestPath, DDS_FLAGS_NONE, nwimageDitherDiffusion );
@@ -3430,13 +3430,13 @@ bool Test06()
 
                             // TODO - Verify the image chain data (perhaps MD5 checksum)
 
-                            wchar_t tname[MAX_PATH];
+                            wchar_t tname[MAX_PATH] = {};
                             wcscpy_s( tname, fname );
                             wcscat_s( tname, L"_" );
                             wcscat_s( tname, GetName(tformat) );
                             wcscat_s( tname, L"_complex" );
 
-                            wchar_t szDestPath[MAX_PATH];
+                            wchar_t szDestPath[MAX_PATH] = {};
                             _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                             SaveToDDSFile( imageComplex.GetImages(), imageComplex.GetImageCount(), imageComplex.GetMetadata(), DDS_FLAGS_NONE, szDestPath );

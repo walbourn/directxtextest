@@ -108,7 +108,7 @@ HRESULT MD5Checksum( _In_ const ScratchImage& image, _Out_bytecap_x_(16) uint8_t
 
 
 //-------------------------------------------------------------------------------------
-HRESULT SaveScratchImage( _In_z_ LPCWSTR szFile, _In_ DWORD flags, _In_ const ScratchImage& image )
+HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags, _In_ const ScratchImage& image )
 {
     if ( szFile == NULL || image.GetPixels() == NULL || image.GetPixelsSize() == 0 )
         return E_INVALIDARG;

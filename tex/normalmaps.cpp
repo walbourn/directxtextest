@@ -12,7 +12,7 @@ using namespace DirectX;
 
 //-------------------------------------------------------------------------------------
 
-extern HRESULT SaveScratchImage( _In_z_ LPCWSTR szFile, _In_ DWORD flags, _In_ const ScratchImage& image );
+extern HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags, _In_ const ScratchImage& image );
 
 
 //-------------------------------------------------------------------------------------

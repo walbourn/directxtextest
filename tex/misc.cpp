@@ -14,7 +14,7 @@ using namespace DirectX;
 
 //-------------------------------------------------------------------------------------
 
-extern HRESULT SaveScratchImage( _In_z_ LPCWSTR szFile, _In_ DWORD flags, _In_ const ScratchImage& image );
+extern HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags, _In_ const ScratchImage& image );
 
 //-------------------------------------------------------------------------------------
 
@@ -162,10 +162,10 @@ bool Test09()
                 {
                     // TODO - Verify the image data (perhaps MD5 checksum)
 
-                    wchar_t tname[MAX_PATH];
+                    wchar_t tname[MAX_PATH] = {};
                     swprintf_s( tname, L"%s_%d_%d", fname, x, y );
 
-                    wchar_t szDestPath[MAX_PATH];
+                    wchar_t szDestPath[MAX_PATH] = {};
                     _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, image );
@@ -200,10 +200,10 @@ bool Test09()
                 {
                     // TODO - Verify the image data (perhaps MD5 checksum)
 
-                    wchar_t tname[MAX_PATH];
+                    wchar_t tname[MAX_PATH] = {};
                     swprintf_s( tname, L"offset_%s_%Iu_%Iu", fname, x, y );
 
-                    wchar_t szDestPath[MAX_PATH];
+                    wchar_t szDestPath[MAX_PATH] = {};
                     _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, image );
@@ -238,10 +238,10 @@ bool Test09()
                 {
                     // TODO - Verify the image data (perhaps MD5 checksum)
 
-                    wchar_t tname[MAX_PATH];
+                    wchar_t tname[MAX_PATH] = {};
                     swprintf_s( tname, L"cvt_%s_%Iu_%Iu", fname, x, y );
 
-                    wchar_t szDestPath[MAX_PATH];
+                    wchar_t szDestPath[MAX_PATH] = {};
                     _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, image );
@@ -276,10 +276,10 @@ bool Test09()
                 {
                     // TODO - Verify the image data (perhaps MD5 checksum)
 
-                    wchar_t tname[MAX_PATH];
+                    wchar_t tname[MAX_PATH] = {};
                     swprintf_s( tname, L"cvt_offset_%s_%Iu_%Iu", fname, x, y );
 
-                    wchar_t szDestPath[MAX_PATH];
+                    wchar_t szDestPath[MAX_PATH] = {};
                     _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, image );

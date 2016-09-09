@@ -16,7 +16,7 @@
 using namespace DirectX;
 
 //-------------------------------------------------------------------------------------
-HRESULT LoadBlobFromFile( _In_z_ LPCWSTR szFile, Blob& blob )
+HRESULT LoadBlobFromFile( _In_z_ const wchar_t* szFile, Blob& blob )
 {
     if ( szFile == NULL )
         return E_INVALIDARG;
@@ -163,7 +163,7 @@ HRESULT MD5Checksum( _In_ const ScratchImage& image, _Out_bytecap_x_(16) uint8_t
 
 
 //-------------------------------------------------------------------------------------
-HRESULT SaveScratchImage( _In_z_ LPCWSTR szFile, _In_ DWORD flags, _In_ const ScratchImage& image )
+HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags, _In_ const ScratchImage& image )
 {
     if ( szFile == NULL || image.GetPixels() == NULL || image.GetPixelsSize() == 0 )
         return E_INVALIDARG;
@@ -210,7 +210,7 @@ HRESULT SaveScratchImage( _In_z_ LPCWSTR szFile, _In_ DWORD flags, _In_ const Sc
 
 
 //-------------------------------------------------------------------------------------
-HRESULT CreateWideImage( _In_count_(nimages) const Image* images, _In_ size_t nimages, _In_ const TexMetadata& metadata, _Out_ ScratchImage& result )
+HRESULT CreateWideImage( _In_count_(nimages) const Image* images, size_t nimages, _In_ const TexMetadata& metadata, _Out_ ScratchImage& result )
 {
     if ( !images || !nimages )
         return E_INVALIDARG;
@@ -253,7 +253,7 @@ HRESULT CreateWideImage( _In_count_(nimages) const Image* images, _In_ size_t ni
 
 
 //-------------------------------------------------------------------------------------
-HRESULT IsDDSHeaderPresent( _In_bytecount_(size) LPCVOID pSource, _In_ size_t size )
+HRESULT IsDDSHeaderPresent( _In_bytecount_(size) const void* pSource, size_t size )
 {
     if ( !pSource )
         return E_INVALIDARG;
@@ -296,7 +296,7 @@ HRESULT IsDDSHeaderPresent( _In_bytecount_(size) LPCVOID pSource, _In_ size_t si
     return S_FALSE;
 }
 
-HRESULT IsDDSHeaderPresent( _In_z_ LPCWSTR szFile )
+HRESULT IsDDSHeaderPresent( _In_z_ const wchar_t* szFile )
 {
     if ( szFile == NULL )
         return E_INVALIDARG;

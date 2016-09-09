@@ -400,10 +400,10 @@ static const SaveMedia g_SaveMedia[] =
 };
 
 //-------------------------------------------------------------------------------------
-extern HRESULT LoadBlobFromFile( _In_z_ LPCWSTR szFile, Blob& blob );
-extern size_t DetermineFileSize( _In_z_ LPCWSTR szFile );
+extern HRESULT LoadBlobFromFile( _In_z_ const wchar_t* szFile, Blob& blob );
+extern size_t DetermineFileSize( _In_z_ const wchar_t* szFile );
 extern HRESULT MD5Checksum( _In_ const ScratchImage& image, _Out_bytecap_x_(16) uint8_t *digest );
-extern HRESULT SaveScratchImage( _In_z_ LPCWSTR szFile, _In_ DWORD flags, _In_ const ScratchImage& image );
+extern HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags, _In_ const ScratchImage& image );
 
 namespace
 {
@@ -421,7 +421,7 @@ bool Test00()
     {
         ComPtr<IWICImagingFactory> wic;
         HRESULT hr = CoCreateInstance( CLSID_WICImagingFactory2, nullptr, CLSCTX_INPROC_SERVER,
-                                       __uuidof(IWICImagingFactory2), reinterpret_cast<LPVOID*>( wic.GetAddressOf() ) );
+                                       IID_PPV_ARGS(wic.GetAddressOf()));
         if (SUCCEEDED(hr))
         {
             systemSupportsWIC2 = true;
@@ -439,7 +439,7 @@ bool Test00()
         else
         {
             hr = CoCreateInstance( CLSID_WICImagingFactory1, nullptr, CLSCTX_INPROC_SERVER,
-                                   __uuidof(IWICImagingFactory2), reinterpret_cast<LPVOID*>( wic.GetAddressOf() ) );
+                                   IID_PPV_ARGS(wic.GetAddressOf()));
             if (SUCCEEDED(hr))
             {
                 SetWICFactory(wic.Get());
