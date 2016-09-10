@@ -754,13 +754,6 @@ extern HRESULT CreateWideImage( _In_count_(nimages) const Image* images, size_t 
 extern HRESULT IsDDSHeaderPresent( _In_bytecount_(size) const void* pSource, size_t size );
 extern HRESULT IsDDSHeaderPresent( _In_z_ const wchar_t* szFile );
 
-namespace
-{
-    struct find_closer { void operator()(HANDLE h) { assert(h != INVALID_HANDLE_VALUE); if (h) FindClose(h); } };
-
-    typedef public std::unique_ptr<void, find_closer> ScopedFindHandle;
-}
-
 //-------------------------------------------------------------------------------------
 // GetMetadataFromDDSMemory/File
 bool Test01()
