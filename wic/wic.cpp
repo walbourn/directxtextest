@@ -506,7 +506,7 @@ bool Test01()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting raw file data from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed getting raw file data from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else
         {
@@ -517,7 +517,7 @@ bool Test01()
                                                if ( !reader )
                                                {
                                                    success = false;
-                                                   printe( "Failed metadata query reader from memory:\n%S\n", szPath );
+                                                   printe( "Failed metadata query reader from memory:\n%ls\n", szPath );
                                                }
 #if !defined(_XBOX_ONE) || !defined(_TITLE)
                                                else if ( g_TestMedia[index].options & FLAGS_MQR_ORIENT )
@@ -535,7 +535,7 @@ bool Test01()
                                                    if ( !orient )
                                                    {
                                                        success = false;
-                                                       printe( "Failed metadata query read of orientation from memory:\n%S\n", szPath );
+                                                       printe( "Failed metadata query read of orientation from memory:\n%ls\n", szPath );
                                                    }
                                                    
                                                    PropVariantClear( &value );
@@ -547,12 +547,12 @@ bool Test01()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed getting data from memory (HRESULT %08X):\n%S\n", hr, szPath );
+                printe( "Failed getting data from memory (HRESULT %08X):\n%ls\n", hr, szPath );
             }
             else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
             {
                 success = false;
-                printe( "Metadata error in:\n%S\n", szPath );
+                printe( "Metadata error in:\n%ls\n", szPath );
                 printmeta( &metadata );
                 printmetachk( check );
             }
@@ -571,7 +571,7 @@ bool Test01()
                         {
                             pass = false;
                             success = false;
-                            printe( "Metadata error with WIC_FLAGS_FORCE_RGB:\n%S\n", szPath );
+                            printe( "Metadata error with WIC_FLAGS_FORCE_RGB:\n%ls\n", szPath );
                             printmeta( &metadata2 );
                         }
                     }
@@ -589,7 +589,7 @@ bool Test01()
                         {
                             pass = false;
                             success = false;
-                            printe( "Metadata error with WIC_FLAGS_IGNORE_SRGB:\n%S\n", szPath );
+                            printe( "Metadata error with WIC_FLAGS_IGNORE_SRGB:\n%ls\n", szPath );
                             printmeta( &metadata2 );
                         }
                     }
@@ -603,7 +603,7 @@ bool Test01()
                         {
                             pass = false;
                             success = false;
-                            printe( "Metadata error with WIC_FLAGS_NO_X2_BIAS:\n%S\n", szPath );
+                            printe( "Metadata error with WIC_FLAGS_NO_X2_BIAS:\n%ls\n", szPath );
                             printmeta( &metadata2 );
                         }
                     }
@@ -622,7 +622,7 @@ bool Test01()
                         {
                             pass = false;
                             success = false;
-                            printe( "Metadata error with WIC_FLAGS_NO_16BPP:\n%S\n", szPath );
+                            printe( "Metadata error with WIC_FLAGS_NO_16BPP:\n%ls\n", szPath );
                             printmeta( &metadata2 );
                         }
                     }
@@ -636,7 +636,7 @@ bool Test01()
                         {
                             pass = false;
                             success = false;
-                            printe( "Metadata error without WIC_FLAGS_ALLOW_MONO:\n%S\n", szPath );
+                            printe( "Metadata error without WIC_FLAGS_ALLOW_MONO:\n%ls\n", szPath );
                             printmeta( &metadata2 );
                         }
                     }
@@ -652,7 +652,7 @@ bool Test01()
                     {
                         pass = false;
                         success = false;
-                        printe( "Metadata error without WIC_FLAGS_ALL_FRAMES:\n%S\n", szPath );
+                        printe( "Metadata error without WIC_FLAGS_ALL_FRAMES:\n%ls\n", szPath );
                         printmeta( &metadata2 );
                     }
                 }
@@ -708,7 +708,7 @@ bool Test02()
                                                 if ( !reader )
                                                 {
                                                     success = false;
-                                                    printe( "Failed metadata query reader from file:\n%S\n", szPath );
+                                                    printe( "Failed metadata query reader from file:\n%ls\n", szPath );
                                                 }
 #if !defined(_XBOX_ONE) || !defined(_TITLE)
                                                 else if ( g_TestMedia[index].options & FLAGS_MQR_ORIENT )
@@ -726,7 +726,7 @@ bool Test02()
                                                     if ( !orient )
                                                     {
                                                         success = false;
-                                                        printe( "Failed metadata query read of orientation from file:\n%S\n", szPath );
+                                                        printe( "Failed metadata query read of orientation from file:\n%ls\n", szPath );
                                                     }
                                                    
                                                     PropVariantClear( &value );
@@ -738,12 +738,12 @@ bool Test02()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting data from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
             success = false;
-            printe( "Metadata error in:\n%S\n", szPath );
+            printe( "Metadata error in:\n%ls\n", szPath );
             printmeta( &metadata );
             printmetachk( check );
         }
@@ -762,7 +762,7 @@ bool Test02()
                     {
                         pass = false;
                         success = false;
-                        printe( "Metadata error with WIC_FLAGS_FORCE_RGB:\n%S\n", szPath );
+                        printe( "Metadata error with WIC_FLAGS_FORCE_RGB:\n%ls\n", szPath );
                         printmeta( &metadata2 );
                     }
                 }
@@ -780,7 +780,7 @@ bool Test02()
                     {
                         pass = false;
                         success = false;
-                        printe( "Metadata error with WIC_FLAGS_IGNORE_SRGB:\n%S\n", szPath );
+                        printe( "Metadata error with WIC_FLAGS_IGNORE_SRGB:\n%ls\n", szPath );
                         printmeta( &metadata2 );
                     }
                 }
@@ -794,7 +794,7 @@ bool Test02()
                     {
                         pass = false;
                         success = false;
-                        printe( "Metadata error with WIC_FLAGS_NO_X2_BIAS:\n%S\n", szPath );
+                        printe( "Metadata error with WIC_FLAGS_NO_X2_BIAS:\n%ls\n", szPath );
                         printmeta( &metadata2 );
                     }
                 }
@@ -813,7 +813,7 @@ bool Test02()
                     {
                         pass = false;
                         success = false;
-                        printe( "Metadata error with WIC_FLAGS_NO_16BPP:\n%S\n", szPath );
+                        printe( "Metadata error with WIC_FLAGS_NO_16BPP:\n%ls\n", szPath );
                         printmeta( &metadata2 );
                     }
                 }
@@ -827,7 +827,7 @@ bool Test02()
                     {
                         pass = false;
                         success = false;
-                        printe( "Metadata error without WIC_FLAGS_ALLOW_MONO:\n%S\n", szPath );
+                        printe( "Metadata error without WIC_FLAGS_ALLOW_MONO:\n%ls\n", szPath );
                         printmeta( &metadata2 );
                     }
                 }
@@ -843,7 +843,7 @@ bool Test02()
                 {
                     pass = false;
                     success = false;
-                    printe( "Metadata error without WIC_FLAGS_ALL_FRAMES:\n%S\n", szPath );
+                    printe( "Metadata error without WIC_FLAGS_ALL_FRAMES:\n%ls\n", szPath );
                     printmeta( &metadata2 );
                 }
             }
@@ -896,7 +896,7 @@ bool Test03()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting raw file data from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed getting raw file data from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else
         {
@@ -908,12 +908,12 @@ bool Test03()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed loading wic from memory (HRESULT %08X):\n%S\n", hr, szPath );
+                printe( "Failed loading wic from memory (HRESULT %08X):\n%ls\n", hr, szPath );
             }
             else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
             {
                 success = false;
-                printe( "Metadata error in:\n%S\n", szPath );
+                printe( "Metadata error in:\n%ls\n", szPath );
                 printmeta( &metadata );
                 printmetachk( check );
             }
@@ -934,7 +934,7 @@ bool Test03()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
+                    printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
                 }
                 else if ( memcmp( digest, g_TestMedia[index].md5, 16 ) != 0
                           && (!expected2 || memcmp( digest, expected2, 16 ) != 0 )
@@ -942,7 +942,7 @@ bool Test03()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed comparing MD5 checksum:\n%S\n", szPath );
+                    printe( "Failed comparing MD5 checksum:\n%ls\n", szPath );
                     printdigest( "computed", digest );
                     printdigest( "expected", g_TestMedia[index].md5 );
                     if ( expected2 )
@@ -1005,12 +1005,12 @@ bool Test04()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed loading wic from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed loading wic from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
             success = false;
-            printe( "Metadata error in:\n%S\n", szPath );
+            printe( "Metadata error in:\n%ls\n", szPath );
             printmeta( &metadata );
             printmetachk( check );
         }
@@ -1031,7 +1031,7 @@ bool Test04()
             {
                 success = false;
                 pass = false;
-                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
+                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
             }
             else if ( memcmp( digest, g_TestMedia[index].md5, 16 ) != 0
                       && (!expected2 || memcmp( digest, expected2, 16 ) != 0 )
@@ -1039,7 +1039,7 @@ bool Test04()
             {
                 success = false;
                 pass = false;
-                printe( "Failed comparing MD5 checksum:\n%S\n", szPath );
+                printe( "Failed comparing MD5 checksum:\n%ls\n", szPath );
                 printdigest( "computed", digest );
                 printdigest( "expected", g_TestMedia[index].md5 );
                 if ( expected2 )
@@ -1106,7 +1106,7 @@ bool Test05()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed loading DDS from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed loading DDS from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else
         {
@@ -1118,7 +1118,7 @@ bool Test05()
             {
                 success = false;
                 pass = false;
-                printe( "Failed writing wic (%S) to memory (HRESULT %08X):\n%S\n", g_SaveMedia[index].ext, hr, szPath );
+                printe( "Failed writing wic (%ls) to memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, hr, szPath );
             }
             else
             {
@@ -1129,7 +1129,7 @@ bool Test05()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed reading back written wic (%S) from memory (HRESULT %08X):\n%S\n", g_SaveMedia[index].ext, hr, szPath );
+                    printe( "Failed reading back written wic (%ls) from memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, hr, szPath );
                 }
                 else if ( metadata.width != metadata2.width
                           || metadata.height != metadata2.height
@@ -1138,7 +1138,7 @@ bool Test05()
                 { // Formats can vary for readback, and miplevel is going to be 1 for WIC images
                     success = false;
                     pass = false;
-                    printe( "Metadata error in wic (%S) memory readback:\n%S\n", g_SaveMedia[index].ext, szPath );
+                    printe( "Metadata error in wic (%ls) memory readback:\n%ls\n", g_SaveMedia[index].ext, szPath );
                     printmeta( &metadata2 );
                     printmetachk( &metadata );
                 }
@@ -1151,7 +1151,7 @@ bool Test05()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed writing wic 24bpp (%S) to memory (HRESULT %08X):\n%S\n", g_SaveMedia[index].ext, hr, szPath );
+                    printe( "Failed writing wic 24bpp (%ls) to memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, hr, szPath );
                 }
                 else
                 {
@@ -1162,7 +1162,7 @@ bool Test05()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed reading back written wic 24bpp (%S) from memory (HRESULT %08X):\n%S\n", g_SaveMedia[index].ext, hr, szPath );
+                        printe( "Failed reading back written wic 24bpp (%ls) from memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, hr, szPath );
                     }
                     else if ( metadata.width != metadata2.width
                               || metadata.height != metadata2.height
@@ -1172,7 +1172,7 @@ bool Test05()
                     { // miplevel is going to be 1 for WIC images
                         success = false;
                         pass = false;
-                        printe( "Metadata error in wic 24bpp (%S) memory readback:\n%S\n", g_SaveMedia[index].ext, szPath );
+                        printe( "Metadata error in wic 24bpp (%ls) memory readback:\n%ls\n", g_SaveMedia[index].ext, szPath );
                         printmeta( &metadata2 );
                         printmetachk( &metadata );
                     }
@@ -1201,7 +1201,7 @@ bool Test05()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed writing wic with custom props (%S) to memory (HRESULT %08X):\n%S\n", g_SaveMedia[index].ext, hr, szPath );
+                        printe( "Failed writing wic with custom props (%ls) to memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, hr, szPath );
                     }
                     else
                     {
@@ -1212,7 +1212,7 @@ bool Test05()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed reading back written wic custom props (%S) from memory (HRESULT %08X):\n%S\n", g_SaveMedia[index].ext, hr, szPath );
+                            printe( "Failed reading back written wic custom props (%ls) from memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, hr, szPath );
                         }
                         else if ( metadata.width != metadata2.width
                                     || metadata.height != metadata2.height
@@ -1221,7 +1221,7 @@ bool Test05()
                         { // miplevel is going to be 1 for WIC images, format changes
                             success = false;
                             pass = false;
-                            printe( "Metadata error in wic custom props (%S) memory readback:\n%S\n", g_SaveMedia[index].ext, szPath );
+                            printe( "Metadata error in wic custom props (%ls) memory readback:\n%ls\n", g_SaveMedia[index].ext, szPath );
                             printmeta( &metadata2 );
                             printmetachk( &metadata );
                         }
@@ -1229,7 +1229,7 @@ bool Test05()
                         { // We are forcing uncompressed in the custom props, so new image should be strictly larger than original
                             success = false;
                             pass = false;
-                            printe( "Failed wic custom props (%S) from memory sizes unchanged (%Iu ... %Iu):\n%S\n", g_SaveMedia[index].ext, blob.GetBufferSize(), original, szPath );
+                            printe( "Failed wic custom props (%ls) from memory sizes unchanged (%Iu ... %Iu):\n%ls\n", g_SaveMedia[index].ext, blob.GetBufferSize(), original, szPath );
                         }
                     }
                 }
@@ -1260,7 +1260,7 @@ bool Test05()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed loading DDS from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed loading DDS from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else
         {
@@ -1269,7 +1269,7 @@ bool Test05()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed writing mf wic .tiff to memory (HRESULT %08X):\n%S\n", hr, szPath );
+                printe( "Failed writing mf wic .tiff to memory (HRESULT %08X):\n%ls\n", hr, szPath );
             }
             else
             {
@@ -1279,7 +1279,7 @@ bool Test05()
                 if ( FAILED(hr) )
                 {
                     success = false;
-                    printe( "Failed reading back written mf wic .tiff to memory (HRESULT %08X):\n%S\n", hr, szPath );
+                    printe( "Failed reading back written mf wic .tiff to memory (HRESULT %08X):\n%ls\n", hr, szPath );
                 }
                 else if ( metadata.width != metadata2.width
                           || metadata.height != metadata2.height
@@ -1287,7 +1287,7 @@ bool Test05()
                           || metadata2.dimension != TEX_DIMENSION_TEXTURE2D	)
                 {   // Formats can vary for readback, and miplevel is going to be 1 for WIC images
                     success = false;
-                    printe( "Metadata error in wic .tiff memory readback:\n%S\n", szPath );
+                    printe( "Metadata error in wic .tiff memory readback:\n%ls\n", szPath );
                     printmeta( &metadata2 );
                     printmetachk( &metadata );
                 }
@@ -1374,7 +1374,7 @@ bool Test06()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed loading DDS from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed loading DDS from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else
         {
@@ -1385,7 +1385,7 @@ bool Test06()
             {
                 success = false;
                 pass = false;
-                printe( "Failed writing wic to (HRESULT %08X):\n%S\n", hr, szDestPath );
+                printe( "Failed writing wic to (HRESULT %08X):\n%ls\n", hr, szDestPath );
             }
             else
             {
@@ -1396,7 +1396,7 @@ bool Test06()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed reading back written wic (HRESULT %08X):\n%S\n", hr, szDestPath );
+                    printe( "Failed reading back written wic (HRESULT %08X):\n%ls\n", hr, szDestPath );
                 }
                 else if ( metadata.width != metadata2.width
                           || metadata.height != metadata2.height
@@ -1406,7 +1406,7 @@ bool Test06()
                 {   // Formats can vary for readback, and miplevel is going to be 1 for WIC images
                     success = false;
                     pass = false;
-                    printe( "Metadata error in wic readback:\n%S\n", szDestPath );
+                    printe( "Metadata error in wic readback:\n%ls\n", szDestPath );
                     printmeta( &metadata2 );
                     printmetachk( &metadata );
                 }
@@ -1420,7 +1420,7 @@ bool Test06()
             {
                 success = false;
                 pass = false;
-                printe( "Failed writing wic 24bpp to (HRESULT %08X):\n%S\n", hr, szDestPath2 );
+                printe( "Failed writing wic 24bpp to (HRESULT %08X):\n%ls\n", hr, szDestPath2 );
             }
             else
             {
@@ -1431,7 +1431,7 @@ bool Test06()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed reading back written wic 24bpp (HRESULT %08X):\n%S\n", hr, szDestPath2 );
+                    printe( "Failed reading back written wic 24bpp (HRESULT %08X):\n%ls\n", hr, szDestPath2 );
                 }
                 else if ( metadata.width != metadata2.width
                           || metadata.height != metadata2.height
@@ -1442,7 +1442,7 @@ bool Test06()
                 {   // miplevel is going to be 1 for WIC images
                     success = false;
                     pass = false;
-                    printe( "Metadata error in wic 24bpp readback:\n%S\n", szDestPath2 );
+                    printe( "Metadata error in wic 24bpp readback:\n%ls\n", szDestPath2 );
                     printmeta( &metadata2 );
                     printmetachk( &metadata );
                 }
@@ -1471,7 +1471,7 @@ bool Test06()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed writing wic with custom props to (HRESULT %08X):\n%S\n", hr, szDestPath3 );
+                    printe( "Failed writing wic with custom props to (HRESULT %08X):\n%ls\n", hr, szDestPath3 );
                 }
                 else
                 {
@@ -1482,7 +1482,7 @@ bool Test06()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed reading back written wic custom props (HRESULT %08X):\n%S\n", hr, szDestPath3 );
+                        printe( "Failed reading back written wic custom props (HRESULT %08X):\n%ls\n", hr, szDestPath3 );
                     }
                     else if ( metadata.width != metadata2.width
                                 || metadata.height != metadata2.height
@@ -1492,7 +1492,7 @@ bool Test06()
                     {   // miplevel is going to be 1 for WIC images, format changes
                         success = false;
                         pass = false;
-                        printe( "Metadata error in wic cusomt props readback:\n%S\n", szDestPath3 );
+                        printe( "Metadata error in wic cusomt props readback:\n%ls\n", szDestPath3 );
                         printmeta( &metadata2 );
                         printmetachk( &metadata );
                     }
@@ -1504,7 +1504,7 @@ bool Test06()
                         { // We are forcing uncompressed in the custom props, so new image should be strictly larger than original
                             success = false;
                             pass = false;
-                            printe( "Failed wic custom props sizes unchanged (%Iu ... %Iu):\n%S\n", uncompressed, original, szDestPath3 );
+                            printe( "Failed wic custom props sizes unchanged (%Iu ... %Iu):\n%ls\n", uncompressed, original, szDestPath3 );
                         }
                     }
                 }
@@ -1543,7 +1543,7 @@ bool Test06()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed loading DDS from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed loading DDS from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else
         {
@@ -1551,7 +1551,7 @@ bool Test06()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed writing mf wic to (HRESULT %08X):\n%S\n", hr, szDestPath );
+                printe( "Failed writing mf wic to (HRESULT %08X):\n%ls\n", hr, szDestPath );
             }
             else
             {
@@ -1561,7 +1561,7 @@ bool Test06()
                 if ( FAILED(hr) )
                 {
                     success = false;
-                    printe( "Failed reading back written mf wic to (HRESULT %08X):\n%S\n", hr, szDestPath );
+                    printe( "Failed reading back written mf wic to (HRESULT %08X):\n%ls\n", hr, szDestPath );
                 }
                 else if ( metadata.width != metadata2.width
                           || metadata.height != metadata2.height
@@ -1570,7 +1570,7 @@ bool Test06()
                           || metadata2.dimension != TEX_DIMENSION_TEXTURE2D	)
                 {   // Formats can vary for readback, and miplevel is going to be 1 for WIC images
                     success = false;
-                    printe( "Metadata error in wic readback:\n%S\n", szDestPath );
+                    printe( "Metadata error in wic readback:\n%ls\n", szDestPath );
                     printmeta( &metadata2 );
                     printmetachk( &metadata );
                 }
@@ -1643,7 +1643,7 @@ bool Test07()
                 if (FAILED(hr))
                 {
                     success = false;
-                    printe("Failed getting raw file data from (HRESULT %08X):\n%S\n", hr, szPath);
+                    printe("Failed getting raw file data from (HRESULT %08X):\n%ls\n", hr, szPath);
                 }
                 else
                 {

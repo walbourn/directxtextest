@@ -787,12 +787,12 @@ bool Test01()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting data from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
             success = false;
-            printe( "Metadata error in:\n%S\n", szPath );
+            printe( "Metadata error in:\n%ls\n", szPath );
             printmeta( &metadata );
             printmetachk( check );
         }
@@ -808,7 +808,7 @@ bool Test01()
                 if ( SUCCEEDED(hr) )
                 {
                     success = pass = false;
-                    printe( "no legacy expansion flag ignored in:\n%S\n", szPath );
+                    printe( "no legacy expansion flag ignored in:\n%ls\n", szPath );
                 }
             }
 
@@ -822,7 +822,7 @@ bool Test01()
                                     && metadata2.format != DXGI_FORMAT_R8G8B8A8_TYPELESS) )
                 {
                     success = pass = false;
-                    printe( "Failed to force RGB:\n%S\n", szPath );
+                    printe( "Failed to force RGB:\n%ls\n", szPath );
                 }
             }
 
@@ -835,7 +835,7 @@ bool Test01()
                                     && metadata2.format != DXGI_FORMAT_R16G16B16A16_UNORM) )
                 {
                     success = pass = false;
-                    printe( "Failed to expand LUMINANCE expansion:\n%S\n", szPath );
+                    printe( "Failed to expand LUMINANCE expansion:\n%ls\n", szPath );
                 }
             }
 
@@ -851,7 +851,7 @@ bool Test01()
                     if ( FAILED(hr) || (metadata2.format == metadata.format) || (BitsPerPixel(metadata2.format) == 16) )
                     {
                         success = pass = false;
-                        printe( "Failed to force no 16bpp formats:\n%S\n", szPath );
+                        printe( "Failed to force no 16bpp formats:\n%ls\n", szPath );
                     }
                 }
                 break;
@@ -899,7 +899,7 @@ bool Test02()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting raw file data from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed getting raw file data from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else
         {
@@ -917,12 +917,12 @@ bool Test02()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed loading dds from memory (HRESULT %08X):\n%S\n", hr, szPath );
+                printe( "Failed loading dds from memory (HRESULT %08X):\n%ls\n", hr, szPath );
             }
             else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
             {
                 success = false;
-                printe( "Metadata error in:\n%S\n", szPath );
+                printe( "Metadata error in:\n%ls\n", szPath );
                 printmeta( &metadata );
                 printmetachk( check );
             }
@@ -933,12 +933,12 @@ bool Test02()
                 if ( FAILED(hr) )
                 {
                     success = false;
-                    printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
+                    printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
                 }
                 else if ( memcmp( digest, g_TestMedia[index].md5, 16 ) != 0 )
                 {
                     success = false;
-                    printe( "Failed comparing MD5 checksum:\n%S\n", szPath );
+                    printe( "Failed comparing MD5 checksum:\n%ls\n", szPath );
                     printdigest( "computed", digest );
                     printdigest( "expected", g_TestMedia[index].md5 );
                 }
@@ -957,7 +957,7 @@ bool Test02()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed loading dds from memory with NO_R10B10G10A2_FIXUP (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed loading dds from memory with NO_R10B10G10A2_FIXUP (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else
                         {
@@ -965,7 +965,7 @@ bool Test02()
                             if ( FAILED(hr) )
                             {
                                 success = false;
-                                printe( "Failed computing MD5 checksum of NO_R10B10G10A2_FIXUP image data (HRESULT %08X):\n%S\n", hr, szPath );
+                                printe( "Failed computing MD5 checksum of NO_R10B10G10A2_FIXUP image data (HRESULT %08X):\n%ls\n", hr, szPath );
                             }
                             else
                             {
@@ -979,7 +979,7 @@ bool Test02()
                                 if ( memcmp( digest, expected, 16 ) != 0 )
                                 {
                                     success = false;
-                                    printe( "Failed comparing NO_R10B10G10A2_FIXUP MD5 checksum:\n%S\n", szPath );
+                                    printe( "Failed comparing NO_R10B10G10A2_FIXUP MD5 checksum:\n%ls\n", szPath );
                                     printdigest( "computed", digest );
                                     printdigest( "expected", expected );
                                 }
@@ -1005,7 +1005,7 @@ bool Test02()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed loading dds from memory with FORCE_RGB (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed loading dds from memory with FORCE_RGB (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else
                         {
@@ -1018,7 +1018,7 @@ bool Test02()
                             case DXGI_FORMAT_B8G8R8X8_TYPELESS:
                             case DXGI_FORMAT_B8G8R8X8_UNORM_SRGB:
                                 success = false;
-                                printe( "Failed FORCE_RGB still using BGR format %d:\n%S\n", metadata2.format, szPath );
+                                printe( "Failed FORCE_RGB still using BGR format %d:\n%ls\n", metadata2.format, szPath );
                                 break;
 
                             default:
@@ -1042,7 +1042,7 @@ bool Test02()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed loading dds from memory with NO_16BPP (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed loading dds from memory with NO_16BPP (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else
                         {
@@ -1052,7 +1052,7 @@ bool Test02()
                             case DXGI_FORMAT_B5G5R5A1_UNORM:
                             case DXGI_FORMAT_B4G4R4A4_UNORM:
                                 success = false;
-                                printe( "Failed NO_16BPP still using 16BPP format %d:\n%S\n", metadata2.format, szPath );
+                                printe( "Failed NO_16BPP still using 16BPP format %d:\n%ls\n", metadata2.format, szPath );
                                 break;
 
                             default:
@@ -1075,7 +1075,7 @@ bool Test02()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed loading dds from memory with EXPAND_LUMINANCE (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed loading dds from memory with EXPAND_LUMINANCE (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else
                         {
@@ -1085,7 +1085,7 @@ bool Test02()
                             case DXGI_FORMAT_R8_UNORM:
                             case DXGI_FORMAT_R16_UNORM:
                                 success = false;
-                                printe( "Failed EXPAND_LUMINANCE still using smaller format %d:\n%S\n", metadata2.format, szPath );
+                                printe( "Failed EXPAND_LUMINANCE still using smaller format %d:\n%ls\n", metadata2.format, szPath );
                                 break;
 
                             default:
@@ -1094,7 +1094,7 @@ bool Test02()
                                     if ( FAILED(hr) )
                                     {
                                         success = false;
-                                        printe( "Failed computing MD5 checksum of EXPAND_LUMINANCE image data (HRESULT %08X):\n%S\n", hr, szPath );
+                                        printe( "Failed computing MD5 checksum of EXPAND_LUMINANCE image data (HRESULT %08X):\n%ls\n", hr, szPath );
                                     }
                                     else
                                     {
@@ -1107,7 +1107,7 @@ bool Test02()
                                         if ( memcmp( digest, expected, 16 ) != 0 )
                                         {
                                             success = false;
-                                            printe( "Failed comparing EXPAND_LUMINANCE MD5 checksum:\n%S\n", szPath );
+                                            printe( "Failed comparing EXPAND_LUMINANCE MD5 checksum:\n%ls\n", szPath );
                                             printdigest( "computed", digest );
                                             printdigest( "expected", expected );
                                         }
@@ -1179,12 +1179,12 @@ bool Test03()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed loading dds from memory (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed loading dds from memory (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
             success = false;
-            printe( "Metadata error in:\n%S\n", szPath );
+            printe( "Metadata error in:\n%ls\n", szPath );
             printmeta( &metadata );
             printmetachk( check );
         }
@@ -1195,12 +1195,12 @@ bool Test03()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
+                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
             }
             else if ( memcmp( digest, g_TestMedia[index].md5, 16 ) != 0 )
             {
                 success = false;
-                printe( "Failed comparing MD5 checksum:\n%S\n", szPath );
+                printe( "Failed comparing MD5 checksum:\n%ls\n", szPath );
                 printdigest( "computed", digest );
                 printdigest( "expected", g_TestMedia[index].md5 );
             }
@@ -1219,7 +1219,7 @@ bool Test03()
                     if ( FAILED(hr) )
                     {
                         success = false;
-                        printe( "Failed loading dds from memory with NO_R10B10G10A2_FIXUP (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed loading dds from memory with NO_R10B10G10A2_FIXUP (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else
                     {
@@ -1227,7 +1227,7 @@ bool Test03()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed computing MD5 checksum of NO_R10B10G10A2_FIXUP image data (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed computing MD5 checksum of NO_R10B10G10A2_FIXUP image data (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else
                         {
@@ -1241,7 +1241,7 @@ bool Test03()
                             if ( memcmp( digest, expected, 16 ) != 0 )
                             {
                                 success = false;
-                                printe( "Failed comparing NO_R10B10G10A2_FIXUP MD5 checksum:\n%S\n", szPath );
+                                printe( "Failed comparing NO_R10B10G10A2_FIXUP MD5 checksum:\n%ls\n", szPath );
                                 printdigest( "computed", digest );
                                 printdigest( "expected", expected );
                             }
@@ -1267,7 +1267,7 @@ bool Test03()
                     if ( FAILED(hr) )
                     {
                         success = false;
-                        printe( "Failed loading dds from memory with FORCE_RGB (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed loading dds from memory with FORCE_RGB (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else
                     {
@@ -1280,7 +1280,7 @@ bool Test03()
                         case DXGI_FORMAT_B8G8R8X8_TYPELESS:
                         case DXGI_FORMAT_B8G8R8X8_UNORM_SRGB:
                             success = false;
-                            printe( "Failed FORCE_RGB still using BGR format %d:\n%S\n", metadata2.format, szPath );
+                            printe( "Failed FORCE_RGB still using BGR format %d:\n%ls\n", metadata2.format, szPath );
                             break;
 
                         default:
@@ -1304,7 +1304,7 @@ bool Test03()
                     if ( FAILED(hr) )
                     {
                         success = false;
-                        printe( "Failed loading dds from memory with NO_16BPP (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed loading dds from memory with NO_16BPP (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else
                     {
@@ -1314,7 +1314,7 @@ bool Test03()
                         case DXGI_FORMAT_B5G5R5A1_UNORM:
                         case DXGI_FORMAT_B4G4R4A4_UNORM:
                             success = false;
-                            printe( "Failed NO_16BPP still using 16BPP format %d:\n%S\n", metadata2.format, szPath );
+                            printe( "Failed NO_16BPP still using 16BPP format %d:\n%ls\n", metadata2.format, szPath );
                             break;
 
                         default:
@@ -1337,7 +1337,7 @@ bool Test03()
                     if ( FAILED(hr) )
                     {
                         success = false;
-                        printe( "Failed loading dds from memory with EXPAND_LUMINANCE (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed loading dds from memory with EXPAND_LUMINANCE (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else
                     {
@@ -1347,7 +1347,7 @@ bool Test03()
                         case DXGI_FORMAT_R8_UNORM:
                         case DXGI_FORMAT_R16_UNORM:
                             success = false;
-                            printe( "Failed EXPAND_LUMINANCE still using smaller format %d:\n%S\n", metadata2.format, szPath );
+                            printe( "Failed EXPAND_LUMINANCE still using smaller format %d:\n%ls\n", metadata2.format, szPath );
                             break;
 
                         default:
@@ -1356,7 +1356,7 @@ bool Test03()
                                 if ( FAILED(hr) )
                                 {
                                     success = false;
-                                    printe( "Failed computing MD5 checksum of EXPAND_LUMINANCE image data (HRESULT %08X):\n%S\n", hr, szPath );
+                                    printe( "Failed computing MD5 checksum of EXPAND_LUMINANCE image data (HRESULT %08X):\n%ls\n", hr, szPath );
                                 }
                                 else
                                 {
@@ -1369,7 +1369,7 @@ bool Test03()
                                     if ( memcmp( digest, expected, 16 ) != 0 )
                                     {
                                         success = false;
-                                        printe( "Failed comparing EXPAND_LUMINANCE MD5 checksum:\n%S\n", szPath );
+                                        printe( "Failed comparing EXPAND_LUMINANCE MD5 checksum:\n%ls\n", szPath );
                                         printdigest( "computed", digest );
                                         printdigest( "expected", expected );
                                     }
@@ -1433,7 +1433,7 @@ bool Test04()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed loading DDS from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed loading DDS from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else
         {
@@ -1445,7 +1445,7 @@ bool Test04()
             {
                 success = false;
                 pass = false;
-                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
+                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
             }
             else
             {
@@ -1455,7 +1455,7 @@ bool Test04()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed writing DDS to memory (HRESULT %08X):\n%S\n", hr, szPath );
+                    printe( "Failed writing DDS to memory (HRESULT %08X):\n%ls\n", hr, szPath );
                 }
                 else
                 {
@@ -1466,7 +1466,7 @@ bool Test04()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed reading back written DDS to memory (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed reading back written DDS to memory (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else
                     {
@@ -1493,7 +1493,7 @@ bool Test04()
                         {
                             success = false;
                             pass = false;
-                            printe( "Metadata error in dds dim memory readback:\n%S\n", szPath );
+                            printe( "Metadata error in dds dim memory readback:\n%ls\n", szPath );
                             printmeta( &metadata2 );
                             printmetachk( &chk );
                         }
@@ -1506,7 +1506,7 @@ bool Test04()
                         {
                             success = false;
                             pass = false;
-                            printe( "Metadata error in dds memory readback:\n%S\n", szPath );
+                            printe( "Metadata error in dds memory readback:\n%ls\n", szPath );
                             printmeta( &metadata2 );
                             printmetachk( &chk );
                         }
@@ -1518,13 +1518,13 @@ bool Test04()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%S\n", hr, szPath );
+                                printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%ls\n", hr, szPath );
                             }
                             else if ( memcmp( digest, digest2, 16 ) != 0 )
                             {
                                 success = false;
                                 pass = false;
-                                printe( "MD5 checksum of reloaded data doesn't match original:\n%S\n", szPath );
+                                printe( "MD5 checksum of reloaded data doesn't match original:\n%ls\n", szPath );
                             }
                         }
                     }
@@ -1537,7 +1537,7 @@ bool Test04()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed writing DDS with DDS_FLAGS_FORCE_DX10_EXT to memory (HRESULT %08X):\n%S\n", hr, szPath );
+                    printe( "Failed writing DDS with DDS_FLAGS_FORCE_DX10_EXT to memory (HRESULT %08X):\n%ls\n", hr, szPath );
                 }
                 else
                 {
@@ -1548,7 +1548,7 @@ bool Test04()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_DX10_EXT to memory (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_DX10_EXT to memory (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( metadata.width != metadata2.width
                               || metadata.height != metadata2.height
@@ -1560,7 +1560,7 @@ bool Test04()
                     {
                         success = false;
                         pass = false;
-                        printe( "Metadata error in dds with DDS_FLAGS_FORCE_DX10_EXT readback from memory:\n%S\n", szPath );
+                        printe( "Metadata error in dds with DDS_FLAGS_FORCE_DX10_EXT readback from memory:\n%ls\n", szPath );
                         printmeta( &metadata2 );
                         printmetachk( &metadata );
                     }
@@ -1571,13 +1571,13 @@ bool Test04()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed checking DDS header type in memory (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed checking DDS header type in memory (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( hr == S_FALSE )
                         {
                             success = false;
                             pass = false;
-                            printe( "Write with DDS_FLAGS_FORCE_DX10_EXT did not result in DX10 extended header in memory:\n%S\n", szPath );
+                            printe( "Write with DDS_FLAGS_FORCE_DX10_EXT did not result in DX10 extended header in memory:\n%ls\n", szPath );
                         }
                         else
                         {
@@ -1587,13 +1587,13 @@ bool Test04()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed computing MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT reloaded image data (HRESULT %08X):\n%S\n", hr, szPath );
+                                printe( "Failed computing MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT reloaded image data (HRESULT %08X):\n%ls\n", hr, szPath );
                             }
                             else if ( memcmp( digest, digest2, 16 ) != 0 )
                             {
                                 success = false;
                                 pass = false;
-                                printe( "MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT reloaded data doesn't match original:\n%S\n", szPath );
+                                printe( "MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT reloaded data doesn't match original:\n%ls\n", szPath );
                             }
                         }
                     }
@@ -1606,7 +1606,7 @@ bool Test04()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed writing DDS with DDS_FLAGS_FORCE_DX10_EXT_MISC2 to memory (HRESULT %08X):\n%S\n", hr, szPath );
+                    printe( "Failed writing DDS with DDS_FLAGS_FORCE_DX10_EXT_MISC2 to memory (HRESULT %08X):\n%ls\n", hr, szPath );
                 }
                 else
                 {
@@ -1617,7 +1617,7 @@ bool Test04()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_DX10_EXT_MISC2 to memory (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_DX10_EXT_MISC2 to memory (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( metadata.width != metadata2.width
                               || metadata.height != metadata2.height
@@ -1629,7 +1629,7 @@ bool Test04()
                     {
                         success = false;
                         pass = false;
-                        printe( "Metadata error in dds with DDS_FLAGS_FORCE_DX10_EXT_MISC2 readback from memory:\n%S\n", szPath );
+                        printe( "Metadata error in dds with DDS_FLAGS_FORCE_DX10_EXT_MISC2 readback from memory:\n%ls\n", szPath );
                         printmeta( &metadata2 );
                         printmetachk( &metadata );
                     }
@@ -1640,13 +1640,13 @@ bool Test04()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed checking DDS header type in memory (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed checking DDS header type in memory (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( hr == S_FALSE )
                         {
                             success = false;
                             pass = false;
-                            printe( "Write with DDS_FLAGS_FORCE_DX10_EXT_MISC2 did not result in DX10 extended header in memory:\n%S\n", szPath );
+                            printe( "Write with DDS_FLAGS_FORCE_DX10_EXT_MISC2 did not result in DX10 extended header in memory:\n%ls\n", szPath );
                         }
                         else
                         {
@@ -1656,13 +1656,13 @@ bool Test04()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed computing MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT_MISC2 reloaded image data (HRESULT %08X):\n%S\n", hr, szPath );
+                                printe( "Failed computing MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT_MISC2 reloaded image data (HRESULT %08X):\n%ls\n", hr, szPath );
                             }
                             else if ( memcmp( digest, digest2, 16 ) != 0 )
                             {
                                 success = false;
                                 pass = false;
-                                printe( "MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT_MISC2 reloaded data doesn't match original:\n%S\n", szPath );
+                                printe( "MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT_MISC2 reloaded data doesn't match original:\n%ls\n", szPath );
                             }
                         }
                     }
@@ -1678,13 +1678,13 @@ bool Test04()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed creating wide test image (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed creating wide test image (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( image.GetImage(0,0,0)->rowPitch >= imageWide.GetImage(0,0,0)->rowPitch )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed creating wide test image - result is same as source: %Iu %Iu\n%S\n", image.GetImage(0,0,0)->rowPitch, imageWide.GetImage(0,0,0)->rowPitch, szPath );
+                        printe( "Failed creating wide test image - result is same as source: %Iu %Iu\n%ls\n", image.GetImage(0,0,0)->rowPitch, imageWide.GetImage(0,0,0)->rowPitch, szPath );
                     }
                     else
                     {
@@ -1695,7 +1695,7 @@ bool Test04()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed writing DDS with wide image to memory (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed writing DDS with wide image to memory (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else
                         {
@@ -1706,7 +1706,7 @@ bool Test04()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed reading back written DDS with wide image to memory (HRESULT %08X):\n%S\n", hr, szPath );
+                                printe( "Failed reading back written DDS with wide image to memory (HRESULT %08X):\n%ls\n", hr, szPath );
                             }
                             else if ( metadata.width != metadata2.width
                                       || metadata.height != metadata2.height
@@ -1718,7 +1718,7 @@ bool Test04()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Metadata error in dds with wide image readback from memory:\n%S\n", szPath );
+                                printe( "Metadata error in dds with wide image readback from memory:\n%ls\n", szPath );
                                 printmeta( &metadata2 );
                                 printmetachk( &metadata );
                             }
@@ -1730,13 +1730,13 @@ bool Test04()
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed computing MD5 checksum of wide image reloaded image data (HRESULT %08X):\n%S\n", hr, szPath );
+                                    printe( "Failed computing MD5 checksum of wide image reloaded image data (HRESULT %08X):\n%ls\n", hr, szPath );
                                 }
                                 else if ( memcmp( digest, digest2, 16 ) != 0 )
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "MD5 checksum of wide image reloaded data doesn't match original:\n%S\n", szPath );
+                                    printe( "MD5 checksum of wide image reloaded data doesn't match original:\n%ls\n", szPath );
                                 }
                             }
                         }
@@ -1830,7 +1830,7 @@ bool Test05()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed loading DDS from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed loading DDS from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else
         {
@@ -1842,7 +1842,7 @@ bool Test05()
             {
                 success = false;
                 pass = false;
-                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
+                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
             }
             else
             {
@@ -1851,7 +1851,7 @@ bool Test05()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed writing DDS to (HRESULT %08X):\n%S\n", hr, szDestPath );
+                    printe( "Failed writing DDS to (HRESULT %08X):\n%ls\n", hr, szDestPath );
                 }
                 else
                 {
@@ -1862,7 +1862,7 @@ bool Test05()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed reading back written DDS to (HRESULT %08X):\n%S\n", hr, szDestPath );
+                        printe( "Failed reading back written DDS to (HRESULT %08X):\n%ls\n", hr, szDestPath );
                     }
                     else
                     {
@@ -1889,7 +1889,7 @@ bool Test05()
                         {
                             success = false;
                             pass = false;
-                            printe( "Metadata error in dds readback:\n%S\n", szDestPath );
+                            printe( "Metadata error in dds readback:\n%ls\n", szDestPath );
                             printmeta( &metadata2 );
                             printmetachk( &chk );
                         }
@@ -1913,13 +1913,13 @@ bool Test05()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%S\n", hr, szDestPath );
+                                printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%ls\n", hr, szDestPath );
                             }
                             else if ( memcmp( digest, digest2, 16 ) != 0 )
                             {
                                 success = false;
                                 pass = false;
-                                printe( "MD5 checksum of reloaded data doesn't match original:\n%S\n", szDestPath );
+                                printe( "MD5 checksum of reloaded data doesn't match original:\n%ls\n", szDestPath );
                             }
                         }
                     }
@@ -1931,7 +1931,7 @@ bool Test05()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed writing DDS with DDS_FLAGS_FORCE_DX10_EXT to (HRESULT %08X):\n%S\n", hr, szDestPathDX10 );
+                    printe( "Failed writing DDS with DDS_FLAGS_FORCE_DX10_EXT to (HRESULT %08X):\n%ls\n", hr, szDestPathDX10 );
                 }
                 else
                 {
@@ -1942,7 +1942,7 @@ bool Test05()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_DX10_EXT to (HRESULT %08X):\n%S\n", hr, szDestPathDX10 );
+                        printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_DX10_EXT to (HRESULT %08X):\n%ls\n", hr, szDestPathDX10 );
                     }
                     else if ( metadata.width != metadata2.width
                               || metadata.height != metadata2.height
@@ -1954,7 +1954,7 @@ bool Test05()
                     {
                         success = false;
                         pass = false;
-                        printe( "Metadata error in dds with DDS_FLAGS_FORCE_DX10_EXT readback:\n%S\n", szDestPathDX10 );
+                        printe( "Metadata error in dds with DDS_FLAGS_FORCE_DX10_EXT readback:\n%ls\n", szDestPathDX10 );
                         printmeta( &metadata2 );
                         printmetachk( &metadata );
                     }
@@ -1965,13 +1965,13 @@ bool Test05()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed checking DDS header type (HRESULT %08X):\n%S\n", hr, szDestPathDX10 );
+                            printe( "Failed checking DDS header type (HRESULT %08X):\n%ls\n", hr, szDestPathDX10 );
                         }
                         else if ( hr == S_FALSE )
                         {
                             success = false;
                             pass = false;
-                            printe( "Write with DDS_FLAGS_FORCE_DX10_EXT did not result in DX10 extended header:\n%S\n", szDestPathDX10 );
+                            printe( "Write with DDS_FLAGS_FORCE_DX10_EXT did not result in DX10 extended header:\n%ls\n", szDestPathDX10 );
                         }
                         else
                         {
@@ -1981,13 +1981,13 @@ bool Test05()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed computing MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT reloaded image data (HRESULT %08X):\n%S\n", hr, szDestPathDX10 );
+                                printe( "Failed computing MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT reloaded image data (HRESULT %08X):\n%ls\n", hr, szDestPathDX10 );
                             }
                             else if ( memcmp( digest, digest2, 16 ) != 0 )
                             {
                                 success = false;
                                 pass = false;
-                                printe( "MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT reloaded data doesn't match original:\n%S\n", szDestPathDX10 );
+                                printe( "MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT reloaded data doesn't match original:\n%ls\n", szDestPathDX10 );
                             }
                         }
                     }
@@ -1999,7 +1999,7 @@ bool Test05()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed writing DDS with DDS_FLAGS_FORCE_DX10_EXT_MISC2 to (HRESULT %08X):\n%S\n", hr, szDestPathDX10_2 );
+                    printe( "Failed writing DDS with DDS_FLAGS_FORCE_DX10_EXT_MISC2 to (HRESULT %08X):\n%ls\n", hr, szDestPathDX10_2 );
                 }
                 else
                 {
@@ -2010,7 +2010,7 @@ bool Test05()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_DX10_EXT_MISC2 to (HRESULT %08X):\n%S\n", hr, szDestPathDX10_2 );
+                        printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_DX10_EXT_MISC2 to (HRESULT %08X):\n%ls\n", hr, szDestPathDX10_2 );
                     }
                     else if ( metadata.width != metadata2.width
                               || metadata.height != metadata2.height
@@ -2022,7 +2022,7 @@ bool Test05()
                     {
                         success = false;
                         pass = false;
-                        printe( "Metadata error in dds with DDS_FLAGS_FORCE_DX10_EXT_MISC2 readback:\n%S\n", szDestPathDX10_2 );
+                        printe( "Metadata error in dds with DDS_FLAGS_FORCE_DX10_EXT_MISC2 readback:\n%ls\n", szDestPathDX10_2 );
                         printmeta( &metadata2 );
                         printmetachk( &metadata );
                     }
@@ -2033,13 +2033,13 @@ bool Test05()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed checking DDS header type (HRESULT %08X):\n%S\n", hr, szDestPathDX10_2 );
+                            printe( "Failed checking DDS header type (HRESULT %08X):\n%ls\n", hr, szDestPathDX10_2 );
                         }
                         else if ( hr == S_FALSE )
                         {
                             success = false;
                             pass = false;
-                            printe( "Write with DDS_FLAGS_FORCE_DX10_EXT_MISC2 did not result in DX10 extended header:\n%S\n", szDestPathDX10_2 );
+                            printe( "Write with DDS_FLAGS_FORCE_DX10_EXT_MISC2 did not result in DX10 extended header:\n%ls\n", szDestPathDX10_2 );
                         }
                         else
                         {
@@ -2049,13 +2049,13 @@ bool Test05()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed computing MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT_MISC2 reloaded image data (HRESULT %08X):\n%S\n", hr, szDestPathDX10_2 );
+                                printe( "Failed computing MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT_MISC2 reloaded image data (HRESULT %08X):\n%ls\n", hr, szDestPathDX10_2 );
                             }
                             else if ( memcmp( digest, digest2, 16 ) != 0 )
                             {
                                 success = false;
                                 pass = false;
-                                printe( "MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT_MISC2 reloaded data doesn't match original:\n%S\n", szDestPathDX10_2 );
+                                printe( "MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT_MISC2 reloaded data doesn't match original:\n%ls\n", szDestPathDX10_2 );
                             }
                         }
                     }
@@ -2070,7 +2070,7 @@ bool Test05()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed creating wide test image (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed creating wide test image (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else
                     {
@@ -2081,7 +2081,7 @@ bool Test05()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed writing DDS with wide image to (HRESULT %08X):\n%S\n", hr, szDestPathWide );
+                            printe( "Failed writing DDS with wide image to (HRESULT %08X):\n%ls\n", hr, szDestPathWide );
                         }
                         else
                         {
@@ -2092,7 +2092,7 @@ bool Test05()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed reading back written DDS with wide image to (HRESULT %08X):\n%S\n", hr, szDestPathWide );
+                                printe( "Failed reading back written DDS with wide image to (HRESULT %08X):\n%ls\n", hr, szDestPathWide );
                             }
                             else if ( metadata.width != metadata2.width
                                       || metadata.height != metadata2.height
@@ -2104,7 +2104,7 @@ bool Test05()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Metadata error in dds with wide image readback:\n%S\n", szDestPathWide );
+                                printe( "Metadata error in dds with wide image readback:\n%ls\n", szDestPathWide );
                                 printmeta( &metadata2 );
                                 printmetachk( &metadata );
                             }
@@ -2116,13 +2116,13 @@ bool Test05()
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed computing MD5 checksum of wide image reloaded image data (HRESULT %08X):\n%S\n", hr, szDestPathWide );
+                                    printe( "Failed computing MD5 checksum of wide image reloaded image data (HRESULT %08X):\n%ls\n", hr, szDestPathWide );
                                 }
                                 else if ( memcmp( digest, digest2, 16 ) != 0 )
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "MD5 checksum of wide image reloaded data doesn't match original:\n%S\n", szDestPathWide );
+                                    printe( "MD5 checksum of wide image reloaded data doesn't match original:\n%ls\n", szDestPathWide );
                                 }
                             }
                         }
@@ -2209,7 +2209,7 @@ bool Test06()
                 if (FAILED(hr))
                 {
                     success = false;
-                    printe("Failed getting raw file data from (HRESULT %08X):\n%S\n", hr, szPath);
+                    printe("Failed getting raw file data from (HRESULT %08X):\n%ls\n", hr, szPath);
                 }
                 else
                 {
@@ -2222,13 +2222,13 @@ bool Test06()
                         if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
                         {
                             success = false;
-                            printe("ERROR: frommemory expected success! (%08X)\n%S\n", hr, szPath);
+                            printe("ERROR: frommemory expected success! (%08X)\n%ls\n", hr, szPath);
                         }
                     }
                     else if (SUCCEEDED(hr) && !isdds)
                     {
                         success = false;
-                        printe("ERROR: frommemory expected failure\n%S\n", szPath);
+                        printe("ERROR: frommemory expected failure\n%ls\n", szPath);
                     }
                 }
             }
@@ -2244,13 +2244,13 @@ bool Test06()
                     if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
                     {
                         success = false;
-                        printe("ERROR: fromfile expected success ! (%08X)\n%S\n", hr, szPath);
+                        printe("ERROR: fromfile expected success ! (%08X)\n%ls\n", hr, szPath);
                     }
                 }
                 else if (SUCCEEDED(hr) && !isdds)
                 {
                     success = false;
-                    printe("ERROR: fromfile expected failure\n%S\n", szPath);
+                    printe("ERROR: fromfile expected failure\n%ls\n", szPath);
                 }
             }
         }

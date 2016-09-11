@@ -64,12 +64,12 @@ bool Test13()
     HRESULT hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, &metadata, imagealpha );
     if ( FAILED(hr) )
     {
-        printe( "Failed loading dds (HRESULT %08X):\n%S\n", hr, szPath );
+        printe( "Failed loading dds (HRESULT %08X):\n%ls\n", hr, szPath );
         return false;
     }
     else if ( memcmp( &metadata, &checkai, sizeof(TexMetadata) ) != 0 )
     {
-        printe( "Metadata error in DDS:\n%S\n", szPath );
+        printe( "Metadata error in DDS:\n%ls\n", szPath );
         printmeta( &metadata );
         printmetachk( &checkai );
         return false;
@@ -79,7 +79,7 @@ bool Test13()
     hr = MD5Checksum( imagealpha, srcdigest1, 1 );
     if ( FAILED(hr) )
     {
-        printe( "Failed computing MD5 checksum (HRESULT %08X):\n%S\n", hr, szPath );
+        printe( "Failed computing MD5 checksum (HRESULT %08X):\n%ls\n", hr, szPath );
         return false;
     }
 
@@ -87,7 +87,7 @@ bool Test13()
     hr = MD5Checksum( imagealpha, srcdigestall );
     if ( FAILED(hr) )
     {
-        printe( "Failed computing MD5 checksum (HRESULT %08X):\n%S\n", hr, szPath );
+        printe( "Failed computing MD5 checksum (HRESULT %08X):\n%ls\n", hr, szPath );
         return false;
     }
 

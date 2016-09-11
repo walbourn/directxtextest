@@ -57,12 +57,12 @@ bool Test11()
     HRESULT hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, &metadata, imagehmap );
     if ( FAILED(hr) )
     {
-        printe( "Failed loading dds (HRESULT %08X):\n%S\n", hr, szPath );
+        printe( "Failed loading dds (HRESULT %08X):\n%ls\n", hr, szPath );
         return false;
     }
     else if ( memcmp( &metadata, &checkhmap, sizeof(TexMetadata) ) != 0 )
     {
-        printe( "Metadata error in DDS:\n%S\n", szPath );
+        printe( "Metadata error in DDS:\n%ls\n", szPath );
         printmeta( &metadata );
         printmetachk( &checkhmap );
         return false;

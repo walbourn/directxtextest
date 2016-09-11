@@ -719,7 +719,7 @@ bool Test05()
         if ( !_LoadScanline( &temp, 1, &p.bytes[0], p.pitch, p.format ) )
         {
             success = false;
-            printe( "Failed loading pixel format %S, index %Iu\n", GetName( p.format ), index );
+            printe( "Failed loading pixel format %ls, index %Iu\n", GetName( p.format ), index );
         }
         else
         {
@@ -728,7 +728,7 @@ bool Test05()
             if ( !XMVector4NearEqual( chk, temp, g_PixelEpsilon ) )
             {
                 success = false;
-                printe( "Failed loading pixel format %S, index %Iu: %f %f %f %f ... %f %f %f %f\n", GetName( p.format ), index,
+                printe( "Failed loading pixel format %ls, index %Iu: %f %f %f %f ... %f %f %f %f\n", GetName( p.format ), index,
                         XMVectorGetX(temp), XMVectorGetY(temp), XMVectorGetZ(temp), XMVectorGetW(temp),
                         p.vector.x, p.vector.y, p.vector.z, p.vector.w );
             }
@@ -738,7 +738,7 @@ bool Test05()
         if ( !_LoadScanlineLinear( &temp, 1, &p.bytes[0], p.pitch, p.format, 0 ) )
         {
             success = false;
-            printe( "Failed loading (2) pixel format %S, index %Iu\n", GetName( p.format ), index );
+            printe( "Failed loading (2) pixel format %ls, index %Iu\n", GetName( p.format ), index );
         }
         else
         {
@@ -747,7 +747,7 @@ bool Test05()
             if ( !XMVector4NearEqual( chk, temp, g_PixelEpsilon ) )
             {
                 success = false;
-                printe( "Failed loading (2) pixel format %S, index %Iu: %f %f %f %f ... %f %f %f %f\n", GetName( p.format ), index,
+                printe( "Failed loading (2) pixel format %ls, index %Iu: %f %f %f %f ... %f %f %f %f\n", GetName( p.format ), index,
                         XMVectorGetX(temp), XMVectorGetY(temp), XMVectorGetZ(temp), XMVectorGetW(temp),
                         p.vector.x, p.vector.y, p.vector.z, p.vector.w );
             }
@@ -763,14 +763,14 @@ bool Test05()
         if ( !_StoreScanline( buff, p.pitch, p.format, &temp, 1, 0.25f ) )
         {
             success = false;
-            printe( "Failed storing pixel format %S, index %Iu\n", GetName( p.format ), index );
+            printe( "Failed storing pixel format %ls, index %Iu\n", GetName( p.format ), index );
         }
         else
         {
             if ( memcmp( buff, &p.bytes[0], p.pitch ) != 0 )
             {
                 success = false;
-                printe( "Failed storing pixel format %S, index %Iu\n%f %f %f %f:\n",
+                printe( "Failed storing pixel format %ls, index %Iu\n%f %f %f %f:\n",
                         GetName( p.format ), index, p.vector.x, p.vector.y, p.vector.z, p.vector.w );
                 printe( "    %02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X\n... %02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X\n",
                         buff[0], buff[1], buff[2], buff[3], buff[4], buff[5], buff[6], buff[7],
@@ -785,14 +785,14 @@ bool Test05()
         if ( !_StoreScanlineLinear( buff, p.pitch, p.format, &temp, 1, 0, 0.25f ) )
         {
             success = false;
-            printe( "Failed storing (2) pixel format %S, index %Iu\n", GetName( p.format ), index );
+            printe( "Failed storing (2) pixel format %ls, index %Iu\n", GetName( p.format ), index );
         }
         else
         {
             if ( memcmp( buff, &p.bytes[0], p.pitch ) != 0 )
             {
                 success = false;
-                printe( "Failed storing (2) pixel format %S, index %Iu\n%f %f %f %f:\n",
+                printe( "Failed storing (2) pixel format %ls, index %Iu\n%f %f %f %f:\n",
                         GetName( p.format ), index, p.vector.x, p.vector.y, p.vector.z, p.vector.w );
                 printe( "    %02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X\n... %02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X\n",
                         buff[0], buff[1], buff[2], buff[3], buff[4], buff[5], buff[6], buff[7],
@@ -897,7 +897,7 @@ static const TestPixels s_TestPartialTypeless[] =
             if ( !_LoadScanline( &temp, 1, &p.bytes[0], p.pitch, p.format ) )
             {
                 success = false;
-                printe( "Failed loading partial typeless pixel format %S, index %Iu\n", GetName( p.format ), index );
+                printe( "Failed loading partial typeless pixel format %ls, index %Iu\n", GetName( p.format ), index );
             }
             else
             {
@@ -906,7 +906,7 @@ static const TestPixels s_TestPartialTypeless[] =
                 if ( !XMVector4NearEqual( chk, temp, g_PixelEpsilon ) )
                 {
                     success = false;
-                    printe( "Failed loading partial typeless pixel format %S, index %Iu: %f %f %f %f ... %f %f %f %f\n", GetName( p.format ), index,
+                    printe( "Failed loading partial typeless pixel format %ls, index %Iu: %f %f %f %f ... %f %f %f %f\n", GetName( p.format ), index,
                             XMVectorGetX(temp), XMVectorGetY(temp), XMVectorGetZ(temp), XMVectorGetW(temp),
                             p.vector.x, p.vector.y, p.vector.z, p.vector.w );
                 }
@@ -969,12 +969,12 @@ bool Test05B()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting DDS data from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed getting DDS data from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
             success = false;
-            printe( "Metadata error in DDS:\n%S\n", szPath );
+            printe( "Metadata error in DDS:\n%ls\n", szPath );
             printmeta( &metadata );
             printmetachk( check );
         }
@@ -985,7 +985,7 @@ bool Test05B()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed internal scanline load/store (HRESULT %08X) %S:\n%S\n",
+                printe( "Failed internal scanline load/store (HRESULT %08X) %ls:\n%ls\n",
                         hr, GetName( srcimage.GetMetadata().format ), szPath );
             }
             else
@@ -1006,12 +1006,12 @@ bool Test05B()
                 if ( FAILED(hr) )
                 {
                     success = false;
-                    printe( "Failed comparing internal convert images (HRESULT %08X):\n%S\n", hr, szPath );
+                    printe( "Failed comparing internal convert images (HRESULT %08X):\n%ls\n", hr, szPath );
                 }
                 else if ( IsErrorTooLarge( mse, targMSE ) )
                 {
                     success = false;
-                    printe( "Failed comparing internal convert images MSE = %f (%f %f %f %f)... %f:\n%S\n",
+                    printe( "Failed comparing internal convert images MSE = %f (%f %f %f %f)... %f:\n%ls\n",
                             mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
                 }
 
@@ -1048,7 +1048,7 @@ bool Test05C()
         if ( !_LoadScanline( &temp, 1, &p.bytes[0], p.pitch, p.format ) )
         {
             success = false;
-            printe( "Failed loading pixel format %S, index %Iu\n", GetName( p.format ), index );
+            printe( "Failed loading pixel format %ls, index %Iu\n", GetName( p.format ), index );
         }
         else
         {
@@ -1062,7 +1062,7 @@ bool Test05C()
             if ( !XMVector4NearEqual( chk, temp, g_PixelEpsilon ) )
             {
                 success = false;
-                printe( "Failed converting pixel %S -> %S, index %Iu: %f %f %f %f ... %f %f %f %f\n", GetName( p.format ), GetName( srgb ), index,
+                printe( "Failed converting pixel %ls -> %ls, index %Iu: %f %f %f %f ... %f %f %f %f\n", GetName( p.format ), GetName( srgb ), index,
                         XMVectorGetX(temp), XMVectorGetY(temp), XMVectorGetZ(temp), XMVectorGetW(temp),
                         XMVectorGetX(chk), XMVectorGetY(chk), XMVectorGetZ(chk), XMVectorGetW(chk) );
             }
@@ -1071,7 +1071,7 @@ bool Test05C()
         if ( !_LoadScanline( &temp, 1, &p.bytes[0], p.pitch, srgb ) )
         {
             success = false;
-            printe( "Failed loading pixel format %S, index %Iu\n", GetName( p.format ), index );
+            printe( "Failed loading pixel format %ls, index %Iu\n", GetName( p.format ), index );
         }
         else
         {
@@ -1085,7 +1085,7 @@ bool Test05C()
             if ( !XMVector4NearEqual( chk, temp, g_PixelEpsilon ) )
             {
                 success = false;
-                printe( "Failed converting pixel %S -> %S, index %Iu: %f %f %f %f ... %f %f %f %f\n", GetName( srgb ), GetName( p.format ), index,
+                printe( "Failed converting pixel %ls -> %ls, index %Iu: %f %f %f %f ... %f %f %f %f\n", GetName( srgb ), GetName( p.format ), index,
                         XMVectorGetX(temp), XMVectorGetY(temp), XMVectorGetZ(temp), XMVectorGetW(temp),
                         XMVectorGetX(chk), XMVectorGetY(chk), XMVectorGetZ(chk), XMVectorGetW(chk) );
             }
@@ -1095,7 +1095,7 @@ bool Test05C()
         if ( !_LoadScanlineLinear( &temp, 1, &p.bytes[0], p.pitch, p.format, TEX_FILTER_SRGB ) )
         {
             success = false;
-            printe( "Failed linear loading (1) pixel format %S, index %Iu\n", GetName( p.format ), index );
+            printe( "Failed linear loading (1) pixel format %ls, index %Iu\n", GetName( p.format ), index );
         }
         else
         {
@@ -1107,7 +1107,7 @@ bool Test05C()
             if ( !XMVector4NearEqual( chk, temp, g_PixelEpsilon ) )
             {
                 success = false;
-                printe( "Failed linear loading (1) pixel %S, index %Iu: %f %f %f %f ... %f %f %f %f\n", GetName( p.format ), index,
+                printe( "Failed linear loading (1) pixel %ls, index %Iu: %f %f %f %f ... %f %f %f %f\n", GetName( p.format ), index,
                         XMVectorGetX(temp), XMVectorGetY(temp), XMVectorGetZ(temp), XMVectorGetW(temp),
                         XMVectorGetX(chk), XMVectorGetY(chk), XMVectorGetZ(chk), XMVectorGetW(chk) );
             }
@@ -1116,7 +1116,7 @@ bool Test05C()
         if ( !_LoadScanlineLinear( &temp, 1, &p.bytes[0], p.pitch, srgb, 0 ) )
         {
             success = false;
-            printe( "Failed linear loading (2) pixel format %S, index %Iu\n", GetName( p.format ), index );
+            printe( "Failed linear loading (2) pixel format %ls, index %Iu\n", GetName( p.format ), index );
         }
         else
         {
@@ -1128,7 +1128,7 @@ bool Test05C()
             if ( !XMVector4NearEqual( chk, temp, g_PixelEpsilon ) )
             {
                 success = false;
-                printe( "Failed linear loading (2) pixel %S, index %Iu: %f %f %f %f ... %f %f %f %f\n", GetName( p.format ), index,
+                printe( "Failed linear loading (2) pixel %ls, index %Iu: %f %f %f %f ... %f %f %f %f\n", GetName( p.format ), index,
                         XMVectorGetX(temp), XMVectorGetY(temp), XMVectorGetZ(temp), XMVectorGetW(temp),
                         XMVectorGetX(chk), XMVectorGetY(chk), XMVectorGetZ(chk), XMVectorGetW(chk) );
             }
@@ -1140,12 +1140,12 @@ bool Test05C()
         if ( !_StoreScanlineLinear( &buff[0], 16, p.format, &temp, 1, TEX_FILTER_SRGB ) )
         {
             success = false;
-            printe( "Failed linear storing (1) pixel format %S, index %Iu\n", GetName( p.format ), index );
+            printe( "Failed linear storing (1) pixel format %ls, index %Iu\n", GetName( p.format ), index );
         }
         else if ( !_LoadScanline( &temp, 1, &buff, 16, p.format ) )
         {
             success = false;
-            printe( "Failed reloading linear stored (1) pixel format %S, index %Iu\n", GetName( p.format ), index );
+            printe( "Failed reloading linear stored (1) pixel format %ls, index %Iu\n", GetName( p.format ), index );
         }
         else
         {
@@ -1157,7 +1157,7 @@ bool Test05C()
             if ( !XMVector4NearEqual( chk, temp, g_PixelEpsilon ) )
             {
                 success = false;
-                printe( "Failed linear storing (1) pixel %S, index %Iu: %f %f %f %f ... %f %f %f %f\n", GetName( p.format ), index,
+                printe( "Failed linear storing (1) pixel %ls, index %Iu: %f %f %f %f ... %f %f %f %f\n", GetName( p.format ), index,
                         XMVectorGetX(temp), XMVectorGetY(temp), XMVectorGetZ(temp), XMVectorGetW(temp),
                         XMVectorGetX(chk), XMVectorGetY(chk), XMVectorGetZ(chk), XMVectorGetW(chk) );
             }
@@ -1167,12 +1167,12 @@ bool Test05C()
         if ( !_StoreScanlineLinear( &buff[0], 16, srgb, &temp, 1, 0 ) )
         {
             success = false;
-            printe( "Failed linear storing (2) pixel format %S, index %Iu\n", GetName( p.format ), index );
+            printe( "Failed linear storing (2) pixel format %ls, index %Iu\n", GetName( p.format ), index );
         }
         else if ( !_LoadScanline( &temp, 1, &buff, 16, p.format ) )
         {
             success = false;
-            printe( "Failed reloading linear stored (2) pixel format %S, index %Iu\n", GetName( p.format ), index );
+            printe( "Failed reloading linear stored (2) pixel format %ls, index %Iu\n", GetName( p.format ), index );
         }
         else
         {
@@ -1184,7 +1184,7 @@ bool Test05C()
             if ( !XMVector4NearEqual( chk, temp, g_PixelEpsilon ) )
             {
                 success = false;
-                printe( "Failed linear storing (2) pixel %S, index %Iu: %f %f %f %f ... %f %f %f %f\n", GetName( p.format ), index,
+                printe( "Failed linear storing (2) pixel %ls, index %Iu: %f %f %f %f ... %f %f %f %f\n", GetName( p.format ), index,
                         XMVectorGetX(temp), XMVectorGetY(temp), XMVectorGetZ(temp), XMVectorGetW(temp),
                         XMVectorGetX(chk), XMVectorGetY(chk), XMVectorGetZ(chk), XMVectorGetW(chk) );
             }
@@ -2603,12 +2603,12 @@ bool Test05D()
         if ( !_StoreScanline( buff, sizeof(buff), p.dformat, &temp, 1, 0.25f ) )
         {
             success = false;
-            printe( "Failed storing pixel format %S, index %Iu\n", GetName( p.dformat ), index );
+            printe( "Failed storing pixel format %ls, index %Iu\n", GetName( p.dformat ), index );
         }
         else if ( !_LoadScanline( &temp, 1, buff, sizeof(buff), p.dformat ) )
         {
             success = false;
-            printe( "Failed loading pixel format %S, index %Iu\n", GetName( p.dformat ), index );
+            printe( "Failed loading pixel format %ls, index %Iu\n", GetName( p.dformat ), index );
         }
         else
         {
@@ -2617,7 +2617,7 @@ bool Test05D()
             if ( !XMVector4NearEqual( chk, temp, g_PixelEpsilon ) )
             {
                 success = false;
-                printe( "Failed converting format\n%S (%08X), -> %S, index %Iu:\n%f %f %f %f = %f %f %f %f\n\t\t\t\t... %f %f %f %f\n", GetName( p.sformat ), p.flags, GetName( p.dformat ), index,
+                printe( "Failed converting format\n%ls (%08X), -> %ls, index %Iu:\n%f %f %f %f = %f %f %f %f\n\t\t\t\t... %f %f %f %f\n", GetName( p.sformat ), p.flags, GetName( p.dformat ), index,
                         p.svector.x, p.svector.y, p.svector.z, p.svector.w,
                         XMVectorGetX(temp), XMVectorGetY(temp), XMVectorGetZ(temp), XMVectorGetW(temp),
                         p.dvector.x, p.dvector.y, p.dvector.z, p.dvector.w );
@@ -2682,12 +2682,12 @@ bool Test06()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting DDS data from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed getting DDS data from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
             success = false;
-            printe( "Metadata error in DDS:\n%S\n", szPath );
+            printe( "Metadata error in DDS:\n%ls\n", szPath );
             printmeta( &metadata );
             printmetachk( check );
         }
@@ -2759,16 +2759,16 @@ bool Test06()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed conversion (HRESULT %08X) to %S:\n%S\n", hr, GetName( tformat ), szPath );
+                    printe( "Failed conversion (HRESULT %08X) to %ls:\n%ls\n", hr, GetName( tformat ), szPath );
                 }
                 else if ( image.GetMetadata().format != tformat
                           || image.GetMetadata().width != srcimage.GetMetadata().width || image.GetMetadata().height != srcimage.GetMetadata().height )
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed conversion result is %Iu x %Iu (format %S):\n",
+                    printe( "Failed conversion result is %Iu x %Iu (format %ls):\n",
                             image.GetMetadata().width, image.GetMetadata().height, GetName( image.GetMetadata().format ) );
-                    printe( "\n...(check) %Iu x %Iu (format %S):\n%S\n",
+                    printe( "\n...(check) %Iu x %Iu (format %ls):\n%ls\n",
                             srcimage.GetMetadata().width, srcimage.GetMetadata().height, GetName( tformat ), szPath );
                 }
                 else
@@ -2815,16 +2815,16 @@ bool Test06()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed DITHER conversion (HRESULT %08X) to %S:\n%S\n", hr, GetName( tformat ), szPath );
+                        printe( "Failed DITHER conversion (HRESULT %08X) to %ls:\n%ls\n", hr, GetName( tformat ), szPath );
                     }
                     else if ( imageDither.GetMetadata().format != tformat
                               || imageDither.GetMetadata().width != srcimage.GetMetadata().width || imageDither.GetMetadata().height != srcimage.GetMetadata().height )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed DITHER conversion result is %Iu x %Iu (format %S):\n",
+                        printe( "Failed DITHER conversion result is %Iu x %Iu (format %ls):\n",
                                 imageDither.GetMetadata().width, imageDither.GetMetadata().height, GetName( imageDither.GetMetadata().format ) );
-                        printe( "\n...(check) %Iu x %Iu (format %S):\n%S\n",
+                        printe( "\n...(check) %Iu x %Iu (format %ls):\n%ls\n",
                                 srcimage.GetMetadata().width, srcimage.GetMetadata().height, GetName( tformat ), szPath );
                     }
                     else
@@ -2857,7 +2857,7 @@ bool Test06()
                         else if ( IsErrorTooLarge( mse, targMSE ) )
                         {
                             success = false;
-                            printe( "Failed comparing simple vs. DITHER image data (%f [%f %f %f %f])\nformat %S -> %S:\n%S\n",
+                            printe( "Failed comparing simple vs. DITHER image data (%f [%f %f %f %f])\nformat %ls -> %ls:\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName( metadata.format), GetName( tformat ), szPath );
                         }
 
@@ -2894,16 +2894,16 @@ bool Test06()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed Diffusion DITHER conversion (HRESULT %08X) to %S:\n%S\n", hr, GetName( tformat ), szPath );
+                        printe( "Failed Diffusion DITHER conversion (HRESULT %08X) to %ls:\n%ls\n", hr, GetName( tformat ), szPath );
                     }
                     else if ( imageDitherDiffusion.GetMetadata().format != tformat
                               || imageDitherDiffusion.GetMetadata().width != srcimage.GetMetadata().width || imageDitherDiffusion.GetMetadata().height != srcimage.GetMetadata().height )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed Diffusion DITHER conversion result is %Iu x %Iu (format %S):\n",
+                        printe( "Failed Diffusion DITHER conversion result is %Iu x %Iu (format %ls):\n",
                                 imageDitherDiffusion.GetMetadata().width, imageDitherDiffusion.GetMetadata().height, GetName( imageDitherDiffusion.GetMetadata().format ) );
-                        printe( "\n...(check) %Iu x %Iu (format %S):\n%S\n",
+                        printe( "\n...(check) %Iu x %Iu (format %ls):\n%ls\n",
                                 srcimage.GetMetadata().width, srcimage.GetMetadata().height, GetName( tformat ), szPath );
                     }
                     else
@@ -2936,7 +2936,7 @@ bool Test06()
                         else if ( IsErrorTooLarge( mse, targMSE ) )
                         {
                             success = false;
-                            printe( "Failed comparing simple vs. Diffusion DITHER image data (%f [%f %f %f %f])\nformat %S -> %S:\n%S\n",
+                            printe( "Failed comparing simple vs. Diffusion DITHER image data (%f [%f %f %f %f])\nformat %ls -> %ls:\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName( metadata.format), GetName( tformat ), szPath );
                         }
 
@@ -2981,7 +2981,7 @@ bool Test06()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed non-WIC conversion (HRESULT %08X) to %S:\n%S\n", hr, GetName( tformat ), szPath );
+                        printe( "Failed non-WIC conversion (HRESULT %08X) to %ls:\n%ls\n", hr, GetName( tformat ), szPath );
                     }
                     else if ( nwimage.GetMetadata().format != tformat
                               || nwimage.GetMetadata().width != srcimage.GetMetadata().width
@@ -2989,9 +2989,9 @@ bool Test06()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed non-WIC conversion result is %Iu x %Iu (format %S):\n",
+                        printe( "Failed non-WIC conversion result is %Iu x %Iu (format %ls):\n",
                                 nwimage.GetMetadata().width, nwimage.GetMetadata().height, GetName( nwimage.GetMetadata().format ) );
-                        printe( "\n...(check) %Iu x %Iu (format %S):\n%S\n",
+                        printe( "\n...(check) %Iu x %Iu (format %ls):\n%ls\n",
                                 srcimage.GetMetadata().width, srcimage.GetMetadata().height, GetName( tformat ), szPath );
                     }
                     else
@@ -3033,7 +3033,7 @@ bool Test06()
                         else if ( IsErrorTooLarge( mse, targMSE ) )
                         {
                             success = false;
-                            printe( "Failed comparing simple vs. non-WIC image data (%f [%f %f %f %f])\nformat %S -> %S:\n%S\n",
+                            printe( "Failed comparing simple vs. non-WIC image data (%f [%f %f %f %f])\nformat %ls -> %ls:\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName( metadata.format), GetName( tformat ), szPath );
                         }
 
@@ -3073,16 +3073,16 @@ bool Test06()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed non-WIC DITHER conversion (HRESULT %08X) to %S:\n%S\n", hr, GetName( tformat ), szPath );
+                        printe( "Failed non-WIC DITHER conversion (HRESULT %08X) to %ls:\n%ls\n", hr, GetName( tformat ), szPath );
                     }
                     else if ( nwimageDither.GetMetadata().format != tformat
                               || nwimageDither.GetMetadata().width != srcimage.GetMetadata().width || nwimageDither.GetMetadata().height != srcimage.GetMetadata().height )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed non-WIC DITHER conversion result is %Iu x %Iu (format %S):\n",
+                        printe( "Failed non-WIC DITHER conversion result is %Iu x %Iu (format %ls):\n",
                                 nwimageDither.GetMetadata().width, nwimageDither.GetMetadata().height, GetName( nwimageDither.GetMetadata().format ) );
-                        printe( "\n...(check) %Iu x %Iu (format %S):\n%S\n",
+                        printe( "\n...(check) %Iu x %Iu (format %ls):\n%ls\n",
                                 srcimage.GetMetadata().width, srcimage.GetMetadata().height, GetName( tformat ), szPath );
                     }
                     else
@@ -3113,7 +3113,7 @@ bool Test06()
                         else if ( IsErrorTooLarge( mse, targMSE ) )
                         {
                             success = false;
-                            printe( "Failed comparing non-WIC simple vs. DITHER image data (%f [%f %f %f %f])\nformat %S -> %S:\n%S\n",
+                            printe( "Failed comparing non-WIC simple vs. DITHER image data (%f [%f %f %f %f])\nformat %ls -> %ls:\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName( metadata.format), GetName( tformat ), szPath );
                         }
 
@@ -3151,16 +3151,16 @@ bool Test06()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed non-WIC Diffusion DITHER conversion (HRESULT %08X) to %S:\n%S\n", hr, GetName( tformat ), szPath );
+                        printe( "Failed non-WIC Diffusion DITHER conversion (HRESULT %08X) to %ls:\n%ls\n", hr, GetName( tformat ), szPath );
                     }
                     else if ( nwimageDitherDiffusion.GetMetadata().format != tformat
                               || nwimageDitherDiffusion.GetMetadata().width != srcimage.GetMetadata().width || nwimageDitherDiffusion.GetMetadata().height != srcimage.GetMetadata().height )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed non-WIC Diffusion DITHER conversion result is %Iu x %Iu (format %S):\n",
+                        printe( "Failed non-WIC Diffusion DITHER conversion result is %Iu x %Iu (format %ls):\n",
                                 nwimageDitherDiffusion.GetMetadata().width, nwimageDitherDiffusion.GetMetadata().height, GetName( nwimageDitherDiffusion.GetMetadata().format ) );
-                        printe( "\n...(check) %Iu x %Iu (format %S):\n%S\n",
+                        printe( "\n...(check) %Iu x %Iu (format %ls):\n%ls\n",
                                 srcimage.GetMetadata().width, srcimage.GetMetadata().height, GetName( tformat ), szPath );
                     }
                     else
@@ -3193,7 +3193,7 @@ bool Test06()
                         else if ( IsErrorTooLarge( mse, targMSE ) )
                         {
                             success = false;
-                            printe( "Failed non-WIC comparing simple vs. Diffusion DITHER image data (%f [%f %f %f %f])\nformat %S -> %S:\n%S\n",
+                            printe( "Failed non-WIC comparing simple vs. Diffusion DITHER image data (%f [%f %f %f %f])\nformat %ls -> %ls:\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName( metadata.format), GetName( tformat ), szPath );
                         }
 
@@ -3373,7 +3373,7 @@ bool Test06()
                         if ( IsErrorTooLarge( mse, targMSE ) )
                         {
                             success = false;
-                            printe( "Failed comparing sRGB vs. RGB image data (%f [%f %f %f %f])\nformat %S -> %S:\n%S\n",
+                            printe( "Failed comparing sRGB vs. RGB image data (%f [%f %f %f %f])\nformat %ls -> %ls:\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName( metadata.format ), GetName( tformat ), szPath );
                         }
                     }
@@ -3388,7 +3388,7 @@ bool Test06()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed convert complex (HRESULT %08X) to %S:\n%S\n", hr, GetName( tformat ), szPath );
+                        printe( "Failed convert complex (HRESULT %08X) to %ls:\n%ls\n", hr, GetName( tformat ), szPath );
                     }
                     else
                     {
@@ -3405,7 +3405,7 @@ bool Test06()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed convert complex result:\n%S\n", szPath );
+                            printe( "Failed convert complex result:\n%ls\n", szPath );
                             printmeta( &metadata2 );
                             printmetachk( check );
                         }
@@ -3424,7 +3424,7 @@ bool Test06()
                             if ( IsErrorTooLarge( mse, 0.0f ) )
                             {
                                 success = false;
-                                printe( "Failed comparing simple vs. complex image data (%f [%f %f %f %f]):\nformat %S -> %S:\n%S\n",
+                                printe( "Failed comparing simple vs. complex image data (%f [%f %f %f %f]):\nformat %ls -> %ls:\n%ls\n",
                                         mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName(metadata.format), GetName( tformat ), szPath );
                             }
 

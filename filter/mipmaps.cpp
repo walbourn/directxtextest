@@ -364,12 +364,12 @@ bool Test02()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting DDS data from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed getting DDS data from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
             success = false;
-            printe( "Metadata error in DDS:\n%S\n", szPath );
+            printe( "Metadata error in DDS:\n%ls\n", szPath );
             printmeta( &metadata );
             printmetachk( check );
         }
@@ -382,7 +382,7 @@ bool Test02()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed computing MD5 checksum (HRESULT %08X):\n%S\n", hr, szPath );
+                printe( "Failed computing MD5 checksum (HRESULT %08X):\n%ls\n", hr, szPath );
             }
             else
             {
@@ -395,13 +395,13 @@ bool Test02()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed mip-map Fant/Box generation (HRESULT %08X):\n%S\n", hr, szPath );
+                    printe( "Failed mip-map Fant/Box generation (HRESULT %08X):\n%ls\n", hr, szPath );
                 }
                 else if ( mipChain.GetMetadata().mipLevels < 2 )
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed mip-map Fant/Box generation result is %Iu mip levels:\n%S\n", mipChain.GetMetadata().mipLevels, szPath );
+                    printe( "Failed mip-map Fant/Box generation result is %Iu mip levels:\n%ls\n", mipChain.GetMetadata().mipLevels, szPath );
                 }
                 else
                 {
@@ -412,13 +412,13 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing Fant/Box MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed computing Fant/Box MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( !(g_MipMapMedia[index].options & FLAGS_SKIP_TOPTEST) && memcmp( digest, srcdigest, 16 ) != 0 )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing Fant/Box top MD5 checksum:\n%S\n", szPath );
+                        printe( "Failed comparing Fant/Box top MD5 checksum:\n%ls\n", szPath );
                         printdigest( "computed", digest );
                         printdigest( "expected", srcdigest );
                     }
@@ -447,7 +447,7 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( memcmp( digest, g_MipMapMedia[index].md5, 16 ) != 0
                               && (!expected2 || memcmp( digest, expected2, 16 ) != 0 )
@@ -456,7 +456,7 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing Fant/Box mipchain MD5 checksum:\n%S\n", szPath );
+                        printe( "Failed comparing Fant/Box mipchain MD5 checksum:\n%ls\n", szPath );
                         printdigest( "computed", digest );
                         printdigest( "expected", g_MipMapMedia[index].md5 );
                         if ( expected2 )
@@ -494,13 +494,13 @@ bool Test02()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed mip-map Point generation (HRESULT %08X):\n%S\n", hr, szPath );
+                    printe( "Failed mip-map Point generation (HRESULT %08X):\n%ls\n", hr, szPath );
                 }
                 else if ( mipChainPoint.GetMetadata().mipLevels < 2 )
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed mip-map Point generation result is %Iu mip levels:\n%S\n", mipChainPoint.GetMetadata().mipLevels, szPath );
+                    printe( "Failed mip-map Point generation result is %Iu mip levels:\n%ls\n", mipChainPoint.GetMetadata().mipLevels, szPath );
                 }
                 else
                 {
@@ -511,13 +511,13 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( !(g_MipMapMedia[index].options & FLAGS_SKIP_TOPTEST) && memcmp( digest, srcdigest, 16 ) != 0 )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing Point top MD5 checksum:\n%S\n", szPath );
+                        printe( "Failed comparing Point top MD5 checksum:\n%ls\n", szPath );
                         printdigest( "computed", digest );
                         printdigest( "expected", srcdigest );
                     }
@@ -534,14 +534,14 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( memcmp( digest, g_MipMapMedia[index].md5_point, 16 ) != 0
                               && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing Point mipchain MD5 checksum:\n%S\n", szPath );
+                        printe( "Failed comparing Point mipchain MD5 checksum:\n%ls\n", szPath );
                         printdigest( "computed", digest );
                         printdigest( "expected", g_MipMapMedia[index].md5_point );
                         if ( expected2 )
@@ -572,13 +572,13 @@ bool Test02()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed mip-map Linear generation (HRESULT %08X):\n%S\n", hr, szPath );
+                    printe( "Failed mip-map Linear generation (HRESULT %08X):\n%ls\n", hr, szPath );
                 }
                 else if ( mipChainLinear.GetMetadata().mipLevels < 2 )
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed mip-map Linear generation result is %Iu mip levels:\n%S\n", mipChainLinear.GetMetadata().mipLevels, szPath );
+                    printe( "Failed mip-map Linear generation result is %Iu mip levels:\n%ls\n", mipChainLinear.GetMetadata().mipLevels, szPath );
                 }
                 else
                 {
@@ -589,13 +589,13 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( !(g_MipMapMedia[index].options & FLAGS_SKIP_TOPTEST) && memcmp( digest, srcdigest, 16 ) != 0 )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing Linear top MD5 checksum:\n%S\n", szPath );
+                        printe( "Failed comparing Linear top MD5 checksum:\n%ls\n", szPath );
                         printdigest( "computed", digest );
                         printdigest( "expected", srcdigest );
                     }
@@ -612,14 +612,14 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( memcmp( digest, g_MipMapMedia[index].md5_linear, 16 ) != 0
                               && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing Linear mipchain MD5 checksum:\n%S\n", szPath );
+                        printe( "Failed comparing Linear mipchain MD5 checksum:\n%ls\n", szPath );
                         printdigest( "computed", digest );
                         printdigest( "expected", g_MipMapMedia[index].md5_linear );
                         if ( expected2 )
@@ -635,12 +635,12 @@ bool Test02()
                     if ( FAILED(hr) )
                     {
                         success = false;
-                        printe( "Failed comparing Point vs. Linear image data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed comparing Point vs. Linear image data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( IsErrorTooLarge( mse, targMSE ) )
                     {
                         success = false;
-                        printe( "Failed comparing Point vs. Linear MSE = %f (%f %f %f %f)... %f:\n%S\n",
+                        printe( "Failed comparing Point vs. Linear MSE = %f (%f %f %f %f)... %f:\n%ls\n",
                                 mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
                     }
 
@@ -666,13 +666,13 @@ bool Test02()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed mip-map Cubic generation (HRESULT %08X):\n%S\n", hr, szPath );
+                    printe( "Failed mip-map Cubic generation (HRESULT %08X):\n%ls\n", hr, szPath );
                 }
                 else if ( mipChainCubic.GetMetadata().mipLevels < 2 )
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed mip-map Cubic generation result is %Iu mip levels:\n%S\n", mipChainCubic.GetMetadata().mipLevels, szPath );
+                    printe( "Failed mip-map Cubic generation result is %Iu mip levels:\n%ls\n", mipChainCubic.GetMetadata().mipLevels, szPath );
                 }
                 else
                 {
@@ -683,13 +683,13 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( !(g_MipMapMedia[index].options & FLAGS_SKIP_TOPTEST) && memcmp( digest, srcdigest, 16 ) != 0 )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing Cubic top MD5 checksum:\n%S\n", szPath );
+                        printe( "Failed comparing Cubic top MD5 checksum:\n%ls\n", szPath );
                         printdigest( "computed", digest );
                         printdigest( "expected", srcdigest );
                     }
@@ -706,14 +706,14 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( memcmp( digest, g_MipMapMedia[index].md5_cubic, 16 ) != 0
                               && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing Cubic mipchain MD5 checksum:\n%S\n", szPath );
+                        printe( "Failed comparing Cubic mipchain MD5 checksum:\n%ls\n", szPath );
                         printdigest( "computed", digest );
                         printdigest( "expected", g_MipMapMedia[index].md5_cubic );
                         if ( expected2 )
@@ -729,12 +729,12 @@ bool Test02()
                     if ( FAILED(hr) )
                     {
                         success = false;
-                        printe( "Failed comparing Point vs. Cubic image data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed comparing Point vs. Cubic image data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( IsErrorTooLarge( mse, targMSE ) )
                     {
                         success = false;
-                        printe( "Failed comparing Point vs. Cubic MSE = %f (%f %f %f %f)... %f:\n%S\n",
+                        printe( "Failed comparing Point vs. Cubic MSE = %f (%f %f %f %f)... %f:\n%ls\n",
                                 mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
                     }
 
@@ -744,12 +744,12 @@ bool Test02()
                     if ( FAILED(hr) )
                     {
                         success = false;
-                        printe( "Failed comparing Linear vs. Cubic image data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed comparing Linear vs. Cubic image data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( IsErrorTooLarge( mse, targMSE ) )
                     {
                         success = false;
-                        printe( "Failed comparing Linear vs. Cubic MSE = %f (%f %f %f %f)... %f:\n%S\n",
+                        printe( "Failed comparing Linear vs. Cubic MSE = %f (%f %f %f %f)... %f:\n%ls\n",
                                 mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
                     }
 
@@ -775,13 +775,13 @@ bool Test02()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed mip-map Triangle generation (HRESULT %08X):\n%S\n", hr, szPath );
+                    printe( "Failed mip-map Triangle generation (HRESULT %08X):\n%ls\n", hr, szPath );
                 }
                 else if ( mipChainTriangle.GetMetadata().mipLevels < 2 )
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed mip-map Triangle generation result is %Iu mip levels:\n%S\n", mipChainTriangle.GetMetadata().mipLevels, szPath );
+                    printe( "Failed mip-map Triangle generation result is %Iu mip levels:\n%ls\n", mipChainTriangle.GetMetadata().mipLevels, szPath );
                 }
                 else
                 {
@@ -792,13 +792,13 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( !(g_MipMapMedia[index].options & FLAGS_SKIP_TOPTEST) && memcmp( digest, srcdigest, 16 ) != 0 )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing Triangle top MD5 checksum:\n%S\n", szPath );
+                        printe( "Failed comparing Triangle top MD5 checksum:\n%ls\n", szPath );
                         printdigest( "computed", digest );
                         printdigest( "expected", srcdigest );
                     }
@@ -815,14 +815,14 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( memcmp( digest, g_MipMapMedia[index].md5_tri, 16 ) != 0
                               && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing Triangle mipchain MD5 checksum:\n%S\n", szPath );
+                        printe( "Failed comparing Triangle mipchain MD5 checksum:\n%ls\n", szPath );
                         printdigest( "computed", digest );
                         printdigest( "expected", g_MipMapMedia[index].md5_tri );
                         if ( expected2 )
@@ -855,13 +855,13 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map separate alpha generation (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed mip-map separate alpha generation (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( mipChainSepAlpha.GetMetadata().mipLevels < 2 )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map separate alpha generation result is %Iu mip levels:\n%S\n", mipChainSepAlpha.GetMetadata().mipLevels, szPath );
+                        printe( "Failed mip-map separate alpha generation result is %Iu mip levels:\n%ls\n", mipChainSepAlpha.GetMetadata().mipLevels, szPath );
                     }
                     else
                     {
@@ -872,13 +872,13 @@ bool Test02()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( !(g_MipMapMedia[index].options & FLAGS_SKIP_TOPTEST) && memcmp( digest, srcdigest, 16 ) != 0 )
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed comparing separate alpha top MD5 checksum:\n%S\n", szPath );
+                            printe( "Failed comparing separate alpha top MD5 checksum:\n%ls\n", szPath );
                             printdigest( "computed", digest );
                             printdigest( "expected", srcdigest );
                         }
@@ -895,14 +895,14 @@ bool Test02()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed computing MD5 checksum of mipchain separate alpha data (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed computing MD5 checksum of mipchain separate alpha data (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( memcmp( digest, g_MipMapMedia[index].md5_sepalpha, 16 ) != 0
                                   && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed comparing separate alpha mipchain MD5 checksum:\n%S\n", szPath );
+                            printe( "Failed comparing separate alpha mipchain MD5 checksum:\n%ls\n", szPath );
                             printdigest( "computed", digest );
                             printdigest( "expected", g_MipMapMedia[index].md5_sepalpha );
                             if ( expected2 )
@@ -940,13 +940,13 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map non-WIC generation (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed mip-map non-WIC generation (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( nwMipChain.GetMetadata().mipLevels < 2 )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map non-WIC generation result is %Iu mip levels:\n%S\n", nwMipChain.GetMetadata().mipLevels, szPath );
+                        printe( "Failed mip-map non-WIC generation result is %Iu mip levels:\n%ls\n", nwMipChain.GetMetadata().mipLevels, szPath );
                     }
                     else
                     {
@@ -957,12 +957,12 @@ bool Test02()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed comparing non-WIC to WIC image data (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed comparing non-WIC to WIC image data (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( IsErrorTooLarge( mse, targMSE ) )
                         {
                             success = false;
-                            printe( "Failed comparing non-WIC to WIC MSE = %f (%f %f %f %f)... %f:\n%S\n",
+                            printe( "Failed comparing non-WIC to WIC MSE = %f (%f %f %f %f)... %f:\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
                         }
 
@@ -988,13 +988,13 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map non-WIC Point generation (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed mip-map non-WIC Point generation (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( nwMipChainPoint.GetMetadata().mipLevels < 2 )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map non-WIC Point generation result is %Iu mip levels:\n%S\n", nwMipChainPoint.GetMetadata().mipLevels, szPath );
+                        printe( "Failed mip-map non-WIC Point generation result is %Iu mip levels:\n%ls\n", nwMipChainPoint.GetMetadata().mipLevels, szPath );
                     }
                     else
                     {
@@ -1007,12 +1007,12 @@ bool Test02()
                             if ( FAILED(hr) )
                             {
                                 success = false;
-                                printe( "Failed comparing non-WIC to WIC Point image data (HRESULT %08X):\n%S\n", hr, szPath );
+                                printe( "Failed comparing non-WIC to WIC Point image data (HRESULT %08X):\n%ls\n", hr, szPath );
                             }
                             else if ( IsErrorTooLarge( mse, targMSE ) )
                             {
                                 success = false;
-                                printe( "Failed comparing non-WIC to WIC Point MSE = %f (%f %f %f %f)... %f:\n%S\n",
+                                printe( "Failed comparing non-WIC to WIC Point MSE = %f (%f %f %f %f)... %f:\n%ls\n",
                                         mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
                             }
                         }
@@ -1038,13 +1038,13 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map non-WIC Linear generation (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed mip-map non-WIC Linear generation (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( nwMipChainLinear.GetMetadata().mipLevels < 2 )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map non-WIC Linear generation result is %Iu mip levels:\n%S\n", nwMipChainLinear.GetMetadata().mipLevels, szPath );
+                        printe( "Failed mip-map non-WIC Linear generation result is %Iu mip levels:\n%ls\n", nwMipChainLinear.GetMetadata().mipLevels, szPath );
                     }
                     else
                     {
@@ -1055,12 +1055,12 @@ bool Test02()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed comparing non-WIC to WIC Linear image data (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed comparing non-WIC to WIC Linear image data (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( IsErrorTooLarge( mse, targMSE ) )
                         {
                             success = false;
-                            printe( "Failed comparing non-WIC to WIC Linear MSE = %f (%f %f %f %f)... %f:\n%S\n",
+                            printe( "Failed comparing non-WIC to WIC Linear MSE = %f (%f %f %f %f)... %f:\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
                         }
 
@@ -1070,12 +1070,12 @@ bool Test02()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed comparing non-WIC Point vs. Linear image data (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed comparing non-WIC Point vs. Linear image data (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( IsErrorTooLarge( mse, targMSE ) )
                         {
                             success = false;
-                            printe( "Failed comparing non-WIC Point vs. Linear MSE = %f (%f %f %f %f)... %f:\n%S\n",
+                            printe( "Failed comparing non-WIC Point vs. Linear MSE = %f (%f %f %f %f)... %f:\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
                         }
 
@@ -1100,13 +1100,13 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map non-WIC Cubic generation (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed mip-map non-WIC Cubic generation (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( nwMipChainCubic.GetMetadata().mipLevels < 2 )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map non-WIC Cubic generation result is %Iu mip levels:\n%S\n", nwMipChainCubic.GetMetadata().mipLevels, szPath );
+                        printe( "Failed mip-map non-WIC Cubic generation result is %Iu mip levels:\n%ls\n", nwMipChainCubic.GetMetadata().mipLevels, szPath );
                     }
                     else
                     {
@@ -1117,12 +1117,12 @@ bool Test02()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed comparing non-WIC to WIC Cubic image data (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed comparing non-WIC to WIC Cubic image data (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( IsErrorTooLarge( mse, targMSE ) )
                         {
                             success = false;
-                            printe( "Failed comparing non-WIC to WIC Cubic MSE = %f (%f %f %f %f)... %f:\n%S\n",
+                            printe( "Failed comparing non-WIC to WIC Cubic MSE = %f (%f %f %f %f)... %f:\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
                         }
 
@@ -1134,12 +1134,12 @@ bool Test02()
                             if ( FAILED(hr) )
                             {
                                 success = false;
-                                printe( "Failed comparing non-WIC Point vs. Cubic image data (HRESULT %08X):\n%S\n", hr, szPath );
+                                printe( "Failed comparing non-WIC Point vs. Cubic image data (HRESULT %08X):\n%ls\n", hr, szPath );
                             }
                             else if ( IsErrorTooLarge( mse, targMSE ) )
                             {
                                 success = false;
-                                printe( "Failed comparing non-WIC Point vs. Cubic MSE = %f (%f %f %f %f)... %f:\n%S\n",
+                                printe( "Failed comparing non-WIC Point vs. Cubic MSE = %f (%f %f %f %f)... %f:\n%ls\n",
                                         mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
                             }
                         }
@@ -1150,12 +1150,12 @@ bool Test02()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed comparing non-WIC Linear vs. Cubic image data (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed comparing non-WIC Linear vs. Cubic image data (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( IsErrorTooLarge( mse, targMSE ) )
                         {
                             success = false;
-                            printe( "Failed comparing non-WIC Linear vs. Cubic MSE = %f (%f %f %f %f)... %f:\n%S\n",
+                            printe( "Failed comparing non-WIC Linear vs. Cubic MSE = %f (%f %f %f %f)... %f:\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
                         }
 
@@ -1185,13 +1185,13 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map sRGB generation (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed mip-map sRGB generation (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( srgbMipChain.GetMetadata().mipLevels < 2 )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map sRGB generation result is %Iu mip levels:\n%S\n", srgbMipChain.GetMetadata().mipLevels, szPath );
+                        printe( "Failed mip-map sRGB generation result is %Iu mip levels:\n%ls\n", srgbMipChain.GetMetadata().mipLevels, szPath );
                     }
                     else
                     {
@@ -1202,18 +1202,18 @@ bool Test02()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed comparing sRGB to non-WIC image data (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed comparing sRGB to non-WIC image data (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( IsErrorTooSmall( mse, 0.00005f ) )
                         {
                             success = false;
-                            printe( "Failed comparing sRGB to WIC which appear near identical MSE = %f (%f %f %f %f):\n%S\n",
+                            printe( "Failed comparing sRGB to WIC which appear near identical MSE = %f (%f %f %f %f):\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], szPath );
                         }
                         else if ( IsErrorTooLarge( mse, targMSE ) )
                         {
                             success = false;
-                            printe( "Failed comparing sRGB to WIC MSE = %f (%f %f %f %f)... %f:\n%S\n",
+                            printe( "Failed comparing sRGB to WIC MSE = %f (%f %f %f %f)... %f:\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
                         }
 
@@ -1239,13 +1239,13 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map sRGB Linear generation (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed mip-map sRGB Linear generation (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( srgbMipChainLinear.GetMetadata().mipLevels < 2 )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map sRGB Linear generation result is %Iu mip levels:\n%S\n", srgbMipChainLinear.GetMetadata().mipLevels, szPath );
+                        printe( "Failed mip-map sRGB Linear generation result is %Iu mip levels:\n%ls\n", srgbMipChainLinear.GetMetadata().mipLevels, szPath );
                     }
                     else
                     {
@@ -1256,18 +1256,18 @@ bool Test02()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed comparing sRGB Linear to non-WIC image data (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed comparing sRGB Linear to non-WIC image data (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( IsErrorTooSmall( mse, 0.00005f ) )
                         {
                             success = false;
-                            printe( "Failed comparing sRGB Linear to WIC which appear near identical MSE = %f (%f %f %f %f):\n%S\n",
+                            printe( "Failed comparing sRGB Linear to WIC which appear near identical MSE = %f (%f %f %f %f):\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], szPath );
                         }
                         else if ( IsErrorTooLarge( mse, targMSE ) )
                         {
                             success = false;
-                            printe( "Failed comparing sRGB Linear to WIC MSE = %f (%f %f %f %f)... %f:\n%S\n",
+                            printe( "Failed comparing sRGB Linear to WIC MSE = %f (%f %f %f %f)... %f:\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
                         }
 
@@ -1293,13 +1293,13 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map sRGB Cubic generation (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed mip-map sRGB Cubic generation (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( srgbMipChainCubic.GetMetadata().mipLevels < 2 )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map sRGB Cubic generation result is %Iu mip levels:\n%S\n", srgbMipChainCubic.GetMetadata().mipLevels, szPath );
+                        printe( "Failed mip-map sRGB Cubic generation result is %Iu mip levels:\n%ls\n", srgbMipChainCubic.GetMetadata().mipLevels, szPath );
                     }
                     else
                     {
@@ -1310,18 +1310,18 @@ bool Test02()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed comparing sRGB Cubic to non-WIC image data (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed comparing sRGB Cubic to non-WIC image data (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( IsErrorTooSmall( mse, 0.00005f ) )
                         {
                             success = false;
-                            printe( "Failed comparing sRGB Cubic to non-WIC which appear near identical MSE = %f (%f %f %f %f):\n%S\n",
+                            printe( "Failed comparing sRGB Cubic to non-WIC which appear near identical MSE = %f (%f %f %f %f):\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], szPath );
                         }
                         else if ( IsErrorTooLarge( mse, targMSE ) )
                         {
                             success = false;
-                            printe( "Failed comparing sRGB Cubic to non-WIC WIC MSE = %f (%f %f %f %f)... %f:\n%S\n",
+                            printe( "Failed comparing sRGB Cubic to non-WIC WIC MSE = %f (%f %f %f %f)... %f:\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
                         }
 
@@ -1347,13 +1347,13 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map sRGB Triangle generation (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed mip-map sRGB Triangle generation (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( srgbMipChainTriangle.GetMetadata().mipLevels < 2 )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map sRGB Triangle generation result is %Iu mip levels:\n%S\n", srgbMipChainTriangle.GetMetadata().mipLevels, szPath );
+                        printe( "Failed mip-map sRGB Triangle generation result is %Iu mip levels:\n%ls\n", srgbMipChainTriangle.GetMetadata().mipLevels, szPath );
                     }
                     else
                     {
@@ -1364,18 +1364,18 @@ bool Test02()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed comparing sRGB Triangle to default data (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed comparing sRGB Triangle to default data (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( IsErrorTooSmall( mse, 0.00005f ) )
                         {
                             success = false;
-                            printe( "Failed comparing sRGB Triangle to default which appear near identical MSE = %f (%f %f %f %f):\n%S\n",
+                            printe( "Failed comparing sRGB Triangle to default which appear near identical MSE = %f (%f %f %f %f):\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], szPath );
                         }
                         else if ( IsErrorTooLarge( mse, targMSE ) )
                         {
                             success = false;
-                            printe( "Failed comparing sRGB Triangle to default MSE = %f (%f %f %f %f)... %f:\n%S\n",
+                            printe( "Failed comparing sRGB Triangle to default MSE = %f (%f %f %f %f)... %f:\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
                         }
 
@@ -1409,7 +1409,7 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map complex Fant/Box generation (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed mip-map complex Fant/Box generation (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else
                     {
@@ -1426,7 +1426,7 @@ bool Test02()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed mip-map complex Fant/Box generation result is %Iu mip levels:\n%S\n", metadata2.mipLevels, szPath );
+                            printe( "Failed mip-map complex Fant/Box generation result is %Iu mip levels:\n%ls\n", metadata2.mipLevels, szPath );
                             printmeta( &metadata2 );
                             printmetachk( check );
                         }
@@ -1439,13 +1439,13 @@ bool Test02()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
+                                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
                             }
                             else if ( !(g_MipMapMedia[index].options & FLAGS_SKIP_TOPTEST) && memcmp( digest, srcdigest, 16 ) != 0 )
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed comparing complex top MD5 checksum:\n%S\n", szPath );
+                                printe( "Failed comparing complex top MD5 checksum:\n%ls\n", szPath );
                                 printdigest( "computed", digest );
                                 printdigest( "expected", srcdigest );
                             }
@@ -1474,7 +1474,7 @@ bool Test02()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed computing MD5 checksum of complex mipchain data (HRESULT %08X):\n%S\n", hr, szPath );
+                                printe( "Failed computing MD5 checksum of complex mipchain data (HRESULT %08X):\n%ls\n", hr, szPath );
                             }
                             else if ( memcmp( digest, g_MipMapMedia[index].md5_c, 16 ) != 0
                                       && (!expected2 || memcmp( digest, expected2, 16 ) != 0 )
@@ -1483,7 +1483,7 @@ bool Test02()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed comparing complex mipchain MD5 checksum:\n%S\n", szPath );
+                                printe( "Failed comparing complex mipchain MD5 checksum:\n%ls\n", szPath );
                                 printdigest( "computed", digest );
                                 printdigest( "expected", g_MipMapMedia[index].md5_c );
                                 if ( expected2 )
@@ -1571,12 +1571,12 @@ bool Test03()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting DDS data from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed getting DDS data from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
             success = false;
-            printe( "Metadata error in DDS:\n%S\n", szPath );
+            printe( "Metadata error in DDS:\n%ls\n", szPath );
             printmeta( &metadata );
             printmetachk( check );
         }
@@ -1589,7 +1589,7 @@ bool Test03()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed computing MD5 checksum (HRESULT %08X):\n%S\n", hr, szPath );
+                printe( "Failed computing MD5 checksum (HRESULT %08X):\n%ls\n", hr, szPath );
             }
             else
             {
@@ -1602,13 +1602,13 @@ bool Test03()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed volume mip-map Fant/Box generation (HRESULT %08X):\n%S\n", hr, szPath );
+                    printe( "Failed volume mip-map Fant/Box generation (HRESULT %08X):\n%ls\n", hr, szPath );
                 }
                 else if ( mipChain.GetMetadata().mipLevels < 2 )
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed volume mip-map Fant/Box generation result is %Iu mip levels:\n%S\n", mipChain.GetMetadata().mipLevels, szPath );
+                    printe( "Failed volume mip-map Fant/Box generation result is %Iu mip levels:\n%ls\n", mipChain.GetMetadata().mipLevels, szPath );
                 }
                 else
                 {
@@ -1619,13 +1619,13 @@ bool Test03()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( memcmp( digest, srcdigest, 16 ) != 0 )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing MD5 checksum:\n%S\n", szPath );
+                        printe( "Failed comparing MD5 checksum:\n%ls\n", szPath );
                         printdigest( "computed", digest );
                         printdigest( "expected", srcdigest );
                     }
@@ -1642,14 +1642,14 @@ bool Test03()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( memcmp( digest, g_MipMapMedia3D[index].md5, 16 ) != 0
                               && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing mipchain MD5 checksum:\n%S\n", szPath );
+                        printe( "Failed comparing mipchain MD5 checksum:\n%ls\n", szPath );
                         printdigest( "computed", digest );
                         printdigest( "expected", g_MipMapMedia3D[index].md5 );
                         if ( expected2 )
@@ -1674,13 +1674,13 @@ bool Test03()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed volume mip-map Point generation (HRESULT %08X):\n%S\n", hr, szPath );
+                    printe( "Failed volume mip-map Point generation (HRESULT %08X):\n%ls\n", hr, szPath );
                 }
                 else if ( mipChainPoint.GetMetadata().mipLevels < 2 )
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed volume mip-map Point generation result is %Iu mip levels:\n%S\n", mipChainPoint.GetMetadata().mipLevels, szPath );
+                    printe( "Failed volume mip-map Point generation result is %Iu mip levels:\n%ls\n", mipChainPoint.GetMetadata().mipLevels, szPath );
                 }
                 else
                 {
@@ -1691,13 +1691,13 @@ bool Test03()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( memcmp( digest, srcdigest, 16 ) != 0 )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing Point MD5 checksum:\n%S\n", szPath );
+                        printe( "Failed comparing Point MD5 checksum:\n%ls\n", szPath );
                         printdigest( "computed", digest );
                         printdigest( "expected", srcdigest );
                     }
@@ -1714,14 +1714,14 @@ bool Test03()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( memcmp( digest, g_MipMapMedia3D[index].md5_point, 16 ) != 0
                               && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing Point mipchain MD5 checksum:\n%S\n", szPath );
+                        printe( "Failed comparing Point mipchain MD5 checksum:\n%ls\n", szPath );
                         printdigest( "computed", digest );
                         printdigest( "expected", g_MipMapMedia3D[index].md5_point );
                         if ( expected2 )
@@ -1748,13 +1748,13 @@ bool Test03()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed volume mip-map Linear generation (HRESULT %08X):\n%S\n", hr, szPath );
+                    printe( "Failed volume mip-map Linear generation (HRESULT %08X):\n%ls\n", hr, szPath );
                 }
                 else if ( mipChainLinear.GetMetadata().mipLevels < 2 )
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed volume mip-map Linear generation result is %Iu mip levels:\n%S\n", mipChainLinear.GetMetadata().mipLevels, szPath );
+                    printe( "Failed volume mip-map Linear generation result is %Iu mip levels:\n%ls\n", mipChainLinear.GetMetadata().mipLevels, szPath );
                 }
                 else
                 {
@@ -1765,13 +1765,13 @@ bool Test03()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( memcmp( digest, srcdigest, 16 ) != 0 )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing Linear MD5 checksum:\n%S\n", szPath );
+                        printe( "Failed comparing Linear MD5 checksum:\n%ls\n", szPath );
                         printdigest( "computed", digest );
                         printdigest( "expected", srcdigest );
                     }
@@ -1788,14 +1788,14 @@ bool Test03()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( memcmp( digest, g_MipMapMedia3D[index].md5_linear, 16 ) != 0
                               && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing Linear mipchain MD5 checksum:\n%S\n", szPath );
+                        printe( "Failed comparing Linear mipchain MD5 checksum:\n%ls\n", szPath );
                         printdigest( "computed", digest );
                         printdigest( "expected", g_MipMapMedia3D[index].md5_linear );
                         if ( expected2 )
@@ -1822,13 +1822,13 @@ bool Test03()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed volume mip-map Cubic generation (HRESULT %08X):\n%S\n", hr, szPath );
+                    printe( "Failed volume mip-map Cubic generation (HRESULT %08X):\n%ls\n", hr, szPath );
                 }
                 else if ( mipChainCubic.GetMetadata().mipLevels < 2 )
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed volume mip-map Cubic generation result is %Iu mip levels:\n%S\n", mipChainCubic.GetMetadata().mipLevels, szPath );
+                    printe( "Failed volume mip-map Cubic generation result is %Iu mip levels:\n%ls\n", mipChainCubic.GetMetadata().mipLevels, szPath );
                 }
                 else
                 {
@@ -1839,13 +1839,13 @@ bool Test03()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( memcmp( digest, srcdigest, 16 ) != 0 )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing Cubic MD5 checksum:\n%S\n", szPath );
+                        printe( "Failed comparing Cubic MD5 checksum:\n%ls\n", szPath );
                         printdigest( "computed", digest );
                         printdigest( "expected", srcdigest );
                     }
@@ -1862,14 +1862,14 @@ bool Test03()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( memcmp( digest, g_MipMapMedia3D[index].md5_cubic, 16 ) != 0
                               && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing Cubic mipchain MD5 checksum:\n%S\n", szPath );
+                        printe( "Failed comparing Cubic mipchain MD5 checksum:\n%ls\n", szPath );
                         printdigest( "computed", digest );
                         printdigest( "expected", g_MipMapMedia3D[index].md5_cubic );
                         if ( expected2 )
@@ -1896,13 +1896,13 @@ bool Test03()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed volume mip-map Triangle generation (HRESULT %08X):\n%S\n", hr, szPath );
+                    printe( "Failed volume mip-map Triangle generation (HRESULT %08X):\n%ls\n", hr, szPath );
                 }
                 else if ( mipChainTriangle.GetMetadata().mipLevels < 2 )
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed volume mip-map Triangle generation result is %Iu mip levels:\n%S\n", mipChainTriangle.GetMetadata().mipLevels, szPath );
+                    printe( "Failed volume mip-map Triangle generation result is %Iu mip levels:\n%ls\n", mipChainTriangle.GetMetadata().mipLevels, szPath );
                 }
                 else
                 {
@@ -1913,13 +1913,13 @@ bool Test03()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( memcmp( digest, srcdigest, 16 ) != 0 )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing Triangle MD5 checksum:\n%S\n", szPath );
+                        printe( "Failed comparing Triangle MD5 checksum:\n%ls\n", szPath );
                         printdigest( "computed", digest );
                         printdigest( "expected", srcdigest );
                     }
@@ -1936,14 +1936,14 @@ bool Test03()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( memcmp( digest, g_MipMapMedia3D[index].md5_tri, 16 ) != 0
                               && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing Triangle mipchain MD5 checksum:\n%S\n", szPath );
+                        printe( "Failed comparing Triangle mipchain MD5 checksum:\n%ls\n", szPath );
                         printdigest( "computed", digest );
                         printdigest( "expected", g_MipMapMedia3D[index].md5_tri );
                         if ( expected2 )
@@ -1972,7 +1972,7 @@ bool Test03()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed volume mip-map complex Fant/Box generation (HRESULT %08X):\n%S\n", hr, szPath );
+                    printe( "Failed volume mip-map complex Fant/Box generation (HRESULT %08X):\n%ls\n", hr, szPath );
                 }
                 else
                 {
@@ -1989,7 +1989,7 @@ bool Test03()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed volume mip-map complex Fant/Box generation result is %Iu mip levels:\n%S\n", metadata2.mipLevels, szPath );
+                        printe( "Failed volume mip-map complex Fant/Box generation result is %Iu mip levels:\n%ls\n", metadata2.mipLevels, szPath );
                         printmeta( &metadata2 );
                         printmetachk( check );
                     }
@@ -2002,13 +2002,13 @@ bool Test03()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( memcmp( digest, srcdigest, 16 ) != 0 )
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed comparing complex MD5 checksum:\n%S\n", szPath );
+                            printe( "Failed comparing complex MD5 checksum:\n%ls\n", szPath );
                             printdigest( "computed", digest );
                             printdigest( "expected", srcdigest );
                         }
@@ -2025,14 +2025,14 @@ bool Test03()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( memcmp( digest, g_MipMapMedia3D[index].md5_c, 16 ) != 0
                                   && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed comparing complex mipchain MD5 checksum:\n%S\n", szPath );
+                            printe( "Failed comparing complex mipchain MD5 checksum:\n%ls\n", szPath );
                             printdigest( "computed", digest );
                             printdigest( "expected", g_MipMapMedia3D[index].md5_c );
                             if ( expected2 )

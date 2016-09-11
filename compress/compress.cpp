@@ -363,12 +363,12 @@ bool Test01()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting source data from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed getting source data from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
             success = false;
-            printe( "Metadata error in source file:\n%S\n", szPath );
+            printe( "Metadata error in source file:\n%ls\n", szPath );
             printmeta( &metadata );
             printmetachk( check );
         }
@@ -383,7 +383,7 @@ bool Test01()
             {
                 success = false;
                 pass = false;
-                printe( "Failed decompress [single] (HRESULT %08X):\n%S\n", hr, szPath );
+                printe( "Failed decompress [single] (HRESULT %08X):\n%ls\n", hr, szPath );
             }
             else if ( image.GetMetadata().format != g_BCMedia[index].format
                       || image.GetMetadata().width != metadata.width
@@ -391,7 +391,7 @@ bool Test01()
             {
                 success = false;
                 pass = false;
-                printe( "Unexpected decompress result %Iu x %Iu %S\n... %Iu x %Iu %S:\n%S\n",
+                printe( "Unexpected decompress result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
                         image.GetMetadata().width, image.GetMetadata().height, GetName( image.GetMetadata().format ),
                         metadata.width, metadata.height, GetName( g_BCMedia[index].format ), szPath );
             }
@@ -408,7 +408,7 @@ bool Test01()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed decompress [complex] (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed decompress [complex] (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( image2.GetMetadata().format != g_BCMedia[index].format
                               || image2.GetMetadata().width != metadata.width
@@ -416,7 +416,7 @@ bool Test01()
                     {
                         success = false;
                         pass = false;
-                        printe( "Unexpected decompress [complex] result %Iu x %Iu %S\n... %Iu x %Iu %S:\n%S\n",
+                        printe( "Unexpected decompress [complex] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
                                 image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ),
                                 metadata.width, metadata.height, GetName( g_BCMedia[index].format ), szPath );
                     }
@@ -437,14 +437,14 @@ bool Test01()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed creating wide test image (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed creating wide test image (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( srcimage.GetImage(0,0,0)->rowPitch >= imageWide.GetImage(0,0,0)->rowPitch
                               || srcimage.GetImage(0,0,0)->format != imageWide.GetImage(0,0,0)->format )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed creating wide test image - result is same as source: %Iu %Iu\n%S\n", srcimage.GetImage(0,0,0)->rowPitch, imageWide.GetImage(0,0,0)->rowPitch, szPath );
+                        printe( "Failed creating wide test image - result is same as source: %Iu %Iu\n%ls\n", srcimage.GetImage(0,0,0)->rowPitch, imageWide.GetImage(0,0,0)->rowPitch, szPath );
                     }
                     else
                     {
@@ -454,7 +454,7 @@ bool Test01()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed decompress [wide] (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed decompress [wide] (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( image2.GetMetadata().format != g_BCMedia[index].format
                                   || image2.GetMetadata().width != metadata.width
@@ -462,7 +462,7 @@ bool Test01()
                         {
                             success = false;
                             pass = false;
-                            printe( "Unexpected decompress [wide] result %Iu x %Iu %S\n... %Iu x %Iu %S:\n%S\n",
+                            printe( "Unexpected decompress [wide] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
                                     image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ),
                                     metadata.width, metadata.height, GetName( g_BCMedia[index].format ), szPath );
                         }
@@ -474,12 +474,12 @@ bool Test01()
                             if ( FAILED(hr) )
                             {
                                 success = false;
-                                printe( "Failed comparing decompress vs. decompress wide image data (HRESULT %08X):\n%S\n", hr, szPath );
+                                printe( "Failed comparing decompress vs. decompress wide image data (HRESULT %08X):\n%ls\n", hr, szPath );
                             }
                             else if ( IsErrorTooLarge( mse, targMSE ) )
                             {
                                 success = false;
-                                printe( "Failed comparing decompress vs. decompress wide MSE = %f (%f %f %f %f)... %f:\n%S\n",
+                                printe( "Failed comparing decompress vs. decompress wide MSE = %f (%f %f %f %f)... %f:\n%ls\n",
                                         mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
                             }
                         }
@@ -567,12 +567,12 @@ bool Test02()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting source data from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed getting source data from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
             success = false;
-            printe( "Metadata error in source file:\n%S\n", szPath );
+            printe( "Metadata error in source file:\n%ls\n", szPath );
             printmeta( &metadata );
             printmetachk( check );
         }
@@ -640,7 +640,7 @@ bool Test02()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed compress [single M/T] (HRESULT %08X) to %S:\n%S\n", hr, GetName(cformat), szPath );
+                    printe( "Failed compress [single M/T] (HRESULT %08X) to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                 }
                 else if ( image.GetMetadata().format != cformat
                           || image.GetMetadata().width != metadata.width
@@ -648,7 +648,7 @@ bool Test02()
                 {
                     success = false;
                     pass = false;
-                    printe( "Unexpected compress [single M/T] result %Iu x %Iu %S\n... %Iu x %Iu %S:\n%S\n",
+                    printe( "Unexpected compress [single M/T] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
                             image.GetMetadata().width, image.GetMetadata().height, GetName( image.GetMetadata().format ),
                             metadata.width, metadata.height, GetName( cformat ), szPath );
                 }
@@ -661,13 +661,13 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing source to BC image (HRESULT %08X) converting to %S:\n%S\n", hr, GetName(cformat), szPath );
+                        printe( "Failed comparing source to BC image (HRESULT %08X) converting to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                     }
                     else if ( IsErrorTooLarge( mse, 0.02f ) )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing source to BC image MSE = %f (%f %f %f %f)... 0.02f converting to %S:\n%S\n",
+                        printe( "Failed comparing source to BC image MSE = %f (%f %f %f %f)... 0.02f converting to %ls:\n%ls\n",
                                 mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName(cformat), szPath );
                     }
 
@@ -700,7 +700,7 @@ bool Test02()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed compress [single S/T] (HRESULT %08X) to %S:\n%S\n", hr, GetName(cformat), szPath );
+                                printe( "Failed compress [single S/T] (HRESULT %08X) to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                             }
                             else if ( image2.GetMetadata().format != cformat
                                       || image2.GetMetadata().width != metadata.width
@@ -708,7 +708,7 @@ bool Test02()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Unexpected compress [single S/T] result %Iu x %Iu %S\n... %Iu x %Iu %S:\n%S\n",
+                                printe( "Unexpected compress [single S/T] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
                                         image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ),
                                         metadata.width, metadata.height, GetName( cformat ), szPath );
                             }
@@ -721,13 +721,13 @@ bool Test02()
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed comparing single vs. parallel images (HRESULT %08X) converting to %S:\n%S\n", hr, GetName(cformat), szPath );
+                                    printe( "Failed comparing single vs. parallel images (HRESULT %08X) converting to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                                 }
                                 else if ( IsErrorTooLarge( mse, 0.000001f ) )
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed comparing single vs. parallel images MSE = %f (%f %f %f %f)... 0.000001f converting to %S:\n%S\n",
+                                    printe( "Failed comparing single vs. parallel images MSE = %f (%f %f %f %f)... 0.000001f converting to %ls:\n%ls\n",
                                             mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName(cformat), szPath );
                                 }
                             }
@@ -745,7 +745,7 @@ bool Test02()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed compress [dithering] (HRESULT %08X) to %S:\n%S\n", hr, GetName(cformat), szPath );
+                                printe( "Failed compress [dithering] (HRESULT %08X) to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                             }
                             else if ( image2.GetMetadata().format != cformat
                                       || image2.GetMetadata().width != metadata.width
@@ -753,7 +753,7 @@ bool Test02()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Unexpected compress [dithering] result %Iu x %Iu %S\n... %Iu x %Iu %S:\n%S\n",
+                                printe( "Unexpected compress [dithering] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
                                         image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ),
                                         metadata.width, metadata.height, GetName( cformat ), szPath );
                             }
@@ -766,13 +766,13 @@ bool Test02()
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed comparing straight vs. dither images (HRESULT %08X) converting to %S:\n%S\n", hr, GetName(cformat), szPath );
+                                    printe( "Failed comparing straight vs. dither images (HRESULT %08X) converting to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                                 }
                                 else if ( IsErrorTooLarge( mse, 0.01f ) )
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed comparing straight vs. dither images MSE = %f (%f %f %f %f)... 0.01f converting to %S:\n%S\n",
+                                    printe( "Failed comparing straight vs. dither images MSE = %f (%f %f %f %f)... 0.01f converting to %ls:\n%ls\n",
                                             mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName(cformat), szPath );
                                 }
                             }
@@ -789,7 +789,7 @@ bool Test02()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed compress [uniform] (HRESULT %08X) to %S:\n%S\n", hr, GetName(cformat), szPath );
+                                printe( "Failed compress [uniform] (HRESULT %08X) to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                             }
                             else if ( image2.GetMetadata().format != cformat
                                       || image2.GetMetadata().width != metadata.width
@@ -797,7 +797,7 @@ bool Test02()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Unexpected compress [uniform] result %Iu x %Iu %S\n... %Iu x %Iu %S:\n%S\n",
+                                printe( "Unexpected compress [uniform] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
                                         image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ),
                                         metadata.width, metadata.height, GetName( cformat ), szPath );
                             }
@@ -810,13 +810,13 @@ bool Test02()
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed comparing straight vs. uniform images (HRESULT %08X) converting to %S:\n%S\n", hr, GetName(cformat), szPath );
+                                    printe( "Failed comparing straight vs. uniform images (HRESULT %08X) converting to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                                 }
                                 else if ( IsErrorTooLarge( mse, 0.02f ) )
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed comparing straight vs. uniform images MSE = %f (%f %f %f %f)... 0.02f converting to %S:\n%S\n",
+                                    printe( "Failed comparing straight vs. uniform images MSE = %f (%f %f %f %f)... 0.02f converting to %ls:\n%ls\n",
                                             mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName(cformat), szPath );
                                 }
                             }
@@ -831,7 +831,7 @@ bool Test02()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed compress [3subsets] (HRESULT %08X) to %S:\n%S\n", hr, GetName(cformat), szPath );
+                                printe( "Failed compress [3subsets] (HRESULT %08X) to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                             }
                             else if ( image2.GetMetadata().format != cformat
                                       || image2.GetMetadata().width != metadata.width
@@ -839,7 +839,7 @@ bool Test02()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Unexpected compress [3subsets] result %Iu x %Iu %S\n... %Iu x %Iu %S:\n%S\n",
+                                printe( "Unexpected compress [3subsets] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
                                         image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ),
                                         metadata.width, metadata.height, GetName( cformat ), szPath );
                             }
@@ -852,13 +852,13 @@ bool Test02()
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed comparing straight vs. 3subsets images (HRESULT %08X) converting to %S:\n%S\n", hr, GetName(cformat), szPath );
+                                    printe( "Failed comparing straight vs. 3subsets images (HRESULT %08X) converting to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                                 }
                                 else if ( IsErrorTooLarge( mse, 0.0001f ) )
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed comparing straight vs. 3subsets images MSE = %f (%f %f %f %f)... 0.0001f converting to %S:\n%S\n",
+                                    printe( "Failed comparing straight vs. 3subsets images MSE = %f (%f %f %f %f)... 0.0001f converting to %ls:\n%ls\n",
                                             mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName(cformat), szPath );
                                 }
                             }
@@ -873,13 +873,13 @@ bool Test02()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed creating wide test image (HRESULT %08X):\n%S\n", hr, szPath );
+                                printe( "Failed creating wide test image (HRESULT %08X):\n%ls\n", hr, szPath );
                             }
                             else if ( srcimage.GetImage(0,0,0)->rowPitch >= imageWide.GetImage(0,0,0)->rowPitch )
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed creating wide test image - result is same as source: %Iu %Iu\n%S\n", srcimage.GetImage(0,0,0)->rowPitch, imageWide.GetImage(0,0,0)->rowPitch, szPath );
+                                printe( "Failed creating wide test image - result is same as source: %Iu %Iu\n%ls\n", srcimage.GetImage(0,0,0)->rowPitch, imageWide.GetImage(0,0,0)->rowPitch, szPath );
                             }
                             else
                             {
@@ -889,7 +889,7 @@ bool Test02()
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed compress [wide image] (HRESULT %08X) to %S:\n%S\n", hr, GetName(cformat), szPath );
+                                    printe( "Failed compress [wide image] (HRESULT %08X) to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                                 }
                                 else if ( image2.GetMetadata().format != cformat
                                           || image2.GetMetadata().width != metadata.width
@@ -897,7 +897,7 @@ bool Test02()
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Unexpected compress [wide image] result %Iu x %Iu %S\n... %Iu x %Iu %S:\n%S\n",
+                                    printe( "Unexpected compress [wide image] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
                                             image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ),
                                             metadata.width, metadata.height, GetName( cformat ), szPath );
                                 }
@@ -910,13 +910,13 @@ bool Test02()
                                     {
                                         success = false;
                                         pass = false;
-                                        printe( "Failed comparing wide vs. parallel images (HRESULT %08X) converting to %S:\n%S\n", hr, GetName(cformat), szPath );
+                                        printe( "Failed comparing wide vs. parallel images (HRESULT %08X) converting to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                                     }
                                     else if ( IsErrorTooLarge( mse, 0.000001f ) )
                                     {
                                         success = false;
                                         pass = false;
-                                        printe( "Failed comparing wide vs. parallel images MSE = %f (%f %f %f %f)... 0.000001f converting to %S:\n%S\n",
+                                        printe( "Failed comparing wide vs. parallel images MSE = %f (%f %f %f %f)... 0.000001f converting to %ls:\n%ls\n",
                                                 mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName(cformat), szPath );
                                     }
                                 }
@@ -947,7 +947,7 @@ bool Test02()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed compress [complex] (HRESULT %08X) to %S:\n%S\n", hr, GetName(cformat), szPath );
+                            printe( "Failed compress [complex] (HRESULT %08X) to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                         }
                         else if ( image2.GetMetadata().format != cformat
                                     || image2.GetMetadata().width != metadata.width
@@ -956,7 +956,7 @@ bool Test02()
                         {
                             success = false;
                             pass = false;
-                            printe( "Unexpected compress [complex] result %Iu x %Iu %S %Iu\n... %Iu x %Iu %S %Iu:\n%S\n",
+                            printe( "Unexpected compress [complex] result %Iu x %Iu %ls %Iu\n... %Iu x %Iu %ls %Iu:\n%ls\n",
                                     image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ), image2.GetImageCount(),
                                     metadata.width, metadata.height, GetName( cformat ), srcimage.GetImageCount(), szPath );
                         }
@@ -979,14 +979,14 @@ bool Test02()
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed comparing source [complex , %Iu] to BC image (HRESULT %08X) converting to %S:\n%S\n", j, hr, GetName(cformat), szPath );
+                                    printe( "Failed comparing source [complex , %Iu] to BC image (HRESULT %08X) converting to %ls:\n%ls\n", j, hr, GetName(cformat), szPath );
                                     break;
                                 }
                                 else if ( IsErrorTooLarge( mse, targMSE ) )
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed comparing source [complex, %Iu] to BC image MSE = %f (%f %f %f %f)... %f converting to %S:\n%S\n",
+                                    printe( "Failed comparing source [complex, %Iu] to BC image MSE = %f (%f %f %f %f)... %f converting to %ls:\n%ls\n",
                                             j, mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, GetName(cformat), szPath );
                                 }
                             }
@@ -1080,12 +1080,12 @@ bool Test03()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting source data from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed getting source data from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
             success = false;
-            printe( "Metadata error in source file:\n%S\n", szPath );
+            printe( "Metadata error in source file:\n%ls\n", szPath );
             printmeta( &metadata );
             printmetachk( check );
         }
@@ -1115,7 +1115,7 @@ bool Test03()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed GPU compress [single] (HRESULT %08X) to %S:\n%S\n", hr, GetName(cformat), szPath );
+                    printe( "Failed GPU compress [single] (HRESULT %08X) to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                 }
                 else if ( image.GetMetadata().format != cformat
                           || image.GetMetadata().width != metadata.width
@@ -1123,7 +1123,7 @@ bool Test03()
                 {
                     success = false;
                     pass = false;
-                    printe( "Unexpected GPU compress [single] result %Iu x %Iu %S\n... %Iu x %Iu %S:\n%S\n",
+                    printe( "Unexpected GPU compress [single] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
                             image.GetMetadata().width, image.GetMetadata().height, GetName( image.GetMetadata().format ),
                             metadata.width, metadata.height, GetName( cformat ), szPath );
                 }
@@ -1136,13 +1136,13 @@ bool Test03()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing source to GPU BC image (HRESULT %08X) converting to %S:\n%S\n", hr, GetName(cformat), szPath );
+                        printe( "Failed comparing source to GPU BC image (HRESULT %08X) converting to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                     }
                     else if ( IsErrorTooLarge( mse, 0.02f ) )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing source to GPU BC image MSE = %f (%f %f %f %f)... 0.02f converting to %S:\n%S\n",
+                        printe( "Failed comparing source to GPU BC image MSE = %f (%f %f %f %f)... 0.02f converting to %ls:\n%ls\n",
                                 mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName(cformat), szPath );
                     }
 
@@ -1163,7 +1163,7 @@ bool Test03()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed GPU compress [complex] (HRESULT %08X) to %S:\n%S\n", hr, GetName(cformat), szPath );
+                            printe( "Failed GPU compress [complex] (HRESULT %08X) to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                         }
                         else if ( image2.GetMetadata().format != cformat
                                     || image2.GetMetadata().width != metadata.width
@@ -1172,7 +1172,7 @@ bool Test03()
                         {
                             success = false;
                             pass = false;
-                            printe( "Unexpected GPU compress [complex] result %Iu x %Iu %S %Iu\n... %Iu x %Iu %S %Iu:\n%S\n",
+                            printe( "Unexpected GPU compress [complex] result %Iu x %Iu %ls %Iu\n... %Iu x %Iu %ls %Iu:\n%ls\n",
                                     image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ), image2.GetImageCount(),
                                     metadata.width, metadata.height, GetName( cformat ), srcimage.GetImageCount(), szPath );
                         }
@@ -1195,14 +1195,14 @@ bool Test03()
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed comparing source [complex , %Iu] to GPU BC image (HRESULT %08X) converting to %S:\n%S\n", j, hr, GetName(cformat), szPath );
+                                    printe( "Failed comparing source [complex , %Iu] to GPU BC image (HRESULT %08X) converting to %ls:\n%ls\n", j, hr, GetName(cformat), szPath );
                                     break;
                                 }
                                 else if ( IsErrorTooLarge( mse, targMSE ) )
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed comparing source [complex, %Iu] to GPU BC image MSE = %f (%f %f %f %f)... %f converting to %S:\n%S\n",
+                                    printe( "Failed comparing source [complex, %Iu] to GPU BC image MSE = %f (%f %f %f %f)... %f converting to %ls:\n%ls\n",
                                             j, mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, GetName(cformat), szPath );
                                 }
                             }
@@ -1222,7 +1222,7 @@ bool Test03()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed GPU compress [alpha weight] (HRESULT %08X) to %S:\n%S\n", hr, GetName(cformat), szPath );
+                            printe( "Failed GPU compress [alpha weight] (HRESULT %08X) to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                         }
                         else if ( image2.GetMetadata().format != cformat
                                     || image2.GetMetadata().width != metadata.width
@@ -1230,7 +1230,7 @@ bool Test03()
                         {
                             success = false;
                             pass = false;
-                            printe( "Unexpected GPU compress [alpha weight] result %Iu x %Iu %S\n... %Iu x %Iu %S:\n%S\n",
+                            printe( "Unexpected GPU compress [alpha weight] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
                                     image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ),
                                     metadata.width, metadata.height, GetName( cformat ), szPath );
                         }
@@ -1243,13 +1243,13 @@ bool Test03()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed GPU comparing straight vs. alpha weight images (HRESULT %08X) converting to %S:\n%S\n", hr, GetName(cformat), szPath );
+                                printe( "Failed GPU comparing straight vs. alpha weight images (HRESULT %08X) converting to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                             }
                             else if ( IsErrorTooLarge( mse, 0.01f ) )
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed GPU comparing straight vs. alpha weight images MSE = %f (%f %f %f %f)... 0.01f converting to %S:\n%S\n",
+                                printe( "Failed GPU comparing straight vs. alpha weight images MSE = %f (%f %f %f %f)... 0.01f converting to %ls:\n%ls\n",
                                         mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName(cformat), szPath );
                             }
                         }
@@ -1264,7 +1264,7 @@ bool Test03()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed GPU compress [3subsets] (HRESULT %08X) to %S:\n%S\n", hr, GetName(cformat), szPath );
+                            printe( "Failed GPU compress [3subsets] (HRESULT %08X) to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                         }
                         else if ( image2.GetMetadata().format != cformat
                                     || image2.GetMetadata().width != metadata.width
@@ -1272,7 +1272,7 @@ bool Test03()
                         {
                             success = false;
                             pass = false;
-                            printe( "Unexpected GPU compress [3subsets] result %Iu x %Iu %S\n... %Iu x %Iu %S:\n%S\n",
+                            printe( "Unexpected GPU compress [3subsets] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
                                     image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ),
                                     metadata.width, metadata.height, GetName( cformat ), szPath );
                         }
@@ -1285,13 +1285,13 @@ bool Test03()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed GPU comparing straight vs. 3subsets images (HRESULT %08X) converting to %S:\n%S\n", hr, GetName(cformat), szPath );
+                                printe( "Failed GPU comparing straight vs. 3subsets images (HRESULT %08X) converting to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                             }
                             else if ( IsErrorTooLarge( mse, 0.002f ) )
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed GPU comparing straight vs. 3subsets images MSE = %f (%f %f %f %f)... 0.002f converting to %S:\n%S\n",
+                                printe( "Failed GPU comparing straight vs. 3subsets images MSE = %f (%f %f %f %f)... 0.002f converting to %ls:\n%ls\n",
                                         mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName(cformat), szPath );
                             }
                         }
@@ -1306,13 +1306,13 @@ bool Test03()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed creating wide test image (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed creating wide test image (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( srcimage.GetImage(0,0,0)->rowPitch >= imageWide.GetImage(0,0,0)->rowPitch )
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed creating wide test image - result is same as source: %Iu %Iu\n%S\n", srcimage.GetImage(0,0,0)->rowPitch, imageWide.GetImage(0,0,0)->rowPitch, szPath );
+                            printe( "Failed creating wide test image - result is same as source: %Iu %Iu\n%ls\n", srcimage.GetImage(0,0,0)->rowPitch, imageWide.GetImage(0,0,0)->rowPitch, szPath );
                         }
                         else
                         {
@@ -1322,7 +1322,7 @@ bool Test03()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed GPU compress [wide] (HRESULT %08X) to %S:\n%S\n", hr, GetName(cformat), szPath );
+                                printe( "Failed GPU compress [wide] (HRESULT %08X) to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                             }
                             else if ( image2.GetMetadata().format != cformat
                                         || image2.GetMetadata().width != metadata.width
@@ -1330,7 +1330,7 @@ bool Test03()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Unexpected GPU compress [wide] result %Iu x %Iu %S\n... %Iu x %Iu %S:\n%S\n",
+                                printe( "Unexpected GPU compress [wide] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
                                         image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ),
                                         metadata.width, metadata.height, GetName( cformat ), szPath );
                             }
@@ -1343,13 +1343,13 @@ bool Test03()
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed GPU comparing standard vs. wide images (HRESULT %08X) converting to %S:\n%S\n", hr, GetName(cformat), szPath );
+                                    printe( "Failed GPU comparing standard vs. wide images (HRESULT %08X) converting to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                                 }
                                 else if ( IsErrorTooLarge( mse, 0.01f ) )
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed GPU comparing standard vs. wide images MSE = %f (%f %f %f %f)... 0.01f converting to %S:\n%S\n",
+                                    printe( "Failed GPU comparing standard vs. wide images MSE = %f (%f %f %f %f)... 0.01f converting to %ls:\n%ls\n",
                                             mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName(cformat), szPath );
                                 }
                             }

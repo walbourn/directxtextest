@@ -99,12 +99,12 @@ bool Test04()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting DDS data from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed getting DDS data from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
             success = false;
-            printe( "Metadata error in DDS:\n%S\n", szPath );
+            printe( "Metadata error in DDS:\n%ls\n", szPath );
             printmeta( &metadata );
             printmetachk( check );
         }
@@ -121,7 +121,7 @@ bool Test04()
             {
                 success = false;
                 pass = false;
-                printe( "Failed flip/rotating (HRESULT %08X) using %08X:\n%S\n", hr, dwFlags, szPath );
+                printe( "Failed flip/rotating (HRESULT %08X) using %08X:\n%ls\n", hr, dwFlags, szPath );
             }
             else
             {
@@ -133,7 +133,7 @@ bool Test04()
                     pass = false;
                     printe( "Failed flip/rotating result is %Iu x %Iu:\n", 
                             image.GetMetadata().width, image.GetMetadata().height );
-                    printe( "\n...(check) %Iu x %Iu:\n%S\n", srcimage.GetMetadata().height, srcimage.GetMetadata().width, szPath );
+                    printe( "\n...(check) %Iu x %Iu:\n%ls\n", srcimage.GetMetadata().height, srcimage.GetMetadata().width, szPath );
                 }
                 else if ( !(dwFlags & (TEX_FR_ROTATE90|TEX_FR_ROTATE270))
                           && ( image.GetMetadata().width != srcimage.GetMetadata().width
@@ -143,7 +143,7 @@ bool Test04()
                     pass = false;
                     printe( "Failed flip/rotating result is %Iu x %Iu:\n",
                             image.GetMetadata().width, image.GetMetadata().height );
-                    printe( "\n...(check) %Iu x %Iu:\n%S\n", srcimage.GetMetadata().width, srcimage.GetMetadata().height, szPath );
+                    printe( "\n...(check) %Iu x %Iu:\n%ls\n", srcimage.GetMetadata().width, srcimage.GetMetadata().height, szPath );
                 }
                 else
                 {
@@ -165,7 +165,7 @@ bool Test04()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed flip/rotating complex (HRESULT %08X) using %08X:\n%S\n", hr, dwFlags, szPath );
+                    printe( "Failed flip/rotating complex (HRESULT %08X) using %08X:\n%ls\n", hr, dwFlags, szPath );
                 }
                 else
                 {
@@ -179,7 +179,7 @@ bool Test04()
                         pass = false;
                         printe( "Failed flip/rotating complex result is %Iu x %Iu:\n", 
                                 metadata2.width, metadata2.height );
-                        printe( "\n...(check) %Iu x %Iu:\n%S\n", srcimage.GetMetadata().height, srcimage.GetMetadata().width, szPath );
+                        printe( "\n...(check) %Iu x %Iu:\n%ls\n", srcimage.GetMetadata().height, srcimage.GetMetadata().width, szPath );
                     }
                     else if ( !(dwFlags & (TEX_FR_ROTATE90|TEX_FR_ROTATE270))
                               && ( metadata2.width != srcimage.GetMetadata().width
@@ -189,7 +189,7 @@ bool Test04()
                         pass = false;
                         printe( "Failed flip/rotating complex result is %Iu x %Iu:\n",
                                 metadata2.width, metadata2.height );
-                        printe( "\n...(check) %Iu x %Iu:\n%S\n", srcimage.GetMetadata().width, srcimage.GetMetadata().height, szPath );
+                        printe( "\n...(check) %Iu x %Iu:\n%ls\n", srcimage.GetMetadata().width, srcimage.GetMetadata().height, szPath );
                     }
                     else if ( metadata2.mipLevels != check->mipLevels
                               || metadata2.depth != check->depth
@@ -200,7 +200,7 @@ bool Test04()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed flip/rotating complex result:\n%S\n", szPath );
+                        printe( "Failed flip/rotating complex result:\n%ls\n", szPath );
                         printmeta( &metadata2 );
                         printmetachk( check );
                     }

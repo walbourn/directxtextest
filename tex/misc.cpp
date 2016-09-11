@@ -65,12 +65,12 @@ bool Test09()
     HRESULT hr = LoadFromDDSFile( szPath, DDS_FLAGS_FORCE_RGB, &metadata, imageTest );
     if ( FAILED(hr) )
     {
-        printe( "Failed loading dds (HRESULT %08X):\n%S\n", hr, szPath );
+        printe( "Failed loading dds (HRESULT %08X):\n%ls\n", hr, szPath );
         return false;
     }
     else if ( memcmp( &metadata, &checkTest, sizeof(TexMetadata) ) != 0 )
     {
-        printe( "Metadata error in DDS:\n%S\n", szPath );
+        printe( "Metadata error in DDS:\n%ls\n", szPath );
         printmeta( &metadata );
         printmetachk( &checkTest );
         return false;
@@ -95,12 +95,12 @@ bool Test09()
     hr = LoadFromDDSFile( szPath, DDS_FLAGS_FORCE_RGB, &metadata, imageLogo );
     if ( FAILED(hr) )
     {
-        printe( "Failed loading dds (HRESULT %08X):\n%S\n", hr, szPath );
+        printe( "Failed loading dds (HRESULT %08X):\n%ls\n", hr, szPath );
         return false;
     }
     else if ( memcmp( &metadata, &checkLogo, sizeof(TexMetadata) ) != 0 )
     {
-        printe( "Metadata error in DDS:\n%S\n", szPath );
+        printe( "Metadata error in DDS:\n%ls\n", szPath );
         printmeta( &metadata );
         printmetachk( &checkLogo );
         return false;
@@ -125,12 +125,12 @@ bool Test09()
     hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, &metadata, imageEarth );
     if ( FAILED(hr) )
     {
-        printe( "Failed loading dds (HRESULT %08X):\n%S\n", hr, szPath );
+        printe( "Failed loading dds (HRESULT %08X):\n%ls\n", hr, szPath );
         return false;
     }
     else if ( memcmp( &metadata, &checkEarth, sizeof(TexMetadata) ) != 0 )
     {
-        printe( "Metadata error in DDS:\n%S\n", szPath );
+        printe( "Metadata error in DDS:\n%ls\n", szPath );
         printmeta( &metadata );
         printmetachk( &checkEarth );
         return false;
@@ -318,7 +318,7 @@ bool Test10()
     HRESULT hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, NULL, imageLogo );
     if ( FAILED(hr) )
     {
-        printe( "Failed loading dds (HRESULT %08X):\n%S\n", hr, szPath );
+        printe( "Failed loading dds (HRESULT %08X):\n%ls\n", hr, szPath );
         return false;
     }
 
@@ -339,7 +339,7 @@ bool Test10()
     hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, NULL, imageWin95 );
     if ( FAILED(hr) )
     {
-        printe( "Failed loading dds (HRESULT %08X):\n%S\n", hr, szPath );
+        printe( "Failed loading dds (HRESULT %08X):\n%ls\n", hr, szPath );
         return false;
     }
 
@@ -360,7 +360,7 @@ bool Test10()
     hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, NULL, imageDX );
     if ( FAILED(hr) )
     {
-        printe( "Failed loading dds (HRESULT %08X):\n%S\n", hr, szPath );
+        printe( "Failed loading dds (HRESULT %08X):\n%ls\n", hr, szPath );
         return false;
     }
 
@@ -381,7 +381,7 @@ bool Test10()
     hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, NULL, imageAlpha );
     if ( FAILED(hr) )
     {
-        printe( "Failed loading dds (HRESULT %08X):\n%S\n", hr, szPath );
+        printe( "Failed loading dds (HRESULT %08X):\n%ls\n", hr, szPath );
         return false;
     }
 
@@ -513,12 +513,12 @@ bool Test14()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting data from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
             success = false;
-            printe( "Metadata error in:\n%S\n", szPath );
+            printe( "Metadata error in:\n%ls\n", szPath );
             printmeta( &metadata );
             printmetachk( check );
         }
@@ -528,7 +528,7 @@ bool Test14()
             if ( isao != s_TestMedia[index].isAlphaAllOpaque )
             {
                 success = false;
-                printe( "Failed IsAlphaAllOpaque: %s ... %s\n%S\n", (isao) ? "true" : "false", (s_TestMedia[index].isAlphaAllOpaque) ? "true" : "false", szPath );
+                printe( "Failed IsAlphaAllOpaque: %s ... %s\n%ls\n", (isao) ? "true" : "false", (s_TestMedia[index].isAlphaAllOpaque) ? "true" : "false", szPath );
             }
             else
                 ++npass;
@@ -538,6 +538,158 @@ bool Test14()
     }
 
     print("%Iu images tested, %Iu images passed ", ncount, npass );
+
+    return success;
+}
+
+
+//-------------------------------------------------------------------------------------
+// Evaluate
+bool Test16()
+{
+    struct TestMedia
+    {
+        TexMetadata metadata;
+        const wchar_t *fname;
+        float maxLuminance;
+    };
+
+    static const TestMedia s_TestMedia[] =
+    {
+        // width height depth arraySize mipLevels miscFlags miscFlags2 format dimension | filename | bool
+        { { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"reftexture.dds", 1.f },
+        { { 200, 150, 1, 1, 1, 0, 0, DXGI_FORMAT_B5G5R5A1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test555.dds", 0.931935f },
+        { { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test8888.dds", 0.11f },
+        { { 32, 32, 1, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test8888mip.dds", 0.11f },
+        { { 32, 32, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcube8888.dds", 0.11f },
+        { { 32, 32, 1, 6, 6, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcube8888mip.dds", 0.11f },
+        { { 32, 32, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_BC3_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcubedxt5.dds", 0.11f },
+        { { 32, 32, 1, 6, 6, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_BC3_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcubedxt5mip.dds", 0.11f },
+        { { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testdxt1.dds", 0.11f },
+        { { 32, 32, 1, 1, 6, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testdxt1mip.dds", 0.11f },
+        { { 32, 32, 4, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888.dds", 0.11f },
+        { { 32, 32, 4, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888mip.dds", 0.11f },
+        { { 32, 32, 4, 1, 6, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvoldxt1mip.dds", 0.11f },
+        { { 512, 256, 1, 1, 10, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth_A2B10G10R10.dds", 0.984360f },
+        { { 512, 256, 1, 1, 10, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth_A2R10G10B10.dds", 0.984360f },
+        { { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_BC7_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"bc7_unorm.dds", 1.f },
+        { { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_BC7_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"bc7_unorm_srgb.dds", 1.f },
+        { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B5G5R5A1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_A1R5G5B5.dds", 1.f },
+        { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_BC2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_DXT3.dds", 1.f },
+        { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B5G6R5_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_R5G6B5.dds", 1.f },
+        { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_X8B8G8R8.dds", 1.f },
+        { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_A8R3G3B2.dds", 1.f },
+        { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R16G16B16A16_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_rgba16.dds", 1.f },
+        { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R16G16B16A16_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_rgba16f.dds", 1.f },
+        { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R32G32B32A32_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_rgba32f.dds", 1.f },
+        { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"alphaedge.dds", 0.f },
+        { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B4G4R4A4_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_A4L4.dds", 1.f },
+        { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B4G4R4A4_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_X4R4G4B4.dds", 1.f },
+        { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B4G4R4A4_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_A4R4G4B4.dds", 1.f },
+        { { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"dx5_logo.dds", 0.968588f },
+        { { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"win95.dds", 1.f },
+        { { 256, 256, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lobbycube.dds", 0.996452f },
+        { { 8192, 4096, 1, 1, 14, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"world8192.dds", 1.f },
+        { { 304, 268, 1, 1, 9, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"tree02S.dds", 0.731412f },
+        { { 304, 268, 1, 1, 9, 0, TEX_ALPHA_MODE_PREMULTIPLIED, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"tree02S_pmalpha.dds", 0.731412f },
+        { { 1024, 512, 1, 1, 11, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthdiffuse.dds", 0.970588f },
+        { { 800, 800, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"SplashScreen2.dds", 0.910078f },
+        { { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lena.dds", 0.933569f },
+    };
+
+    bool success = true;
+
+    size_t ncount = 0;
+    size_t npass = 0;
+
+    for (size_t index = 0; index < _countof(s_TestMedia); ++index)
+    {
+        wchar_t szPath[MAX_PATH];
+        DWORD ret = ExpandEnvironmentStringsW(s_TestMedia[index].fname, szPath, MAX_PATH);
+        if (!ret || ret > MAX_PATH)
+        {
+            printe("ERROR: ExpandEnvironmentStrings FAILED\n");
+            return false;
+        }
+
+#ifdef DEBUG
+        OutputDebugString(szPath);
+        OutputDebugStringA("\n");
+#endif
+
+        TexMetadata metadata;
+        ScratchImage image;
+        HRESULT hr = LoadFromDDSFile(szPath, DDS_FLAGS_NONE, &metadata, image);
+
+        const TexMetadata* check = &s_TestMedia[index].metadata;
+        if (FAILED(hr))
+        {
+            success = false;
+            printe("Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath);
+        }
+        else if (memcmp(&metadata, check, sizeof(TexMetadata)) != 0)
+        {
+            success = false;
+            printe("Metadata error in:\n%ls\n", szPath);
+            printmeta(&metadata);
+            printmetachk(check);
+        }
+        else
+        {
+            XMVECTOR maxLum = XMVectorZero();
+
+            hr = Evaluate(*image.GetImage(0, 0, 0), [&](const XMVECTOR* pixels, size_t width, size_t y)
+            {
+                UNREFERENCED_PARAMETER(y);
+                for (size_t j = 0; j < width; ++j)
+                {
+                    static const XMVECTORF32 s_luminance = { 0.3f, 0.59f, 0.11f, 0.f };
+                    static const XMVECTORF32 s_nitsNormalize = { 100.f, 100.f, 100.f, 1.f };
+
+                    XMVECTOR v = *pixels++;
+
+                    v = XMVectorDivide(v, s_nitsNormalize);
+                    v = XMVectorSaturate(v);
+                    v = XMVector3Dot(v, s_luminance);
+
+                    maxLum = XMVectorMax(v, maxLum);
+                }
+            });
+            if (FAILED(hr))
+            {
+                success = false;
+                printe("ERROR: Evaluate failed (%08X)\n%ls\n", hr, szPath);
+            }
+            else
+            {
+                float maxLuminance = XMVectorGetX(maxLum);
+                maxLuminance *= 100.f;
+
+                if (!IsEqual(maxLuminance, s_TestMedia[index].maxLuminance))
+                {
+                    success = false;
+                    printe("ERROR: Evaluate result unexpected %f...%f\n%ls\n", maxLuminance, s_TestMedia[index].maxLuminance, szPath);
+                }
+                else
+                    ++npass;
+            }
+
+#if 0
+            bool isao = image.IsAlphaAllOpaque();
+            if (isao != s_TestMedia[index].isAlphaAllOpaque)
+            {
+                success = false;
+                printe("Failed IsAlphaAllOpaque: %s ... %s\n%ls\n", (isao) ? "true" : "false", (s_TestMedia[index].isAlphaAllOpaque) ? "true" : "false", szPath);
+            }
+            else
+                ++npass;
+#endif
+        }
+
+        ++ncount;
+    }
+
+    print("%Iu images tested, %Iu images passed ", ncount, npass);
 
     return success;
 }

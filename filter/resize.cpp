@@ -376,12 +376,12 @@ bool Test01()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting DDS data from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed getting DDS data from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
             success = false;
-            printe( "Metadata error in DDS:\n%S\n", szPath );
+            printe( "Metadata error in DDS:\n%ls\n", szPath );
             printmeta( &metadata );
             printmetachk( check );
         }
@@ -405,7 +405,7 @@ bool Test01()
             {
                 success = false;
                 pass = false;
-                printe( "Failed resizing (HRESULT %08X) to %u x %u:\n%S\n", hr, twidth, theight, szPath );
+                printe( "Failed resizing (HRESULT %08X) to %u x %u:\n%ls\n", hr, twidth, theight, szPath );
             }
             else if ( image.GetMetadata().width != twidth || image.GetMetadata().height != theight )
             {
@@ -413,7 +413,7 @@ bool Test01()
                 pass = false;
                 printe( "Failed resizing result is %Iu x %Iu:\n",
                         image.GetMetadata().width, image.GetMetadata().height );
-                printe( "\n...(check) %u x %u:\n%S\n", twidth, theight, szPath );
+                printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
             }
             else
             {
@@ -436,7 +436,7 @@ bool Test01()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
+                    printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
                 }
                 else if ( memcmp( digest, g_ResizeMedia[index].md5, 16 ) != 0
                           && (!expected2 || memcmp( digest, expected2, 16 ) != 0 )
@@ -445,7 +445,7 @@ bool Test01()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed comparing image MD5 checksum (%u x %u):\n%S\n", twidth, theight, szPath );
+                    printe( "Failed comparing image MD5 checksum (%u x %u):\n%ls\n", twidth, theight, szPath );
                     printdigest( "computed", digest );
                     printdigest( "expected", g_ResizeMedia[index].md5 );
                     if ( expected2 )
@@ -484,7 +484,7 @@ bool Test01()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed resizing Point (HRESULT %08X) to %u x %u:\n%S\n", hr, twidth, theight, szPath );
+                    printe( "Failed resizing Point (HRESULT %08X) to %u x %u:\n%ls\n", hr, twidth, theight, szPath );
                 }
                 else if ( imagePoint.GetMetadata().width != twidth || imagePoint.GetMetadata().height != theight )
                 {
@@ -492,7 +492,7 @@ bool Test01()
                     pass = false;
                     printe( "Failed resizing Point result is %Iu x %Iu:\n",
                             imagePoint.GetMetadata().width, imagePoint.GetMetadata().height );
-                    printe( "\n...(check) %u x %u:\n%S\n", twidth, theight, szPath );
+                    printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                 }
                 else
                 {
@@ -509,14 +509,14 @@ bool Test01()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of image Point data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of image Point data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( memcmp( digest, g_ResizeMedia[index].md5_point, 16 ) != 0
                               && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing image Point MD5 checksum (%u x %u):\n%S\n", twidth, theight, szPath );
+                        printe( "Failed comparing image Point MD5 checksum (%u x %u):\n%ls\n", twidth, theight, szPath );
                         printdigest( "computed", digest );
                         printdigest( "expected", g_ResizeMedia[index].md5_point );
                         if ( expected2 )
@@ -546,7 +546,7 @@ bool Test01()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed resizing Linear (HRESULT %08X) to %u x %u:\n%S\n", hr, twidth, theight, szPath );
+                    printe( "Failed resizing Linear (HRESULT %08X) to %u x %u:\n%ls\n", hr, twidth, theight, szPath );
                 }
                 else if ( imageLinear.GetMetadata().width != twidth || imageLinear.GetMetadata().height != theight )
                 {
@@ -554,7 +554,7 @@ bool Test01()
                     pass = false;
                     printe( "Failed resizing Linear result is %Iu x %Iu:\n",
                             imageLinear.GetMetadata().width, imageLinear.GetMetadata().height );
-                    printe( "\n...(check) %u x %u:\n%S\n", twidth, theight, szPath );
+                    printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                 }
                 else
                 {
@@ -571,14 +571,14 @@ bool Test01()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of image Linear data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of image Linear data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( memcmp( digest, g_ResizeMedia[index].md5_linear, 16 ) != 0
                               && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing image Linear MD5 checksum (%u x %u):\n%S\n", twidth, theight, szPath );
+                        printe( "Failed comparing image Linear MD5 checksum (%u x %u):\n%ls\n", twidth, theight, szPath );
                         printdigest( "computed", digest );
                         printdigest( "expected", g_ResizeMedia[index].md5_linear );
                         if ( expected2 )
@@ -594,12 +594,12 @@ bool Test01()
                     if ( FAILED(hr) )
                     {
                         success = false;
-                        printe( "Failed comparing Point vs. Linear image data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed comparing Point vs. Linear image data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( IsErrorTooLarge( mse, targMSE ) )
                     {
                         success = false;
-                        printe( "Failed comparing Point vs. Linear MSE = %f (%f %f %f %f)... %f (%u x %u):\n%S\n",
+                        printe( "Failed comparing Point vs. Linear MSE = %f (%f %f %f %f)... %f (%u x %u):\n%ls\n",
                                 mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, twidth, theight, szPath );
                     }
 
@@ -624,7 +624,7 @@ bool Test01()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed resizing Cubic (HRESULT %08X) to %u x %u:\n%S\n", hr, twidth, theight, szPath );
+                    printe( "Failed resizing Cubic (HRESULT %08X) to %u x %u:\n%ls\n", hr, twidth, theight, szPath );
                 }
                 else if ( imageCubic.GetMetadata().width != twidth || imageCubic.GetMetadata().height != theight )
                 {
@@ -632,7 +632,7 @@ bool Test01()
                     pass = false;
                     printe( "Failed resizing Cubic result is %Iu x %Iu:\n",
                             imageCubic.GetMetadata().width, imageCubic.GetMetadata().height );
-                    printe( "\n...(check) %u x %u:\n%S\n", twidth, theight, szPath );
+                    printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                 }
                 else
                 {
@@ -649,14 +649,14 @@ bool Test01()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of image Cubic data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of image Cubic data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( memcmp( digest, g_ResizeMedia[index].md5_cubic, 16 ) != 0
                               && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing image Cubic MD5 checksum  (%u x %u):\n%S\n", twidth, theight, szPath );
+                        printe( "Failed comparing image Cubic MD5 checksum  (%u x %u):\n%ls\n", twidth, theight, szPath );
                         printdigest( "computed", digest );
                         printdigest( "expected", g_ResizeMedia[index].md5_cubic );
                         if ( expected2 )
@@ -672,12 +672,12 @@ bool Test01()
                     if ( FAILED(hr) )
                     {
                         success = false;
-                        printe( "Failed comparing Point vs. Cubic image data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed comparing Point vs. Cubic image data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( IsErrorTooLarge( mse, targMSE ) )
                     {
                         success = false;
-                        printe( "Failed comparing Point vs. Cubic MSE = %f (%f %f %f %f)... %f  (%u x %u):\n%S\n",
+                        printe( "Failed comparing Point vs. Cubic MSE = %f (%f %f %f %f)... %f  (%u x %u):\n%ls\n",
                                 mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, twidth, theight, szPath );
                     }
 
@@ -687,12 +687,12 @@ bool Test01()
                     if ( FAILED(hr) )
                     {
                         success = false;
-                        printe( "Failed comparing Linear vs. Cubic image data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed comparing Linear vs. Cubic image data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( IsErrorTooLarge( mse, targMSE ) )
                     {
                         success = false;
-                        printe( "Failed comparing Linear vs. Cubic MSE = %f (%f %f %f %f)... %f  (%u x %u):\n%S\n",
+                        printe( "Failed comparing Linear vs. Cubic MSE = %f (%f %f %f %f)... %f  (%u x %u):\n%ls\n",
                                 mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, twidth, theight, szPath );
                     }
 
@@ -717,7 +717,7 @@ bool Test01()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed resizing Triangle (HRESULT %08X) to %u x %u:\n%S\n", hr, twidth, theight, szPath );
+                    printe( "Failed resizing Triangle (HRESULT %08X) to %u x %u:\n%ls\n", hr, twidth, theight, szPath );
                 }
                 else if ( imageTriangle.GetMetadata().width != twidth || imageTriangle.GetMetadata().height != theight )
                 {
@@ -725,7 +725,7 @@ bool Test01()
                     pass = false;
                     printe( "Failed resizing Triangle result is %Iu x %Iu:\n",
                             imageTriangle.GetMetadata().width, imageTriangle.GetMetadata().height );
-                    printe( "\n...(check) %u x %u:\n%S\n", twidth, theight, szPath );
+                    printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                 }
                 else
                 {
@@ -742,14 +742,14 @@ bool Test01()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of image Triangle data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of image Triangle data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( memcmp( digest, g_ResizeMedia[index].md5_tri, 16 ) != 0
                               && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ))
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing image Triangle MD5 checksum  (%u x %u):\n%S\n", twidth, theight, szPath );
+                        printe( "Failed comparing image Triangle MD5 checksum  (%u x %u):\n%ls\n", twidth, theight, szPath );
                         printdigest( "computed", digest );
                         printdigest( "expected", g_ResizeMedia[index].md5_tri );
                         if ( expected2 )
@@ -783,7 +783,7 @@ bool Test01()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed resizing sep alpha (HRESULT %08X) to %u x %u:\n%S\n", hr, twidth, theight, szPath );
+                    printe( "Failed resizing sep alpha (HRESULT %08X) to %u x %u:\n%ls\n", hr, twidth, theight, szPath );
                 }
                 else if ( imageSepAlpha.GetMetadata().width != twidth || imageSepAlpha.GetMetadata().height != theight )
                 {
@@ -791,7 +791,7 @@ bool Test01()
                     pass = false;
                     printe( "Failed resizing sep alpha result is %Iu x %Iu:\n",
                             imageSepAlpha.GetMetadata().width, imageSepAlpha.GetMetadata().height );
-                    printe( "\n...(check) %u x %u:\n%S\n", twidth, theight, szPath );
+                    printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                 }
                 else
                 {
@@ -808,14 +808,14 @@ bool Test01()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of image sep alpha data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of image sep alpha data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( memcmp( digest, g_ResizeMedia[index].md5_sepalpha, 16 ) != 0
                               && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing image sep alpha MD5 checksum  (%u x %u):\n%S\n", twidth, theight, szPath );
+                        printe( "Failed comparing image sep alpha MD5 checksum  (%u x %u):\n%ls\n", twidth, theight, szPath );
                         printdigest( "computed", digest );
                         printdigest( "expected", g_ResizeMedia[index].md5_sepalpha );
                         if ( expected2 )
@@ -853,7 +853,7 @@ bool Test01()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed non-WIC resizing (HRESULT %08X) to %u x %u:\n%S\n", hr, twidth, theight, szPath );
+                    printe( "Failed non-WIC resizing (HRESULT %08X) to %u x %u:\n%ls\n", hr, twidth, theight, szPath );
                 }
                 else if ( nwimage.GetMetadata().width != twidth || nwimage.GetMetadata().height != theight )
                 {
@@ -861,7 +861,7 @@ bool Test01()
                     pass = false;
                     printe( "Failed non-WIC resizing result is %Iu x %Iu:\n",
                             nwimage.GetMetadata().width, nwimage.GetMetadata().height );
-                    printe( "\n...(check) %u x %u:\n%S\n", twidth, theight, szPath );
+                    printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                 }
                 else
                 {
@@ -872,12 +872,12 @@ bool Test01()
                     if ( FAILED(hr) )
                     {
                         success = false;
-                        printe( "Failed comparing non-WIC to WIC image data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed comparing non-WIC to WIC image data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( IsErrorTooLarge( mse, targMSE ) )
                     {
                         success = false;
-                        printe( "Failed comparing non-WIC to WIC MSE = %f (%f %f %f %f)... %f  (%u x %u):\n%S\n",
+                        printe( "Failed comparing non-WIC to WIC MSE = %f (%f %f %f %f)... %f  (%u x %u):\n%ls\n",
                                 mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, twidth, theight, szPath );
                     }
 
@@ -905,7 +905,7 @@ bool Test01()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed non-WIC Point resizing (HRESULT %08X) to %u x %u:\n%S\n", hr, twidth, theight, szPath );
+                        printe( "Failed non-WIC Point resizing (HRESULT %08X) to %u x %u:\n%ls\n", hr, twidth, theight, szPath );
                     }
                     else if ( nwimagePoint.GetMetadata().width != twidth || nwimagePoint.GetMetadata().height != theight )
                     {
@@ -913,7 +913,7 @@ bool Test01()
                         pass = false;
                         printe( "Failed non-WIC Point resizing result is %Iu x %Iu:\n",
                                 nwimagePoint.GetMetadata().width, nwimagePoint.GetMetadata().height );
-                        printe( "\n...(check) %u x %u:\n%S\n", twidth, theight, szPath );
+                        printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                     }
                     else
                     {
@@ -926,12 +926,12 @@ bool Test01()
                             if ( FAILED(hr) )
                             {
                                 success = false;
-                                printe( "Failed comparing non-WIC to WIC Point image data (HRESULT %08X):\n%S\n", hr, szPath );
+                                printe( "Failed comparing non-WIC to WIC Point image data (HRESULT %08X):\n%ls\n", hr, szPath );
                             }
                             else if ( IsErrorTooLarge( mse, targMSE ) )
                             {
                                 success = false;
-                                printe( "Failed comparing non-WIC to WIC Point MSE = %f (%f %f %f %f)... %f  (%u x %u):\n%S\n",
+                                printe( "Failed comparing non-WIC to WIC Point MSE = %f (%f %f %f %f)... %f  (%u x %u):\n%ls\n",
                                         mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, twidth, theight, szPath );
                             }
                         }
@@ -957,7 +957,7 @@ bool Test01()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed non-WIC Linear resizing (HRESULT %08X) to %u x %u:\n%S\n", hr, twidth, theight, szPath );
+                        printe( "Failed non-WIC Linear resizing (HRESULT %08X) to %u x %u:\n%ls\n", hr, twidth, theight, szPath );
                     }
                     else if ( nwimageLinear.GetMetadata().width != twidth || nwimageLinear.GetMetadata().height != theight )
                     {
@@ -965,7 +965,7 @@ bool Test01()
                         pass = false;
                         printe( "Failed non-WIC Linear resizing result is %Iu x %Iu:\n",
                                 nwimageLinear.GetMetadata().width, nwimageLinear.GetMetadata().height );
-                        printe( "\n...(check) %u x %u:\n%S\n", twidth, theight, szPath );
+                        printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                     }
                     else
                     {
@@ -976,12 +976,12 @@ bool Test01()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed comparing non-WIC to WIC Linear image data (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed comparing non-WIC to WIC Linear image data (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( IsErrorTooLarge( mse, targMSE ) )
                         {
                             success = false;
-                            printe( "Failed comparing non-WIC to WIC Linear MSE = %f (%f %f %f %f)... %f  (%u x %u):\n%S\n",
+                            printe( "Failed comparing non-WIC to WIC Linear MSE = %f (%f %f %f %f)... %f  (%u x %u):\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, twidth, theight, szPath );
                         }
 
@@ -1006,7 +1006,7 @@ bool Test01()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed non-WIC Cubic resizing (HRESULT %08X) to %u x %u:\n%S\n", hr, twidth, theight, szPath );
+                        printe( "Failed non-WIC Cubic resizing (HRESULT %08X) to %u x %u:\n%ls\n", hr, twidth, theight, szPath );
                     }
                     else if ( nwimageCubic.GetMetadata().width != twidth || nwimageCubic.GetMetadata().height != theight )
                     {
@@ -1014,7 +1014,7 @@ bool Test01()
                         pass = false;
                         printe( "Failed non-WIC Cubic resizing result is %Iu x %Iu:\n",
                                 nwimageCubic.GetMetadata().width, nwimageCubic.GetMetadata().height );
-                        printe( "\n...(check) %u x %u:\n%S\n", twidth, theight, szPath );
+                        printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                     }
                     else
                     {
@@ -1025,12 +1025,12 @@ bool Test01()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed comparing non-WIC to WIC Cubic image data (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed comparing non-WIC to WIC Cubic image data (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( IsErrorTooLarge( mse, targMSE ) )
                         {
                             success = false;
-                            printe( "Failed comparing non-WIC to WIC Cubic MSE = %f (%f %f %f %f)... %f  (%u x %u):\n%S\n",
+                            printe( "Failed comparing non-WIC to WIC Cubic MSE = %f (%f %f %f %f)... %f  (%u x %u):\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, twidth, theight, szPath );
                         }
 
@@ -1042,12 +1042,12 @@ bool Test01()
                             if ( FAILED(hr) )
                             {
                                 success = false;
-                                printe( "Failed comparing non-WIC Point vs. Cubic image data (HRESULT %08X):\n%S\n", hr, szPath );
+                                printe( "Failed comparing non-WIC Point vs. Cubic image data (HRESULT %08X):\n%ls\n", hr, szPath );
                             }
                             else if ( IsErrorTooLarge( mse, targMSE ) )
                             {
                                 success = false;
-                                printe( "Failed comparing non-WIC Point vs. Cubic MSE = %f (%f %f %f %f)... %f  (%u x %u):\n%S\n",
+                                printe( "Failed comparing non-WIC Point vs. Cubic MSE = %f (%f %f %f %f)... %f  (%u x %u):\n%ls\n",
                                         mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, twidth, theight, szPath );
                             }
                         }
@@ -1058,12 +1058,12 @@ bool Test01()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed comparing non-WIC Linear vs. Cubic image data (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed comparing non-WIC Linear vs. Cubic image data (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( IsErrorTooLarge( mse, targMSE ) )
                         {
                             success = false;
-                            printe( "Failed comparing non-WIC Linear vs. Cubic MSE = %f (%f %f %f %f)... %f  (%u x %u):\n%S\n",
+                            printe( "Failed comparing non-WIC Linear vs. Cubic MSE = %f (%f %f %f %f)... %f  (%u x %u):\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, twidth, theight, szPath );
                         }
 
@@ -1094,7 +1094,7 @@ bool Test01()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed sRGB resizing (HRESULT %08X) to %u x %u:\n%S\n", hr, twidth, theight, szPath );
+                    printe( "Failed sRGB resizing (HRESULT %08X) to %u x %u:\n%ls\n", hr, twidth, theight, szPath );
                 }
                 else if ( srgbimage.GetMetadata().width != twidth || srgbimage.GetMetadata().height != theight )
                 {
@@ -1102,7 +1102,7 @@ bool Test01()
                     pass = false;
                     printe( "Failed sRGB resizing result is %Iu x %Iu:\n",
                             srgbimage.GetMetadata().width, srgbimage.GetMetadata().height );
-                    printe( "\n...(check) %u x %u:\n%S\n", twidth, theight, szPath );
+                    printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                 }
                 else
                 {
@@ -1113,18 +1113,18 @@ bool Test01()
                     if ( FAILED(hr) )
                     {
                         success = false;
-                        printe( "Failed comparing sRGB to non-WIC image data (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed comparing sRGB to non-WIC image data (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( IsErrorTooSmall( mse, 0.00005f ) )
                     {
                         success = false;
-                        printe( "Failed comparing sRGB to non-WIC which appear near identical MSE = %f (%f %f %f %f)  (%u x %u):\n%S\n",
+                        printe( "Failed comparing sRGB to non-WIC which appear near identical MSE = %f (%f %f %f %f)  (%u x %u):\n%ls\n",
                                 mse, mseV[0], mseV[1], mseV[2], mseV[3], twidth, theight, szPath );
                     }
                     else if ( IsErrorTooLarge( mse, targMSE ) )
                     {
                         success = false;
-                        printe( "Failed comparing sRGB to non-WIC MSE = %f (%f %f %f %f)... %f  (%u x %u):\n%S\n",
+                        printe( "Failed comparing sRGB to non-WIC MSE = %f (%f %f %f %f)... %f  (%u x %u):\n%ls\n",
                                 mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, twidth, theight, szPath );
                     }
 
@@ -1152,7 +1152,7 @@ bool Test01()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed sRGB Linear resizing (HRESULT %08X) to %u x %u:\n%S\n", hr, twidth, theight, szPath );
+                        printe( "Failed sRGB Linear resizing (HRESULT %08X) to %u x %u:\n%ls\n", hr, twidth, theight, szPath );
                     }
                     else if ( srgbimageLinear.GetMetadata().width != twidth || srgbimageLinear.GetMetadata().height != theight )
                     {
@@ -1160,7 +1160,7 @@ bool Test01()
                         pass = false;
                         printe( "Failed sRGB Linear resizing result is %Iu x %Iu:\n",
                                 srgbimageLinear.GetMetadata().width, srgbimageLinear.GetMetadata().height );
-                        printe( "\n...(check) %u x %u:\n%S\n", twidth, theight, szPath );
+                        printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                     }
                     else
                     {
@@ -1171,18 +1171,18 @@ bool Test01()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed comparing sRGB Linear to non-WIC image data (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed comparing sRGB Linear to non-WIC image data (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( IsErrorTooSmall( mse, 0.00005f ) )
                         {
                             success = false;
-                            printe( "Failed comparing sRGB Linear to non-WIC which appear near identical MSE = %f (%f %f %f %f)  (%u x %u):\n%S\n",
+                            printe( "Failed comparing sRGB Linear to non-WIC which appear near identical MSE = %f (%f %f %f %f)  (%u x %u):\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], twidth, theight, szPath );
                         }
                         else if ( IsErrorTooLarge( mse, targMSE ) )
                         {
                             success = false;
-                            printe( "Failed comparing sRGB Linear to non-WIC MSE = %f (%f %f %f %f)... %f  (%u x %u):\n%S\n",
+                            printe( "Failed comparing sRGB Linear to non-WIC MSE = %f (%f %f %f %f)... %f  (%u x %u):\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, twidth, theight, szPath );
                         }
 
@@ -1208,7 +1208,7 @@ bool Test01()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed sRGB Cubic resizing (HRESULT %08X) to %u x %u:\n%S\n", hr, twidth, theight, szPath );
+                        printe( "Failed sRGB Cubic resizing (HRESULT %08X) to %u x %u:\n%ls\n", hr, twidth, theight, szPath );
                     }
                     else if ( srgbimageCubic.GetMetadata().width != twidth || srgbimageCubic.GetMetadata().height != theight )
                     {
@@ -1216,7 +1216,7 @@ bool Test01()
                         pass = false;
                         printe( "Failed sRGB Cubic resizing result is %Iu x %Iu:\n",
                                 srgbimageCubic.GetMetadata().width, srgbimageCubic.GetMetadata().height );
-                        printe( "\n...(check) %u x %u:\n%S\n", twidth, theight, szPath );
+                        printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                     }
                     else
                     {
@@ -1227,18 +1227,18 @@ bool Test01()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed comparing sRGB Cubic to non-WIC image data (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed comparing sRGB Cubic to non-WIC image data (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( IsErrorTooSmall( mse, 0.00005f ) )
                         {
                             success = false;
-                            printe( "Failed comparing sRGB Cubic to non-WIC which appear near identical MSE = %f (%f %f %f %f)  (%u x %u):\n%S\n",
+                            printe( "Failed comparing sRGB Cubic to non-WIC which appear near identical MSE = %f (%f %f %f %f)  (%u x %u):\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], twidth, theight, szPath );
                         }
                         else if ( IsErrorTooLarge( mse, targMSE ) )
                         {
                             success = false;
-                            printe( "Failed comparing sRGB Cubic to non-WIC MSE = %f (%f %f %f %f)... %f  (%u x %u):\n%S\n",
+                            printe( "Failed comparing sRGB Cubic to non-WIC MSE = %f (%f %f %f %f)... %f  (%u x %u):\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, twidth, theight, szPath );
                         }
 
@@ -1264,7 +1264,7 @@ bool Test01()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed sRGB Triangle resizing (HRESULT %08X) to %u x %u:\n%S\n", hr, twidth, theight, szPath );
+                        printe( "Failed sRGB Triangle resizing (HRESULT %08X) to %u x %u:\n%ls\n", hr, twidth, theight, szPath );
                     }
                     else if ( srgbimageTriangle.GetMetadata().width != twidth || srgbimageTriangle.GetMetadata().height != theight )
                     {
@@ -1272,7 +1272,7 @@ bool Test01()
                         pass = false;
                         printe( "Failed sRGB Triangle resizing result is %Iu x %Iu:\n",
                                 srgbimageTriangle.GetMetadata().width, srgbimageTriangle.GetMetadata().height );
-                        printe( "\n...(check) %u x %u:\n%S\n", twidth, theight, szPath );
+                        printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                     }
                     else
                     {
@@ -1283,18 +1283,18 @@ bool Test01()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed comparing sRGB Triangle to default image data (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed comparing sRGB Triangle to default image data (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( IsErrorTooSmall( mse, 0.00005f ) )
                         {
                             success = false;
-                            printe( "Failed comparing sRGB Triangle to default which appear near identical MSE = %f (%f %f %f %f)  (%u x %u):\n%S\n",
+                            printe( "Failed comparing sRGB Triangle to default which appear near identical MSE = %f (%f %f %f %f)  (%u x %u):\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], twidth, theight, szPath );
                         }
                         else if ( IsErrorTooLarge( mse, targMSE ) )
                         {
                             success = false;
-                            printe( "Failed comparing sRGB Triangle to default = %f (%f %f %f %f)... %f  (%u x %u):\n%S\n",
+                            printe( "Failed comparing sRGB Triangle to default = %f (%f %f %f %f)... %f  (%u x %u):\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, twidth, theight, szPath );
                         }
 
@@ -1328,7 +1328,7 @@ bool Test01()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed resizing complex (HRESULT %08X) to %u x %u:\n%S\n", hr, twidth, theight, szPath );
+                    printe( "Failed resizing complex (HRESULT %08X) to %u x %u:\n%ls\n", hr, twidth, theight, szPath );
                 }
                 else
                 {
@@ -1345,7 +1345,7 @@ bool Test01()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed resizing complex result:\n%S\n", szPath );
+                        printe( "Failed resizing complex result:\n%ls\n", szPath );
                         printmeta( &metadata2 );
                         printmetachk( check );
                         printe( "...\n(check) w: %u x h: %u x d: %Iu\narraySize: %Iu  mips: 1\nmiscFlags: %08X miscFlags2: %08X format: %u dimension: %u\n", 
@@ -1367,14 +1367,14 @@ bool Test01()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed computing MD5 checksum of image complex data (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed computing MD5 checksum of image complex data (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( memcmp( digest, g_ResizeMedia[index].md5_c, 16 ) != 0
                                   && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed comparing image complex MD5 checksum  (%u x %u):\n%S\n", twidth, theight, szPath );
+                            printe( "Failed comparing image complex MD5 checksum  (%u x %u):\n%ls\n", twidth, theight, szPath );
                             printdigest( "computed", digest );
                             printdigest( "expected", g_ResizeMedia[index].md5_c );
                             if ( expected2 )

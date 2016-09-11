@@ -146,68 +146,68 @@ bool Test01()
 
         if ( !IsValid( (DXGI_FORMAT)f ) )
         {
-            printe( "ERROR: Isvalid failed on DXGI Format %u (%S)\n", f, GetName( DXGI_FORMAT(f) ) );
+            printe( "ERROR: Isvalid failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) ) );
             success = false;
         }
 
         if ( IsCompressed( (DXGI_FORMAT)f ) != isCompressed )
         {
-            printe( "ERROR: IsCompressed failed on DXGI Format %u (%S)\n", f, GetName( DXGI_FORMAT(f) )  );
+            printe( "ERROR: IsCompressed failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
             success = false;
         }
 
         if ( IsPacked( (DXGI_FORMAT)f ) != isPAK )
         {
-            printe( "ERROR: IsPacked failed on DXGI Format %u (%S)\n", f, GetName( DXGI_FORMAT(f) )  );
+            printe( "ERROR: IsPacked failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
             success = false;
         }
 
         if ( IsSRGB( (DXGI_FORMAT)f ) != isSRGB )
         {
-            printe( "ERROR: IsSRGB failed on DXGI Format %u (%S)\n", f, GetName( DXGI_FORMAT(f) )  );
+            printe( "ERROR: IsSRGB failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
             success = false;
         }
 
         if ( (IsTypeless( (DXGI_FORMAT)f ) != isTypeless)
              || (IsTypeless( (DXGI_FORMAT)f, true ) != isTypeless) )
         {
-            printe( "ERROR: IsTypeless failed on DXGI Format %u (%S)\n", f, GetName( DXGI_FORMAT(f) )  );
+            printe( "ERROR: IsTypeless failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
             success = false;
         }
 
         if ( IsTypeless( (DXGI_FORMAT)f, false ) != isPartialTypeless )
         {
-            printe( "ERROR: IsTypeless(false) failed on DXGI Format %u (%S)\n", f, GetName( DXGI_FORMAT(f) )  );
+            printe( "ERROR: IsTypeless(false) failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
             success = false;
         }
 
         if ( HasAlpha( (DXGI_FORMAT)f ) != hasAlpha )
         {
-            printe( "ERROR: HasAlpha failed on DXGI Format %u (%S)\n", f, GetName( DXGI_FORMAT(f) )  );
+            printe( "ERROR: HasAlpha failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
             success = false;
         }
 
         if ( IsVideo( (DXGI_FORMAT)f) != isVideo )
         {
-            printe( "ERROR: IsVideo failed on DXGI Format %u (%S)\n", f, GetName( DXGI_FORMAT(f) )  );
+            printe( "ERROR: IsVideo failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
             success = false;
         }
 
         if ( IsPlanar( (DXGI_FORMAT)f ) != isPlanar )
         {
-            printe( "ERROR: IsPlanar failed on DXGI Format %u (%S)\n", f, GetName( DXGI_FORMAT(f) )  );
+            printe( "ERROR: IsPlanar failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
             success = false;
         }
 
         if ( IsPalettized( (DXGI_FORMAT)f ) != isPal )
         {
-            printe( "ERROR: IsPalettized failed on DXGI Format %u (%S)\n", f, GetName( DXGI_FORMAT(f) )  );
+            printe( "ERROR: IsPalettized failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
             success = false;
         }
 
         if ( IsDepthStencil( (DXGI_FORMAT)f ) != isDepthStencil )
         {
-            printe( "ERROR: IsDepthStencil failed on DXGI Format %u (%S)\n", f, GetName( DXGI_FORMAT(f) )  );
+            printe( "ERROR: IsDepthStencil failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
             success = false;
         }
 
@@ -225,7 +225,7 @@ bool Test01()
 
         if ( BitsPerPixel( (DXGI_FORMAT)f ) == 0 )
         {
-            printe( "ERROR: BitsPerPixel failed on DXGI Format %u (%S)\n", f, GetName( DXGI_FORMAT(f) )  );
+            printe( "ERROR: BitsPerPixel failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
             success = false;
         }
 
@@ -233,7 +233,7 @@ bool Test01()
         {
             if ( BitsPerColor( (DXGI_FORMAT)f ) != 0 )
             {
-                printe( "ERROR: BitsPerColor succeeded on DXGI Format %u when it should have returned 0 (%S)\n", f, GetName( DXGI_FORMAT(f) )  );
+                printe( "ERROR: BitsPerColor succeeded on DXGI Format %u when it should have returned 0 (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
                 success = false;
             }
         }
@@ -241,7 +241,7 @@ bool Test01()
         {
             if ( BitsPerColor( (DXGI_FORMAT)f ) == 0 )
             {
-                printe( "ERROR: BitsPerColor failed on DXGI Format %u (%S)\n", f, GetName( DXGI_FORMAT(f) )  );
+                printe( "ERROR: BitsPerColor failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
                 success = false;
             }
         }
@@ -551,14 +551,14 @@ bool Test02()
         ComputePitch( DXGI_FORMAT(j), 4, 2, rowPitch, slicePitch );
         if ( rowPitch != 8 || slicePitch != 24 )
         {
-            printe("ERROR: CP %S A failed rowPitch %Iu, slicePitch %Iu\n", GetName( DXGI_FORMAT(j) ), rowPitch, slicePitch );
+            printe("ERROR: CP %ls A failed rowPitch %Iu, slicePitch %Iu\n", GetName( DXGI_FORMAT(j) ), rowPitch, slicePitch );
             success = false;
         }
 
         ComputePitch( DXGI_FORMAT(j), 128, 64, rowPitch, slicePitch );
         if ( rowPitch != 256 || slicePitch != 24576 )
         {
-            printe("ERROR: CP %S B failed rowPitch %Iu, slicePitch %Iu\n", GetName( DXGI_FORMAT(j) ), rowPitch, slicePitch );
+            printe("ERROR: CP %ls B failed rowPitch %Iu, slicePitch %Iu\n", GetName( DXGI_FORMAT(j) ), rowPitch, slicePitch );
             success = false;
         }
 
@@ -568,28 +568,28 @@ bool Test02()
         GetSurfaceInfo( 4, 2, DXGI_FORMAT(j), &numBytes, &rowBytes, &numRows );
         if ( rowBytes != 8 || numBytes != 24 || numRows != 3 )
         {
-            printe("ERROR: CP %S A failed rowBytes %Iu, numBytes %Iu, numRows %Iu\n", GetName( DXGI_FORMAT(j) ), rowBytes, numBytes, numRows );
+            printe("ERROR: CP %ls A failed rowBytes %Iu, numBytes %Iu, numRows %Iu\n", GetName( DXGI_FORMAT(j) ), rowBytes, numBytes, numRows );
             success = false;
         }
 
         rows = ComputeScanlines(DXGI_FORMAT(j), 2);
         if ( rows != 3 )
         {
-            printe("ERROR: CS %S A failed rows %Iu\n", GetName( DXGI_FORMAT(j) ), rows );
+            printe("ERROR: CS %ls A failed rows %Iu\n", GetName( DXGI_FORMAT(j) ), rows );
             success = false;
         }
 
         GetSurfaceInfo( 128, 64, DXGI_FORMAT(j), &numBytes, &rowBytes, &numRows );
         if ( rowBytes != 256 || numBytes != 24576 || numRows != (64+32) )
         {
-            printe("ERROR: CP %S B failed rowBytes %Iu, numBytes %Iu, numRows %Iu\n", GetName( DXGI_FORMAT(j) ), rowBytes, numBytes, numRows );
+            printe("ERROR: CP %ls B failed rowBytes %Iu, numBytes %Iu, numRows %Iu\n", GetName( DXGI_FORMAT(j) ), rowBytes, numBytes, numRows );
             success = false;
         }
 
         rows = ComputeScanlines(DXGI_FORMAT(j), 64);
         if ( rows != 96 )
         {
-            printe("ERROR: CS %S B failed rows %Iu\n", GetName( DXGI_FORMAT(j) ), rows );
+            printe("ERROR: CS %ls B failed rows %Iu\n", GetName( DXGI_FORMAT(j) ), rows );
             success = false;
         }
     }
@@ -921,7 +921,7 @@ bool Test02()
 
                 if ( FAILED(hr) )
                 {
-                    printe("ERROR: Failed creating texture for format %S (%u), %u by %u (%08X)\n", GetName( DXGI_FORMAT(f) ), f, vals[i], vals[j], hr );
+                    printe("ERROR: Failed creating texture for format %ls (%u), %u by %u (%08X)\n", GetName( DXGI_FORMAT(f) ), f, vals[i], vals[j], hr );
                     success = false;
                     continue;
                 }
@@ -930,7 +930,7 @@ bool Test02()
                 hr = context->Map( tex.Get(), 0, D3D11_MAP_WRITE, 0, &res );
                 if ( FAILED(hr) )
                 {
-                    printe("ERROR: Failed mapping texture for format %S (%u), %u by %u\n", GetName( DXGI_FORMAT(f) ), f, vals[i], vals[j] );
+                    printe("ERROR: Failed mapping texture for format %ls (%u), %u by %u\n", GetName( DXGI_FORMAT(f) ), f, vals[i], vals[j] );
                     success = false;
                     continue;
                 }
@@ -938,7 +938,7 @@ bool Test02()
                 ComputePitch( DXGI_FORMAT(f), vals[i], vals[j], rowPitch, slicePitch, CP_FLAGS_NONE );
                 if ( rowPitch != res.RowPitch || slicePitch != res.DepthPitch )
                 {
-                    printe("ERROR: %S (%u) failed rowPitch %Iu, slicePitch %Iu (%u by %u)...check rowPitch %u slicePitch %u\n",
+                    printe("ERROR: %ls (%u) failed rowPitch %Iu, slicePitch %Iu (%u by %u)...check rowPitch %u slicePitch %u\n",
                            GetName( DXGI_FORMAT(f) ), f, rowPitch, slicePitch, vals[i], vals[j], res.RowPitch, res.DepthPitch );
                     success = false;
                 }
@@ -967,7 +967,7 @@ bool Test02()
                     size_t rowCount = ComputeScanlines( DXGI_FORMAT(f), vals[j] );
                     if ( rowCount != targetRows )
                     {
-                        printe("ERROR: %S (%u) failed scanlines %Iu (%u)...check scanlines %u\n",
+                        printe("ERROR: %ls (%u) failed scanlines %Iu (%u)...check scanlines %u\n",
                                GetName( DXGI_FORMAT(f) ), f, rowCount, vals[j], targetRows );
                         success = false;
                     }
@@ -980,7 +980,7 @@ bool Test02()
 
                         if ( rowBytes != res.RowPitch || numBytes != res.DepthPitch || numRows != targetRows )
                         {
-                            printe("ERROR: %S (%u) failed rowBytes %Iu, numBytes %Iu, numRows %Iu (%u by %u)...check rowBytes %u numBytes %u numRows %u\n",
+                            printe("ERROR: %ls (%u) failed rowBytes %Iu, numBytes %Iu, numRows %Iu (%u by %u)...check rowBytes %u numBytes %u numRows %u\n",
                                    GetName( DXGI_FORMAT(f) ), f, rowBytes, numBytes, numRows, vals[i], vals[j],
                                    res.RowPitch, res.DepthPitch, targetRows );
                             success = false;

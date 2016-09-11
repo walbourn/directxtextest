@@ -79,12 +79,12 @@ bool Test15()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting DDS data from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed getting DDS data from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
             success = false;
-            printe( "Metadata error in DDS:\n%S\n", szPath );
+            printe( "Metadata error in DDS:\n%ls\n", szPath );
             printmeta( &metadata );
             printmetachk( check );
         }
@@ -99,16 +99,16 @@ bool Test15()
             {
                 success = false;
                 pass = false;
-                printe( "Failed single plane conversion (HRESULT %08X):\n%S\n", hr, szPath );
+                printe( "Failed single plane conversion (HRESULT %08X):\n%ls\n", hr, szPath );
             }
             else if ( image.GetMetadata().format != g_TestMedia[index].tformat
                       || image.GetMetadata().width != srcimage.GetMetadata().width || image.GetMetadata().height != srcimage.GetMetadata().height )
             {
                 success = false;
                 pass = false;
-                printe( "Failed conversion result is %Iu x %Iu (format %S):\n",
+                printe( "Failed conversion result is %Iu x %Iu (format %ls):\n",
                         image.GetMetadata().width, image.GetMetadata().height, GetName( image.GetMetadata().format ) );
-                printe( "\n...(check) %Iu x %Iu (format %S):\n%S\n",
+                printe( "\n...(check) %Iu x %Iu (format %ls):\n%ls\n",
                         srcimage.GetMetadata().width, srcimage.GetMetadata().height, GetName( g_TestMedia[index].tformat ), szPath );
             }
             else

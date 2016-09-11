@@ -101,12 +101,12 @@ bool Test01()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting data from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
             success = false;
-            printe( "Metadata error in:\n%S\n", szPath );
+            printe( "Metadata error in:\n%ls\n", szPath );
             printmeta( &metadata );
             printmetachk( check );
         }
@@ -115,7 +115,7 @@ bool Test01()
             if ( !IsSupportedTexture( device.Get(), metadata ) )
             {
                 success = false;
-                printe( "Failed testing data from (HRESULT %08X):\n%S\n", hr, szPath );
+                printe( "Failed testing data from (HRESULT %08X):\n%ls\n", hr, szPath );
             }
             else
                 ++npass;
@@ -180,12 +180,12 @@ bool Test02()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting data from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
             success = false;
-            printe( "Metadata error in:\n%S\n", szPath );
+            printe( "Metadata error in:\n%ls\n", szPath );
             printmeta( &metadata );
             printmetachk( check );
         }
@@ -197,7 +197,7 @@ bool Test02()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed creating texture from (HRESULT %08X):\n%S\n", hr, szPath );
+                printe( "Failed creating texture from (HRESULT %08X):\n%ls\n", hr, szPath );
             }
             else
             {
@@ -208,7 +208,7 @@ bool Test02()
                 if ( FAILED(hr) )
                 {
                     success = false;
-                    printe( "Failed creating texture ex from (HRESULT %08X):\n%S\n", hr, szPath );
+                    printe( "Failed creating texture ex from (HRESULT %08X):\n%ls\n", hr, szPath );
                 }
                 else
                 {
@@ -278,12 +278,12 @@ bool Test03()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting data from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
             success = false;
-            printe( "Metadata error in:\n%S\n", szPath );
+            printe( "Metadata error in:\n%ls\n", szPath );
             printmeta( &metadata );
             printmetachk( check );
         }
@@ -295,11 +295,11 @@ bool Test03()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed creating SRV from (HRESULT %08X):\n%S\n", hr, szPath );
+                printe( "Failed creating SRV from (HRESULT %08X):\n%ls\n", hr, szPath );
             }
             else
             {
-                print( "Viewing %S\n", szPath );
+                print( "Viewing %ls\n", szPath );
 
                 RenderTest( metadata, pSRV );
 
@@ -310,7 +310,7 @@ bool Test03()
                 if ( FAILED(hr) )
                 {
                     success = false;
-                    printe( "Failed creating SRV ex from (HRESULT %08X):\n%S\n", hr, szPath );
+                    printe( "Failed creating SRV ex from (HRESULT %08X):\n%ls\n", hr, szPath );
                 }
                 else
                 {
@@ -397,12 +397,12 @@ bool Test04()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting data from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
             success = false;
-            printe( "Metadata error in:\n%S\n", szPath );
+            printe( "Metadata error in:\n%ls\n", szPath );
             printmeta( &metadata );
             printmetachk( check );
         }
@@ -414,7 +414,7 @@ bool Test04()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed creating texture from (HRESULT %08X):\n%S\n", hr, szPath );
+                printe( "Failed creating texture from (HRESULT %08X):\n%ls\n", hr, szPath );
             }
             else
             {
@@ -424,7 +424,7 @@ bool Test04()
                 if ( FAILED(hr) )
                 {
                     success = false;
-                    printe( "Failed capturing texture from (HRESULT %08X):\n%S\n", hr, szPath );
+                    printe( "Failed capturing texture from (HRESULT %08X):\n%ls\n", hr, szPath );
                 }
                 else
                 {
@@ -433,14 +433,14 @@ bool Test04()
                     if ( memcmp( &mdata2, check, sizeof(TexMetadata) ) != 0 )
                     {
                         success = false;
-                        printe( "Metadata error in:\n%S\n", szDestPath );
+                        printe( "Metadata error in:\n%ls\n", szDestPath );
                         printmeta( &mdata2 );
                         printmetachk( check );
                     }
                     else if ( image.GetImageCount() != image2.GetImageCount() )
                     {
                         success = false;
-                        printe( "Image count in captured texture (%Iu) doesn't match source (%Iu) in:\n%S\n", image2.GetImageCount(), image.GetImageCount(), szDestPath );
+                        printe( "Image count in captured texture (%Iu) doesn't match source (%Iu) in:\n%ls\n", image2.GetImageCount(), image.GetImageCount(), szDestPath );
                     }
                     else
                     {
@@ -451,7 +451,7 @@ bool Test04()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed writing DDS to (HRESULT %08X):\n%S\n", hr, szDestPath );
+                            printe( "Failed writing DDS to (HRESULT %08X):\n%ls\n", hr, szDestPath );
                         }
 
                         float mse, mseV[4];
@@ -460,13 +460,13 @@ bool Test04()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed comparing captured image (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed comparing captured image (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( fabs( mse ) > 0.000001f )
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed comparing captured image MSE = %f (%f %f %f %f)... 0.f:\n%S\n",
+                            printe( "Failed comparing captured image MSE = %f (%f %f %f %f)... 0.f:\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], szPath );
                         }
 

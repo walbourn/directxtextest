@@ -179,12 +179,12 @@ bool Test01()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting data from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
             success = false;
-            printe( "Metadata error in:\n%S\n", szPath );
+            printe( "Metadata error in:\n%ls\n", szPath );
             printmeta( &metadata );
             printmetachk( check );
         }
@@ -231,7 +231,7 @@ bool Test02()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting raw file data from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed getting raw file data from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else
         {
@@ -243,12 +243,12 @@ bool Test02()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed loading tga from memory (HRESULT %08X):\n%S\n", hr, szPath );
+                printe( "Failed loading tga from memory (HRESULT %08X):\n%ls\n", hr, szPath );
             }
             else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
             {
                 success = false;
-                printe( "Metadata error in:\n%S\n", szPath );
+                printe( "Metadata error in:\n%ls\n", szPath );
                 printmeta( &metadata );
                 printmetachk( check );
             }
@@ -259,12 +259,12 @@ bool Test02()
                 if ( FAILED(hr) )
                 {
                     success = false;
-                    printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
+                    printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
                 }
                 else if ( memcmp( digest, g_TestMedia[index].md5, 16 ) != 0 )
                 {
                     success = false;
-                    printe( "Failed comparing MD5 checksum:\n%S\n", szPath );
+                    printe( "Failed comparing MD5 checksum:\n%ls\n", szPath );
                     printdigest( "computed", digest );
                     printdigest( "expected", g_TestMedia[index].md5 );
                 }
@@ -318,12 +318,12 @@ bool Test03()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed loading tga from memory (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed loading tga from memory (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
             success = false;
-            printe( "Metadata error in:\n%S\n", szPath );
+            printe( "Metadata error in:\n%ls\n", szPath );
             printmeta( &metadata );
             printmetachk( check );
         }
@@ -334,12 +334,12 @@ bool Test03()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
+                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
             }
             else if ( memcmp( digest, g_TestMedia[index].md5, 16 ) != 0 )
             {
                 success = false;
-                printe( "Failed comparing MD5 checksum:\n%S\n", szPath );
+                printe( "Failed comparing MD5 checksum:\n%ls\n", szPath );
                 printdigest( "computed", digest );
                 printdigest( "expected", g_TestMedia[index].md5 );
             }
@@ -389,14 +389,14 @@ bool Test04()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed loading DDS from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed loading DDS from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else
         {
             if ( metadata.format != g_SaveMedia[index].src_format )
             {
                 success = false;
-                printe( "Unexpected DDS pixel format (found %d, expected %d):\n%S\n", metadata.format, g_SaveMedia[index].src_format, szPath );
+                printe( "Unexpected DDS pixel format (found %d, expected %d):\n%ls\n", metadata.format, g_SaveMedia[index].src_format, szPath );
             }
 
             uint8_t digest[16];
@@ -404,7 +404,7 @@ bool Test04()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
+                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
             }
             else
             {
@@ -413,7 +413,7 @@ bool Test04()
                 if ( FAILED(hr) )
                 {
                     success = false;
-                    printe( "Failed writing tga to memory (HRESULT %08X):\n%S\n", hr, szPath );
+                    printe( "Failed writing tga to memory (HRESULT %08X):\n%ls\n", hr, szPath );
                 }
                 else
                 {
@@ -424,7 +424,7 @@ bool Test04()
                     if ( FAILED(hr) )
                     {
                         success = false;
-                        printe( "Failed reading back written tga to memory (HRESULT %08X):\n%S\n", hr, szPath );
+                        printe( "Failed reading back written tga to memory (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( metadata.width != metadata2.width
                               || metadata.height != metadata2.height
@@ -434,7 +434,7 @@ bool Test04()
                               || g_SaveMedia[index].sav_format != metadata2.format )
                     { // Formats can vary for readback, and miplevel is going to be 1 for TGA images
                         success = false;
-                        printe( "Metadata error in tga memory readback:\n%S\n", szPath );
+                        printe( "Metadata error in tga memory readback:\n%ls\n", szPath );
                         printmeta( &metadata2 );
                         printmetachk( &metadata );
                     }
@@ -455,12 +455,12 @@ bool Test04()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( memcmp( expected, digest2, 16 ) != 0 )
                         {
                             success = false;
-                            printe( "MD5 checksum of reloaded data doesn't match original:\n%S\n", szPath );
+                            printe( "MD5 checksum of reloaded data doesn't match original:\n%ls\n", szPath );
                         }
                         else
                             ++npass;
@@ -527,14 +527,14 @@ bool Test05()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed loading DDS from (HRESULT %08X):\n%S\n", hr, szPath );
+            printe( "Failed loading DDS from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else
         {
             if ( metadata.format != g_SaveMedia[index].src_format )
             {
                 success = false;
-                printe( "Unexpected DDS pixel format (found %d, expected %d):\n%S\n", metadata.format, g_SaveMedia[index].src_format, szPath );
+                printe( "Unexpected DDS pixel format (found %d, expected %d):\n%ls\n", metadata.format, g_SaveMedia[index].src_format, szPath );
             }
 
             uint8_t digest[16];
@@ -542,7 +542,7 @@ bool Test05()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%S\n", hr, szPath );
+                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
             }
             else
             {
@@ -550,7 +550,7 @@ bool Test05()
                 if ( FAILED(hr) )
                 {
                     success = false;
-                    printe( "Failed writing tga to (HRESULT %08X):\n%S\n", hr, szDestPath );
+                    printe( "Failed writing tga to (HRESULT %08X):\n%ls\n", hr, szDestPath );
                 }
                 else
                 {
@@ -560,7 +560,7 @@ bool Test05()
                     if ( FAILED(hr) )
                     {
                         success = false;
-                        printe( "Failed reading back written tga to (HRESULT %08X):\n%S\n", hr, szDestPath );
+                        printe( "Failed reading back written tga to (HRESULT %08X):\n%ls\n", hr, szDestPath );
                     }
                     else if ( metadata.width != metadata2.width
                               || metadata.height != metadata2.height
@@ -570,7 +570,7 @@ bool Test05()
                               || g_SaveMedia[index].sav_format != metadata2.format  )
                     {   // Formats can vary for readback, and miplevel is going to be 1 for TGA images
                         success = false;
-                        printe( "Metadata error in tga readback:\n%S\n", szDestPath );
+                        printe( "Metadata error in tga readback:\n%ls\n", szDestPath );
                         printmeta( &metadata2 );
                         printmetachk( &metadata );
                     }
@@ -589,12 +589,12 @@ bool Test05()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%S\n", hr, szPath );
+                            printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( memcmp( expected, digest2, 16 ) != 0 )
                         {
                             success = false;
-                            printe( "MD5 checksum of reloaded data doesn't match original:\n%S\n", szPath );
+                            printe( "MD5 checksum of reloaded data doesn't match original:\n%ls\n", szPath );
                         }
                         else
                             ++npass;
@@ -676,7 +676,7 @@ bool Test06()
                 if (FAILED(hr))
                 {
                     success = false;
-                    printe("Failed getting raw file data from (HRESULT %08X):\n%S\n", hr, szPath);
+                    printe("Failed getting raw file data from (HRESULT %08X):\n%ls\n", hr, szPath);
                 }
                 else
                 {
@@ -689,13 +689,13 @@ bool Test06()
                         if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
                         {
                             success = false;
-                            printe("ERROR: frommemory expected success! (%08X)\n%S\n", hr, szPath);
+                            printe("ERROR: frommemory expected success! (%08X)\n%ls\n", hr, szPath);
                         }
                     }
                     else if (SUCCEEDED(hr) && !istga)
                     {
                         success = false;
-                        printe("ERROR: frommemory expected failure\n%S\n", szPath);
+                        printe("ERROR: frommemory expected failure\n%ls\n", szPath);
                     }
                 }
             }
@@ -711,13 +711,13 @@ bool Test06()
                     if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
                     {
                         success = false;
-                        printe("ERROR: fromfile expected success ! (%08X)\n%S\n", hr, szPath);
+                        printe("ERROR: fromfile expected success ! (%08X)\n%ls\n", hr, szPath);
                     }
                 }
                 else if (SUCCEEDED(hr) && !istga)
                 {
                     success = false;
-                    printe("ERROR: fromfile expected failure\n%S\n", szPath);
+                    printe("ERROR: fromfile expected failure\n%ls\n", szPath);
                 }
             }
         }
