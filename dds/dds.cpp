@@ -20,6 +20,7 @@ enum
     FLAGS_LUMINANCE     = 0x10,
     FLAGS_YUV           = 0x20,
     FLAGS_XBOX          = 0x40,
+    FLAGS_BAD_TAILS     = 0x80,
     FLAGS_ALTMD5_MASK   = 0xf00,
 };
 
@@ -112,8 +113,10 @@ static const TestMedia g_TestMedia[] =
 { ALTMD5(5),{ 512, 256, 1, 1, 10, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth_A2R10G10B10.dds",{ 0x96,0x3d,0x00,0x07,0x52,0x40,0xe4,0x9b,0xf0,0xc8,0x75,0x01,0x2e,0xe5,0x8d,0x30 } },
 { FLAGS_NONE,{ 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"donuts1.dds",{ 0xc3,0x90,0xf6,0xe8,0xaf,0x5d,0xde,0xce,0xca,0x5e,0x79,0xfc,0x80,0x76,0x52,0xbb } },
 { FLAGS_NONE,{ 512, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"envmap.dds",{ 0x7f,0x7e,0x96,0x96,0x78,0xb3,0x00,0x56,0x47,0xb3,0xee,0x5e,0x73,0xc0,0xb3,0x52 } },
+{ FLAGS_BAD_TAILS,{ 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"texture0.dds",{ 0x91,0xcf,0x59,0x2a,0x7a,0x22,0xae,0x3e,0x0f,0x71,0x5f,0x17,0xe6,0x16,0xd0,0x4c } },
 { FLAGS_NONE,{ 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"texture1.dds",{ 0xf8,0x8b,0x21,0xd6,0x7f,0x7f,0xd4,0x3f,0xfe,0xa2,0xff,0x0b,0xc4,0xfb,0x27,0x26 } },
 { FLAGS_NONE,{ 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_BC2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"texture2.dds",{ 0x50,0xd0,0x48,0x01,0xdc,0x1f,0x56,0x99,0xa1,0x44,0x9a,0xd2,0x93,0x1a,0xa6,0x2b } },
+{ FLAGS_BAD_TAILS,{ 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_BC3_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"texture3.dds",{ 0x9f,0x4a,0x94,0xbf,0x12,0xfe,0xcc,0xcd,0x3f,0x06,0x33,0xde,0x5a,0x70,0x95,0x1c } },
 { FLAGS_NONE,{ 256, 256, 1, 6, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"texarray0.dds",{ 0xb8,0x97,0xb3,0xa4,0x0d,0x40,0xb1,0x9b,0x48,0xd0,0x9a,0x1c,0xeb,0x22,0x5a,0x91 } },
 { FLAGS_NONE,{ 512, 256, 1, 2, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"texarray1.dds",{ 0x3c,0xba,0xcf,0xc9,0xee,0x16,0xad,0x8b,0x72,0xf7,0xad,0xf4,0xc6,0x95,0xea,0x91 } },
 { FLAGS_NONE,{ 7, 7, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"tex7x7.dds",{ 0x79,0x27,0xd2,0xa9,0x1c,0x80,0x94,0x99,0xa2,0x71,0x9b,0xdd,0xd3,0xa2,0x54,0x53 } },
@@ -908,6 +911,10 @@ bool Test02()
             {
                 flags |= DDS_FLAGS_LEGACY_DWORD;
             }
+            if (g_TestMedia[index].options & FLAGS_BAD_TAILS)
+            {
+                flags |= DDS_FLAGS_BAD_DXTN_TAILS;
+            }
 
             TexMetadata metadata;
             ScratchImage image;
@@ -1169,6 +1176,10 @@ bool Test03()
         if ( g_TestMedia[index].options & FLAGS_DWORDA )
         {
             flags |= DDS_FLAGS_LEGACY_DWORD;
+        }
+        if (g_TestMedia[index].options & FLAGS_BAD_TAILS)
+        {
+            flags |= DDS_FLAGS_BAD_DXTN_TAILS;
         }
 
         TexMetadata metadata;
@@ -2216,6 +2227,10 @@ bool Test06()
                     TexMetadata metadata;
                     ScratchImage image;
                     hr = LoadFromDDSMemory(blob.GetBufferPointer(), blob.GetBufferSize(), DDS_FLAGS_NONE, &metadata, image);
+                    if (hr == HRESULT_FROM_WIN32( ERROR_HANDLE_EOF) )
+                    {
+                        hr = LoadFromDDSMemory(blob.GetBufferPointer(), blob.GetBufferSize(), DDS_FLAGS_BAD_DXTN_TAILS, &metadata, image);
+                    }
 
                     if (FAILED(hr) && isdds)
                     {
@@ -2238,6 +2253,10 @@ bool Test06()
                 TexMetadata metadata;
                 ScratchImage image;
                 HRESULT hr = LoadFromDDSFile(szPath, DDS_FLAGS_NONE, &metadata, image);
+                if (hr == HRESULT_FROM_WIN32( ERROR_HANDLE_EOF ))
+                {
+                    hr = LoadFromDDSFile(szPath, DDS_FLAGS_BAD_DXTN_TAILS, &metadata, image);
+                }
 
                 if (FAILED(hr) && isdds)
                 {
