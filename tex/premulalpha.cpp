@@ -22,6 +22,11 @@ inline bool IsEqual( float f1, float f2 )
     return ( fabs(f1 - f2) < 0.000001 ) != 0;
 }
 
+inline bool IsErrorTooLarge(float f, float threshold)
+{
+    return (fabs(f) > threshold) != 0;
+}
+
 //-------------------------------------------------------------------------------------
 // PremultiplyAlpha
 bool Test13()
@@ -132,10 +137,44 @@ bool Test13()
                 }
             }
 
-            wchar_t szDestPath[MAX_PATH];
+            wchar_t szDestPath[MAX_PATH] = {};
             _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, fname, L".dds" );
 
             SaveScratchImage( szDestPath, DDS_FLAGS_NONE, pmAlpha );
+
+            // Reverse
+            ScratchImage alpha;
+            hr = PremultiplyAlpha(*pmAlpha.GetImage(0, 0, 0), TEX_PMALPHA_DEFAULT, alpha, true);
+            if (FAILED(hr))
+            {
+                success = false;
+                printe("Failed computing demul alpha [single] (HRESULT %08X)\n", hr);
+            }
+            else
+            {
+                float mse, mseV[4];
+                hr = ComputeMSE(*imagealpha.GetImage(0, 0, 0), *alpha.GetImage(0, 0, 0), mse, mseV);
+                if (FAILED(hr))
+                {
+                    success = false;
+                    printe("Failed comparing demul alpha [single] of image data (HRESULT %08X)\n", hr);
+                }
+
+                if (IsErrorTooLarge(mse, 0.0001f))
+                {
+                    success = false;
+                    printe("Failed comparing demul alpha [single] of image data (%f)\n", mse);
+                }
+
+                wchar_t fname2[_MAX_FNAME];
+                wcscpy_s(fname2, fname);
+                wcscat_s(fname2, L"_reverse");
+
+                wchar_t szDestPath2[MAX_PATH] = {};
+                _wmakepath_s(szDestPath2, MAX_PATH, NULL, tempDir, fname2, L".dds");
+
+                SaveScratchImage(szDestPath2, DDS_FLAGS_NONE, alpha);
+            }
         }
 
         // TEX_PMALPHA_SRGB
@@ -190,6 +229,40 @@ bool Test13()
             _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
 
             SaveScratchImage( szDestPath, DDS_FLAGS_NONE, pmAlphaSRGB );
+
+            // Reverse
+            ScratchImage alphaSRGB;
+            hr = PremultiplyAlpha(*pmAlphaSRGB.GetImage(0, 0, 0), TEX_PMALPHA_SRGB, alphaSRGB, true);
+            if (FAILED(hr))
+            {
+                success = false;
+                printe("Failed computing demul alpha [single sRGB] (HRESULT %08X)\n", hr);
+            }
+            else
+            {
+                float mse, mseV[4];
+                hr = ComputeMSE(*imagealpha.GetImage(0, 0, 0), *alphaSRGB.GetImage(0, 0, 0), mse, mseV);
+                if (FAILED(hr))
+                {
+                    success = false;
+                    printe("Failed comparing demul alpha [single sRGB] of image data (HRESULT %08X)\n", hr);
+                }
+
+                if (IsErrorTooLarge(mse, 0.0001f))
+                {
+                    success = false;
+                    printe("Failed comparing demul alpha [single sRGB] of image data (%f)\n", mse);
+                }
+
+                wchar_t fname2[_MAX_FNAME];
+                wcscpy_s(fname2, fname);
+                wcscat_s(fname2, L"_sRGB_reverse");
+
+                wchar_t szDestPath2[MAX_PATH] = {};
+                _wmakepath_s(szDestPath2, MAX_PATH, NULL, tempDir, fname2, L".dds");
+
+                SaveScratchImage(szDestPath2, DDS_FLAGS_NONE, alphaSRGB);
+            }
         }
 
         // TEX_PMALPHA_IGNORE_SRGB
@@ -219,6 +292,31 @@ bool Test13()
             {
                 success = false;
                 printe( "Premultiply image [single ignore sRGB] is *not* identical to non-sRGB!\n" );
+            }
+
+            // Reverse
+            ScratchImage alphaNoSRGB;
+            hr = PremultiplyAlpha(*pmAlphaNoSRGB.GetImage(0, 0, 0), TEX_PMALPHA_IGNORE_SRGB | TEX_PMALPHA_SRGB, alphaNoSRGB, true);
+            if (FAILED(hr))
+            {
+                success = false;
+                printe("Failed computing demul alpha [single sRGB] (HRESULT %08X)\n", hr);
+            }
+            else
+            {
+                float mse, mseV[4];
+                hr = ComputeMSE(*imagealpha.GetImage(0, 0, 0), *alphaNoSRGB.GetImage(0, 0, 0), mse, mseV);
+                if (FAILED(hr))
+                {
+                    success = false;
+                    printe("Failed comparing demul alpha [single sRGB] of image data (HRESULT %08X)\n", hr);
+                }
+
+                if (IsErrorTooLarge(mse, 0.0001f))
+                {
+                    success = false;
+                    printe("Failed comparing demul alpha [single sRGB] of image data (%f)\n", mse);
+                }
             }
         }
     }
@@ -250,45 +348,85 @@ bool Test13()
             {
                 // Verfy the result
                 uint8_t digest[16];
-                hr = MD5Checksum( pmAlpha, digest );
-                if ( FAILED(hr) )
+                hr = MD5Checksum(pmAlpha, digest);
+                if (FAILED(hr))
                 {
                     success = false;
-                    printe( "Failed computing premultiply alpha [complex] of image data (HRESULT %08X)\n", hr );
+                    printe("Failed computing premultiply alpha [complex] of image data (HRESULT %08X)\n", hr);
                 }
-                else if ( memcmp( digest, srcdigestall, 16 ) == 0 )
+                else if (memcmp(digest, srcdigestall, 16) == 0)
                 {
                     success = false;
-                    printe( "Premultiply image [complex] is identical to original!\n" );
+                    printe("Premultiply image [complex] is identical to original!\n");
                 }
                 else
                 {
                     static float result[9] = { 0.005031f, 0.005441f, 0.005821f, 0.006450f, 0.007194f, 0.008633f, 0.012355f, 0.018454f, 0.020023f };
-                    for( size_t j = 0; j < metadata.mipLevels; ++j )
+                    for (size_t j = 0; j < metadata.mipLevels; ++j)
                     {
                         float mse, mseV[4];
-                        hr = ComputeMSE( *imagealpha.GetImage(j,0,0), *pmAlpha.GetImage(j,0,0), mse, mseV );
-                        if ( FAILED(hr) )
+                        hr = ComputeMSE(*imagealpha.GetImage(j, 0, 0), *pmAlpha.GetImage(j, 0, 0), mse, mseV);
+                        if (FAILED(hr))
                         {
                             success = false;
-                            printe( "Failed comparing premultiply alpha [complex] of image data (HRESULT %08X, %Iu)\n", hr, j );
+                            printe("Failed comparing premultiply alpha [complex] of image data (HRESULT %08X, %Iu)\n", hr, j);
                         }
-                        else if ( !IsEqual( mse, result[j] ) )
+                        else if (!IsEqual(mse, result[j]))
                         {
                             success = false;
-                            printe( "Failed comparing premultiply alpha [complex] of image data (%f, %Iu)\n", mse, j );
+                            printe("Failed comparing premultiply alpha [complex] of image data (%f, %Iu)\n", mse, j);
                         }
                     }
                 }
 
                 wchar_t tname[MAX_PATH] = { 0 };
-                wcscpy_s( tname, fname );
-                wcscat_s( tname, L"_c" );
+                wcscpy_s(tname, fname);
+                wcscat_s(tname, L"_c");
 
                 wchar_t szDestPath[MAX_PATH];
-                _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+                _wmakepath_s(szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds");
 
-                SaveScratchImage( szDestPath, DDS_FLAGS_NONE, pmAlpha );
+                SaveScratchImage(szDestPath, DDS_FLAGS_NONE, pmAlpha);
+
+                // Reverse
+                ScratchImage alpha;
+                hr = PremultiplyAlpha(pmAlpha.GetImages(), pmAlpha.GetImageCount(), pmAlpha.GetMetadata(), TEX_PMALPHA_DEFAULT, alpha, true);
+                if (FAILED(hr))
+                {
+                    success = false;
+                    printe("Failed computing delmul alpha [complex] (HRESULT %08X)\n", hr);
+                }
+                else
+                {
+                    const TexMetadata& metadata2 = alpha.GetMetadata();
+
+                    TexMetadata chk = metadata;
+                    chk.SetAlphaMode(TEX_ALPHA_MODE_STRAIGHT);
+
+                    if (memcmp(&metadata2, &chk, sizeof(TexMetadata)) != 0)
+                    {
+                        success = false;
+                        printe("Metadata error in delmul alpha [complex] \n");
+                        printmeta(&metadata2);
+                        printmetachk(&chk);
+                    }
+                    else
+                    {
+                        float mse, mseV[4];
+                        hr = ComputeMSE(*imagealpha.GetImage(0, 0, 0), *alpha.GetImage(0, 0, 0), mse, mseV);
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            printe("Failed comparing demul alpha [complex] of image data (HRESULT %08X)\n", hr);
+                        }
+
+                        if (IsErrorTooLarge(mse, 0.0001f))
+                        {
+                            success = false;
+                            printe("Failed comparing demul alpha [complex] of image data (%f)\n", mse);
+                        }
+                    }
+                }
             }
         }
     }
