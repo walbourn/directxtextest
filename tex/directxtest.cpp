@@ -37,6 +37,7 @@ extern bool Test13();
 extern bool Test14();
 extern bool Test15();
 extern bool Test16();
+extern bool Test17();
 
 TestInfo g_Tests[] =
 {
@@ -45,6 +46,7 @@ TestInfo g_Tests[] =
     { "Make*", Test12 },
     { "ComputeMSE", Test10 },
     { "Evaluate", Test16 },
+    { "Transform", Test17 },
     { "IsAlphaAllOpaque", Test14 },
     { "FlipRotate", Test04 },
     { "Convert (internalA)", Test05 },
