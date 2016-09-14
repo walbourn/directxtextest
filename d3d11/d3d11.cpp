@@ -408,75 +408,150 @@ bool Test04()
         }
         else
         {
-            ID3D11Resource* pResource = NULL;
+            bool pass = true;
 
-            hr = CreateTexture( device.Get(), image.GetImages(), image.GetImageCount(), metadata, &pResource );
-            if ( FAILED(hr) )
             {
-                success = false;
-                printe( "Failed creating texture from (HRESULT %08X):\n%ls\n", hr, szPath );
-            }
-            else
-            {
-                ScratchImage image2;
-                hr = CaptureTexture( device.Get(), context.Get(), pResource, image2 );
-
-                if ( FAILED(hr) )
+                ComPtr<ID3D11Resource> pResource;
+                hr = CreateTexture(device.Get(), image.GetImages(), image.GetImageCount(), metadata, pResource.GetAddressOf());
+                if (FAILED(hr))
                 {
                     success = false;
-                    printe( "Failed capturing texture from (HRESULT %08X):\n%ls\n", hr, szPath );
+                    printe("Failed creating texture from (HRESULT %08X):\n%ls\n", hr, szPath);
                 }
                 else
                 {
-                    const TexMetadata& mdata2 = image2.GetMetadata();
+                    ScratchImage image2;
+                    hr = CaptureTexture(device.Get(), context.Get(), pResource.Get(), image2);
 
-                    if ( memcmp( &mdata2, check, sizeof(TexMetadata) ) != 0 )
+                    if (FAILED(hr))
                     {
                         success = false;
-                        printe( "Metadata error in:\n%ls\n", szDestPath );
-                        printmeta( &mdata2 );
-                        printmetachk( check );
-                    }
-                    else if ( image.GetImageCount() != image2.GetImageCount() )
-                    {
-                        success = false;
-                        printe( "Image count in captured texture (%Iu) doesn't match source (%Iu) in:\n%ls\n", image2.GetImageCount(), image.GetImageCount(), szDestPath );
+                        printe("Failed capturing texture from (HRESULT %08X):\n%ls\n", hr, szPath);
                     }
                     else
                     {
-                        bool pass = true;
+                        const TexMetadata& mdata2 = image2.GetMetadata();
 
-                        hr = SaveToDDSFile( image2.GetImages(), image2.GetImageCount(), image2.GetMetadata(), DDS_FLAGS_NONE, szDestPath );
-                        if ( FAILED(hr) )
+                        if (memcmp(&mdata2, check, sizeof(TexMetadata)) != 0)
                         {
                             success = false;
-                            pass = false;
-                            printe( "Failed writing DDS to (HRESULT %08X):\n%ls\n", hr, szDestPath );
+                            printe("Metadata error in:\n%ls\n", szDestPath);
+                            printmeta(&mdata2);
+                            printmetachk(check);
                         }
-
-                        float mse, mseV[4];
-                        hr = ComputeMSE( *image.GetImage(0,0,0), *image2.GetImage(0,0,0), mse, mseV );
-                        if ( FAILED(hr) )
+                        else if (image.GetImageCount() != image2.GetImageCount())
                         {
                             success = false;
-                            pass = false;
-                            printe( "Failed comparing captured image (HRESULT %08X):\n%ls\n", hr, szPath );
+                            printe("Image count in captured texture (%Iu) doesn't match source (%Iu) in:\n%ls\n", image2.GetImageCount(), image.GetImageCount(), szDestPath);
                         }
-                        else if ( fabs( mse ) > 0.000001f )
+                        else
                         {
-                            success = false;
-                            pass = false;
-                            printe( "Failed comparing captured image MSE = %f (%f %f %f %f)... 0.f:\n%ls\n",
-                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], szPath );
-                        }
+                            hr = SaveToDDSFile(image2.GetImages(), image2.GetImageCount(), image2.GetMetadata(), DDS_FLAGS_NONE, szDestPath);
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed writing DDS to (HRESULT %08X):\n%ls\n", hr, szDestPath);
+                            }
 
-                        if ( pass )
-                            ++npass;
+                            float mse, mseV[4];
+                            hr = ComputeMSE(*image.GetImage(0, 0, 0), *image2.GetImage(0, 0, 0), mse, mseV);
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed comparing captured image (HRESULT %08X):\n%ls\n", hr, szPath);
+                            }
+                            else if (fabs(mse) > 0.000001f)
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed comparing captured image MSE = %f (%f %f %f %f)... 0.f:\n%ls\n",
+                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], szPath);
+                            }
+                        }
                     }
                 }
-
-                pResource->Release();
             }
+
+            // Staging resource tests
+            {
+                ComPtr<ID3D11Resource> pStaging;
+                hr = CreateTextureEx(device.Get(), image.GetImages(), image.GetImageCount(), metadata,
+                    D3D11_USAGE_STAGING, 0, D3D11_CPU_ACCESS_READ, 0, false, pStaging.GetAddressOf());
+                if (FAILED(hr))
+                {
+                    success = false;
+                    pass = false;
+                    printe("Failed creating test staging texture (HRESULT %08X):\n%ls\n", hr, szPath);
+                }
+                else
+                {
+                    ScratchImage image2;
+                    hr = CaptureTexture(device.Get(), context.Get(), pStaging.Get(), image2);
+
+                    if (FAILED(hr))
+                    {
+                        success = false;
+                        printe("Failed capturing texture from staging texture (HRESULT %08X):\n%ls\n", hr, szPath);
+                    }
+                    else
+                    {
+                        const TexMetadata& mdata2 = image2.GetMetadata();
+
+                        if (memcmp(&mdata2, check, sizeof(TexMetadata)) != 0)
+                        {
+                            success = false;
+                            printe("Metadata error in:\n%ls\n", szDestPath);
+                            printmeta(&mdata2);
+                            printmetachk(check);
+                        }
+                        else if (image.GetImageCount() != image2.GetImageCount())
+                        {
+                            success = false;
+                            printe("Image count in captured texture staging texture (%Iu) doesn't match source (%Iu) in:\n%ls\n", image2.GetImageCount(), image.GetImageCount(), szDestPath);
+                        }
+                        else
+                        {
+                            wchar_t tname[MAX_PATH] = {};
+                            wcscpy_s(tname, fname);
+                            wcscat_s(tname, L"_staging");
+
+                            wchar_t szDestPath2[MAX_PATH];
+                            _wmakepath_s(szDestPath2, MAX_PATH, NULL, tempDir, tname, L".dds");
+
+                            hr = SaveToDDSFile(image2.GetImages(), image2.GetImageCount(), image2.GetMetadata(), DDS_FLAGS_NONE, szDestPath2);
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed writing DDS to (HRESULT %08X):\n%ls\n", hr, szDestPath2);
+                            }
+
+                            float mse, mseV[4];
+                            hr = ComputeMSE(*image.GetImage(0, 0, 0), *image2.GetImage(0, 0, 0), mse, mseV);
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed comparing captured image (HRESULT %08X):\n%ls\n", hr, szPath);
+                            }
+                            else if (fabs(mse) > 0.000001f)
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed comparing captured image MSE = %f (%f %f %f %f)... 0.f:\n%ls\n",
+                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], szPath);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // CaptureTexture of an MSAA resource is tested elsewhere
+
+            if (pass)
+                ++npass;
         }
 
         ++ncount;
