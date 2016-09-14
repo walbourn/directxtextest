@@ -635,7 +635,7 @@ bool Test02()
 #ifdef _OPENMP
                                                                    | TEX_COMPRESS_PARALLEL
 #endif
-                                                                   , 0.5f, image );
+                                                                   , TEX_THRESHOLD_DEFAULT, image );
                 if ( FAILED(hr) )
                 {
                     success = false;
@@ -695,7 +695,7 @@ bool Test02()
                         // Single-thread
                         {
                             ScratchImage image2;
-                            hr = Compress( *srcimage.GetImage(0,0,0), cformat, TEX_COMPRESS_DEFAULT, 0.5f, image2 );
+                            hr = Compress( *srcimage.GetImage(0,0,0), cformat, TEX_COMPRESS_DEFAULT, TEX_THRESHOLD_DEFAULT, image2 );
                             if ( FAILED(hr) )
                             {
                                 success = false;
@@ -740,7 +740,7 @@ bool Test02()
                              || cformat == DXGI_FORMAT_BC3_UNORM || cformat == DXGI_FORMAT_BC3_UNORM_SRGB )
                         {
                             ScratchImage image2;
-                            hr = Compress( *srcimage.GetImage(0,0,0), cformat, TEX_COMPRESS_DITHER, 0.5f, image2 );
+                            hr = Compress( *srcimage.GetImage(0,0,0), cformat, TEX_COMPRESS_DITHER, TEX_THRESHOLD_DEFAULT, image2 );
                             if ( FAILED(hr) )
                             {
                                 success = false;
@@ -784,7 +784,7 @@ bool Test02()
                              || cformat == DXGI_FORMAT_BC3_UNORM || cformat == DXGI_FORMAT_BC3_UNORM_SRGB )
                         {
                             ScratchImage image2;
-                            hr = Compress( *srcimage.GetImage(0,0,0), cformat, TEX_COMPRESS_UNIFORM, 0.5f, image2 );
+                            hr = Compress( *srcimage.GetImage(0,0,0), cformat, TEX_COMPRESS_UNIFORM, TEX_THRESHOLD_DEFAULT, image2 );
                             if ( FAILED(hr) )
                             {
                                 success = false;
@@ -826,7 +826,7 @@ bool Test02()
                         if ( cformat == DXGI_FORMAT_BC7_UNORM || cformat == DXGI_FORMAT_BC7_UNORM_SRGB )
                         {
                             ScratchImage image2;
-                            hr = Compress( *srcimage.GetImage(0,0,0), cformat, TEX_COMPRESS_BC7_USE_3SUBSETS, 0.5f, image2 );
+                            hr = Compress( *srcimage.GetImage(0,0,0), cformat, TEX_COMPRESS_BC7_USE_3SUBSETS, TEX_THRESHOLD_DEFAULT, image2 );
                             if ( FAILED(hr) )
                             {
                                 success = false;
@@ -884,7 +884,7 @@ bool Test02()
                             else
                             {
                                 ScratchImage image2;
-                                hr = Compress( *imageWide.GetImage(0,0,0), cformat, TEX_COMPRESS_DEFAULT, 0.5f, image2 );
+                                hr = Compress( *imageWide.GetImage(0,0,0), cformat, TEX_COMPRESS_DEFAULT, TEX_THRESHOLD_DEFAULT, image2 );
                                 if ( FAILED(hr) )
                                 {
                                     success = false;
@@ -942,7 +942,7 @@ bool Test02()
 #ifdef _OPENMP
                                        | TEX_COMPRESS_PARALLEL
 #endif
-                                       , 0.5f, image2 );
+                                       , TEX_THRESHOLD_DEFAULT, image2 );
                         if ( FAILED(hr) )
                         {
                             success = false;

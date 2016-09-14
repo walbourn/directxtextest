@@ -131,7 +131,7 @@ bool Test15()
                     wcscat_s( tname, L"_DXGI_FORMAT_YUY2" );
 
                     ScratchImage yuy2;
-                    hr = Convert( *image.GetImage(0,0,0), DXGI_FORMAT_YUY2, TEX_FILTER_DEFAULT, 0.f, yuy2 );
+                    hr = Convert( *image.GetImage(0,0,0), DXGI_FORMAT_YUY2, TEX_FILTER_DEFAULT, TEX_THRESHOLD_DEFAULT, yuy2 );
                     if ( SUCCEEDED(hr) )
                     {
                         _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );

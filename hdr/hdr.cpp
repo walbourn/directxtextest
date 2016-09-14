@@ -358,7 +358,7 @@ bool Test04()
 
             // DXGI_FORMAT_R32G32B32_FLOAT
             ScratchImage image96bpp;
-            hr = Convert(*image.GetImage(0, 0, 0), DXGI_FORMAT_R32G32B32_FLOAT, TEX_FILTER_DEFAULT, 0.5f, image96bpp);
+            hr = Convert(*image.GetImage(0, 0, 0), DXGI_FORMAT_R32G32B32_FLOAT, TEX_FILTER_DEFAULT, TEX_THRESHOLD_DEFAULT, image96bpp);
             if (FAILED(hr))
             {
                 success = false;
@@ -559,7 +559,7 @@ bool Test05()
 
             // DXGI_FORMAT_R32G32B32_FLOAT
             ScratchImage image96bpp;
-            hr = Convert(*image.GetImage(0, 0, 0), DXGI_FORMAT_R32G32B32_FLOAT, TEX_FILTER_DEFAULT, 0.5f, image96bpp);
+            hr = Convert(*image.GetImage(0, 0, 0), DXGI_FORMAT_R32G32B32_FLOAT, TEX_FILTER_DEFAULT, TEX_THRESHOLD_DEFAULT, image96bpp);
             if (FAILED(hr))
             {
                 success = false;

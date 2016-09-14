@@ -2754,7 +2754,7 @@ bool Test06()
 
                 //--- Simple convert --------------------------------------------------
                 ScratchImage image;
-                hr = Convert( *srcimage.GetImage(0,0,0), tformat, filter, 0.0, image );
+                hr = Convert( *srcimage.GetImage(0,0,0), tformat, filter, TEX_THRESHOLD_DEFAULT, image );
                 if ( FAILED(hr) )
                 {
                     success = false;
@@ -2810,7 +2810,7 @@ bool Test06()
                 if ( g_TargetFormats[findex].option & FLAGS_DITHER )
                 {
                     // Ordered dithering
-                    hr = Convert( *srcimage.GetImage(0,0,0), tformat, filter | TEX_FILTER_DITHER, 0.0, imageDither );
+                    hr = Convert( *srcimage.GetImage(0,0,0), tformat, filter | TEX_FILTER_DITHER, TEX_THRESHOLD_DEFAULT, imageDither );
                     if ( FAILED(hr) )
                     {
                         success = false;
@@ -2889,7 +2889,7 @@ bool Test06()
                     }
 
                     // Error diffusion dithering
-                    hr = Convert( *srcimage.GetImage(0,0,0), tformat, filter | TEX_FILTER_DITHER_DIFFUSION, 0.0, imageDitherDiffusion );
+                    hr = Convert( *srcimage.GetImage(0,0,0), tformat, filter | TEX_FILTER_DITHER_DIFFUSION, TEX_THRESHOLD_DEFAULT, imageDitherDiffusion );
                     if ( FAILED(hr) )
                     {
                         success = false;
@@ -2976,7 +2976,7 @@ bool Test06()
                 {
                     ScratchImage nwimage;
 
-                    hr = Convert( *srcimage.GetImage(0,0,0), tformat, filter | TEX_FILTER_FORCE_NON_WIC, 0.0, nwimage );
+                    hr = Convert( *srcimage.GetImage(0,0,0), tformat, filter | TEX_FILTER_FORCE_NON_WIC, TEX_THRESHOLD_DEFAULT, nwimage );
                     if ( FAILED(hr) )
                     {
                         success = false;
@@ -3068,7 +3068,7 @@ bool Test06()
 
                     // Ordered dithering
                     ScratchImage nwimageDither;
-                    hr = Convert( *srcimage.GetImage(0,0,0), tformat, filter | TEX_FILTER_FORCE_NON_WIC | TEX_FILTER_DITHER, 0.0, nwimageDither );
+                    hr = Convert( *srcimage.GetImage(0,0,0), tformat, filter | TEX_FILTER_FORCE_NON_WIC | TEX_FILTER_DITHER, TEX_THRESHOLD_DEFAULT, nwimageDither );
                     if ( FAILED(hr) )
                     {
                         success = false;
@@ -3146,7 +3146,7 @@ bool Test06()
 
                     // Error diffusion dithering
                     ScratchImage nwimageDitherDiffusion;
-                    hr = Convert( *srcimage.GetImage(0,0,0), tformat, filter | TEX_FILTER_FORCE_NON_WIC | TEX_FILTER_DITHER_DIFFUSION, 0.0, nwimageDitherDiffusion );
+                    hr = Convert( *srcimage.GetImage(0,0,0), tformat, filter | TEX_FILTER_FORCE_NON_WIC | TEX_FILTER_DITHER_DIFFUSION, TEX_THRESHOLD_DEFAULT, nwimageDitherDiffusion );
                     if ( FAILED(hr) )
                     {
                         success = false;
@@ -3383,7 +3383,7 @@ bool Test06()
                 if ( srcimage.GetImageCount() > 1 )
                 {
                     ScratchImage imageComplex;
-                    hr = Convert( srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), tformat, filter, 0.f, imageComplex );
+                    hr = Convert( srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), tformat, filter, TEX_THRESHOLD_DEFAULT, imageComplex );
                     if ( FAILED(hr) )
                     {
                         success = false;
