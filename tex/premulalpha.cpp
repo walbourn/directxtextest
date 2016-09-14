@@ -144,7 +144,7 @@ bool Test13()
 
             // Reverse
             ScratchImage alpha;
-            hr = PremultiplyAlpha(*pmAlpha.GetImage(0, 0, 0), TEX_PMALPHA_DEFAULT, alpha, true);
+            hr = PremultiplyAlpha(*pmAlpha.GetImage(0, 0, 0), TEX_PMALPHA_REVERSE, alpha);
             if (FAILED(hr))
             {
                 success = false;
@@ -232,7 +232,7 @@ bool Test13()
 
             // Reverse
             ScratchImage alphaSRGB;
-            hr = PremultiplyAlpha(*pmAlphaSRGB.GetImage(0, 0, 0), TEX_PMALPHA_SRGB, alphaSRGB, true);
+            hr = PremultiplyAlpha(*pmAlphaSRGB.GetImage(0, 0, 0), TEX_PMALPHA_REVERSE | TEX_PMALPHA_SRGB, alphaSRGB);
             if (FAILED(hr))
             {
                 success = false;
@@ -296,7 +296,7 @@ bool Test13()
 
             // Reverse
             ScratchImage alphaNoSRGB;
-            hr = PremultiplyAlpha(*pmAlphaNoSRGB.GetImage(0, 0, 0), TEX_PMALPHA_IGNORE_SRGB | TEX_PMALPHA_SRGB, alphaNoSRGB, true);
+            hr = PremultiplyAlpha(*pmAlphaNoSRGB.GetImage(0, 0, 0), TEX_PMALPHA_REVERSE | TEX_PMALPHA_IGNORE_SRGB | TEX_PMALPHA_SRGB, alphaNoSRGB);
             if (FAILED(hr))
             {
                 success = false;
@@ -390,7 +390,7 @@ bool Test13()
 
                 // Reverse
                 ScratchImage alpha;
-                hr = PremultiplyAlpha(pmAlpha.GetImages(), pmAlpha.GetImageCount(), pmAlpha.GetMetadata(), TEX_PMALPHA_DEFAULT, alpha, true);
+                hr = PremultiplyAlpha(pmAlpha.GetImages(), pmAlpha.GetImageCount(), pmAlpha.GetMetadata(), TEX_PMALPHA_REVERSE, alpha);
                 if (FAILED(hr))
                 {
                     success = false;
