@@ -545,7 +545,7 @@ bool Test14()
 
 
 //-------------------------------------------------------------------------------------
-// Evaluate
+// EvaluateImage
 bool Test16()
 {
     struct TestMedia
@@ -639,7 +639,7 @@ bool Test16()
         {
             XMVECTOR maxLum = XMVectorZero();
 
-            hr = Evaluate(*image.GetImage(0, 0, 0), [&](const XMVECTOR* pixels, size_t width, size_t y)
+            hr = EvaluateImage(*image.GetImage(0, 0, 0), [&](const XMVECTOR* pixels, size_t width, size_t y)
             {
                 UNREFERENCED_PARAMETER(y);
 
@@ -662,7 +662,7 @@ bool Test16()
             if (FAILED(hr))
             {
                 success = false;
-                printe("ERROR: Evaluate failed (%08X)\n%ls\n", hr, szPath);
+                printe("ERROR: EvaluateImage failed (%08X)\n%ls\n", hr, szPath);
             }
             else
             {
@@ -672,7 +672,7 @@ bool Test16()
                 if (!IsEqual(maxLuminance, s_TestMedia[index].maxLuminance))
                 {
                     success = false;
-                    printe("ERROR: Evaluate result unexpected %f...%f\n%ls\n", maxLuminance, s_TestMedia[index].maxLuminance, szPath);
+                    printe("ERROR: EvaluateImage result unexpected %f...%f\n%ls\n", maxLuminance, s_TestMedia[index].maxLuminance, szPath);
                 }
                 else
                     ++npass;
@@ -689,7 +689,7 @@ bool Test16()
 
 
 //-------------------------------------------------------------------------------------
-// Transform
+// TransformImage
 
 namespace
 {
@@ -838,12 +838,12 @@ bool Test17()
             // Identity transform
             {
                 ScratchImage image;
-                hr = Transform(*srcimage.GetImage(0, 0, 0), xform_copy, image);
+                hr = TransformImage(*srcimage.GetImage(0, 0, 0), xform_copy, image);
                 if (FAILED(hr))
                 {
                     success = false;
                     pass = false;
-                    printe("ERROR: Transform (copy) failed (%08X)\n%ls\n", hr, szPath);
+                    printe("ERROR: TransformImage (copy) failed (%08X)\n%ls\n", hr, szPath);
                 }
                 else
                 {
@@ -873,12 +873,12 @@ bool Test17()
             // Inverse RGB
             {
                 ScratchImage image;
-                hr = Transform(*srcimage.GetImage(0, 0, 0), xform_inverse, image);
+                hr = TransformImage(*srcimage.GetImage(0, 0, 0), xform_inverse, image);
                 if (FAILED(hr))
                 {
                     success = false;
                     pass = false;
-                    printe("ERROR: Transform (inverse) failed (%08X)\n%ls\n", hr, szPath);
+                    printe("ERROR: TransformImage (inverse) failed (%08X)\n%ls\n", hr, szPath);
                 }
                 else
                 {
@@ -908,7 +908,7 @@ bool Test17()
             // Chroma-key
             {
                 ScratchImage image;
-                hr = Transform(*srcimage.GetImage(0, 0, 0), [&](XMVECTOR* outPixels, const XMVECTOR* inPixels, size_t width, size_t y)
+                hr = TransformImage(*srcimage.GetImage(0, 0, 0), [&](XMVECTOR* outPixels, const XMVECTOR* inPixels, size_t width, size_t y)
                 {
                     static const XMVECTORF32 s_chromaKey = { 0.f, 1.f, 0.f, 0.f };
                     static const XMVECTORF32 s_tolerance = { 0.2f, 0.2f, 0.2f, 0.f };
@@ -938,7 +938,7 @@ bool Test17()
                 {
                     success = false;
                     pass = false;
-                    printe("ERROR: Transform (colorkey) failed (%08X)\n%ls\n", hr, szPath);
+                    printe("ERROR: TransformImage (colorkey) failed (%08X)\n%ls\n", hr, szPath);
                 }
                 else
                 {
@@ -971,12 +971,12 @@ bool Test17()
                 // Identity transform
                 {
                     ScratchImage imageComplex;
-                    hr = Transform(srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), xform_copy, imageComplex);
+                    hr = TransformImage(srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), xform_copy, imageComplex);
                     if (FAILED(hr))
                     {
                         success = false;
                         pass = false;
-                        printe("ERROR: Transform (copy complex) failed (%08X)\n%ls\n", hr, szPath);
+                        printe("ERROR: TransformImage (copy complex) failed (%08X)\n%ls\n", hr, szPath);
                     }
                     else
                     {
@@ -1003,12 +1003,12 @@ bool Test17()
                 // Inverse RGB
                 {
                     ScratchImage imageComplex;
-                    hr = Transform(srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), xform_inverse, imageComplex);
+                    hr = TransformImage(srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), xform_inverse, imageComplex);
                     if (FAILED(hr))
                     {
                         success = false;
                         pass = false;
-                        printe("ERROR: Transform (inverse complex) failed (%08X)\n%ls\n", hr, szPath);
+                        printe("ERROR: TransformImage (inverse complex) failed (%08X)\n%ls\n", hr, szPath);
                     }
                     else
                     {
@@ -1035,7 +1035,7 @@ bool Test17()
                 // Chroma-key
                 {
                     ScratchImage imageComplex;
-                    hr = Transform(srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(),
+                    hr = TransformImage(srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(),
                         [&](XMVECTOR* outPixels, const XMVECTOR* inPixels, size_t width, size_t y)
                     {
                         static const XMVECTORF32 s_chromaKey = { 0.f, 1.f, 0.f, 0.f };
@@ -1066,7 +1066,7 @@ bool Test17()
                     {
                         success = false;
                         pass = false;
-                        printe("ERROR: Transform (colorkey complex) failed (%08X)\n%ls\n", hr, szPath);
+                        printe("ERROR: TransformImage (colorkey complex) failed (%08X)\n%ls\n", hr, szPath);
                     }
                     else
                     {
