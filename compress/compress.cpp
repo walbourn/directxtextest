@@ -822,16 +822,16 @@ bool Test02()
                             }
                         }
 
-                        // BC7 mode 0 & 2
+                        // BC7 quick (aka mode 6)
                         if ( cformat == DXGI_FORMAT_BC7_UNORM || cformat == DXGI_FORMAT_BC7_UNORM_SRGB )
                         {
                             ScratchImage image2;
-                            hr = Compress( *srcimage.GetImage(0,0,0), cformat, TEX_COMPRESS_BC7_USE_3SUBSETS, TEX_THRESHOLD_DEFAULT, image2 );
+                            hr = Compress( *srcimage.GetImage(0,0,0), cformat, TEX_COMPRESS_BC7_QUICK, TEX_THRESHOLD_DEFAULT, image2 );
                             if ( FAILED(hr) )
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed compress [3subsets] (HRESULT %08X) to %ls:\n%ls\n", hr, GetName(cformat), szPath );
+                                printe( "Failed compress [quick] (HRESULT %08X) to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                             }
                             else if ( image2.GetMetadata().format != cformat
                                       || image2.GetMetadata().width != metadata.width
@@ -839,7 +839,7 @@ bool Test02()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Unexpected compress [3subsets] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
+                                printe( "Unexpected compress [quick] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
                                         image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ),
                                         metadata.width, metadata.height, GetName( cformat ), szPath );
                             }
@@ -852,14 +852,56 @@ bool Test02()
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed comparing straight vs. 3subsets images (HRESULT %08X) converting to %ls:\n%ls\n", hr, GetName(cformat), szPath );
+                                    printe( "Failed comparing straight vs. quick images (HRESULT %08X) converting to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                                 }
                                 else if ( IsErrorTooLarge( mse, 0.0001f ) )
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed comparing straight vs. 3subsets images MSE = %f (%f %f %f %f)... 0.0001f converting to %ls:\n%ls\n",
+                                    printe( "Failed comparing straight vs. quick images MSE = %f (%f %f %f %f)... 0.0001f converting to %ls:\n%ls\n",
                                             mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName(cformat), szPath );
+                                }
+                            }
+                        }
+
+                        // BC7 mode 0 & 2
+                        if (cformat == DXGI_FORMAT_BC7_UNORM || cformat == DXGI_FORMAT_BC7_UNORM_SRGB)
+                        {
+                            ScratchImage image2;
+                            hr = Compress(*srcimage.GetImage(0, 0, 0), cformat, TEX_COMPRESS_BC7_USE_3SUBSETS, TEX_THRESHOLD_DEFAULT, image2);
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed compress [3subsets] (HRESULT %08X) to %ls:\n%ls\n", hr, GetName(cformat), szPath);
+                            }
+                            else if (image2.GetMetadata().format != cformat
+                                || image2.GetMetadata().width != metadata.width
+                                || image2.GetMetadata().height != metadata.height)
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Unexpected compress [3subsets] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
+                                    image2.GetMetadata().width, image2.GetMetadata().height, GetName(image2.GetMetadata().format),
+                                    metadata.width, metadata.height, GetName(cformat), szPath);
+                            }
+                            else
+                            {
+                                // Verify the image here is (slightly) different than the one produced above (the ST version)
+                                // TESTTEST- SaveScratchImage( L"C:\\Temp\\XXX.DDS", DDS_FLAGS_NONE, image2 );
+                                hr = ComputeMSE(*image.GetImage(0, 0, 0), *image2.GetImage(0, 0, 0), mse, mseV, flags & ~CMSE_IMAGE1_X2_BIAS);
+                                if (FAILED(hr))
+                                {
+                                    success = false;
+                                    pass = false;
+                                    printe("Failed comparing straight vs. 3subsets images (HRESULT %08X) converting to %ls:\n%ls\n", hr, GetName(cformat), szPath);
+                                }
+                                else if (IsErrorTooLarge(mse, 0.0001f))
+                                {
+                                    success = false;
+                                    pass = false;
+                                    printe("Failed comparing straight vs. 3subsets images MSE = %f (%f %f %f %f)... 0.0001f converting to %ls:\n%ls\n",
+                                        mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName(cformat), szPath);
                                 }
                             }
                         }
@@ -1251,6 +1293,48 @@ bool Test03()
                                 pass = false;
                                 printe( "Failed GPU comparing straight vs. alpha weight images MSE = %f (%f %f %f %f)... 0.01f converting to %ls:\n%ls\n",
                                         mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName(cformat), szPath );
+                            }
+                        }
+                    }
+
+                    // BC7 quick (aka mode 6)
+                    if (cformat == DXGI_FORMAT_BC7_UNORM || cformat == DXGI_FORMAT_BC7_UNORM_SRGB)
+                    {
+                        ScratchImage image2;
+                        hr = Compress(device.Get(), *srcimage.GetImage(0, 0, 0), cformat, TEX_COMPRESS_BC7_QUICK, 2.f, image2);
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed GPU compress [quick] (HRESULT %08X) to %ls:\n%ls\n", hr, GetName(cformat), szPath);
+                        }
+                        else if (image2.GetMetadata().format != cformat
+                            || image2.GetMetadata().width != metadata.width
+                            || image2.GetMetadata().height != metadata.height)
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Unexpected GPU compress [quick] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
+                                image2.GetMetadata().width, image2.GetMetadata().height, GetName(image2.GetMetadata().format),
+                                metadata.width, metadata.height, GetName(cformat), szPath);
+                        }
+                        else
+                        {
+                            // Verify the image is (slightly) different than the one produced without alpha weight
+                            // TESTTEST- SaveScratchImage( L"C:\\Temp\\XXX.DDS", DDS_FLAGS_NONE, image2 );
+                            hr = ComputeMSE(*image.GetImage(0, 0, 0), *image2.GetImage(0, 0, 0), mse, mseV);
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed GPU comparing straight vs. quick images (HRESULT %08X) converting to %ls:\n%ls\n", hr, GetName(cformat), szPath);
+                            }
+                            else if (IsErrorTooLarge(mse, 0.002f))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed GPU comparing straight vs. quick images MSE = %f (%f %f %f %f)... 0.002f converting to %ls:\n%ls\n",
+                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName(cformat), szPath);
                             }
                         }
                     }
