@@ -111,6 +111,7 @@ static const TestMedia g_TestMedia[] =
 { FLAGS_YUV, { 200, 200, 4, 1, 1, 0, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"lenaVolYUY2.dds" },
 { FLAGS_XBOX, { 1920, 1485, 1, 1, 1, 0, 0, XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"7E3_1920x1485.dds" },
 { FLAGS_XBOX, { 1920, 1485, 1, 1, 1, 0, 0, XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"6E4_1920x1485.dds" },
+// TODO - R11G11B10_FLOAT, DXGI_FORMAT_R9G9B9E5_SHAREDEXP
 };
 
 struct TestTargetFormat
@@ -3376,6 +3377,42 @@ bool Test06()
                             printe( "Failed comparing sRGB vs. RGB image data (%f [%f %f %f %f])\nformat %ls -> %ls:\n%ls\n",
                                     mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName( metadata.format ), GetName( tformat ), szPath );
                         }
+                    }
+                }
+
+                {
+                    ScratchImage image;
+                    hr = Convert(*srcimage.GetImage(0, 0, 0), tformat, TEX_FILTER_FLOAT_X2BIAS, TEX_THRESHOLD_DEFAULT, image);
+                    if (FAILED(hr))
+                    {
+                        success = false;
+                        pass = false;
+                        printe("Failed conversion x2 bias (HRESULT %08X) to %ls:\n%ls\n", hr, GetName(tformat), szPath);
+                    }
+                    else if (image.GetMetadata().format != tformat
+                        || image.GetMetadata().width != srcimage.GetMetadata().width || image.GetMetadata().height != srcimage.GetMetadata().height)
+                    {
+                        success = false;
+                        pass = false;
+                        printe("Failed conversion result x2 bias is %Iu x %Iu (format %ls):\n",
+                            image.GetMetadata().width, image.GetMetadata().height, GetName(image.GetMetadata().format));
+                        printe("\n...(check) %Iu x %Iu (format %ls):\n%ls\n",
+                            srcimage.GetMetadata().width, srcimage.GetMetadata().height, GetName(tformat), szPath);
+                    }
+                    else
+                    {
+                        // TODO - Verify the image data (perhaps MD5 checksum)
+
+                        wchar_t tname[MAX_PATH] = {};
+                        wcscpy_s(tname, fname);
+                        wcscat_s(tname, L"_");
+                        wcscat_s(tname, GetName(tformat));
+                        wcscat_s(tname, L"_x2bias");
+
+                        wchar_t szDestPath[MAX_PATH] = {};
+                        _wmakepath_s(szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds");
+
+                        SaveScratchImage(szDestPath, DDS_FLAGS_NONE, image);
                     }
                 }
 
