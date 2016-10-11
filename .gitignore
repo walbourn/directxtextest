@@ -23,3 +23,5 @@ Profile
 Release
 x64
 screenshot.*
+toolscripts/texassemble/out
+toolscripts/texconv/out
