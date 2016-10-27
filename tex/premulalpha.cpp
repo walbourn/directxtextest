@@ -311,8 +311,7 @@ bool Test13()
                     success = false;
                     printe("Failed comparing demul alpha [single sRGB] of image data (HRESULT %08X)\n", hr);
                 }
-
-                if (IsErrorTooLarge(mse, 0.0001f))
+                else if (IsErrorTooLarge(mse, 0.0001f))
                 {
                     success = false;
                     printe("Failed comparing demul alpha [single sRGB] of image data (%f)\n", mse);
@@ -419,8 +418,7 @@ bool Test13()
                             success = false;
                             printe("Failed comparing demul alpha [complex] of image data (HRESULT %08X)\n", hr);
                         }
-
-                        if (IsErrorTooLarge(mse, 0.0001f))
+                        else if (IsErrorTooLarge(mse, 0.0001f))
                         {
                             success = false;
                             printe("Failed comparing demul alpha [complex] of image data (%f)\n", mse);
