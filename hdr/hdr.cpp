@@ -72,7 +72,7 @@ bool Test01()
             return false;
         }
 
-#ifdef DEBUG
+#ifdef _DEBUG
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
@@ -126,7 +126,7 @@ bool Test02()
             return false;
         }
 
-#ifdef DEBUG
+#ifdef _DEBUG
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
@@ -210,7 +210,7 @@ bool Test03()
             return false;
         }
 
-#ifdef DEBUG
+#ifdef _DEBUG
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
@@ -282,7 +282,7 @@ bool Test04()
             return false;
         }
 
-#ifdef DEBUG
+#ifdef _DEBUG
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
@@ -459,7 +459,7 @@ bool Test05()
             return false;
         }
 
-#ifdef DEBUG
+#ifdef _DEBUG
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif

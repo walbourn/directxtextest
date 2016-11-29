@@ -51,7 +51,7 @@ bool Test15()
             return false;
         }
 
-#ifdef DEBUG
+#ifdef _DEBUG
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif

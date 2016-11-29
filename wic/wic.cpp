@@ -496,7 +496,7 @@ bool Test01()
             return false;
         }
 
-#ifdef DEBUG
+#ifdef _DEBUG
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
@@ -696,7 +696,7 @@ bool Test02()
             return false;
         }
 
-#ifdef DEBUG
+#ifdef _DEBUG
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
@@ -886,7 +886,7 @@ bool Test03()
             return false;
         }
 
-#ifdef DEBUG
+#ifdef _DEBUG
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
@@ -992,7 +992,7 @@ bool Test04()
             return false;
         }
 
-#ifdef DEBUG
+#ifdef _DEBUG
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
@@ -1082,7 +1082,7 @@ bool Test05()
             return false;
         }
 
-#ifdef DEBUG
+#ifdef _DEBUG
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
@@ -1353,7 +1353,7 @@ bool Test06()
         wcscat_s( tname, L"_props" );
         _wmakepath_s( szDestPath3, MAX_PATH, NULL, tempDir, tname, g_SaveMedia[index].ext );
 
-#ifdef DEBUG
+#ifdef _DEBUG
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif

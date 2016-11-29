@@ -90,11 +90,17 @@ static const TestMedia g_TestMedia[] =
 // Premul alpha
 { FLAGS_NONE,{ 304, 268, 1, 1, 9, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"tree02S.dds",{ 0xb5,0xed,0x5a,0xc6,0xc4,0xf1,0x5f,0x77,0x3c,0xcd,0x42,0xda,0x3b,0x72,0xf7,0x02 } },
 { FLAGS_PMALPHA,{ 304, 268, 1, 1, 9, 0, TEX_ALPHA_MODE_PREMULTIPLIED, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"tree02S_pmalpha.dds",{ 0x10,0x85,0x57,0xdc,0x61,0x2c,0x77,0x14,0x3e,0x4e,0x6e,0x1d,0xf0,0x87,0xb4,0x9b } },
+{ FLAGS_NONE,{ 128, 128, 128, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"ngc6543_128.dds",{ 0xd3,0xf2,0x22,0x02,0xae,0xbe,0x9e,0x48,0x4a,0x76,0x2e,0x32,0xbe,0xe8,0x88,0x13 } },
 
 // Normal maps
 { FLAGS_NONE,{ 512, 512, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"normalmap.dds",{ 0x37,0xb7,0x77,0xc6,0xf6,0xba,0x83,0xe3,0xd2,0xf5,0xfe,0xd4,0x32,0xb8,0x60,0x0e } },
 { FLAGS_NONE,{ 2048, 1024, 1, 1, 12, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"normals.dds",{ 0x61,0x57,0xf2,0x83,0x46,0x3b,0x1e,0xf6,0x76,0x43,0x6d,0xd3,0xfc,0xd1,0xa5,0xd9 } },
+
+// Bump maps (legacy)
 { FLAGS_NONE,{ 1024, 1024, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8_SNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"Adrianne_Body_nm.dds" ,{ 0xfd,0xeb,0x64,0x4a,0x93,0x64,0xeb,0x98,0xde,0x29,0x38,0x90,0x96,0x6c,0x73,0x38 } },
+{ FLAGS_NONE,{ 512, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8_SNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthbumpdudv.dds",{ 0xae,0x49,0x6c,0xfc,0x39,0xe8,0x0e,0xa3,0x27,0xf1,0xf9,0x72,0x87,0xa3,0x6f,0xbc } },
+{ FLAGS_NONE,{ 512, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_SNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthbumpdudv2.dds",{ 0x37,0x8a,0xe1,0x0f,0xe4,0x67,0x9c,0xa4,0xdb,0x90,0x43,0x1a,0xbc,0x73,0x71,0xc3 } },
+{ FLAGS_NONE,{ 512, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R16G16_SNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthbumpdudv3.dds",{ 0xbd,0x5b,0xaa,0x62,0xee,0xd5,0x65,0x1b,0x10,0x02,0x02,0x70,0x59,0xb6,0xbd,0xc6 } },
 
 // Legacy DirectX SDK test files
 { FLAGS_NONE,{ 256, 256, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lobbycube.dds",{ 0x49,0x8e,0x4a,0xe1,0xac,0x42,0x4f,0x52,0xcf,0x0f,0x1f,0xce,0x23,0x2b,0xda,0x8b } },
@@ -778,7 +784,7 @@ bool Test01()
             return false;
         }
 
-#ifdef DEBUG
+#ifdef _DEBUG
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
@@ -892,7 +898,7 @@ bool Test02()
             return false;
         }
 
-#ifdef DEBUG
+#ifdef _DEBUG
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
@@ -1167,7 +1173,7 @@ bool Test03()
             return false;
         }
 
-#ifdef DEBUG
+#ifdef _DEBUG
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
@@ -1432,7 +1438,7 @@ bool Test04()
             return false;
         }
 
-#ifdef DEBUG
+#ifdef _DEBUG
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
@@ -1789,7 +1795,7 @@ bool Test05()
             return false;
         }
 
-#ifdef DEBUG
+#ifdef _DEBUG
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif

@@ -939,7 +939,7 @@ bool Test05B()
             return false;
         }
 
-#ifdef DEBUG
+#ifdef _DEBUG
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
@@ -2655,7 +2655,7 @@ bool Test06()
             return false;
         }
 
-#ifdef DEBUG
+#ifdef _DEBUG
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
@@ -2744,7 +2744,7 @@ bool Test06()
 
                 bool pass = true;
 
-#ifdef DEBUG
+#ifdef _DEBUG
                 OutputDebugString( GetName( tformat ) );
                 OutputDebugStringA("\n");
 #endif
@@ -2786,7 +2786,7 @@ bool Test06()
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, image );
 
-#ifdef DEBUG
+#ifdef _DEBUG
                     if ( tformat == DXGI_FORMAT_R1_UNORM )
                     {
                         _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".png" );
@@ -2873,7 +2873,7 @@ bool Test06()
 
                         SaveScratchImage( szDestPath, DDS_FLAGS_NONE, imageDither );
 
-#ifdef DEBUG
+#ifdef _DEBUG
                         if ( tformat == DXGI_FORMAT_R1_UNORM )
                         {
                             _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".png" );
@@ -2952,7 +2952,7 @@ bool Test06()
 
                         SaveScratchImage( szDestPath, DDS_FLAGS_NONE, imageDitherDiffusion );
 
-#ifdef DEBUG
+#ifdef _DEBUG
                         if ( tformat == DXGI_FORMAT_R1_UNORM )
                         {
                             _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".png" );
@@ -3049,7 +3049,7 @@ bool Test06()
 
                         SaveToDDSFile( nwimage.GetImages(), nwimage.GetImageCount(), nwimage.GetMetadata(), DDS_FLAGS_NONE, szDestPath );
 
-#ifdef DEBUG
+#ifdef _DEBUG
                         if ( tformat == DXGI_FORMAT_R1_UNORM )
                         {
                             _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".png" );
@@ -3129,7 +3129,7 @@ bool Test06()
 
                         SaveScratchImage( szDestPath, DDS_FLAGS_NONE, nwimageDither );
 
-#ifdef DEBUG
+#ifdef _DEBUG
                         if ( tformat == DXGI_FORMAT_R1_UNORM )
                         {
                             _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".png" );
@@ -3209,7 +3209,7 @@ bool Test06()
 
                         SaveScratchImage( szDestPath, DDS_FLAGS_NONE, nwimageDitherDiffusion );
 
-#ifdef DEBUG
+#ifdef _DEBUG
                         if ( tformat == DXGI_FORMAT_R1_UNORM )
                         {
                             _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".png" );

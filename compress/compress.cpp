@@ -332,7 +332,7 @@ bool Test01()
             return false;
         }
 
-#ifdef DEBUG
+#ifdef _DEBUG
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
@@ -530,7 +530,7 @@ bool Test02()
             return false;
         }
 
-#ifdef DEBUG
+#ifdef _DEBUG
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
@@ -592,7 +592,7 @@ bool Test02()
                 if ( SkipCompressCases( check->format, cformat, g_CompressMedia[index].flags, false ) )
                     continue;
 
-#ifdef DEBUG
+#ifdef _DEBUG
                 OutputDebugString( GetName( cformat ) );
                 OutputDebugStringA("\n");
 #endif
@@ -1085,7 +1085,7 @@ bool Test03()
             return false;
         }
 
-#ifdef DEBUG
+#ifdef _DEBUG
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
