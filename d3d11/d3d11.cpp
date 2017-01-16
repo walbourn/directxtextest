@@ -8,13 +8,21 @@
 
 #include "directxtex.h"
 
-#include <wrl.h>
+#include <wrl/client.h>
 
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
 
+enum
+{
+    FLAGS_NONE = 0x0,
+    FLAGS_PLANAR = 0x1,
+    FLAGS_NOT_SUPPORTED = 0x2,
+};
+
 struct TestMedia
 {
+    DWORD options;
     TexMetadata metadata;
     const wchar_t *fname;
     // TODO - Checksum to verify loaded image?
@@ -22,27 +30,39 @@ struct TestMedia
 
 static const TestMedia g_TestMedia[] = 
 {
-// width height depth arraySize mipLevels miscFlags miscFlags2 format dimension | filename
-{ { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"reftexture.dds" },
-{ { 2048, 2048, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"tex4.png" },
-{ { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lena.jpg" },
-{ { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_BC2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_DXT3.dds" },
-{ { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_X8B8G8R8.dds" },
-{ { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"dx5_logo.dds" },
-{ { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"win95.dds" },
-{ { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test8888.dds" },
-{ { 32, 32, 1, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test8888mip.dds" },
-{ { 256, 256, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lobbycube.dds" },
-{ { 32, 32, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcube8888.dds" },
-{ { 32, 32, 1, 6, 6, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcube8888mip.dds" },
-{ { 32, 32, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_BC3_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcubedxt5.dds" },
-{ { 32, 32, 1, 6, 6, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_BC3_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcubedxt5mip.dds" },
-{ { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testdxt1.dds" },
-{ { 32, 32, 1, 1, 6, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testdxt1mip.dds" },
-{ { 32, 32, 4, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888.dds" },
-{ { 32, 32, 4, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888mip.dds" },
-{ { 32, 32, 4, 1, 6, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvoldxt1mip.dds" },
-{ { 32, 1, 1, 1, 6, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE1D }, MEDIA_PATH L"io_R8G8B8A8_UNORM_SRV_DIMENSION_TEXTURE1D_MipOn.DDS" },
+// test-options | width height depth arraySize mipLevels miscFlags miscFlags2 format dimension | filename
+{ FLAGS_NONE, { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"reftexture.dds" },
+{ FLAGS_NONE, { 2048, 2048, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"tex4.png" },
+{ FLAGS_NONE, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lena.jpg" },
+{ FLAGS_NONE, { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_BC2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_DXT3.dds" },
+{ FLAGS_NONE, { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_X8B8G8R8.dds" },
+{ FLAGS_NONE, { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"dx5_logo.dds" },
+{ FLAGS_NONE, { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"win95.dds" },
+{ FLAGS_NONE, { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test8888.dds" },
+{ FLAGS_NONE, { 32, 32, 1, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test8888mip.dds" },
+{ FLAGS_NONE, { 256, 256, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lobbycube.dds" },
+{ FLAGS_NONE, { 32, 32, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcube8888.dds" },
+{ FLAGS_NONE, { 32, 32, 1, 6, 6, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcube8888mip.dds" },
+{ FLAGS_NONE, { 32, 32, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_BC3_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcubedxt5.dds" },
+{ FLAGS_NONE, { 32, 32, 1, 6, 6, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_BC3_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcubedxt5mip.dds" },
+{ FLAGS_NONE, { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testdxt1.dds" },
+{ FLAGS_NONE, { 32, 32, 1, 1, 6, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testdxt1mip.dds" },
+{ FLAGS_NONE, { 32, 32, 4, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888.dds" },
+{ FLAGS_NONE, { 32, 32, 4, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888mip.dds" },
+{ FLAGS_NONE, { 32, 32, 4, 1, 6, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvoldxt1mip.dds" },
+{ FLAGS_NONE, { 32, 1, 1, 1, 6, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE1D }, MEDIA_PATH L"io_R8G8B8A8_UNORM_SRV_DIMENSION_TEXTURE1D_MipOn.DDS" },
+{ FLAGS_PLANAR, { 200, 200, 1, 1, 8, 0, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaYUY2.dds" },
+{ FLAGS_PLANAR, { 200, 200, 1, 1, 8, 0, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaUYVY.dds" },
+{ FLAGS_PLANAR
+  | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_AYUV, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaAYUV.dds" },
+{ FLAGS_PLANAR
+  | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_Y210, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaY210.dds" },
+{ FLAGS_PLANAR
+  | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_Y216, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaY216.dds" },
+{ FLAGS_PLANAR
+  | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_Y410, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaY410.dds" },
+{ FLAGS_PLANAR
+  | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_Y416, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaY416.dds" },
 };
 
 //-------------------------------------------------------------------------------------
@@ -56,10 +76,10 @@ extern void CleanupRenderTest();
 bool Test01()
 {
     ComPtr<ID3D11Device> device;
-    HRESULT hr = CreateDevice( device.GetAddressOf(), NULL );
-    if ( FAILED(hr) )
+    HRESULT hr = CreateDevice(device.GetAddressOf(), nullptr);
+    if (FAILED(hr))
     {
-        printe( "Failed creating device (HRESULT %08X)\n", hr );
+        printe("Failed creating device (HRESULT %08X)\n", hr);
         return false;
     }
 
@@ -68,13 +88,13 @@ bool Test01()
     size_t ncount = 0;
     size_t npass = 0;
 
-    for( size_t index=0; index < _countof(g_TestMedia); ++index )
+    for (size_t index = 0; index < _countof(g_TestMedia); ++index)
     {
         wchar_t szPath[MAX_PATH];
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
-        if ( !ret || ret > MAX_PATH )
+        if (!ret || ret > MAX_PATH)
         {
-            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            printe("ERROR: ExpandEnvironmentStrings FAILED\n");
             return false;
         }
 
@@ -84,47 +104,70 @@ bool Test01()
 #endif
 
         wchar_t ext[_MAX_EXT];
-        _wsplitpath_s( szPath, NULL, 0, NULL, 0, NULL, 0, ext, _MAX_EXT );
+        _wsplitpath_s(szPath, nullptr, 0, nullptr, 0, nullptr, 0, ext, _MAX_EXT);
 
         TexMetadata metadata;
 
-        if ( _wcsicmp( ext, L".dds" ) == 0 )
+        if (_wcsicmp(ext, L".dds") == 0)
         {
-            hr = GetMetadataFromDDSFile( szPath, DDS_FLAGS_NONE, metadata );
+            hr = GetMetadataFromDDSFile(szPath, DDS_FLAGS_NONE, metadata);
         }
         else
         {
-            hr = GetMetadataFromWICFile( szPath, WIC_FLAGS_NONE, metadata );
+            hr = GetMetadataFromWICFile(szPath, WIC_FLAGS_NONE, metadata);
         }
 
         const TexMetadata* check = &g_TestMedia[index].metadata;
-        if ( FAILED(hr) )
+        if (FAILED(hr))
         {
             success = false;
-            printe( "Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe("Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath);
         }
-        else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
+        else if (memcmp(&metadata, check, sizeof(TexMetadata)) != 0)
         {
             success = false;
-            printe( "Metadata error in:\n%ls\n", szPath );
-            printmeta( &metadata );
-            printmetachk( check );
+            printe("Metadata error in:\n%ls\n", szPath);
+            printmeta(&metadata);
+            printmetachk(check);
         }
         else
         {
-            if ( !IsSupportedTexture( device.Get(), metadata ) )
+            bool pass = true;
+
+            if (!IsSupportedTexture(device.Get(), metadata))
             {
-                success = false;
-                printe( "Failed testing data from (HRESULT %08X):\n%ls\n", hr, szPath );
+                if (g_TestMedia[index].options & FLAGS_PLANAR)
+                {
+                    // Can't create video textures with mips on most hardware
+                    metadata.mipLevels = 1;
+                    if (!IsSupportedTexture(device.Get(), metadata))
+                    {
+                        if (!(g_TestMedia[index].options & FLAGS_NOT_SUPPORTED))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed testing planar data from (HRESULT %08X):\n%ls\n", hr, szPath);
+                        }
+                    }
+                }
+                else
+                {
+                    success = false;
+                    pass = false;
+                    printe("Failed testing data from (HRESULT %08X):\n%ls\n", hr, szPath);
+                }
             }
-            else
+
+            if (pass)
+            {
                 ++npass;
+            }
         }
 
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass );
+    print("%Iu images tested, %Iu images passed ", ncount, npass);
 
     return success;
 }
@@ -134,10 +177,10 @@ bool Test01()
 bool Test02()
 {
     ComPtr<ID3D11Device> device;
-    HRESULT hr = CreateDevice( device.GetAddressOf(), NULL );
-    if ( FAILED(hr) )
+    HRESULT hr = CreateDevice(device.GetAddressOf(), nullptr);
+    if (FAILED(hr))
     {
-        printe( "Failed creating device (HRESULT %08X)\n", hr );
+        printe("Failed creating device (HRESULT %08X)\n", hr);
         return false;
     }
 
@@ -146,13 +189,18 @@ bool Test02()
     size_t ncount = 0;
     size_t npass = 0;
 
-    for( size_t index=0; index < _countof(g_TestMedia); ++index )
+    for (size_t index = 0; index < _countof(g_TestMedia); ++index)
     {
+        if (g_TestMedia[index].options & FLAGS_NOT_SUPPORTED)
+        {
+            continue;
+        }
+
         wchar_t szPath[MAX_PATH];
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
-        if ( !ret || ret > MAX_PATH )
+        if (!ret || ret > MAX_PATH)
         {
-            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            printe("ERROR: ExpandEnvironmentStrings FAILED\n");
             return false;
         }
 
@@ -162,58 +210,59 @@ bool Test02()
 #endif
 
         wchar_t ext[_MAX_EXT];
-        _wsplitpath_s( szPath, NULL, 0, NULL, 0, NULL, 0, ext, _MAX_EXT );
+        _wsplitpath_s(szPath, nullptr, 0, nullptr, 0, nullptr, 0, ext, _MAX_EXT);
 
         TexMetadata metadata;
         ScratchImage image;
 
-        if ( _wcsicmp( ext, L".dds" ) == 0 )
+        if (_wcsicmp(ext, L".dds") == 0)
         {
-            hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, &metadata, image );
+            hr = LoadFromDDSFile(szPath, DDS_FLAGS_NONE, &metadata, image);
         }
         else
         {
-            hr = LoadFromWICFile( szPath, WIC_FLAGS_NONE, &metadata, image );
+            hr = LoadFromWICFile(szPath, WIC_FLAGS_NONE, &metadata, image);
         }
 
         const TexMetadata* check = &g_TestMedia[index].metadata;
-        if ( FAILED(hr) )
+        if (FAILED(hr))
         {
             success = false;
-            printe( "Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe("Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath);
         }
-        else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
+        else if (memcmp(&metadata, check, sizeof(TexMetadata)) != 0)
         {
             success = false;
-            printe( "Metadata error in:\n%ls\n", szPath );
-            printmeta( &metadata );
-            printmetachk( check );
+            printe("Metadata error in:\n%ls\n", szPath);
+            printmeta(&metadata);
+            printmetachk(check);
         }
         else
         {
-            ID3D11Resource* pResource = NULL;
+            if (g_TestMedia[index].options & FLAGS_PLANAR)
+            {
+                // Can't create video textures with mips on most hardware
+                metadata.mipLevels = 1;
+            }
 
-            hr = CreateTexture( device.Get(), image.GetImages(), image.GetImageCount(), metadata, &pResource );
-            if ( FAILED(hr) )
+            ComPtr<ID3D11Resource> pResource;
+            hr = CreateTexture(device.Get(), image.GetImages(), image.GetImageCount(), metadata, pResource.GetAddressOf());
+            if (FAILED(hr))
             {
                 success = false;
-                printe( "Failed creating texture from (HRESULT %08X):\n%ls\n", hr, szPath );
+                printe("Failed creating texture from (HRESULT %08X):\n%ls\n", hr, szPath);
             }
             else
             {
-                pResource->Release();
-
-                hr = CreateTextureEx( device.Get(), image.GetImages(), image.GetImageCount(), metadata,
-                                      D3D11_USAGE_IMMUTABLE, D3D11_BIND_SHADER_RESOURCE, 0, 0, true, &pResource );
-                if ( FAILED(hr) )
+                hr = CreateTextureEx(device.Get(), image.GetImages(), image.GetImageCount(), metadata,
+                    D3D11_USAGE_IMMUTABLE, D3D11_BIND_SHADER_RESOURCE, 0, 0, true, pResource.ReleaseAndGetAddressOf());
+                if (FAILED(hr))
                 {
                     success = false;
-                    printe( "Failed creating texture ex from (HRESULT %08X):\n%ls\n", hr, szPath );
+                    printe("Failed creating texture ex from (HRESULT %08X):\n%ls\n", hr, szPath);
                 }
                 else
                 {
-                    pResource->Release();
-
                     ++npass;
                 }
             }
@@ -222,7 +271,7 @@ bool Test02()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass );
+    print("%Iu images tested, %Iu images passed ", ncount, npass);
 
     return success;
 }
@@ -232,10 +281,10 @@ bool Test02()
 bool Test03()
 {
     ComPtr<ID3D11Device> device;
-    HRESULT hr = SetupRenderTest( device.GetAddressOf(), NULL );
-    if ( FAILED(hr) )
+    HRESULT hr = CreateDevice(device.GetAddressOf(), nullptr);
+    if (FAILED(hr))
     {
-        printe( "Failed creating device (HRESULT %08X)\n", hr );
+        printe("Failed creating device (HRESULT %08X)\n", hr);
         return false;
     }
 
@@ -244,13 +293,19 @@ bool Test03()
     size_t ncount = 0;
     size_t npass = 0;
 
-    for( size_t index=0; index < _countof(g_TestMedia); ++index )
+    for (size_t index = 0; index < _countof(g_TestMedia); ++index)
     {
+        if (g_TestMedia[index].options & (FLAGS_PLANAR | FLAGS_NOT_SUPPORTED))
+        {
+            // Skip video textures which need special options to render
+            continue;
+        }
+
         wchar_t szPath[MAX_PATH];
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
-        if ( !ret || ret > MAX_PATH )
+        if (!ret || ret > MAX_PATH)
         {
-            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            printe("ERROR: ExpandEnvironmentStrings FAILED\n");
             return false;
         }
 
@@ -260,62 +315,53 @@ bool Test03()
 #endif
 
         wchar_t ext[_MAX_EXT];
-        _wsplitpath_s( szPath, NULL, 0, NULL, 0, NULL, 0, ext, _MAX_EXT );
+        _wsplitpath_s(szPath, nullptr, 0, nullptr, 0, nullptr, 0, ext, _MAX_EXT);
 
         TexMetadata metadata;
         ScratchImage image;
 
-        if ( _wcsicmp( ext, L".dds" ) == 0 )
+        if (_wcsicmp(ext, L".dds") == 0)
         {
-            hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, &metadata, image );
+            hr = LoadFromDDSFile(szPath, DDS_FLAGS_NONE, &metadata, image);
         }
         else
         {
-            hr = LoadFromWICFile( szPath, WIC_FLAGS_NONE, &metadata, image );
+            hr = LoadFromWICFile(szPath, WIC_FLAGS_NONE, &metadata, image);
         }
 
         const TexMetadata* check = &g_TestMedia[index].metadata;
-        if ( FAILED(hr) )
+        if (FAILED(hr))
         {
             success = false;
-            printe( "Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe("Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath);
         }
-        else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
+        else if (memcmp(&metadata, check, sizeof(TexMetadata)) != 0)
         {
             success = false;
-            printe( "Metadata error in:\n%ls\n", szPath );
-            printmeta( &metadata );
-            printmetachk( check );
+            printe("Metadata error in:\n%ls\n", szPath);
+            printmeta(&metadata);
+            printmetachk(check);
         }
         else
         {
-            ID3D11ShaderResourceView* pSRV = NULL;
-
-            hr = CreateShaderResourceView( device.Get(), image.GetImages(), image.GetImageCount(), metadata, &pSRV );
-            if ( FAILED(hr) )
+            ComPtr<ID3D11ShaderResourceView> pSRV;
+            hr = CreateShaderResourceView(device.Get(), image.GetImages(), image.GetImageCount(), metadata, pSRV.GetAddressOf());
+            if (FAILED(hr))
             {
                 success = false;
-                printe( "Failed creating SRV from (HRESULT %08X):\n%ls\n", hr, szPath );
+                printe("Failed creating SRV from (HRESULT %08X):\n%ls\n", hr, szPath);
             }
             else
             {
-                print( "Viewing %ls\n", szPath );
-
-                RenderTest( metadata, pSRV );
-
-                pSRV->Release();
-
-                hr = CreateShaderResourceViewEx( device.Get(), image.GetImages(), image.GetImageCount(), metadata,
-                                                 D3D11_USAGE_IMMUTABLE, D3D11_BIND_SHADER_RESOURCE, 0, 0, true, &pSRV );
-                if ( FAILED(hr) )
+                hr = CreateShaderResourceViewEx(device.Get(), image.GetImages(), image.GetImageCount(), metadata,
+                    D3D11_USAGE_IMMUTABLE, D3D11_BIND_SHADER_RESOURCE, 0, 0, true, pSRV.ReleaseAndGetAddressOf());
+                if (FAILED(hr))
                 {
                     success = false;
-                    printe( "Failed creating SRV ex from (HRESULT %08X):\n%ls\n", hr, szPath );
+                    printe("Failed creating SRV ex from (HRESULT %08X):\n%ls\n", hr, szPath);
                 }
                 else
                 {
-                    pSRV->Release();
-
                     ++npass;
                 }
             }
@@ -324,23 +370,20 @@ bool Test03()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass );
-
-    CleanupRenderTest();
+    print("%Iu images tested, %Iu images passed ", ncount, npass);
 
     return success;
 }
 
 //-------------------------------------------------------------------------------------
-// CaptureTexture
+// rendertest
 bool Test04()
 {
     ComPtr<ID3D11Device> device;
-    ComPtr<ID3D11DeviceContext> context;
-    HRESULT hr = CreateDevice( device.GetAddressOf(), context.GetAddressOf() );
-    if ( FAILED(hr) )
+    HRESULT hr = SetupRenderTest(device.GetAddressOf(), nullptr);
+    if (FAILED(hr))
     {
-        printe( "Failed creating device (HRESULT %08X)\n", hr );
+        printe("Failed creating device (HRESULT %08X)\n", hr);
         return false;
     }
 
@@ -349,13 +392,120 @@ bool Test04()
     size_t ncount = 0;
     size_t npass = 0;
 
-    for( size_t index=0; index < _countof(g_TestMedia); ++index )
+    for (size_t index = 0; index < _countof(g_TestMedia); ++index)
     {
+        if (g_TestMedia[index].options & (FLAGS_PLANAR | FLAGS_NOT_SUPPORTED))
+        {
+            // Skip video textures which need special options to render
+            continue;
+        }
+
         wchar_t szPath[MAX_PATH];
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
-        if ( !ret || ret > MAX_PATH )
+        if (!ret || ret > MAX_PATH)
         {
-            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            printe("ERROR: ExpandEnvironmentStrings FAILED\n");
+            return false;
+        }
+
+#ifdef _DEBUG
+        OutputDebugString(szPath);
+        OutputDebugStringA("\n");
+#endif
+
+        wchar_t ext[_MAX_EXT];
+        _wsplitpath_s(szPath, nullptr, 0, nullptr, 0, nullptr, 0, ext, _MAX_EXT);
+
+        TexMetadata metadata;
+        ScratchImage image;
+
+        if (_wcsicmp(ext, L".dds") == 0)
+        {
+            hr = LoadFromDDSFile(szPath, DDS_FLAGS_NONE, &metadata, image);
+        }
+        else
+        {
+            hr = LoadFromWICFile(szPath, WIC_FLAGS_NONE, &metadata, image);
+        }
+
+        const TexMetadata* check = &g_TestMedia[index].metadata;
+        if (FAILED(hr))
+        {
+            success = false;
+            printe("Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath);
+        }
+        else if (memcmp(&metadata, check, sizeof(TexMetadata)) != 0)
+        {
+            success = false;
+            printe("Metadata error in:\n%ls\n", szPath);
+            printmeta(&metadata);
+            printmetachk(check);
+        }
+        else
+        {
+            if (g_TestMedia[index].options & FLAGS_PLANAR)
+            {
+                metadata.mipLevels = 1;
+            }
+
+            ComPtr<ID3D11ShaderResourceView> pSRV;
+            hr = CreateShaderResourceView(device.Get(), image.GetImages(), image.GetImageCount(), metadata, pSRV.GetAddressOf());
+            if (FAILED(hr))
+            {
+                success = false;
+                printe("Failed creating SRV from (HRESULT %08X):\n%ls\n", hr, szPath);
+            }
+            else
+            {
+                print("Viewing %ls\n", szPath);
+
+                RenderTest(metadata, pSRV.Get());
+
+                ++npass;
+            }
+        }
+
+        ++ncount;
+    }
+
+    print("%Iu images tested, %Iu images passed ", ncount, npass);
+
+    CleanupRenderTest();
+
+    return success;
+}
+
+//-------------------------------------------------------------------------------------
+// CaptureTexture
+bool Test05()
+{
+    ComPtr<ID3D11Device> device;
+    ComPtr<ID3D11DeviceContext> context;
+    HRESULT hr = CreateDevice(device.GetAddressOf(), context.GetAddressOf());
+    if (FAILED(hr))
+    {
+        printe("Failed creating device (HRESULT %08X)\n", hr);
+        return false;
+    }
+
+    bool success = true;
+
+    size_t ncount = 0;
+    size_t npass = 0;
+
+    for (size_t index = 0; index < _countof(g_TestMedia); ++index)
+    {
+        if (g_TestMedia[index].options & (FLAGS_PLANAR | FLAGS_NOT_SUPPORTED))
+        {
+            // Skip video textures which need special options to render
+            continue;
+        }
+
+        wchar_t szPath[MAX_PATH];
+        DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
+        if (!ret || ret > MAX_PATH)
+        {
+            printe("ERROR: ExpandEnvironmentStrings FAILED\n");
             return false;
         }
 
@@ -366,49 +516,54 @@ bool Test04()
         // Form dest path
         wchar_t ext[_MAX_EXT];
         wchar_t fname[_MAX_FNAME];
-        _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
+        _wsplitpath_s(szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT);
 
         wchar_t tempDir[MAX_PATH];
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"d3d11", tempDir, MAX_PATH);
-        if ( !ret || ret > MAX_PATH )
+        if (!ret || ret > MAX_PATH)
         {
-            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            printe("ERROR: ExpandEnvironmentStrings FAILED\n");
             return false;
         }
 
-        CreateDirectoryW( tempDir, NULL );
+        CreateDirectoryW(tempDir, nullptr);
 
         wchar_t szDestPath[MAX_PATH];
-        _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, fname, L".dds" );
+        _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, fname, L".dds");
 
         TexMetadata metadata;
         ScratchImage image;
 
-        if ( _wcsicmp( ext, L".dds" ) == 0 )
+        if (_wcsicmp(ext, L".dds") == 0)
         {
-            hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, &metadata, image );
+            hr = LoadFromDDSFile(szPath, DDS_FLAGS_NONE, &metadata, image);
         }
         else
         {
-            hr = LoadFromWICFile( szPath, WIC_FLAGS_NONE, &metadata, image );
+            hr = LoadFromWICFile(szPath, WIC_FLAGS_NONE, &metadata, image);
         }
 
         const TexMetadata* check = &g_TestMedia[index].metadata;
-        if ( FAILED(hr) )
+        if (FAILED(hr))
         {
             success = false;
-            printe( "Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe("Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath);
         }
-        else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
+        else if (memcmp(&metadata, check, sizeof(TexMetadata)) != 0)
         {
             success = false;
-            printe( "Metadata error in:\n%ls\n", szPath );
-            printmeta( &metadata );
-            printmetachk( check );
+            printe("Metadata error in:\n%ls\n", szPath);
+            printmeta(&metadata);
+            printmetachk(check);
         }
         else
         {
             bool pass = true;
+
+            if (g_TestMedia[index].options & FLAGS_PLANAR)
+            {
+                metadata.mipLevels = 1;
+            }
 
             {
                 ComPtr<ID3D11Resource> pResource;
@@ -518,7 +673,7 @@ bool Test04()
                             wcscat_s(tname, L"_staging");
 
                             wchar_t szDestPath2[MAX_PATH];
-                            _wmakepath_s(szDestPath2, MAX_PATH, NULL, tempDir, tname, L".dds");
+                            _wmakepath_s(szDestPath2, MAX_PATH, nullptr, tempDir, tname, L".dds");
 
                             hr = SaveToDDSFile(image2.GetImages(), image2.GetImageCount(), image2.GetMetadata(), DDS_FLAGS_NONE, szDestPath2);
                             if (FAILED(hr))
@@ -557,7 +712,7 @@ bool Test04()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass );
+    print("%Iu images tested, %Iu images passed ", ncount, npass);
 
     return success;
 }

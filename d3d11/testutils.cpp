@@ -44,31 +44,31 @@ struct CBChangesEveryFrame
 };
 
 //-------------------------------------------------------------------------------------
-HWND                                g_hWnd = NULL;
+HWND                                g_hWnd = nullptr;
 
-ID3D11Device*                       g_pd3dDevice = NULL;
-ID3D11DeviceContext*                g_pImmediateContext = NULL;
-IDXGISwapChain*                     g_pSwapChain = NULL;
-ID3D11RenderTargetView*             g_pRenderTargetView = NULL;
-ID3D11Texture2D*                    g_pDepthStencil = NULL;
-ID3D11DepthStencilView*             g_pDepthStencilView = NULL;
+ID3D11Device*                       g_pd3dDevice = nullptr;
+ID3D11DeviceContext*                g_pImmediateContext = nullptr;
+IDXGISwapChain*                     g_pSwapChain = nullptr;
+ID3D11RenderTargetView*             g_pRenderTargetView = nullptr;
+ID3D11Texture2D*                    g_pDepthStencil = nullptr;
+ID3D11DepthStencilView*             g_pDepthStencilView = nullptr;
 
-ID3D11PixelShader*                  g_pPixelShader1D = NULL;
-ID3D11PixelShader*                  g_pPixelShader2D = NULL;
-ID3D11PixelShader*                  g_pPixelShader3D = NULL;
-ID3D11PixelShader*                  g_pPixelShaderCube = NULL;
+ID3D11PixelShader*                  g_pPixelShader1D = nullptr;
+ID3D11PixelShader*                  g_pPixelShader2D = nullptr;
+ID3D11PixelShader*                  g_pPixelShader3D = nullptr;
+ID3D11PixelShader*                  g_pPixelShaderCube = nullptr;
 
-ID3D11VertexShader*                 g_pVertexShader2D = NULL;
-ID3D11VertexShader*                 g_pVertexShader3D = NULL;
-ID3D11VertexShader*                 g_pVertexShaderCube = NULL;
+ID3D11VertexShader*                 g_pVertexShader2D = nullptr;
+ID3D11VertexShader*                 g_pVertexShader3D = nullptr;
+ID3D11VertexShader*                 g_pVertexShaderCube = nullptr;
 
-ID3D11InputLayout*                  g_pVertexLayout = NULL;
-ID3D11Buffer*                       g_pVertexBuffer = NULL;
-ID3D11Buffer*                       g_pIndexBuffer = NULL;
-ID3D11Buffer*                       g_pCBNeverChanges = NULL;
-ID3D11Buffer*                       g_pCBChangeOnResize = NULL;
-ID3D11Buffer*                       g_pCBChangesEveryFrame = NULL;
-ID3D11SamplerState*                 g_pSamplerLinear = NULL;
+ID3D11InputLayout*                  g_pVertexLayout = nullptr;
+ID3D11Buffer*                       g_pVertexBuffer = nullptr;
+ID3D11Buffer*                       g_pIndexBuffer = nullptr;
+ID3D11Buffer*                       g_pCBNeverChanges = nullptr;
+ID3D11Buffer*                       g_pCBChangeOnResize = nullptr;
+ID3D11Buffer*                       g_pCBChangesEveryFrame = nullptr;
+ID3D11SamplerState*                 g_pSamplerLinear = nullptr;
 
 XMMATRIX                            g_World;
 XMMATRIX                            g_View;
@@ -78,6 +78,8 @@ XMFLOAT4                            g_vMeshColor( 0.7f, 0.7f, 0.7f, 1.0f );
 
 //-------------------------------------------------------------------------------------
 
+namespace
+{
 // fxc d3d11.fx /EVS2D /Tvs_4_0 /Fhvs2D.h
 #include "shaders\vs2D.h"
 
@@ -100,23 +102,24 @@ XMFLOAT4                            g_vMeshColor( 0.7f, 0.7f, 0.7f, 1.0f );
 #include "shaders\ps3D.h"
 
 //-------------------------------------------------------------------------------------
-static LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
-{
-    PAINTSTRUCT ps;
-    HDC hdc;
-
-    switch( message )
+    LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
+        PAINTSTRUCT ps;
+        HDC hdc;
+
+        switch (message)
+        {
         case WM_PAINT:
-            hdc = BeginPaint( hWnd, &ps );
-            EndPaint( hWnd, &ps );
+            hdc = BeginPaint(hWnd, &ps);
+            EndPaint(hWnd, &ps);
             break;
 
-         default:
-            return DefWindowProc( hWnd, message, wParam, lParam );
-    }
+        default:
+            return DefWindowProc(hWnd, message, wParam, lParam);
+        }
 
-    return 0;
+        return 0;
+    }
 }
 
 
@@ -147,8 +150,8 @@ HRESULT CreateDevice( ID3D11Device** pDev, ID3D11DeviceContext** pContext )
 
     for( UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++ )
     {
-        hr = D3D11CreateDevice( NULL, driverTypes[driverTypeIndex], NULL, createDeviceFlags, featureLevels, numFeatureLevels,
-                                D3D11_SDK_VERSION, pDev, NULL, pContext );
+        hr = D3D11CreateDevice( nullptr, driverTypes[driverTypeIndex], nullptr, createDeviceFlags, featureLevels, numFeatureLevels,
+                                D3D11_SDK_VERSION, pDev, nullptr, pContext );
         if( SUCCEEDED( hr ) )
             break;
     }
@@ -170,9 +173,9 @@ HRESULT SetupRenderTest( ID3D11Device** pDev, ID3D11DeviceContext** pContext )
         wcex.cbSize = sizeof( WNDCLASSEX );
         wcex.style = CS_HREDRAW | CS_VREDRAW | CS_NOCLOSE;
         wcex.lpfnWndProc = WndProc;
-        wcex.hCursor = LoadCursor( NULL, IDC_ARROW );
+        wcex.hCursor = LoadCursor( nullptr, IDC_ARROW );
         wcex.hbrBackground = ( HBRUSH )( COLOR_WINDOW + 1 );
-        wcex.lpszMenuName = NULL;
+        wcex.lpszMenuName = nullptr;
         wcex.lpszClassName = L"DirectXTexClass";
         if( !RegisterClassEx( &wcex ) )
             return E_FAIL;
@@ -182,8 +185,8 @@ HRESULT SetupRenderTest( ID3D11Device** pDev, ID3D11DeviceContext** pContext )
 
     RECT rc = { 0, 0, RENDER_WIDTH, RENDER_HEIGHT };
     AdjustWindowRect( &rc, WS_OVERLAPPEDWINDOW, FALSE );
-    g_hWnd = CreateWindow( L"DirectXTexClass", L"DirectXTex", WS_OVERLAPPEDWINDOW,
-                           CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, NULL, NULL );
+    g_hWnd = CreateWindow( L"DirectXTexClass", L"DirectXTex (D3D11)", WS_OVERLAPPEDWINDOW,
+                           CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, nullptr, nullptr );
     if( !g_hWnd )
         return E_FAIL;
 
@@ -205,9 +208,8 @@ HRESULT SetupRenderTest( ID3D11Device** pDev, ID3D11DeviceContext** pContext )
     };
     const UINT numFeatureLevels = ARRAYSIZE( featureLevels );
 
-    DXGI_SWAP_CHAIN_DESC sd;
-    ZeroMemory( &sd, sizeof( sd ) );
-    sd.BufferCount = 1;
+    DXGI_SWAP_CHAIN_DESC sd = {};
+    sd.BufferCount = 2;
     sd.BufferDesc.Width = RENDER_WIDTH;
     sd.BufferDesc.Height = RENDER_HEIGHT;
     sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -228,8 +230,8 @@ HRESULT SetupRenderTest( ID3D11Device** pDev, ID3D11DeviceContext** pContext )
 
     for( UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++ )
     {
-        hr = D3D11CreateDeviceAndSwapChain( NULL, driverTypes[driverTypeIndex], NULL, createDeviceFlags, featureLevels, numFeatureLevels,
-                                            D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, NULL, &g_pImmediateContext );
+        hr = D3D11CreateDeviceAndSwapChain( nullptr, driverTypes[driverTypeIndex], nullptr, createDeviceFlags, featureLevels, numFeatureLevels,
+                                            D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, nullptr, &g_pImmediateContext );
         if( SUCCEEDED( hr ) )
             break;
     }
@@ -237,19 +239,18 @@ HRESULT SetupRenderTest( ID3D11Device** pDev, ID3D11DeviceContext** pContext )
         return hr;
 
     // Create a render target view
-    ID3D11Texture2D* pBackBuffer = NULL;
+    ID3D11Texture2D* pBackBuffer = nullptr;
     hr = g_pSwapChain->GetBuffer( 0, IID_PPV_ARGS(&pBackBuffer) );
     if( FAILED( hr ) )
         return hr;
 
-    hr = g_pd3dDevice->CreateRenderTargetView( pBackBuffer, NULL, &g_pRenderTargetView );
+    hr = g_pd3dDevice->CreateRenderTargetView( pBackBuffer, nullptr, &g_pRenderTargetView );
     pBackBuffer->Release();
     if( FAILED( hr ) )
         return hr;
 
     // Create depth stencil texture
-    D3D11_TEXTURE2D_DESC descDepth;
-    ZeroMemory( &descDepth, sizeof(descDepth) );
+    D3D11_TEXTURE2D_DESC descDepth = {};
     descDepth.Width = RENDER_WIDTH;
     descDepth.Height = RENDER_HEIGHT;
     descDepth.MipLevels = 1;
@@ -261,13 +262,12 @@ HRESULT SetupRenderTest( ID3D11Device** pDev, ID3D11DeviceContext** pContext )
     descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
     descDepth.CPUAccessFlags = 0;
     descDepth.MiscFlags = 0;
-    hr = g_pd3dDevice->CreateTexture2D( &descDepth, NULL, &g_pDepthStencil );
+    hr = g_pd3dDevice->CreateTexture2D( &descDepth, nullptr, &g_pDepthStencil );
     if( FAILED( hr ) )
         return hr;
 
     // Create the depth stencil view
-    D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
-    ZeroMemory( &descDSV, sizeof(descDSV) );
+    D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
     descDSV.Format = descDepth.Format;
     descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
     descDSV.Texture2D.MipSlice = 0;
@@ -290,15 +290,15 @@ HRESULT SetupRenderTest( ID3D11Device** pDev, ID3D11DeviceContext** pContext )
     //--- Setup render cube -----------------------------------------------------------
 
     // Create the vertex shaders
-    hr = g_pd3dDevice->CreateVertexShader( g_VS2D, sizeof(g_VS2D), NULL, &g_pVertexShader2D );
+    hr = g_pd3dDevice->CreateVertexShader( g_VS2D, sizeof(g_VS2D), nullptr, &g_pVertexShader2D );
     if( FAILED( hr ) )
         return hr;
 
-    hr = g_pd3dDevice->CreateVertexShader( g_VS3D, sizeof(g_VS3D), NULL, &g_pVertexShader3D );
+    hr = g_pd3dDevice->CreateVertexShader( g_VS3D, sizeof(g_VS3D), nullptr, &g_pVertexShader3D );
     if( FAILED( hr ) )
         return hr;
 
-    hr = g_pd3dDevice->CreateVertexShader( g_VSCube, sizeof(g_VSCube), NULL, &g_pVertexShaderCube );
+    hr = g_pd3dDevice->CreateVertexShader( g_VSCube, sizeof(g_VSCube), nullptr, &g_pVertexShaderCube );
     if( FAILED( hr ) )
         return hr;
 
@@ -320,19 +320,19 @@ HRESULT SetupRenderTest( ID3D11Device** pDev, ID3D11DeviceContext** pContext )
     g_pImmediateContext->IASetInputLayout( g_pVertexLayout );
 
     // Create the pixel shaders
-    hr = g_pd3dDevice->CreatePixelShader( g_PS1D, sizeof(g_PS1D), NULL, &g_pPixelShader1D );
+    hr = g_pd3dDevice->CreatePixelShader( g_PS1D, sizeof(g_PS1D), nullptr, &g_pPixelShader1D );
     if( FAILED( hr ) )
         return hr;
 
-    hr = g_pd3dDevice->CreatePixelShader( g_PS2D, sizeof(g_PS2D), NULL, &g_pPixelShader2D );
+    hr = g_pd3dDevice->CreatePixelShader( g_PS2D, sizeof(g_PS2D), nullptr, &g_pPixelShader2D );
     if( FAILED( hr ) )
         return hr;
 
-    hr = g_pd3dDevice->CreatePixelShader( g_PS3D, sizeof(g_PS3D), NULL, &g_pPixelShader3D );
+    hr = g_pd3dDevice->CreatePixelShader( g_PS3D, sizeof(g_PS3D), nullptr, &g_pPixelShader3D );
     if( FAILED( hr ) )
         return hr;
 
-    hr = g_pd3dDevice->CreatePixelShader( g_PSCube, sizeof(g_PSCube), NULL, &g_pPixelShaderCube );
+    hr = g_pd3dDevice->CreatePixelShader( g_PSCube, sizeof(g_PSCube), nullptr, &g_pPixelShaderCube );
     if( FAILED( hr ) )
         return hr;
 
@@ -370,14 +370,12 @@ HRESULT SetupRenderTest( ID3D11Device** pDev, ID3D11DeviceContext** pContext )
         { XMFLOAT3( -1.0f, 1.0f, 1.0f ), XMFLOAT3( 0.0f, 0.0f, 1.0f), XMFLOAT2( 1.0f, 0.0f ) },
     };
 
-    D3D11_BUFFER_DESC bd;
-    ZeroMemory( &bd, sizeof(bd) );
+    D3D11_BUFFER_DESC bd = {};
     bd.Usage = D3D11_USAGE_DEFAULT;
     bd.ByteWidth = sizeof( SimpleVertex ) * 24;
     bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
     bd.CPUAccessFlags = 0;
-    D3D11_SUBRESOURCE_DATA InitData;
-    ZeroMemory( &InitData, sizeof(InitData) );
+    D3D11_SUBRESOURCE_DATA InitData = {};
     InitData.pSysMem = vertices;
     hr = g_pd3dDevice->CreateBuffer( &bd, &InitData, &g_pVertexBuffer );
     if( FAILED( hr ) )
@@ -431,23 +429,22 @@ HRESULT SetupRenderTest( ID3D11Device** pDev, ID3D11DeviceContext** pContext )
     bd.ByteWidth = sizeof(CBNeverChanges);
     bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     bd.CPUAccessFlags = 0;
-    hr = g_pd3dDevice->CreateBuffer( &bd, NULL, &g_pCBNeverChanges );
+    hr = g_pd3dDevice->CreateBuffer( &bd, nullptr, &g_pCBNeverChanges );
     if( FAILED( hr ) )
         return hr;
     
     bd.ByteWidth = sizeof(CBChangeOnResize);
-    hr = g_pd3dDevice->CreateBuffer( &bd, NULL, &g_pCBChangeOnResize );
+    hr = g_pd3dDevice->CreateBuffer( &bd, nullptr, &g_pCBChangeOnResize );
     if( FAILED( hr ) )
         return hr;
     
     bd.ByteWidth = sizeof(CBChangesEveryFrame);
-    hr = g_pd3dDevice->CreateBuffer( &bd, NULL, &g_pCBChangesEveryFrame );
+    hr = g_pd3dDevice->CreateBuffer( &bd, nullptr, &g_pCBChangesEveryFrame );
     if( FAILED( hr ) )
         return hr;
 
     // Create the sample state
-    D3D11_SAMPLER_DESC sampDesc;
-    ZeroMemory( &sampDesc, sizeof(sampDesc) );
+    D3D11_SAMPLER_DESC sampDesc = {};
     sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
     sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
     sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -469,14 +466,14 @@ HRESULT SetupRenderTest( ID3D11Device** pDev, ID3D11DeviceContext** pContext )
 
     CBNeverChanges cbNeverChanges;
     cbNeverChanges.mView = XMMatrixTranspose( g_View );
-    g_pImmediateContext->UpdateSubresource( g_pCBNeverChanges, 0, NULL, &cbNeverChanges, 0, 0 );
+    g_pImmediateContext->UpdateSubresource( g_pCBNeverChanges, 0, nullptr, &cbNeverChanges, 0, 0 );
 
     // Initialize the projection matrix
     g_Projection = XMMatrixPerspectiveFovLH( XM_PIDIV4, RENDER_WIDTH / (FLOAT)RENDER_HEIGHT, 0.01f, 100.0f );
     
     CBChangeOnResize cbChangesOnResize;
     cbChangesOnResize.mProjection = XMMatrixTranspose( g_Projection );
-    g_pImmediateContext->UpdateSubresource( g_pCBChangeOnResize, 0, NULL, &cbChangesOnResize, 0, 0 );
+    g_pImmediateContext->UpdateSubresource( g_pCBChangeOnResize, 0, nullptr, &cbChangesOnResize, 0, 0 );
 
     if ( pDev )
     {
@@ -523,7 +520,7 @@ static void Render()
     cb.mWorld = XMMatrixTranspose( g_World );
     cb.vEyePosition = g_vEyePosition;
     cb.vMeshColor = g_vMeshColor;
-    g_pImmediateContext->UpdateSubresource( g_pCBChangesEveryFrame, 0, NULL, &cb, 0, 0 );
+    g_pImmediateContext->UpdateSubresource( g_pCBChangesEveryFrame, 0, nullptr, &cb, 0, 0 );
 
     //
     // Render the cube
@@ -547,25 +544,25 @@ void RenderTest( const TexMetadata& metadata, ID3D11ShaderResourceView* pSRV )
     switch ( metadata.dimension )
     {
     case TEX_DIMENSION_TEXTURE1D:
-        g_pImmediateContext->VSSetShader( g_pVertexShader2D, NULL, 0 );
-        g_pImmediateContext->PSSetShader( g_pPixelShader1D, NULL, 0 );
+        g_pImmediateContext->VSSetShader( g_pVertexShader2D, nullptr, 0 );
+        g_pImmediateContext->PSSetShader( g_pPixelShader1D, nullptr, 0 );
         break;
 
     case TEX_DIMENSION_TEXTURE3D:
-        g_pImmediateContext->VSSetShader( g_pVertexShader3D, NULL, 0 );
-        g_pImmediateContext->PSSetShader( g_pPixelShader3D, NULL, 0 );
+        g_pImmediateContext->VSSetShader( g_pVertexShader3D, nullptr, 0 );
+        g_pImmediateContext->PSSetShader( g_pPixelShader3D, nullptr, 0 );
         break;
 
     case TEX_DIMENSION_TEXTURE2D:
         if ( metadata.miscFlags & TEX_MISC_TEXTURECUBE ) 
         {
-            g_pImmediateContext->VSSetShader( g_pVertexShaderCube, NULL, 0 );
-            g_pImmediateContext->PSSetShader( g_pPixelShaderCube, NULL, 0 );
+            g_pImmediateContext->VSSetShader( g_pVertexShaderCube, nullptr, 0 );
+            g_pImmediateContext->PSSetShader( g_pPixelShaderCube, nullptr, 0 );
         }
         else
         {
-            g_pImmediateContext->VSSetShader( g_pVertexShader2D, NULL, 0 );
-            g_pImmediateContext->PSSetShader( g_pPixelShader2D, NULL, 0 );
+            g_pImmediateContext->VSSetShader( g_pVertexShader2D, nullptr, 0 );
+            g_pImmediateContext->PSSetShader( g_pPixelShader2D, nullptr, 0 );
         }
         break;
 
@@ -583,7 +580,7 @@ void RenderTest( const TexMetadata& metadata, ID3D11ShaderResourceView* pSRV )
 
     for(;;)
     {
-        if( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )
+        if( PeekMessage( &msg, nullptr, 0, 0, PM_REMOVE ) )
         {
             TranslateMessage( &msg );
             DispatchMessage( &msg );
@@ -601,14 +598,14 @@ void RenderTest( const TexMetadata& metadata, ID3D11ShaderResourceView* pSRV )
 #pragma warning(disable : 6309)
 #pragma warning(disable : 6387)
     if ( pSRV )
-        g_pImmediateContext->PSSetShaderResources( 0, 0, NULL );
+        g_pImmediateContext->PSSetShaderResources( 0, 0, nullptr );
 #pragma warning(pop)
 }
 
 
 //-------------------------------------------------------------------------------------
 
-#define SAFE_RELEASE(p) { if (p) { (p)->Release(); (p)=NULL; } }
+#define SAFE_RELEASE(p) { if (p) { (p)->Release(); (p)=nullptr; } }
 
 void CleanupRenderTest()
 {
@@ -641,6 +638,6 @@ void CleanupRenderTest()
     if ( g_hWnd )
     {
         CloseWindow( g_hWnd );
-        g_hWnd = NULL;
+        g_hWnd = nullptr;
     }
 }
