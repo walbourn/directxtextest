@@ -23,6 +23,6 @@ Debug
 Profile
 Release
 x64
-screenshot.*
+screenshot*.*
 toolscripts/texassemble/out
 toolscripts/texconv/out

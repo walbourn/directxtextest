@@ -12,6 +12,7 @@ using Microsoft::WRL::ComPtr;
 #include "DDSTextureLoader.h"
 #include "WICTextureLoader.h"
 #include "ScreenGrab.h"
+#include "DirectXTex.h"
 #include "ReadData.h"
 
 #include <wincodec.h>
@@ -118,12 +119,17 @@ void Game::Render()
         OutputDebugStringA("Saving screenshot...\n");
 
         ComPtr<ID3D11Resource> backbuffer;
-
         m_deviceResources->GetSwapChain()->GetBuffer(0, IID_PPV_ARGS(backbuffer.GetAddressOf()));
 
         DX::ThrowIfFailed(SaveDDSTextureToFile(context, backbuffer.Get(), L"screenshot.dds"));
 
         DX::ThrowIfFailed(SaveWICTextureToFile(context, backbuffer.Get(), GUID_ContainerFormatJpeg, L"screenshot.jpg"));
+
+        ScratchImage image;
+        DX::ThrowIfFailed(CaptureTexture(m_deviceResources->GetD3DDevice(), context, backbuffer.Get(), image));
+        
+        DX::ThrowIfFailed(SaveToDDSFile(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DDS_FLAGS_NONE, L"screenshot2.dds"));
+        DX::ThrowIfFailed(SaveToWICFile(*image.GetImage(0,0,0), WIC_FLAGS_NONE, GUID_ContainerFormatJpeg, L"screenshot2.jpg"));
     }
 
     // Show the new frame.
