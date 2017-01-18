@@ -14,6 +14,8 @@
 
 #include "directxtex.h"
 
+#include <exception>
+
 using namespace DirectX;
 using Microsoft::WRL::ComPtr;
 
@@ -406,9 +408,9 @@ HRESULT SetupRenderTest(ID3D11Device** pDev, ID3D11DeviceContext** pContext)
         bd.ByteWidth = sizeof(SimpleVertex) * 24;
         bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
-        D3D11_SUBRESOURCE_DATA InitData = {};
-        InitData.pSysMem = s_vertices;
-        hr = g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pVertexBuffer);
+        D3D11_SUBRESOURCE_DATA initData = {};
+        initData.pSysMem = s_vertices;
+        hr = g_pd3dDevice->CreateBuffer(&bd, &initData, &g_pVertexBuffer);
         if (FAILED(hr))
             return hr;
     }
@@ -447,9 +449,9 @@ HRESULT SetupRenderTest(ID3D11Device** pDev, ID3D11DeviceContext** pContext)
         bd.ByteWidth = sizeof(WORD) * 36;
         bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
 
-        D3D11_SUBRESOURCE_DATA InitData = {};
-        InitData.pSysMem = s_indices;
-        hr = g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pIndexBuffer);
+        D3D11_SUBRESOURCE_DATA initData = {};
+        initData.pSysMem = s_indices;
+        hr = g_pd3dDevice->CreateBuffer(&bd, &initData, &g_pIndexBuffer);
         if (FAILED(hr))
             return hr;
     }
@@ -579,7 +581,11 @@ namespace
         //
         // Present our back buffer to our front buffer
         //
-        g_pSwapChain->Present(0, 0);
+        HRESULT hr = g_pSwapChain->Present(0, 0);
+        if (hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
+        {
+            throw std::exception("Present");
+        }
     }
 }
 
