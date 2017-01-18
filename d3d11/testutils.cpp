@@ -208,11 +208,11 @@ HRESULT SetupRenderTest(ID3D11Device** pDev, ID3D11DeviceContext** pContext)
     if (FAILED(hr))
         return hr;
 
-    hr = device->QueryInterface(IID_PPV_ARGS(&g_pd3dDevice));
+    hr = device.Get()->QueryInterface(IID_PPV_ARGS(&g_pd3dDevice));
     if (FAILED(hr))
         return hr;
 
-    hr = context->QueryInterface(IID_PPV_ARGS(&g_pImmediateContext));
+    hr = context.Get()->QueryInterface(IID_PPV_ARGS(&g_pImmediateContext));
     if (FAILED(hr))
         return hr;
 
