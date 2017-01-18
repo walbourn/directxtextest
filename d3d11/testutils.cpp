@@ -86,25 +86,12 @@ namespace
 
     //---------------------------------------------------------------------------------
 
-    // fxc d3d11.fx /EVS2D /Tvs_4_0 /Fhvs2D.h
     #include "shaders\vs2D.h"
-
-    // fxc d3d11.fx /EPS1D /Tps_4_0 /Fhps1D.h
-    #include "shaders\ps1d.h"
-
-    // fxc d3d11.fx /EPS2D /Tps_4_0 /Fhps2D.h
-    #include "shaders\ps2d.h"
-
-    // fxc d3d11.fx /EVSCube /Tvs_4_0 /FhvsCube.h
+    #include "shaders\ps1D.h"
+    #include "shaders\ps2D.h"
     #include "shaders\vsCube.h"
-
-    // fxc d3d11.fx /EPSCube /Tps_4_0 /FhpsCube.h
     #include "shaders\psCube.h"
-
-    // fxc d3d11.fx /nologo /EVS3D /Tvs_4_0 /Fhshaders\vs3D.h
     #include "shaders\vs3D.h"
-
-    //fxc d3d11.fx /nologo /EPS3D /Tps_4_0 /Fhshaders\ps3D.h
     #include "shaders\ps3D.h"
 
     //---------------------------------------------------------------------------------
