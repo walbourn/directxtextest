@@ -12,6 +12,7 @@ using Microsoft::WRL::ComPtr;
 #include "DDSTextureLoader12.h"
 #include "WICTextureLoader12.h"
 #include "ScreenGrab12.h"
+#include "DirectXTex.h"
 #include "ReadData.h"
 
 #include <wincodec.h>
@@ -69,17 +70,26 @@ void Game::Tick()
     {
         OutputDebugStringA("Saving screenshot...\n");
 
+        auto commandQ = m_deviceResources->GetCommandQueue();
+
         DX::ThrowIfFailed(
-            SaveDDSTextureToFile(m_deviceResources->GetCommandQueue(), m_screenshot.Get(),
+            SaveDDSTextureToFile(commandQ, m_screenshot.Get(),
                                  L"screenshot.dds",
                                  D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_PRESENT)
             );
 
         DX::ThrowIfFailed(
-            SaveWICTextureToFile(m_deviceResources->GetCommandQueue(), m_screenshot.Get(),
+            SaveWICTextureToFile(commandQ, m_screenshot.Get(),
                 GUID_ContainerFormatJpeg, L"screenshot.jpg",
                 D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_PRESENT)
             );
+
+        ScratchImage image;
+        DX::ThrowIfFailed(CaptureTexture(commandQ, m_screenshot.Get(), false, image,
+                                         D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_PRESENT));
+
+        DX::ThrowIfFailed(SaveToDDSFile(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DDS_FLAGS_NONE, L"screenshot2.dds"));
+        DX::ThrowIfFailed(SaveToWICFile(*image.GetImage(0, 0, 0), WIC_FLAGS_NONE, GUID_ContainerFormatJpeg, L"screenshot2.jpg"));
 
         m_screenshot.Reset();
     }

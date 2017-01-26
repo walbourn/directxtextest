@@ -30,9 +30,6 @@
     <ClInclude Include="DeviceResources.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="d3dx12.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="ReadData.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -45,6 +42,7 @@
     <ClInclude Include="..\..\ScreenGrab\ScreenGrab12.h">
       <Filter>ScreenGrab</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\DirectXTex\d3dx12.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />

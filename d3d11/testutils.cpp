@@ -408,7 +408,6 @@ HRESULT SetupRenderTest(ID3D11Device** pDev, ID3D11DeviceContext** pContext)
     g_pImmediateContext->IASetVertexBuffers(0, 1, &g_pVertexBuffer, &stride, &offset);
 
     // Create index buffer
-    // Create vertex buffer
     static const WORD s_indices[] =
     {
         3,1,0,
@@ -492,14 +491,14 @@ HRESULT SetupRenderTest(ID3D11Device** pDev, ID3D11DeviceContext** pContext)
     XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
     g_View = XMMatrixLookAtLH(XMLoadFloat4(&g_vEyePosition), At, Up);
 
-    CBNeverChanges cbNeverChanges;
+    CBNeverChanges cbNeverChanges = {};
     cbNeverChanges.mView = XMMatrixTranspose(g_View);
     g_pImmediateContext->UpdateSubresource(g_pCBNeverChanges, 0, nullptr, &cbNeverChanges, 0, 0);
 
     // Initialize the projection matrix
     g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, RENDER_WIDTH / (FLOAT)RENDER_HEIGHT, 0.01f, 100.0f);
 
-    CBChangeOnResize cbChangesOnResize;
+    CBChangeOnResize cbChangesOnResize = {};
     cbChangesOnResize.mProjection = XMMatrixTranspose(g_Projection);
     g_pImmediateContext->UpdateSubresource(g_pCBChangeOnResize, 0, nullptr, &cbChangesOnResize, 0, 0);
 
@@ -549,7 +548,7 @@ namespace
         //
         // Update variables that change once per frame
         //
-        CBChangesEveryFrame cb;
+        CBChangesEveryFrame cb = {};
         cb.mWorld = XMMatrixTranspose(g_World);
         cb.vEyePosition = g_vEyePosition;
         cb.vMeshColor = g_vMeshColor;
