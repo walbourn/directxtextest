@@ -216,7 +216,32 @@ HRESULT CreateDevice( ID3D12Device** pDev )
         }
     }
 
-    return D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(pDev));
+    hr = D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(pDev));
+    if (FAILED(hr))
+        return hr;
+
+#ifndef NDEBUG
+    // Configure debug device (if active).
+    ComPtr<ID3D12InfoQueue> d3dInfoQueue;
+    if (SUCCEEDED((*pDev)->QueryInterface(IID_PPV_ARGS(&d3dInfoQueue))))
+    {
+#ifdef _DEBUG
+        d3dInfoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
+        d3dInfoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
+#endif
+        D3D12_MESSAGE_ID hide[] =
+        {
+            D3D12_MESSAGE_ID_MAP_INVALID_NULLRANGE,
+            D3D12_MESSAGE_ID_UNMAP_INVALID_NULLRANGE
+        };
+        D3D12_INFO_QUEUE_FILTER filter = {};
+        filter.DenyList.NumIDs = _countof(hide);
+        filter.DenyList.pIDList = hide;
+        d3dInfoQueue->AddStorageFilterEntries(&filter);
+    }
+#endif
+
+    return S_OK;
 }
 
 //-------------------------------------------------------------------------------------
