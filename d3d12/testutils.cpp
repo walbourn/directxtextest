@@ -1009,6 +1009,10 @@ void CleanupRenderTest()
     SAFE_RELEASE(g_pCubePSO);
     SAFE_RELEASE(g_p3DPSO);
 
+    SAFE_RELEASE(g_VB);
+    SAFE_RELEASE(g_IB);
+    SAFE_RELEASE(g_CB);
+
     SAFE_RELEASE(g_pRenderTarget[0]);
     SAFE_RELEASE(g_pRenderTarget[1]);
     SAFE_RELEASE(g_pDepthStencil);

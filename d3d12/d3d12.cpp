@@ -1,5 +1,5 @@
 //-------------------------------------------------------=------------------------------
-// d3d11.cpp
+// d3d12.cpp
 //  
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //-------------------------------------------------------------------------------------
@@ -17,10 +17,13 @@
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
 
+static const UINT DXGI_START = 1;
+static const UINT DXGI_END = 190; // as of DXGI 1.3
+
 enum
 {
     FLAGS_NONE = 0x0,
-    FLAGS_PLANAR = 0x1,
+    FLAGS_YUV = 0x1,
     FLAGS_NOT_SUPPORTED = 0x2,
 };
 
@@ -29,7 +32,6 @@ struct TestMedia
     DWORD options;
     TexMetadata metadata;
     const wchar_t *fname;
-    // TODO - Checksum to verify loaded image?
 };
 
 static const TestMedia g_TestMedia[] = 
@@ -55,18 +57,28 @@ static const TestMedia g_TestMedia[] =
 { FLAGS_NONE, { 32, 32, 4, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888mip.dds" },
 { FLAGS_NONE, { 32, 32, 4, 1, 6, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvoldxt1mip.dds" },
 { FLAGS_NONE, { 32, 1, 1, 1, 6, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE1D }, MEDIA_PATH L"io_R8G8B8A8_UNORM_SRV_DIMENSION_TEXTURE1D_MipOn.DDS" },
-{ FLAGS_PLANAR, { 200, 200, 1, 1, 8, 0, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaYUY2.dds" },
-{ FLAGS_PLANAR, { 200, 200, 1, 1, 8, 0, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaUYVY.dds" },
-{ FLAGS_PLANAR
+{ FLAGS_YUV, { 200, 200, 1, 1, 8, 0, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaYUY2.dds" },
+{ FLAGS_YUV, { 200, 200, 1, 1, 8, 0, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaUYVY.dds" },
+{ FLAGS_YUV, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_NV12, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenanv12.dds" },
+{ FLAGS_YUV, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_P010, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaP010.dds" },
+{ FLAGS_YUV
+  | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaCubeYUY2.dds" },
+{ FLAGS_YUV
+  | FLAGS_NOT_SUPPORTED, { 200, 200, 4, 1, 1, 0, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"lenaVolYUY2.dds" },
+{ FLAGS_YUV
   | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_AYUV, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaAYUV.dds" },
-{ FLAGS_PLANAR
+{ FLAGS_YUV
   | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_Y210, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaY210.dds" },
-{ FLAGS_PLANAR
+{ FLAGS_YUV
   | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_Y216, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaY216.dds" },
-{ FLAGS_PLANAR
+{ FLAGS_YUV
   | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_Y410, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaY410.dds" },
-{ FLAGS_PLANAR
+{ FLAGS_YUV
   | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_Y416, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaY416.dds" },
+{ FLAGS_YUV
+  | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_P016, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaP016.dds" },
+{ FLAGS_YUV
+   | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_NV11, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenanv11.dds" },
 };
 
 //-------------------------------------------------------------------------------------
@@ -78,8 +90,70 @@ extern void RenderTest(const TexMetadata& metadata, ID3D12Resource* pResource);
 extern void CleanupRenderTest();
 
 //-------------------------------------------------------------------------------------
-// IsSupportedTexture
+// planartest
 bool Test01()
+{
+    ComPtr<ID3D12Device> device;
+    HRESULT hr = CreateDevice(device.GetAddressOf());
+    if (FAILED(hr))
+    {
+        printe("Failed creating device (HRESULT %08X)\n", hr);
+        return false;
+    }
+
+    bool success = true;
+
+    for (UINT f = DXGI_START; f <= DXGI_END; ++f)
+    {
+        UINT count = D3D12GetFormatPlaneCount(device.Get(), static_cast<DXGI_FORMAT>(f));
+
+        if (!IsValid(static_cast<DXGI_FORMAT>(f)))
+            continue;
+
+        if (!count)
+        {
+            // Not suppoorted for this device
+        }
+        else if (IsPlanar(static_cast<DXGI_FORMAT>(f)))
+        {
+            if (count == 1 && f != DXGI_FORMAT_420_OPAQUE)
+            {
+                printe("ERROR: D3D12 and IsPlanar don't agree on on DXGI Format %u\n", f);
+                success = false;
+            }
+        }
+        else if (count > 1)
+        {
+            switch (f)
+            {
+            // Stencil formats
+            case DXGI_FORMAT_R32G8X24_TYPELESS:
+            case DXGI_FORMAT_D32_FLOAT_S8X24_UINT:
+            case DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS:
+            case DXGI_FORMAT_X32_TYPELESS_G8X24_UINT:
+            case DXGI_FORMAT_R24G8_TYPELESS:
+            case DXGI_FORMAT_D24_UNORM_S8_UINT:
+            case DXGI_FORMAT_R24_UNORM_X8_TYPELESS:
+            case DXGI_FORMAT_X24_TYPELESS_G8_UINT:
+            case 118 /*DXGI_FORMAT_D16_UNORM_S8_UINT*/:
+            case 119 /*XBOX_DXGI_FORMAT_R16_UNORM_X8_TYPELESS*/:
+            case 120 /*XBOX_DXGI_FORMAT_X16_TYPELESS_G8_UINT*/:
+                break;
+
+            default:
+                printe("ERROR: D3D12 and DirectXTex don't agree on on DXGI Format %u\n", f);
+                success = false;
+                break;
+            }
+        }
+    }
+
+    return success;
+}
+
+//-------------------------------------------------------------------------------------
+// IsSupportedTexture
+bool Test02()
 {
     ComPtr<ID3D12Device> device;
     HRESULT hr = CreateDevice(device.GetAddressOf());
@@ -142,7 +216,7 @@ bool Test01()
 
             if (!IsSupportedTexture(device.Get(), metadata))
             {
-                if (g_TestMedia[index].options & FLAGS_PLANAR)
+                if (g_TestMedia[index].options & FLAGS_YUV)
                 {
                     // Can't create video textures with mips on most hardware
                     metadata.mipLevels = 1;
@@ -152,7 +226,7 @@ bool Test01()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed testing planar data from (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed testing yuv data from (HRESULT %08X):\n%ls\n", hr, szPath);
                         }
                     }
                 }
@@ -181,7 +255,7 @@ bool Test01()
 
 //-------------------------------------------------------------------------------------
 // CreateTexture
-bool Test02()
+bool Test03()
 {
     ComPtr<ID3D12Device> device;
     HRESULT hr = CreateDevice(device.GetAddressOf());
@@ -246,25 +320,21 @@ bool Test02()
         }
         else
         {
-            if (g_TestMedia[index].options & FLAGS_PLANAR)
+            if (g_TestMedia[index].options & FLAGS_YUV)
             {
-                // Can't create video textures with mips on most hardware
-                metadata.mipLevels = 1;
+                if (!IsSupportedTexture(device.Get(), metadata))
+                {
+                    // Can't create video textures with mips on most hardware
+                    metadata.mipLevels = 1;
+                }
             }
 
             ComPtr<ID3D12Resource> pResource;
             hr = CreateTexture(device.Get(), metadata, pResource.GetAddressOf());
             if (FAILED(hr))
             {
-                if (g_TestMedia[index].options & FLAGS_PLANAR)
-                {
-                    ++npass;
-                }
-                else
-                {
-                    success = false;
-                    printe("Failed creating texture from (HRESULT %08X):\n%ls\n", hr, szPath);
-                }
+                success = false;
+                printe("Failed creating texture from (HRESULT %08X):\n%ls\n", hr, szPath);
             }
             else
             {
@@ -294,8 +364,16 @@ bool Test02()
 
 //-------------------------------------------------------------------------------------
 // PrepareUpload
-bool Test03()
+bool Test04()
 {
+    ComPtr<ID3D12Device> device;
+    HRESULT hr = CreateDevice(device.GetAddressOf());
+    if (FAILED(hr))
+    {
+        printe("Failed creating device (HRESULT %08X)\n", hr);
+        return false;
+    }
+
     bool success = true;
 
     size_t ncount = 0;
@@ -348,7 +426,7 @@ bool Test03()
         else
         {
             std::vector<D3D12_SUBRESOURCE_DATA> subresources;
-            hr = PrepareUpload(image.GetImages(), image.GetImageCount(), metadata, subresources);
+            hr = PrepareUpload(device.Get(), image.GetImages(), image.GetImageCount(), metadata, subresources);
             if (FAILED(hr))
             {
                 success = false;
@@ -361,8 +439,7 @@ bool Test03()
             }
             else
             {
-                size_t expected = metadata.mipLevels * metadata.arraySize;
-                // TODO - Update for planar formats
+                size_t expected = metadata.mipLevels * metadata.arraySize * D3D12GetFormatPlaneCount(device.Get(), metadata.format);
                 if (subresources.size() != expected)
                 {
                     success = false;
@@ -387,7 +464,7 @@ bool Test03()
 
 //-------------------------------------------------------------------------------------
 // RenderTest
-bool Test04()
+bool Test05()
 {
     ComPtr<ID3D12Device> device;
     ComPtr<ID3D12CommandQueue> queue;
@@ -406,7 +483,7 @@ bool Test04()
 
     for (size_t index = 0; index < _countof(g_TestMedia); ++index)
     {
-        if (g_TestMedia[index].options & (FLAGS_PLANAR | FLAGS_NOT_SUPPORTED))
+        if (g_TestMedia[index].options & (FLAGS_YUV | FLAGS_NOT_SUPPORTED))
         {
             // Skip video textures which need special options to render
             continue;
@@ -456,11 +533,6 @@ bool Test04()
         }
         else
         {
-            if (g_TestMedia[index].options & FLAGS_PLANAR)
-            {
-                metadata.mipLevels = 1;
-            }
-
             ComPtr<ID3D12Resource> pResource;
             hr = CreateTexture(device.Get(), metadata, pResource.GetAddressOf());
             if (FAILED(hr))
@@ -471,11 +543,16 @@ bool Test04()
             else
             {
                 std::vector<D3D12_SUBRESOURCE_DATA> subresources;
-                hr = PrepareUpload(image.GetImages(), image.GetImageCount(), metadata, subresources);
+                hr = PrepareUpload(device.Get(), image.GetImages(), image.GetImageCount(), metadata, subresources);
                 if (FAILED(hr))
                 {
                     success = false;
                     printe("Failed preparing texture from (HRESULT %08X):\n%ls\n", hr, szPath);
+                }
+                else if (subresources.empty())
+                {
+                    success = false;
+                    printe("Failed preparing texture with empty subresources result:\n%ls\n", szPath);
                 }
                 else
                 {
@@ -526,7 +603,7 @@ bool Test04()
 
 //-------------------------------------------------------------------------------------
 // CaptureTexture
-bool Test05()
+bool Test06()
 {
     ComPtr<ID3D12Device> device;
     HRESULT hr = CreateDevice(device.GetAddressOf());
@@ -552,7 +629,7 @@ bool Test05()
 
     for (size_t index = 0; index < _countof(g_TestMedia); ++index)
     {
-        if (g_TestMedia[index].options & (FLAGS_PLANAR | FLAGS_NOT_SUPPORTED))
+        if (g_TestMedia[index].options & FLAGS_NOT_SUPPORTED)
         {
             // Skip video textures which need special options to render
             continue;
@@ -602,6 +679,7 @@ bool Test05()
             hr = LoadFromWICFile(szPath, WIC_FLAGS_NONE, &metadata, image);
         }
 
+        bool forceNoMips = false;
         const TexMetadata* check = &g_TestMedia[index].metadata;
         if (FAILED(hr))
         {
@@ -617,9 +695,14 @@ bool Test05()
         }
         else
         {
-            if (g_TestMedia[index].options & FLAGS_PLANAR)
+            if (g_TestMedia[index].options & FLAGS_YUV)
             {
-                metadata.mipLevels = 1;
+                if (!IsSupportedTexture(device.Get(), metadata))
+                {
+                    // Can't create video textures with mips on most hardware
+                    metadata.mipLevels = 1;
+                    forceNoMips = true;
+                }
             }
 
             ComPtr<ID3D12Resource> pResource;
@@ -632,7 +715,7 @@ bool Test05()
             else
             {
                 std::vector<D3D12_SUBRESOURCE_DATA> subresources;
-                hr = PrepareUpload(image.GetImages(), image.GetImageCount(), metadata, subresources);
+                hr = PrepareUpload(device.Get(), image.GetImages(), image.GetImageCount(), metadata, subresources);
                 if (FAILED(hr))
                 {
                     success = false;
@@ -681,14 +764,14 @@ bool Test05()
                         {
                             const TexMetadata& mdata2 = image2.GetMetadata();
 
-                            if (memcmp(&mdata2, check, sizeof(TexMetadata)) != 0)
+                            if (memcmp(&mdata2, &metadata, sizeof(TexMetadata)) != 0)
                             {
                                 success = false;
                                 printe("Metadata error in:\n%ls\n", szDestPath);
                                 printmeta(&mdata2);
                                 printmetachk(check);
                             }
-                            else if (image.GetImageCount() != image2.GetImageCount())
+                            else if (!forceNoMips && image.GetImageCount() != image2.GetImageCount())
                             {
                                 success = false;
                                 printe("Image count in captured texture (%Iu) doesn't match source (%Iu) in:\n%ls\n", image2.GetImageCount(), image.GetImageCount(), szDestPath);
@@ -703,20 +786,23 @@ bool Test05()
                                     printe("Failed writing DDS to (HRESULT %08X):\n%ls\n", hr, szDestPath);
                                 }
 
-                                float mse, mseV[4];
-                                hr = ComputeMSE(*image.GetImage(0, 0, 0), *image2.GetImage(0, 0, 0), mse, mseV);
-                                if (FAILED(hr))
+                                if (!IsPlanar(metadata.format))
                                 {
-                                    success = false;
-                                    pass = false;
-                                    printe("Failed comparing captured image (HRESULT %08X):\n%ls\n", hr, szPath);
-                                }
-                                else if (fabs(mse) > 0.000001f)
-                                {
-                                    success = false;
-                                    pass = false;
-                                    printe("Failed comparing captured image MSE = %f (%f %f %f %f)... 0.f:\n%ls\n",
-                                        mse, mseV[0], mseV[1], mseV[2], mseV[3], szPath);
+                                    float mse, mseV[4];
+                                    hr = ComputeMSE(*image.GetImage(0, 0, 0), *image2.GetImage(0, 0, 0), mse, mseV);
+                                    if (FAILED(hr))
+                                    {
+                                        success = false;
+                                        pass = false;
+                                        printe("Failed comparing captured image (HRESULT %08X):\n%ls\n", hr, szPath);
+                                    }
+                                    else if (fabs(mse) > 0.000001f)
+                                    {
+                                        success = false;
+                                        pass = false;
+                                        printe("Failed comparing captured image MSE = %f (%f %f %f %f)... 0.f:\n%ls\n",
+                                            mse, mseV[0], mseV[1], mseV[2], mseV[3], szPath);
+                                    }
                                 }
                             }
                         }

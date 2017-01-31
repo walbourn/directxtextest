@@ -26,14 +26,16 @@ extern bool Test02();
 extern bool Test03();
 extern bool Test04();
 extern bool Test05();
+extern bool Test06();
 
 TestInfo g_Tests[] =
 {
-    { "IsSupportedTexture", Test01 },
-    { "CreateTexture", Test02 },
-    { "PrepareUpload", Test03 },
- //   { "rendertest", Test04 },
-    { "CaptureTexture", Test05 },
+    { "planetest", Test01 },
+    { "IsSupportedTexture", Test02 },
+    { "CreateTexture", Test03 },
+    { "PrepareUpload", Test04 },
+    { "rendertest", Test05 },
+    { "CaptureTexture", Test06 },
 };
 
 //-------------------------------------------------------------------------------------

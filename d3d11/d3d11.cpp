@@ -16,7 +16,7 @@ using namespace DirectX;
 enum
 {
     FLAGS_NONE = 0x0,
-    FLAGS_PLANAR = 0x1,
+    FLAGS_YUV = 0x1,
     FLAGS_NOT_SUPPORTED = 0x2,
 };
 
@@ -25,7 +25,6 @@ struct TestMedia
     DWORD options;
     TexMetadata metadata;
     const wchar_t *fname;
-    // TODO - Checksum to verify loaded image?
 };
 
 static const TestMedia g_TestMedia[] = 
@@ -51,18 +50,28 @@ static const TestMedia g_TestMedia[] =
 { FLAGS_NONE, { 32, 32, 4, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888mip.dds" },
 { FLAGS_NONE, { 32, 32, 4, 1, 6, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvoldxt1mip.dds" },
 { FLAGS_NONE, { 32, 1, 1, 1, 6, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE1D }, MEDIA_PATH L"io_R8G8B8A8_UNORM_SRV_DIMENSION_TEXTURE1D_MipOn.DDS" },
-{ FLAGS_PLANAR, { 200, 200, 1, 1, 8, 0, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaYUY2.dds" },
-{ FLAGS_PLANAR, { 200, 200, 1, 1, 8, 0, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaUYVY.dds" },
-{ FLAGS_PLANAR
+{ FLAGS_YUV, { 200, 200, 1, 1, 8, 0, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaYUY2.dds" },
+{ FLAGS_YUV, { 200, 200, 1, 1, 8, 0, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaUYVY.dds" },
+{ FLAGS_YUV, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_NV12, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenanv12.dds" },
+{ FLAGS_YUV, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_P010, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaP010.dds" },
+{ FLAGS_YUV
+  | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaCubeYUY2.dds" },
+{ FLAGS_YUV
+  | FLAGS_NOT_SUPPORTED, { 200, 200, 4, 1, 1, 0, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"lenaVolYUY2.dds" },
+{ FLAGS_YUV
   | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_AYUV, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaAYUV.dds" },
-{ FLAGS_PLANAR
+{ FLAGS_YUV
   | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_Y210, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaY210.dds" },
-{ FLAGS_PLANAR
+{ FLAGS_YUV
   | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_Y216, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaY216.dds" },
-{ FLAGS_PLANAR
+{ FLAGS_YUV
   | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_Y410, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaY410.dds" },
-{ FLAGS_PLANAR
+{ FLAGS_YUV
   | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_Y416, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaY416.dds" },
+{ FLAGS_YUV
+  | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_P016, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaP016.dds" },
+{ FLAGS_YUV
+   | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_NV11, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenanv11.dds" },
 };
 
 //-------------------------------------------------------------------------------------
@@ -136,7 +145,7 @@ bool Test01()
 
             if (!IsSupportedTexture(device.Get(), metadata))
             {
-                if (g_TestMedia[index].options & FLAGS_PLANAR)
+                if (g_TestMedia[index].options & FLAGS_YUV)
                 {
                     // Can't create video textures with mips on most hardware
                     metadata.mipLevels = 1;
@@ -146,7 +155,7 @@ bool Test01()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed testing planar data from (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed testing yuv data from (HRESULT %08X):\n%ls\n", hr, szPath);
                         }
                     }
                 }
@@ -239,10 +248,13 @@ bool Test02()
         }
         else
         {
-            if (g_TestMedia[index].options & FLAGS_PLANAR)
+            if (g_TestMedia[index].options & FLAGS_YUV)
             {
-                // Can't create video textures with mips on most hardware
-                metadata.mipLevels = 1;
+                if (!IsSupportedTexture(device.Get(), metadata))
+                {
+                    // Can't create video textures with mips on most hardware
+                    metadata.mipLevels = 1;
+                }
             }
 
             ComPtr<ID3D11Resource> pResource;
@@ -255,7 +267,8 @@ bool Test02()
             else
             {
                 hr = CreateTextureEx(device.Get(), image.GetImages(), image.GetImageCount(), metadata,
-                    D3D11_USAGE_IMMUTABLE, D3D11_BIND_SHADER_RESOURCE, 0, 0, true, pResource.ReleaseAndGetAddressOf());
+                    D3D11_USAGE_IMMUTABLE, D3D11_BIND_SHADER_RESOURCE, 0, 0,
+                    true, pResource.ReleaseAndGetAddressOf());
                 if (FAILED(hr))
                 {
                     success = false;
@@ -295,7 +308,7 @@ bool Test03()
 
     for (size_t index = 0; index < _countof(g_TestMedia); ++index)
     {
-        if (g_TestMedia[index].options & (FLAGS_PLANAR | FLAGS_NOT_SUPPORTED))
+        if (g_TestMedia[index].options & (FLAGS_YUV | FLAGS_NOT_SUPPORTED))
         {
             // Skip video textures which need special options to render
             continue;
@@ -394,7 +407,7 @@ bool Test04()
 
     for (size_t index = 0; index < _countof(g_TestMedia); ++index)
     {
-        if (g_TestMedia[index].options & (FLAGS_PLANAR | FLAGS_NOT_SUPPORTED))
+        if (g_TestMedia[index].options & (FLAGS_YUV | FLAGS_NOT_SUPPORTED))
         {
             // Skip video textures which need special options to render
             continue;
@@ -443,11 +456,6 @@ bool Test04()
         }
         else
         {
-            if (g_TestMedia[index].options & FLAGS_PLANAR)
-            {
-                metadata.mipLevels = 1;
-            }
-
             ComPtr<ID3D11ShaderResourceView> pSRV;
             hr = CreateShaderResourceView(device.Get(), image.GetImages(), image.GetImageCount(), metadata, pSRV.GetAddressOf());
             if (FAILED(hr))
@@ -495,9 +503,8 @@ bool Test05()
 
     for (size_t index = 0; index < _countof(g_TestMedia); ++index)
     {
-        if (g_TestMedia[index].options & (FLAGS_PLANAR | FLAGS_NOT_SUPPORTED))
+        if (g_TestMedia[index].options & FLAGS_NOT_SUPPORTED)
         {
-            // Skip video textures which need special options to render
             continue;
         }
 
@@ -543,6 +550,7 @@ bool Test05()
             hr = LoadFromWICFile(szPath, WIC_FLAGS_NONE, &metadata, image);
         }
 
+        bool forceNoMips = false;
         const TexMetadata* check = &g_TestMedia[index].metadata;
         if (FAILED(hr))
         {
@@ -560,9 +568,14 @@ bool Test05()
         {
             bool pass = true;
 
-            if (g_TestMedia[index].options & FLAGS_PLANAR)
+            if (g_TestMedia[index].options & FLAGS_YUV)
             {
-                metadata.mipLevels = 1;
+                if (!IsSupportedTexture(device.Get(), metadata))
+                {
+                    // Can't create video textures with mips on most hardware
+                    metadata.mipLevels = 1;
+                    forceNoMips = true;
+                }
             }
 
             {
@@ -587,14 +600,14 @@ bool Test05()
                     {
                         const TexMetadata& mdata2 = image2.GetMetadata();
 
-                        if (memcmp(&mdata2, check, sizeof(TexMetadata)) != 0)
+                        if (memcmp(&mdata2, &metadata, sizeof(TexMetadata)) != 0)
                         {
                             success = false;
                             printe("Metadata error in:\n%ls\n", szDestPath);
                             printmeta(&mdata2);
                             printmetachk(check);
                         }
-                        else if (image.GetImageCount() != image2.GetImageCount())
+                        else if (!forceNoMips && image.GetImageCount() != image2.GetImageCount())
                         {
                             success = false;
                             printe("Image count in captured texture (%Iu) doesn't match source (%Iu) in:\n%ls\n", image2.GetImageCount(), image.GetImageCount(), szDestPath);
@@ -609,20 +622,23 @@ bool Test05()
                                 printe("Failed writing DDS to (HRESULT %08X):\n%ls\n", hr, szDestPath);
                             }
 
-                            float mse, mseV[4];
-                            hr = ComputeMSE(*image.GetImage(0, 0, 0), *image2.GetImage(0, 0, 0), mse, mseV);
-                            if (FAILED(hr))
+                            if (!IsPlanar(metadata.format))
                             {
-                                success = false;
-                                pass = false;
-                                printe("Failed comparing captured image (HRESULT %08X):\n%ls\n", hr, szPath);
-                            }
-                            else if (fabs(mse) > 0.000001f)
-                            {
-                                success = false;
-                                pass = false;
-                                printe("Failed comparing captured image MSE = %f (%f %f %f %f)... 0.f:\n%ls\n",
-                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], szPath);
+                                float mse, mseV[4];
+                                hr = ComputeMSE(*image.GetImage(0, 0, 0), *image2.GetImage(0, 0, 0), mse, mseV);
+                                if (FAILED(hr))
+                                {
+                                    success = false;
+                                    pass = false;
+                                    printe("Failed comparing captured image (HRESULT %08X):\n%ls\n", hr, szPath);
+                                }
+                                else if (fabs(mse) > 0.000001f)
+                                {
+                                    success = false;
+                                    pass = false;
+                                    printe("Failed comparing captured image MSE = %f (%f %f %f %f)... 0.f:\n%ls\n",
+                                        mse, mseV[0], mseV[1], mseV[2], mseV[3], szPath);
+                                }
                             }
                         }
                     }
@@ -654,14 +670,14 @@ bool Test05()
                     {
                         const TexMetadata& mdata2 = image2.GetMetadata();
 
-                        if (memcmp(&mdata2, check, sizeof(TexMetadata)) != 0)
+                        if (memcmp(&mdata2, &metadata, sizeof(TexMetadata)) != 0)
                         {
                             success = false;
                             printe("Metadata error in:\n%ls\n", szDestPath);
                             printmeta(&mdata2);
                             printmetachk(check);
                         }
-                        else if (image.GetImageCount() != image2.GetImageCount())
+                        else if (!forceNoMips && image.GetImageCount() != image2.GetImageCount())
                         {
                             success = false;
                             printe("Image count in captured texture staging texture (%Iu) doesn't match source (%Iu) in:\n%ls\n", image2.GetImageCount(), image.GetImageCount(), szDestPath);
@@ -683,20 +699,23 @@ bool Test05()
                                 printe("Failed writing DDS to (HRESULT %08X):\n%ls\n", hr, szDestPath2);
                             }
 
-                            float mse, mseV[4];
-                            hr = ComputeMSE(*image.GetImage(0, 0, 0), *image2.GetImage(0, 0, 0), mse, mseV);
-                            if (FAILED(hr))
+                            if (!IsPlanar(metadata.format))
                             {
-                                success = false;
-                                pass = false;
-                                printe("Failed comparing captured image (HRESULT %08X):\n%ls\n", hr, szPath);
-                            }
-                            else if (fabs(mse) > 0.000001f)
-                            {
-                                success = false;
-                                pass = false;
-                                printe("Failed comparing captured image MSE = %f (%f %f %f %f)... 0.f:\n%ls\n",
-                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], szPath);
+                                float mse, mseV[4];
+                                hr = ComputeMSE(*image.GetImage(0, 0, 0), *image2.GetImage(0, 0, 0), mse, mseV);
+                                if (FAILED(hr))
+                                {
+                                    success = false;
+                                    pass = false;
+                                    printe("Failed comparing captured image (HRESULT %08X):\n%ls\n", hr, szPath);
+                                }
+                                else if (fabs(mse) > 0.000001f)
+                                {
+                                    success = false;
+                                    pass = false;
+                                    printe("Failed comparing captured image MSE = %f (%f %f %f %f)... 0.f:\n%ls\n",
+                                        mse, mseV[0], mseV[1], mseV[2], mseV[3], szPath);
+                                }
                             }
                         }
                     }
