@@ -1012,6 +1012,9 @@ void CleanupRenderTest()
     SAFE_RELEASE(g_VB);
     SAFE_RELEASE(g_IB);
     SAFE_RELEASE(g_CB);
+    g_VBView.BufferLocation = 0;
+    g_IBView.BufferLocation = 0;
+    g_CBCPU = nullptr;
 
     SAFE_RELEASE(g_pRenderTarget[0]);
     SAFE_RELEASE(g_pRenderTarget[1]);
