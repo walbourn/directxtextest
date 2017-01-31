@@ -53,7 +53,8 @@ static const TestMedia g_TestMedia[] =
 { FLAGS_YUV, { 200, 200, 1, 1, 8, 0, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaYUY2.dds" },
 { FLAGS_YUV, { 200, 200, 1, 1, 8, 0, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaUYVY.dds" },
 { FLAGS_YUV, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_NV12, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenanv12.dds" },
-{ FLAGS_YUV, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_P010, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaP010.dds" },
+{ FLAGS_YUV
+  | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_P010, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaP010.dds" },
 { FLAGS_YUV
   | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaCubeYUY2.dds" },
 { FLAGS_YUV
@@ -153,9 +154,7 @@ bool Test01()
                     {
                         if (!(g_TestMedia[index].options & FLAGS_NOT_SUPPORTED))
                         {
-                            success = false;
-                            pass = false;
-                            printe("Failed testing yuv data from (HRESULT %08X):\n%ls\n", hr, szPath);
+                            print("WARNING: Format %u is not supported by this hardware\n", metadata.format);
                         }
                     }
                 }
@@ -254,6 +253,12 @@ bool Test02()
                 {
                     // Can't create video textures with mips on most hardware
                     metadata.mipLevels = 1;
+
+                    if (!IsSupportedTexture(device.Get(), metadata))
+                    {
+                        print("WARNING: Format %u is not supported by this hardware\n", metadata.format);
+                        continue;
+                    }
                 }
             }
 
@@ -575,6 +580,12 @@ bool Test05()
                     // Can't create video textures with mips on most hardware
                     metadata.mipLevels = 1;
                     forceNoMips = true;
+
+                    if (!IsSupportedTexture(device.Get(), metadata))
+                    {
+                        print("WARNING: Format %u is not supported by this hardware\n", metadata.format);
+                        continue;
+                    }
                 }
             }
 
