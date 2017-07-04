@@ -1807,7 +1807,7 @@ bool Test05()
         // Form dest path
         wchar_t ext[_MAX_EXT];
         wchar_t fname[_MAX_FNAME];
-        _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
+        _wsplitpath_s( szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
         wchar_t tempDir[MAX_PATH];
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"dds", tempDir, MAX_PATH);
@@ -1817,10 +1817,10 @@ bool Test05()
             return false;
         }
 
-        CreateDirectoryW( tempDir, NULL );
+        CreateDirectoryW( tempDir, nullptr );
 
         wchar_t szDestPath[MAX_PATH];
-        _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, fname, L".dds" );
+        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, fname, L".dds" );
 
         // Form second dest path
         wchar_t fname2[_MAX_FNAME] = { 0 };
@@ -1828,21 +1828,21 @@ bool Test05()
         wcscat_s( fname2, L"_DX10" );
 
         wchar_t szDestPathDX10[MAX_PATH];
-        _wmakepath_s( szDestPathDX10, MAX_PATH, NULL, tempDir, fname2, L".dds" );
+        _wmakepath_s( szDestPathDX10, MAX_PATH, nullptr, tempDir, fname2, L".dds" );
 
         // Form third dest path
         wcscpy_s( fname2, fname );
         wcscat_s( fname2, L"_DX10_2" );
 
         wchar_t szDestPathDX10_2[MAX_PATH];
-        _wmakepath_s( szDestPathDX10_2, MAX_PATH, NULL, tempDir, fname2, L".dds" );
+        _wmakepath_s( szDestPathDX10_2, MAX_PATH, nullptr, tempDir, fname2, L".dds" );
 
         // Form fourth dest path
         wcscpy_s( fname2, fname );
         wcscat_s( fname2, L"_WIDE" );
 
         wchar_t szDestPathWide[MAX_PATH];
-        _wmakepath_s( szDestPathWide, MAX_PATH, NULL, tempDir, fname2, L".dds" );
+        _wmakepath_s( szDestPathWide, MAX_PATH, nullptr, tempDir, fname2, L".dds" );
 
         TexMetadata metadata;
         ScratchImage image;
@@ -2215,7 +2215,7 @@ bool Test06()
             {
                 wchar_t ext[_MAX_EXT];
                 wchar_t fname[_MAX_FNAME];
-                _wsplitpath_s(findData.cFileName, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT);
+                _wsplitpath_s(findData.cFileName, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT);
 
                 isdds = (_wcsicmp(ext, L".dds") == 0);
             }

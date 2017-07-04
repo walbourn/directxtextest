@@ -342,7 +342,7 @@ bool Test01()
         // Form dest path
         wchar_t ext[_MAX_EXT];
         wchar_t fname[_MAX_FNAME];
-        _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
+        _wsplitpath_s( szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
         if ( g_ResizeMedia[index].options & FLAGS_NAMECONFLICT )
         {
@@ -357,7 +357,7 @@ bool Test01()
             return false;
         }
 
-        CreateDirectoryW( tempDir, NULL );
+        CreateDirectoryW( tempDir, nullptr );
 
         TexMetadata metadata;
         ScratchImage srcimage;
@@ -459,12 +459,12 @@ bool Test01()
                 }
 
                 wchar_t szDestPath[MAX_PATH] = {};
-                _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, fname2, L".dds" );
+                _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, fname2, L".dds" );
 
                 SaveScratchImage( szDestPath, DDS_FLAGS_NONE, image );
 
 #if defined(DEBUG) && !defined(NO_WMP)
-                _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, fname2, L".wdp" );
+                _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, fname2, L".wdp" );
                 SaveToWICFile( *image.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
 #endif
             }
@@ -530,12 +530,12 @@ bool Test01()
                     wcscat_s( tname, L"_POINT" );
 
                     wchar_t szDestPath[MAX_PATH] = {};
-                    _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, imagePoint );
 
 #if defined(DEBUG) && !defined(NO_WMP)
-                    _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".wdp" );
+                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
                     SaveToWICFile( *imagePoint.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
 #endif
                 }
@@ -608,12 +608,12 @@ bool Test01()
                     wcscat_s( tname, L"_LINEAR" );
 
                     wchar_t szDestPath[MAX_PATH] = {};
-                    _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, imageLinear );
 
 #if defined(DEBUG) && !defined(NO_WMP)
-                    _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".wdp" );
+                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
                     SaveToWICFile( *imageLinear.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
 #endif
                 }
@@ -701,12 +701,12 @@ bool Test01()
                     wcscat_s( tname, L"_CUBIC" );
 
                     wchar_t szDestPath[MAX_PATH] = {};
-                    _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, imageCubic );
 
 #if defined(DEBUG) && !defined(NO_WMP)
-                    _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".wdp" );
+                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
                     SaveToWICFile( *imageCubic.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
 #endif
                 }
@@ -763,12 +763,12 @@ bool Test01()
                     wcscat_s( tname, L"_TRIANGLE" );
 
                     wchar_t szDestPath[MAX_PATH] = {};
-                    _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, imageTriangle );
 
 #if defined(DEBUG) && !defined(NO_WMP)
-                    _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".wdp" );
+                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
                     SaveToWICFile( *imageTriangle.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
 #endif
                 }
@@ -829,12 +829,12 @@ bool Test01()
                     wcscat_s( tname, L"_SEPALPHA" );
 
                     wchar_t szDestPath[MAX_PATH] = {};
-                    _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, imageSepAlpha );
 
 #if defined(DEBUG) && !defined(NO_WMP)
-                    _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".wdp" );
+                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
                     SaveToWICFile( *imageSepAlpha.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
 #endif
                 }
@@ -886,12 +886,12 @@ bool Test01()
                     wcscat_s( tname, L"_nowic" );
 
                     wchar_t szDestPath[MAX_PATH] = {};
-                    _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, nwimage );
 
 #if defined(DEBUG) && !defined(NO_WMP)
-                    _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".wdp" );
+                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
                     SaveToWICFile( *nwimage.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
 #endif
                 }
@@ -941,12 +941,12 @@ bool Test01()
                         wcscat_s( tname, L"_POINT_nowic" );
 
                         wchar_t szDestPath[MAX_PATH] = {};
-                        _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                         SaveScratchImage( szDestPath, DDS_FLAGS_NONE, nwimagePoint );
 
 #if defined(DEBUG) && !defined(NO_WMP)
-                        _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".wdp" );
+                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
                         SaveToWICFile( *nwimagePoint.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
 #endif
                     }
@@ -990,12 +990,12 @@ bool Test01()
                         wcscat_s( tname, L"_LINEAR_nowic" );
 
                         wchar_t szDestPath[MAX_PATH] = {};
-                        _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                         SaveScratchImage( szDestPath, DDS_FLAGS_NONE, nwimageLinear );
 
 #if defined(DEBUG) && !defined(NO_WMP)
-                        _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".wdp" );
+                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
                         SaveToWICFile( *nwimageLinear.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
 #endif
                     }
@@ -1072,12 +1072,12 @@ bool Test01()
                         wcscat_s( tname, L"_CUBIC_nowic" );
 
                         wchar_t szDestPath[MAX_PATH] = {};
-                        _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                         SaveScratchImage( szDestPath, DDS_FLAGS_NONE, nwimageCubic );
 
 #if defined(DEBUG) && !defined(NO_WMP)
-                        _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".wdp" );
+                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
                         SaveToWICFile( *nwimageCubic.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
 #endif
                     }
@@ -1133,12 +1133,12 @@ bool Test01()
                     wcscat_s( tname, L"_srgb" );
 
                     wchar_t szDestPath[MAX_PATH] = {};
-                    _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, srgbimage );
 
 #if defined(DEBUG) && !defined(NO_WMP)
-                    _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".wdp" );
+                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
                     SaveToWICFile( *srgbimage.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
 #endif
                 }
@@ -1191,12 +1191,12 @@ bool Test01()
                         wcscat_s( tname, L"_LINEAR_srgb" );
 
                         wchar_t szDestPath[MAX_PATH] = {};
-                        _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                         SaveScratchImage( szDestPath, DDS_FLAGS_NONE, srgbimageLinear );
 
 #if defined(DEBUG) && !defined(NO_WMP)
-                        _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".wdp" );
+                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
                         SaveToWICFile( *srgbimageLinear.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
 #endif
                     }
@@ -1247,12 +1247,12 @@ bool Test01()
                         wcscat_s( tname, L"_CUBIC_srgb" );
 
                         wchar_t szDestPath[MAX_PATH] = {};
-                        _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                         SaveScratchImage( szDestPath, DDS_FLAGS_NONE, srgbimageCubic );
 
 #if defined(DEBUG) && !defined(NO_WMP)
-                        _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".wdp" );
+                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
                         SaveToWICFile( *srgbimageCubic.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
 #endif
                     }
@@ -1303,12 +1303,12 @@ bool Test01()
                         wcscat_s( tname, L"_TRIANGLE_srgb" );
 
                         wchar_t szDestPath[MAX_PATH] = {};
-                        _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                         SaveScratchImage( szDestPath, DDS_FLAGS_NONE, srgbimageTriangle );
 
 #if defined(DEBUG) && !defined(NO_WMP)
-                        _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".wdp" );
+                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
                         SaveToWICFile( *srgbimageTriangle.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
 #endif
                     }
@@ -1388,7 +1388,7 @@ bool Test01()
                         wcscat_s( tname, L"_complex" );
 
                         wchar_t szDestPath[MAX_PATH] = {};
-                        _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                         SaveToDDSFile( imageComplex.GetImages(), imageComplex.GetImageCount(), imageComplex.GetMetadata(), DDS_FLAGS_NONE, szDestPath );
                     }

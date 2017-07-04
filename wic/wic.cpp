@@ -1129,7 +1129,7 @@ bool Test05()
         HRESULT hr;
 
         wchar_t ext[_MAX_EXT];
-        _wsplitpath_s( szPath, NULL, 0, NULL, 0, NULL, NULL, ext, _MAX_EXT );
+        _wsplitpath_s( szPath, nullptr, 0, nullptr, 0, nullptr, 0, ext, _MAX_EXT );
 
         if ( _wcsicmp( ext, L".dds" ) == 0 )
         {
@@ -1143,7 +1143,7 @@ bool Test05()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed loading DDS from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed loading image from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else
         {
@@ -1364,7 +1364,7 @@ bool Test06()
         // Form dest path
         wchar_t ext[_MAX_EXT];
         wchar_t fname[_MAX_FNAME];
-        _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
+        _wsplitpath_s( szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
         wchar_t tempDir[MAX_PATH];
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"wic", tempDir, MAX_PATH);
@@ -1374,21 +1374,21 @@ bool Test06()
             return false;
         }
 
-        CreateDirectoryW( tempDir, NULL );
+        CreateDirectoryW( tempDir, nullptr );
 
         wchar_t szDestPath[MAX_PATH];
-        _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, fname, g_SaveMedia[index].ext );
+        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, fname, g_SaveMedia[index].ext );
 
         wchar_t szDestPath2[MAX_PATH];
         wchar_t tname[_MAX_FNAME] = { 0 };
         wcscpy_s( tname, fname );
         wcscat_s( tname, L"_tf" );
-        _wmakepath_s( szDestPath2, MAX_PATH, NULL, tempDir, tname, g_SaveMedia[index].ext );
+        _wmakepath_s( szDestPath2, MAX_PATH, nullptr, tempDir, tname, g_SaveMedia[index].ext );
 
         wchar_t szDestPath3[MAX_PATH];
         wcscpy_s( tname, fname );
         wcscat_s( tname, L"_props" );
-        _wmakepath_s( szDestPath3, MAX_PATH, NULL, tempDir, tname, g_SaveMedia[index].ext );
+        _wmakepath_s( szDestPath3, MAX_PATH, nullptr, tempDir, tname, g_SaveMedia[index].ext );
 
 #ifdef _DEBUG
         OutputDebugString(szPath);
@@ -1411,7 +1411,7 @@ bool Test06()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed loading DDS from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed loading image from (HRESULT %08X):\n%ls\n", hr, szPath );
         }
         else
         {
@@ -1626,8 +1626,163 @@ bool Test06()
 
 
 //-------------------------------------------------------------------------------------
-// Fuzz
+// transcode
 bool Test07()
+{
+    static const GUID s_encoders[] =
+    {
+        GUID_ContainerFormatBmp,
+        GUID_ContainerFormatPng,
+        GUID_ContainerFormatJpeg,
+        GUID_ContainerFormatTiff,
+        GUID_ContainerFormatGif,
+#ifndef NO_WMP
+        GUID_ContainerFormatWmp
+#endif
+    };
+
+    bool success = true;
+
+    wchar_t szMediaPath[MAX_PATH] = {};
+    DWORD ret = ExpandEnvironmentStringsW(MEDIA_PATH, szMediaPath, MAX_PATH);
+    if (!ret || ret > MAX_PATH)
+    {
+        printe("ERROR: ExpandEnvironmentStrings FAILED\n");
+        return false;
+    }
+
+    wchar_t szPath[MAX_PATH] = {};
+    wcscpy_s(szPath, szMediaPath);
+    wcscat_s(szPath, L"*.*");
+
+    WIN32_FIND_DATA findData = {};
+    ScopedFindHandle hFile(safe_handle(FindFirstFileEx(szPath,
+        FindExInfoBasic, &findData,
+        FindExSearchNameMatch, nullptr,
+        FIND_FIRST_EX_LARGE_FETCH)));
+    if (!hFile)
+    {
+        printe("ERROR: FindFirstFileEx FAILED (%u)\n", GetLastError());
+        return false;
+    }
+
+    size_t ncount = 0;
+    size_t npass = 0;
+
+    for (;;)
+    {
+        if (!(findData.dwFileAttributes & (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM)))
+        {
+            if (_wcsicmp(findData.cFileName, L"texture0.dds") == 0
+                || _wcsicmp(findData.cFileName, L"texture3.dds") == 0)
+            {
+                if (!FindNextFile(hFile.get(), &findData))
+                    break;
+
+                continue;
+            }
+
+            wcscpy_s(szPath, szMediaPath);
+            wcscat_s(szPath, findData.cFileName);
+
+            OutputDebugString(findData.cFileName);
+            OutputDebugStringA("\n");
+
+            wchar_t fname[_MAX_FNAME];
+            wchar_t ext[_MAX_EXT];
+            _wsplitpath_s(szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT);
+
+            if (*fname == 0 || *ext == 0)
+            {
+                if (!FindNextFile(hFile.get(), &findData))
+                    break;
+
+                continue;
+            }
+
+            ScratchImage image;
+            TexMetadata metadata;
+            HRESULT hr;
+
+            if (_wcsicmp(ext, L".dds") == 0)
+            {
+                hr = LoadFromDDSFile(szPath, DDS_FLAGS_NONE, &metadata, image);
+            }
+            else if (_wcsicmp(ext, L".hdr") == 0)
+            {
+                hr = LoadFromHDRFile(szPath, &metadata, image);
+            }
+            else if (_wcsicmp(ext, L".tga") == 0)
+            {
+                hr = LoadFromTGAFile(szPath, &metadata, image);
+            }
+            else
+            {
+                hr = LoadFromWICFile(szPath, WIC_FLAGS_NONE, &metadata, image);
+            }
+
+            if (hr == HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED)
+                || hr == WINCODEC_ERR_COMPONENTNOTFOUND
+                || metadata.width >= 8192)
+            {
+                if (!FindNextFile(hFile.get(), &findData))
+                    break;
+
+                continue;
+            }
+
+            ++ncount;
+
+            if (!(ncount % 100))
+            {
+                print(".");
+            }
+
+            if (FAILED(hr))
+            {
+                success = false;
+                printe("Failed loading image from (HRESULT %08X):\n%ls\n", hr, szPath);
+            }
+            else
+            {
+                bool pass = true;
+
+                for (int j = 0; j < _countof(s_encoders); j++)
+                {
+                    Blob blob;
+                    hr = SaveToWICMemory(image.GetImages(), image.GetImageCount(), WIC_FLAGS_NONE, s_encoders[j], blob);
+                    if (FAILED(hr) && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != E_OUTOFMEMORY)
+                    {
+                        success = false;
+                        pass = false;
+                        printe("Failed writing with encoder #%d (HRESULT %08X):\n%ls\n", hr, j, szPath);
+                    }
+                }
+
+                if (pass)
+                    ++npass;
+            }
+        }
+
+        if (!FindNextFile(hFile.get(), &findData))
+            break;
+    }
+
+    if (!ncount)
+    {
+        printe("ERROR: expected to find test images\n");
+        return false;
+    }
+
+    print(" %Iu images tested, %Iu images passed ", ncount, npass);
+
+    return success;
+}
+
+
+//-------------------------------------------------------------------------------------
+// Fuzz
+bool Test08()
 {
     bool success = true;
 

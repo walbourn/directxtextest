@@ -417,7 +417,7 @@ bool Test04()
                 }
                 else
                 {
-                    //TESTEST- { HANDLE h = CreateFileW( L"C:\\TEMP\\XXX.TGA", GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, 0, 0 ); DWORD bytesWritten; WriteFile( h, blob.GetBufferPointer(), static_cast<DWORD>( blob.GetBufferSize() ), &bytesWritten, 0 ); CloseHandle(h); }
+                    //TESTEST- { HANDLE h = CreateFileW( L"C:\\TEMP\\XXX.TGA", GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, 0, 0 ); DWORD bytesWritten; WriteFile( h, blob.GetBufferPointer(), static_cast<DWORD>( blob.GetBufferSize() ), &bytesWritten, 0 ); CloseHandle(h); }
                     TexMetadata metadata2;
                     ScratchImage image2;
                     hr = LoadFromTGAMemory( blob.GetBufferPointer(), blob.GetBufferSize(), &metadata2, image2 );
@@ -505,7 +505,7 @@ bool Test05()
         // Form dest path
         wchar_t ext[_MAX_EXT];
         wchar_t fname[_MAX_FNAME];
-        _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
+        _wsplitpath_s( szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
         wchar_t tempDir[MAX_PATH] = {};
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"tga", tempDir, MAX_PATH);
@@ -515,10 +515,10 @@ bool Test05()
             return false;
         }
 
-        CreateDirectoryW( tempDir, NULL );
+        CreateDirectoryW( tempDir, nullptr );
 
         wchar_t szDestPath[MAX_PATH] = {};
-        _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, fname, L".tga" );
+        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, fname, L".tga" );
 
         TexMetadata metadata;
         ScratchImage image;
@@ -661,7 +661,7 @@ bool Test06()
             {
                 wchar_t ext[_MAX_EXT];
                 wchar_t fname[_MAX_FNAME];
-                _wsplitpath_s(findData.cFileName, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT);
+                _wsplitpath_s(findData.cFileName, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT);
 
                 istga = (_wcsicmp(ext, L".tga") == 0);
             }

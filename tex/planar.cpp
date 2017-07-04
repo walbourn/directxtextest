@@ -59,7 +59,7 @@ bool Test15()
         // Form dest path
         wchar_t ext[_MAX_EXT];
         wchar_t fname[_MAX_FNAME];
-        _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
+        _wsplitpath_s( szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
         wchar_t tempDir[MAX_PATH];
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"plane", tempDir, MAX_PATH);
@@ -69,7 +69,7 @@ bool Test15()
             return false;
         }
 
-        CreateDirectoryW( tempDir, NULL );
+        CreateDirectoryW( tempDir, nullptr );
 
         TexMetadata metadata;
         ScratchImage srcimage;
@@ -121,7 +121,7 @@ bool Test15()
                 wcscat_s( tname, GetName(g_TestMedia[index].tformat) );
 
                 wchar_t szDestPath[MAX_PATH];
-                _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+                _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                 SaveScratchImage( szDestPath, DDS_FLAGS_NONE, image );
 
@@ -134,7 +134,7 @@ bool Test15()
                     hr = Convert( *image.GetImage(0,0,0), DXGI_FORMAT_YUY2, TEX_FILTER_DEFAULT, TEX_THRESHOLD_DEFAULT, yuy2 );
                     if ( SUCCEEDED(hr) )
                     {
-                        _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
                         SaveScratchImage( szDestPath, DDS_FLAGS_NONE, yuy2 );
                     }
                 }

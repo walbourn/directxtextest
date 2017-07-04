@@ -38,7 +38,7 @@ bool Test11()
     // Form dest path
     wchar_t ext[_MAX_EXT];
     wchar_t fname[_MAX_FNAME];
-    _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
+    _wsplitpath_s( szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
     wchar_t tempDir[MAX_PATH];
     ret = ExpandEnvironmentStringsW(TEMP_PATH L"nmap", tempDir, MAX_PATH);
@@ -48,7 +48,7 @@ bool Test11()
         return false;
     }
 
-    CreateDirectoryW( tempDir, NULL );
+    CreateDirectoryW( tempDir, nullptr );
 
     const TexMetadata checkhmap = { 1024, 1024, 1, 1, 11, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D };
 
@@ -82,7 +82,7 @@ bool Test11()
             // TODO - Verify the image data (perhaps MD5 checksum)
 
             wchar_t szDestPath[MAX_PATH];
-            _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, fname, L".dds" );
+            _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, fname, L".dds" );
 
             SaveScratchImage( szDestPath, DDS_FLAGS_NONE, normalMap );
         }
@@ -107,7 +107,7 @@ bool Test11()
             wcscat_s( tname, L"_c" );
 
             wchar_t szDestPath[MAX_PATH];
-            _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+            _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
             SaveScratchImage( szDestPath, DDS_FLAGS_NONE, normalMap );
         }

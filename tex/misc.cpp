@@ -47,7 +47,7 @@ bool Test09()
     // Form dest path
     wchar_t ext[_MAX_EXT];
     wchar_t fname[_MAX_FNAME];
-    _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
+    _wsplitpath_s( szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
     wchar_t tempDir[MAX_PATH];
     ret = ExpandEnvironmentStringsW(TEMP_PATH L"cpy", tempDir, MAX_PATH);
@@ -57,7 +57,7 @@ bool Test09()
         return false;
     }
 
-    CreateDirectoryW( tempDir, NULL );
+    CreateDirectoryW( tempDir, nullptr );
 
     const TexMetadata checkTest = { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D };
 
@@ -167,7 +167,7 @@ bool Test09()
                     swprintf_s( tname, L"%s_%d_%d", fname, x, y );
 
                     wchar_t szDestPath[MAX_PATH] = {};
-                    _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, image );
                 }
@@ -205,7 +205,7 @@ bool Test09()
                     swprintf_s( tname, L"offset_%s_%Iu_%Iu", fname, x, y );
 
                     wchar_t szDestPath[MAX_PATH] = {};
-                    _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, image );
                 }
@@ -243,7 +243,7 @@ bool Test09()
                     swprintf_s( tname, L"cvt_%s_%Iu_%Iu", fname, x, y );
 
                     wchar_t szDestPath[MAX_PATH] = {};
-                    _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, image );
                 }
@@ -281,7 +281,7 @@ bool Test09()
                     swprintf_s( tname, L"cvt_offset_%s_%Iu_%Iu", fname, x, y );
 
                     wchar_t szDestPath[MAX_PATH] = {};
-                    _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, image );
                 }
@@ -316,7 +316,7 @@ bool Test10()
 #endif
 
     ScratchImage imageLogo;
-    HRESULT hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, NULL, imageLogo );
+    HRESULT hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, nullptr, imageLogo );
     if ( FAILED(hr) )
     {
         printe( "Failed loading dds (HRESULT %08X):\n%ls\n", hr, szPath );
@@ -337,7 +337,7 @@ bool Test10()
 #endif
 
     ScratchImage imageWin95;
-    hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, NULL, imageWin95 );
+    hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, nullptr, imageWin95 );
     if ( FAILED(hr) )
     {
         printe( "Failed loading dds (HRESULT %08X):\n%ls\n", hr, szPath );
@@ -358,7 +358,7 @@ bool Test10()
 #endif
 
     ScratchImage imageDX;
-    hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, NULL, imageDX );
+    hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, nullptr, imageDX );
     if ( FAILED(hr) )
     {
         printe( "Failed loading dds (HRESULT %08X):\n%ls\n", hr, szPath );
@@ -379,7 +379,7 @@ bool Test10()
 #endif
 
     ScratchImage imageAlpha;
-    hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, NULL, imageAlpha );
+    hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, nullptr, imageAlpha );
     if ( FAILED(hr) )
     {
         printe( "Failed loading dds (HRESULT %08X):\n%ls\n", hr, szPath );

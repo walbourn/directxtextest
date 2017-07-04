@@ -79,7 +79,7 @@ bool Test04()
         // Form dest path
         wchar_t ext[_MAX_EXT];
         wchar_t fname[_MAX_FNAME];
-        _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
+        _wsplitpath_s( szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
         wchar_t tempDir[MAX_PATH];
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"flip", tempDir, MAX_PATH);
@@ -89,7 +89,7 @@ bool Test04()
             return false;
         }
 
-        CreateDirectoryW( tempDir, NULL );
+        CreateDirectoryW( tempDir, nullptr );
 
         TexMetadata metadata;
         ScratchImage srcimage;
@@ -150,7 +150,7 @@ bool Test04()
                     // TODO - Verify the image data (perhaps MD5 checksum)
 
                     wchar_t szDestPath[MAX_PATH];
-                    _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, fname, L".dds" );
+                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, fname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, image );
                 }
@@ -213,7 +213,7 @@ bool Test04()
                         wcscat_s( tname, L"_complex" );
 
                         wchar_t szDestPath[MAX_PATH];
-                        _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                         SaveToDDSFile( imageComplex.GetImages(), imageComplex.GetImageCount(), imageComplex.GetMetadata(), DDS_FLAGS_NONE, szDestPath );
                     }

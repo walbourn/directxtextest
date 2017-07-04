@@ -29,6 +29,7 @@ extern bool Test04();
 extern bool Test05();
 extern bool Test06();
 extern bool Test07();
+extern bool Test08();
 
 TestInfo g_Tests[] =
 {
@@ -39,7 +40,8 @@ TestInfo g_Tests[] =
     { "LoadFromWICFile", Test04 },
     { "SaveWICToMemory", Test05 },
     { "SaveWICToFile", Test06 },
-    { "Fuzz", Test07 },
+    { "*Transcode*", Test07 },
+    { "Fuzz", Test08 },
 };
 
 

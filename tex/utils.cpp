@@ -766,7 +766,7 @@ bool Test02()
     }
 
     //
-    // Here we are comparing the DirectX Runtime vs. DirectXTex, so we only need a NULL device. 
+    // Here we are comparing the DirectX Runtime vs. DirectXTex, so we only need a nullptr device. 
     //
     ComPtr<ID3D11Device> device;
     D3D_FEATURE_LEVEL lvl;
@@ -780,7 +780,7 @@ bool Test02()
                                     nullptr, createDeviceFlags, nullptr, 0, D3D11_SDK_VERSION, device.GetAddressOf(), &lvl, context.GetAddressOf() );
     if ( FAILED(hr) )
     {
-        printe( "Failed creating Direct3D NULL device (HRESULT %08X)\n", hr );
+        printe( "Failed creating Direct3D nullptr device (HRESULT %08X)\n", hr );
         return false;
     }
 

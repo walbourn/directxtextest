@@ -110,7 +110,7 @@ HRESULT MD5Checksum( _In_ const ScratchImage& image, _Out_bytecap_x_(16) uint8_t
 //-------------------------------------------------------------------------------------
 HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags, _In_ const ScratchImage& image )
 {
-    if ( szFile == NULL || image.GetPixels() == NULL || image.GetPixelsSize() == 0 )
+    if ( szFile == nullptr || image.GetPixels() == nullptr || image.GetPixelsSize() == 0 )
         return E_INVALIDARG;
 
     // Create DDS Header
@@ -122,14 +122,14 @@ HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags, _In_ c
         return hr;
 
     // Create file and write header
-    ScopedHandle hFile( safe_handle( CreateFile( szFile, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, 0, NULL ) ) );
+    ScopedHandle hFile( safe_handle( CreateFile( szFile, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, 0, nullptr ) ) );
     if ( !hFile )
     {
         return HRESULT_FROM_WIN32( GetLastError() );
     }
 
     DWORD bytesWritten;
-    if ( !WriteFile( hFile.get(), header, static_cast<DWORD>( required ), &bytesWritten, NULL ) )
+    if ( !WriteFile( hFile.get(), header, static_cast<DWORD>( required ), &bytesWritten, nullptr ) )
     {
         return HRESULT_FROM_WIN32( GetLastError() );
     }
@@ -140,7 +140,7 @@ HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags, _In_ c
     }
 
     // Scratch image is already formatted in memory how the DDS file is laid out, so write all pixel data...
-    if ( !WriteFile( hFile.get(), image.GetPixels(), static_cast<DWORD>( image.GetPixelsSize() ), &bytesWritten, NULL ) )
+    if ( !WriteFile( hFile.get(), image.GetPixels(), static_cast<DWORD>( image.GetPixelsSize() ), &bytesWritten, nullptr ) )
     {
         return HRESULT_FROM_WIN32( GetLastError() );
     }
@@ -157,7 +157,7 @@ HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags, _In_ c
 //-------------------------------------------------------------------------------------
 HRESULT CopyViaLoadStoreScanline( const Image& srcImage, ScratchImage& image )
 {
-    if ( srcImage.pixels == NULL )
+    if ( srcImage.pixels == nullptr )
         return E_INVALIDARG;
 
     ScratchImage temp;
@@ -166,12 +166,12 @@ HRESULT CopyViaLoadStoreScanline( const Image& srcImage, ScratchImage& image )
         return hr;
 
     const Image *timg = temp.GetImage( 0, 0, 0 );
-    if ( timg == NULL )
+    if ( timg == nullptr )
         return E_POINTER;
 
     // Only need 1 scanline of temp memory (hence why temp has a height of 1 above)
     XMVECTOR* tscanline = const_cast<XMVECTOR*>( reinterpret_cast<const XMVECTOR*>( timg->pixels ) );
-    if ( tscanline == NULL )
+    if ( tscanline == nullptr )
         return E_POINTER;
 
     hr = image.Initialize2D( srcImage.format, srcImage.width, srcImage.height, 1, 1 );
@@ -179,7 +179,7 @@ HRESULT CopyViaLoadStoreScanline( const Image& srcImage, ScratchImage& image )
         return hr;
 
     const Image *img = image.GetImage( 0, 0, 0 );
-    if ( img == NULL )
+    if ( img == nullptr )
     {
         image.Release();
         return E_POINTER;

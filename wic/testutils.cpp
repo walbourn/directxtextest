@@ -16,11 +16,11 @@ using namespace DirectX;
 //-------------------------------------------------------------------------------------
 HRESULT LoadBlobFromFile( _In_z_ const wchar_t* szFile, Blob& blob )
 {
-    if ( szFile == NULL )
+    if ( szFile == nullptr )
         return E_INVALIDARG;
 
-    ScopedHandle hFile( safe_handle( CreateFile( szFile, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
-                                                 FILE_FLAG_SEQUENTIAL_SCAN, NULL ) ) );
+    ScopedHandle hFile( safe_handle( CreateFile( szFile, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING,
+                                                 FILE_FLAG_SEQUENTIAL_SCAN, nullptr ) ) );
     if ( !hFile )
     {
         return HRESULT_FROM_WIN32( GetLastError() );
@@ -52,7 +52,7 @@ HRESULT LoadBlobFromFile( _In_z_ const wchar_t* szFile, Blob& blob )
   
     // Load entire file into blob memory
     DWORD bytesRead = 0;
-    if ( !ReadFile( hFile.get(), blob.GetBufferPointer(), static_cast<DWORD>( blob.GetBufferSize() ), &bytesRead, NULL ) )
+    if ( !ReadFile( hFile.get(), blob.GetBufferPointer(), static_cast<DWORD>( blob.GetBufferSize() ), &bytesRead, nullptr ) )
     {
         blob.Release();
         return HRESULT_FROM_WIN32( GetLastError() );
@@ -72,11 +72,11 @@ HRESULT LoadBlobFromFile( _In_z_ const wchar_t* szFile, Blob& blob )
 //-------------------------------------------------------------------------------------
 size_t DetermineFileSize( _In_z_ const wchar_t* szFile )
 {
-    if ( szFile == NULL )
+    if ( szFile == nullptr )
         return 0;
 
-    ScopedHandle hFile( safe_handle( CreateFile( szFile, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
-                                                 FILE_FLAG_SEQUENTIAL_SCAN, NULL ) ) );
+    ScopedHandle hFile( safe_handle( CreateFile( szFile, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING,
+                                                 FILE_FLAG_SEQUENTIAL_SCAN, nullptr ) ) );
     if ( !hFile )
     {
         return 0;
@@ -189,7 +189,7 @@ HRESULT MD5Checksum( _In_ const ScratchImage& image, _Out_bytecap_x_(16) uint8_t
 //-------------------------------------------------------------------------------------
 HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags, _In_ const ScratchImage& image )
 {
-    if ( szFile == NULL || image.GetPixels() == NULL || image.GetPixelsSize() == 0 )
+    if ( szFile == nullptr || image.GetPixels() == nullptr || image.GetPixelsSize() == 0 )
         return E_INVALIDARG;
 
     // Create DDS Header
@@ -201,14 +201,14 @@ HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags, _In_ c
         return hr;
 
     // Create file and write header
-    ScopedHandle hFile( safe_handle( CreateFile( szFile, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, 0, NULL ) ) );
+    ScopedHandle hFile( safe_handle( CreateFile( szFile, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, 0, nullptr ) ) );
     if ( !hFile )
     {
         return HRESULT_FROM_WIN32( GetLastError() );
     }
 
     DWORD bytesWritten;
-    if ( !WriteFile( hFile.get(), header, static_cast<DWORD>( required ), &bytesWritten, NULL ) )
+    if ( !WriteFile( hFile.get(), header, static_cast<DWORD>( required ), &bytesWritten, nullptr ) )
     {
         return HRESULT_FROM_WIN32( GetLastError() );
     }
@@ -219,7 +219,7 @@ HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags, _In_ c
     }
 
     // Scratch image is already formatted in memory how the DDS file is laid out, so write all pixel data...
-    if ( !WriteFile( hFile.get(), image.GetPixels(), static_cast<DWORD>( image.GetPixelsSize() ), &bytesWritten, NULL ) )
+    if ( !WriteFile( hFile.get(), image.GetPixels(), static_cast<DWORD>( image.GetPixelsSize() ), &bytesWritten, nullptr ) )
     {
         return HRESULT_FROM_WIN32( GetLastError() );
     }

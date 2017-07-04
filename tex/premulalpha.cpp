@@ -50,7 +50,7 @@ bool Test13()
     // Form dest path
     wchar_t ext[_MAX_EXT];
     wchar_t fname[_MAX_FNAME];
-    _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
+    _wsplitpath_s( szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
     wchar_t tempDir[MAX_PATH];
     ret = ExpandEnvironmentStringsW(TEMP_PATH L"premul", tempDir, MAX_PATH);
@@ -60,7 +60,7 @@ bool Test13()
         return false;
     }
 
-    CreateDirectoryW( tempDir, NULL );
+    CreateDirectoryW( tempDir, nullptr );
 
     const TexMetadata checkai = { 304, 268, 1, 1, 9, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D };
 
@@ -138,7 +138,7 @@ bool Test13()
             }
 
             wchar_t szDestPath[MAX_PATH] = {};
-            _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, fname, L".dds" );
+            _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, fname, L".dds" );
 
             SaveScratchImage( szDestPath, DDS_FLAGS_NONE, pmAlpha );
 
@@ -171,7 +171,7 @@ bool Test13()
                 wcscat_s(fname2, L"_reverse");
 
                 wchar_t szDestPath2[MAX_PATH] = {};
-                _wmakepath_s(szDestPath2, MAX_PATH, NULL, tempDir, fname2, L".dds");
+                _wmakepath_s(szDestPath2, MAX_PATH, nullptr, tempDir, fname2, L".dds");
 
                 SaveScratchImage(szDestPath2, DDS_FLAGS_NONE, alpha);
             }
@@ -226,7 +226,7 @@ bool Test13()
             wcscat_s( tname, L"_sRGB" );
 
             wchar_t szDestPath[MAX_PATH];
-            _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+            _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
             SaveScratchImage( szDestPath, DDS_FLAGS_NONE, pmAlphaSRGB );
 
@@ -259,7 +259,7 @@ bool Test13()
                 wcscat_s(fname2, L"_sRGB_reverse");
 
                 wchar_t szDestPath2[MAX_PATH] = {};
-                _wmakepath_s(szDestPath2, MAX_PATH, NULL, tempDir, fname2, L".dds");
+                _wmakepath_s(szDestPath2, MAX_PATH, nullptr, tempDir, fname2, L".dds");
 
                 SaveScratchImage(szDestPath2, DDS_FLAGS_NONE, alphaSRGB);
             }
@@ -383,7 +383,7 @@ bool Test13()
                 wcscat_s(tname, L"_c");
 
                 wchar_t szDestPath[MAX_PATH];
-                _wmakepath_s(szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds");
+                _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds");
 
                 SaveScratchImage(szDestPath, DDS_FLAGS_NONE, pmAlpha);
 

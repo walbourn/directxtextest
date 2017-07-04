@@ -467,7 +467,7 @@ bool Test05()
         // Form dest path
         wchar_t ext[_MAX_EXT];
         wchar_t fname[_MAX_FNAME];
-        _wsplitpath_s(szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT);
+        _wsplitpath_s(szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT);
 
         wchar_t tempDir[MAX_PATH] = {};
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"hdr", tempDir, MAX_PATH);
@@ -477,17 +477,17 @@ bool Test05()
             return false;
         }
 
-        CreateDirectoryW(tempDir, NULL);
+        CreateDirectoryW(tempDir, nullptr);
 
         wchar_t szDestPath[MAX_PATH] = {};
-        _wmakepath_s(szDestPath, MAX_PATH, NULL, tempDir, fname, L".hdr");
+        _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, fname, L".hdr");
 
         wchar_t fname2[_MAX_FNAME] = { 0 };
         wcscpy_s(fname2, fname);
         wcscat_s(fname2, L"_96bpp");
 
         wchar_t szDestPath2[MAX_PATH] = {};
-        _wmakepath_s(szDestPath2, MAX_PATH, NULL, tempDir, fname2, L".hdr");
+        _wmakepath_s(szDestPath2, MAX_PATH, nullptr, tempDir, fname2, L".hdr");
 
         TexMetadata metadata;
         ScratchImage image;
@@ -689,7 +689,7 @@ bool Test06()
             {
                 wchar_t ext[_MAX_EXT];
                 wchar_t fname[_MAX_FNAME];
-                _wsplitpath_s(findData.cFileName, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT);
+                _wsplitpath_s(findData.cFileName, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT);
 
                 ishdr = (_wcsicmp(ext, L".hdr") == 0);
             }

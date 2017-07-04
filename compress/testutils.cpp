@@ -40,8 +40,8 @@ HRESULT CreateDevice( ID3D11Device** pDev, ID3D11DeviceContext** pContext )
 
     for( UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++ )
     {
-        hr = D3D11CreateDevice( NULL, driverTypes[driverTypeIndex], NULL, createDeviceFlags, featureLevels, numFeatureLevels,
-                                D3D11_SDK_VERSION, pDev, NULL, pContext );
+        hr = D3D11CreateDevice( nullptr, driverTypes[driverTypeIndex], nullptr, createDeviceFlags, featureLevels, numFeatureLevels,
+                                D3D11_SDK_VERSION, pDev, nullptr, pContext );
         if( SUCCEEDED( hr ) )
             break;
     }
@@ -52,7 +52,7 @@ HRESULT CreateDevice( ID3D11Device** pDev, ID3D11DeviceContext** pContext )
 //-------------------------------------------------------------------------------------
 HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags, _In_ const ScratchImage& image )
 {
-    if ( szFile == NULL || image.GetPixels() == NULL || image.GetPixelsSize() == 0 )
+    if ( szFile == nullptr || image.GetPixels() == nullptr || image.GetPixelsSize() == 0 )
         return E_INVALIDARG;
 
     // Create DDS Header
@@ -64,14 +64,14 @@ HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags, _In_ c
         return hr;
 
     // Create file and write header
-    ScopedHandle hFile( safe_handle( CreateFile( szFile, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, 0, NULL ) ) );
+    ScopedHandle hFile( safe_handle( CreateFile( szFile, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, 0, nullptr ) ) );
     if ( !hFile )
     {
         return HRESULT_FROM_WIN32( GetLastError() );
     }
 
     DWORD bytesWritten;
-    if ( !WriteFile( hFile.get(), header, static_cast<DWORD>( required ), &bytesWritten, NULL ) )
+    if ( !WriteFile( hFile.get(), header, static_cast<DWORD>( required ), &bytesWritten, nullptr ) )
     {
         return HRESULT_FROM_WIN32( GetLastError() );
     }
@@ -82,7 +82,7 @@ HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags, _In_ c
     }
 
     // Scratch image is already formatted in memory how the DDS file is laid out, so write all pixel data...
-    if ( !WriteFile( hFile.get(), image.GetPixels(), static_cast<DWORD>( image.GetPixelsSize() ), &bytesWritten, NULL ) )
+    if ( !WriteFile( hFile.get(), image.GetPixels(), static_cast<DWORD>( image.GetPixelsSize() ), &bytesWritten, nullptr ) )
     {
         return HRESULT_FROM_WIN32( GetLastError() );
     }

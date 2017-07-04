@@ -340,7 +340,7 @@ bool Test01()
         // Form dest path
         wchar_t ext[_MAX_EXT];
         wchar_t fname[_MAX_FNAME];
-        _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
+        _wsplitpath_s( szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
         wchar_t tempDir[MAX_PATH];
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"bc_dec", tempDir, MAX_PATH);
@@ -350,10 +350,10 @@ bool Test01()
             return false;
         }
 
-        CreateDirectoryW( tempDir, NULL );
+        CreateDirectoryW( tempDir, nullptr );
 
         wchar_t szDestPath[MAX_PATH];
-        _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, fname, L".dds" );
+        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, fname, L".dds" );
 
         TexMetadata metadata;
         ScratchImage srcimage;
@@ -538,7 +538,7 @@ bool Test02()
         // Form dest path
         wchar_t ext[_MAX_EXT];
         wchar_t fname[_MAX_FNAME];
-        _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
+        _wsplitpath_s( szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
         wchar_t tempDir[MAX_PATH];
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"bc_enc", tempDir, MAX_PATH);
@@ -548,7 +548,7 @@ bool Test02()
             return false;
         }
 
-        CreateDirectoryW( tempDir, NULL );
+        CreateDirectoryW( tempDir, nullptr );
 
         TexMetadata metadata;
         ScratchImage srcimage;
@@ -973,7 +973,7 @@ bool Test02()
                     wcscat_s( tname, GetName(cformat) );
 
                     wchar_t szDestPath[MAX_PATH];
-                    _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                     if ( metadata.mipLevels > 1 || metadata.arraySize > 1 || metadata.depth > 1 )
                     {
@@ -1093,7 +1093,7 @@ bool Test03()
         // Form dest path
         wchar_t ext[_MAX_EXT];
         wchar_t fname[_MAX_FNAME];
-        _wsplitpath_s( szPath, NULL, 0, NULL, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
+        _wsplitpath_s( szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
         wchar_t tempDir[MAX_PATH];
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"bc_gpu", tempDir, MAX_PATH);
@@ -1103,7 +1103,7 @@ bool Test03()
             return false;
         }
 
-        CreateDirectoryW( tempDir, NULL );
+        CreateDirectoryW( tempDir, nullptr );
 
         TexMetadata metadata;
         ScratchImage srcimage;
@@ -1194,7 +1194,7 @@ bool Test03()
                     wcscat_s( tname, GetName(cformat) );
 
                     wchar_t szDestPath[MAX_PATH];
-                    _wmakepath_s( szDestPath, MAX_PATH, NULL, tempDir, tname, L".dds" );
+                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                     if ( metadata.mipLevels > 1 || metadata.arraySize > 1 || metadata.depth > 1 )
                     {
