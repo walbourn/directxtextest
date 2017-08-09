@@ -343,6 +343,9 @@ static const TestMedia g_TestMedia[] =
 { FLAGS_NONE, { 16384, 8192, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthdiffuseTexture.png", {0x95,0xdc,0xb3,0xa7,0xd0,0xf8,0x63,0x04,0x75,0x1b,0x8f,0x62,0x1f,0xb1,0x44,0x12} },
 { FLAGS_NONE, { 8192, 4096, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"callisto.png", {0x92,0xf7,0x93,0xd3,0x34,0x12,0xef,0x5b,0x54,0x01,0x1a,0xb6,0x7c,0xdb,0x6b,0xa8} },
 
+// Additional TIF test cases
+{ FLAGS_NONE,{ 2048, 1024, 1, 1, 1, 0, 0, DXGI_FORMAT_R16G16B16A16_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"SnowPano_4k_Ref.TIF",{ 0x9a,0xa3,0x6c,0xd6,0x07,0x93,0x8d,0x67,0x5b,0x54,0xb9,0xcd,0xda,0x13,0x56,0xf5 } }, // 48bppRGB
+
 #if (_WIN32_WINNT >= 0x0602 /*_WIN32_WINNT_WIN8*/) || defined(_WIN7_PLATFORM_UPDATE)
 { FLAGS_WIC2, { 1024, 1024, 1, 1, 1, 0, 0, DXGI_FORMAT_R32G32B32_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"ramps_vdm_rel.TIF", { 0xea,0x2c,0xd3,0x74,0xef,0x08,0xbf,0x65,0xfa,0x7a,0x49,0x62,0x2a,0xd3,0x5f,0x82 } },
 { FLAGS_WIC2, { 768, 512, 1, 1, 1, 0, 0, DXGI_FORMAT_R32G32B32_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"96bpp_RGB_FP.TIF", { 0x3d,0x05,0x35,0x60,0x63,0x81,0xcf,0x86,0x09,0x5f,0x8f,0xcc,0xda,0x58,0xd9,0xfe } },
@@ -522,7 +525,7 @@ bool Test01()
 
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
-        if ( (g_TestMedia[index].options & FLAGS_WIC2) && iswic2 )
+        if ( (g_TestMedia[index].options & FLAGS_WIC2) && !iswic2 )
             continue;
 
         wchar_t szPath[MAX_PATH];
@@ -722,7 +725,7 @@ bool Test02()
 
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
-        if ( (g_TestMedia[index].options & FLAGS_WIC2) && iswic2 )
+        if ( (g_TestMedia[index].options & FLAGS_WIC2) && !iswic2 )
             continue;
 
         wchar_t szPath[MAX_PATH];
@@ -912,7 +915,7 @@ bool Test03()
 
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
-        if ( (g_TestMedia[index].options & FLAGS_WIC2) && iswic2 )
+        if ( (g_TestMedia[index].options & FLAGS_WIC2) && !iswic2 )
             continue;
 
         wchar_t szPath[MAX_PATH];
@@ -1018,7 +1021,7 @@ bool Test04()
 
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
-        if ( (g_TestMedia[index].options & FLAGS_WIC2) && iswic2 )
+        if ( (g_TestMedia[index].options & FLAGS_WIC2) && !iswic2 )
             continue;
 
         wchar_t szPath[MAX_PATH];
