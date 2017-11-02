@@ -22,7 +22,7 @@
     <ProjectGuid>{587A57B7-656C-4BAD-A117-F2EC74594955}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>xtwic</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
