@@ -3458,7 +3458,7 @@ bool Test06()
                                 printe( "Failed comparing simple vs. complex image data (HRESULT %08X)\n", hr );
                             }
 
-                            if ( IsErrorTooLarge( mse, 0.0f ) )
+                            if ( IsErrorTooLarge( mse, 0.00001f ) )
                             {
                                 success = false;
                                 printe( "Failed comparing simple vs. complex image data (%f [%f %f %f %f]):\nformat %ls -> %ls:\n%ls\n",
