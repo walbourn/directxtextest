@@ -4,7 +4,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //-------------------------------------------------------------------------------------
 
-#define D3D_DEBUG
+//#define D3D_DEBUG
 
 #include <assert.h>
 
