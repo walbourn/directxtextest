@@ -27,7 +27,7 @@ HRESULT LoadBlobFromFile( _In_z_ const wchar_t* szFile, Blob& blob )
     }
 
     // Get the file size
-    LARGE_INTEGER fileSize = {0};
+    LARGE_INTEGER fileSize = {};
     if ( !GetFileSizeEx( hFile.get(), &fileSize ) )
     {
         return HRESULT_FROM_WIN32( GetLastError() );
@@ -83,7 +83,7 @@ size_t DetermineFileSize( _In_z_ const wchar_t* szFile )
     }
 
     // Get the file size
-    LARGE_INTEGER fileSize = {0};
+    LARGE_INTEGER fileSize = {};
     if ( !GetFileSizeEx( hFile.get(), &fileSize ) )
     {
         return 0;

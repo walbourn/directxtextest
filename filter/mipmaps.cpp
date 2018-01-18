@@ -629,7 +629,7 @@ bool Test02()
                     }
 
                     float targMSE = 0.023f;
-                    float mse = 0, mseV[4] = {0};
+                    float mse = 0, mseV[4] = {};
                     const Image* img = mipChainPoint.GetImage(1,0,0);
                     hr = (img) ? ComputeMSE( *img, *mipChainLinear.GetImage(1,0,0), mse, mseV ) : E_POINTER;
                     if ( FAILED(hr) )
@@ -723,7 +723,7 @@ bool Test02()
                     }
 
                     float targMSE = 0.023f;
-                    float mse = 0, mseV[4] = {0};
+                    float mse = 0, mseV[4] = {};
                     const Image* img = mipChainPoint.GetImage(1,0,0);
                     hr = (img) ? ComputeMSE( *img, *mipChainCubic.GetImage(1,0,0), mse, mseV ) : E_POINTER;
                     if ( FAILED(hr) )
@@ -951,7 +951,7 @@ bool Test02()
                     else
                     {
                         float targMSE = ( g_MipMapMedia[index].options & FLAGS_SEPALPHA ) ? 0.071f : 0.003f;
-                        float mse = 0, mseV[4] = {0};
+                        float mse = 0, mseV[4] = {};
                         const Image* img = mipChain.GetImage(1,0,0);
                         hr = (img) ? ComputeMSE( *img, *nwMipChain.GetImage(1,0,0), mse, mseV ) : E_POINTER;
                         if ( FAILED(hr) )
@@ -1001,7 +1001,7 @@ bool Test02()
                         if ( !(g_MipMapMedia[index].options & FLAGS_SKIP_POINTNOWIC) )
                         {
                             float targMSE = ( g_MipMapMedia[index].options & FLAGS_SEPALPHA ) ? 0.11f : 0.047f;
-                            float mse = 0, mseV[4] = {0};
+                            float mse = 0, mseV[4] = {};
                             const Image* img = mipChainPoint.GetImage(1,0,0);
                             hr = (img) ? ComputeMSE( *img, *nwMipChainPoint.GetImage(1,0,0), mse, mseV ) : E_POINTER;
                             if ( FAILED(hr) )
@@ -1049,7 +1049,7 @@ bool Test02()
                     else
                     {
                         float targMSE = ( g_MipMapMedia[index].options & FLAGS_SEPALPHA ) ? 0.072f : 0.003f;
-                        float mse = 0, mseV[4] = {0};
+                        float mse = 0, mseV[4] = {};
                         const Image* img = mipChainLinear.GetImage(1,0,0);
                         hr = (img) ? ComputeMSE( *img, *nwMipChainLinear.GetImage(1,0,0), mse, mseV ) : E_POINTER;
                         if ( FAILED(hr) )
@@ -1111,7 +1111,7 @@ bool Test02()
                     else
                     {
                         float targMSE = ( g_MipMapMedia[index].options & FLAGS_SEPALPHA ) ? 0.09f : 0.06f;
-                        float mse = 0, mseV[4] = {0};
+                        float mse = 0, mseV[4] = {};
                         const Image* img = mipChainCubic.GetImage(1,0,0);
                         hr = (img) ? ComputeMSE( *img, *nwMipChainCubic.GetImage(1,0,0), mse, mseV ) : E_POINTER;
                         if ( FAILED(hr) )
@@ -1196,7 +1196,7 @@ bool Test02()
                     else
                     {
                         float targMSE = 0.0011f;
-                        float mse = 0, mseV[4] = {0};
+                        float mse = 0, mseV[4] = {};
                         const Image* img = nwMipChain.GetImage(1,0,0);
                         hr = (img) ? ComputeMSE( *img, *srgbMipChain.GetImage(1,0,0), mse, mseV ) : E_POINTER;
                         if ( FAILED(hr) )
@@ -1250,7 +1250,7 @@ bool Test02()
                     else
                     {
                         float targMSE = 0.0011f;
-                        float mse = 0, mseV[4] = {0};
+                        float mse = 0, mseV[4] = {};
                         const Image* img = nwMipChainLinear.GetImage(1,0,0);
                         hr = (img) ? ComputeMSE( *img, *srgbMipChainLinear.GetImage(1,0,0), mse, mseV ) : E_POINTER;
                         if ( FAILED(hr) )
@@ -1304,7 +1304,7 @@ bool Test02()
                     else
                     {
                         float targMSE = 0.0011f;
-                        float mse = 0, mseV[4] = {0};
+                        float mse = 0, mseV[4] = {};
                         const Image* img = nwMipChainCubic.GetImage(1,0,0);
                         hr = (img) ? ComputeMSE( *img, *srgbMipChainCubic.GetImage(1,0,0), mse, mseV ) : E_POINTER;
                         if ( FAILED(hr) )
@@ -1358,7 +1358,7 @@ bool Test02()
                     else
                     {
                         float targMSE = 0.0011f;
-                        float mse = 0, mseV[4] = {0};
+                        float mse = 0, mseV[4] = {};
                         const Image* img = mipChainTriangle.GetImage(1,0,0);
                         hr = (img) ? ComputeMSE( *img, *srgbMipChainTriangle.GetImage(1,0,0), mse, mseV ) : E_POINTER;
                         if ( FAILED(hr) )

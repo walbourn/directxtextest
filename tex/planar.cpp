@@ -115,7 +115,7 @@ bool Test15()
             {
                 // TODO - Verify the image data (perhaps MD5 checksum)
 
-                wchar_t tname[MAX_PATH] = { 0 };
+                wchar_t tname[MAX_PATH] = {};
                 wcscpy_s( tname, fname );
                 wcscat_s( tname, L"_" );
                 wcscat_s( tname, GetName(g_TestMedia[index].tformat) );

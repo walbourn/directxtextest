@@ -100,7 +100,7 @@ bool Test13()
     {
         ScratchImage pmAlpha;
         hr = PremultiplyAlpha( *imagealpha.GetImage(0,0,0), TEX_PMALPHA_DEFAULT, pmAlpha );
-        uint8_t digestDefault[16] = { 0 };
+        uint8_t digestDefault[16] = {};
         if ( FAILED(hr) )
         {
             success = false;
@@ -221,7 +221,7 @@ bool Test13()
                 }
             }
 
-            wchar_t tname[MAX_PATH] = { 0 };
+            wchar_t tname[MAX_PATH] = {};
             wcscpy_s( tname, fname );
             wcscat_s( tname, L"_sRGB" );
 
@@ -378,7 +378,7 @@ bool Test13()
                     }
                 }
 
-                wchar_t tname[MAX_PATH] = { 0 };
+                wchar_t tname[MAX_PATH] = {};
                 wcscpy_s(tname, fname);
                 wcscat_s(tname, L"_c");
 

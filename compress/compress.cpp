@@ -469,7 +469,7 @@ bool Test01()
                         else
                         {
                             float targMSE = 0.00000001f;
-                            float mse = 0, mseV[4] = {0};
+                            float mse = 0, mseV[4] = {};
                             hr = ComputeMSE( *image.GetImage(0,0,0), *image2.GetImage(0,0,0), mse, mseV );
                             if ( FAILED(hr) )
                             {
@@ -967,7 +967,7 @@ bool Test02()
                         break;
                     }
 
-                    wchar_t tname[MAX_PATH] = { 0 };
+                    wchar_t tname[MAX_PATH] = {};
                     wcscpy_s( tname, fname );
                     wcscat_s( tname, L"_" );
                     wcscat_s( tname, GetName(cformat) );
@@ -1188,7 +1188,7 @@ bool Test03()
                                 mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName(cformat), szPath );
                     }
 
-                    wchar_t tname[MAX_PATH] = { 0 };
+                    wchar_t tname[MAX_PATH] = {};
                     wcscpy_s( tname, fname );
                     wcscat_s( tname, L"_" );
                     wcscat_s( tname, GetName(cformat) );

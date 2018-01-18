@@ -372,7 +372,7 @@ HRESULT SetupRenderTest(ID3D12Device** pDev, ID3D12CommandQueue** pCommandQ, ID3
         sd.SampleDesc.Count = 1;
         sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 
-        DXGI_SWAP_CHAIN_FULLSCREEN_DESC fs = { 0 };
+        DXGI_SWAP_CHAIN_FULLSCREEN_DESC fs = {};
         fs.Windowed = TRUE;
 
         ComPtr<IDXGISwapChain1> swapChain;
@@ -964,7 +964,7 @@ void RenderTest(const TexMetadata& metadata, ID3D12Resource* pResource)
     WaitForGpu();
 
     // Main message loop
-    MSG msg = {0};
+    MSG msg = {};
 
     ULONGLONG end = GetTickCount64() + RENDER_TEST_MS_DELAY;
 

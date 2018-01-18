@@ -2830,7 +2830,7 @@ bool Test06()
                     }
                     else
                     {
-                        float mse = 0, mseV[4] = {0};
+                        float mse = 0, mseV[4] = {};
                         float targMSE = ( (BitsPerColor( tformat ) <= 6) && ( BitsPerColor( metadata.format ) >= 16) ) ? 0.03f : 0.002f;
                         if ( g_TargetFormats[findex].option & FLAGS_INTEGER )
                             targMSE = 3.f;
@@ -2909,7 +2909,7 @@ bool Test06()
                     }
                     else
                     {
-                        float mse = 0, mseV[4] = {0};
+                        float mse = 0, mseV[4] = {};
                         float targMSE = ( (BitsPerColor( tformat ) <= 6) && ( BitsPerColor( metadata.format ) >= 16) ) ? 0.03f : 0.003f;
                         if ( g_TargetFormats[findex].option & FLAGS_INTEGER )
                             targMSE = 3.f;
@@ -3014,7 +3014,7 @@ bool Test06()
                             break;
                         }
 
-                        float mse = 0, mseV[4] = {0};
+                        float mse = 0, mseV[4] = {};
                         const Image* img = image.GetImage(0,0,0);
                         hr = (img) ? ComputeMSE( *img, *nwimage.GetImage(0,0,0), mse, mseV, flags ) : E_POINTER;
                         if ( FAILED(hr) )
@@ -3088,7 +3088,7 @@ bool Test06()
                     }
                     else
                     {
-                        float mse = 0, mseV[4] = {0};
+                        float mse = 0, mseV[4] = {};
                         float targMSE = ( (BitsPerColor( tformat ) <= 6) && ( BitsPerColor( metadata.format ) >= 16) ) ? 0.03f : 0.002f;
                         if ( g_TargetFormats[findex].option & FLAGS_INTEGER )
                             targMSE = 3.f;
@@ -3166,7 +3166,7 @@ bool Test06()
                     }
                     else
                     {
-                        float mse = 0, mseV[4] = {0};
+                        float mse = 0, mseV[4] = {};
                         float targMSE = ( (BitsPerColor( tformat ) <= 6) && ( BitsPerColor( metadata.format ) >= 16) ) ? 0.03f : 0.003f;
                         if ( g_TargetFormats[findex].option & FLAGS_INTEGER )
                             targMSE = 3.f;
@@ -3449,7 +3449,7 @@ bool Test06()
                         else
                         {
                             // Compare top-level image with simple case result
-                            float mse = 0, mseV[4] = {0};
+                            float mse = 0, mseV[4] = {};
                             const Image* img = image.GetImage(0,0,0);
                             hr = (img) ? ComputeMSE( *img, *imageComplex.GetImage(0,0,0), mse, mseV ) : E_POINTER;
                             if ( FAILED(hr) )

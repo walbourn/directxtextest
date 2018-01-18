@@ -611,7 +611,7 @@ void RenderTest(const TexMetadata& metadata, ID3D11ShaderResourceView* pSRV)
         g_pImmediateContext->PSSetShaderResources(0, 1, &pSRV);
 
     // Main message loop
-    MSG msg = { 0 };
+    MSG msg = {};
 
     ULONGLONG end = GetTickCount64() + RENDER_TEST_MS_DELAY;
 

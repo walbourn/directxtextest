@@ -482,7 +482,7 @@ bool Test05()
         wchar_t szDestPath[MAX_PATH] = {};
         _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, fname, L".hdr");
 
-        wchar_t fname2[_MAX_FNAME] = { 0 };
+        wchar_t fname2[_MAX_FNAME] = {};
         wcscpy_s(fname2, fname);
         wcscat_s(fname2, L"_96bpp");
 

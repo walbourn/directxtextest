@@ -1833,7 +1833,7 @@ bool Test05()
         _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, fname, L".dds" );
 
         // Form second dest path
-        wchar_t fname2[_MAX_FNAME] = { 0 };
+        wchar_t fname2[_MAX_FNAME] = {};
         wcscpy_s( fname2, fname );
         wcscat_s( fname2, L"_DX10" );
 

@@ -1383,7 +1383,7 @@ bool Test06()
         _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, fname, g_SaveMedia[index].ext );
 
         wchar_t szDestPath2[MAX_PATH];
-        wchar_t tname[_MAX_FNAME] = { 0 };
+        wchar_t tname[_MAX_FNAME] = {};
         wcscpy_s( tname, fname );
         wcscat_s( tname, L"_tf" );
         _wmakepath_s( szDestPath2, MAX_PATH, nullptr, tempDir, tname, g_SaveMedia[index].ext );

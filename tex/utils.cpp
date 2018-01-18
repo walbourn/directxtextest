@@ -799,7 +799,7 @@ bool Test02()
                 D3D11_MESSAGE_ID_SETPRIVATEDATA_CHANGINGPARAMS, D3D11_MESSAGE_ID_LIVE_DEVICE, D3D11_MESSAGE_ID_LIVE_OBJECT_SUMMARY,
                 D3D11_MESSAGE_ID_CREATETEXTURE2D_OUTOFMEMORY_RETURN
             };
-            D3D11_INFO_QUEUE_FILTER filter = {0};
+            D3D11_INFO_QUEUE_FILTER filter = {};
             filter.DenyList.NumIDs = _countof(hide);
             filter.DenyList.pIDList = hide;
             infoQ->AddStorageFilterEntries( &filter );
@@ -928,7 +928,7 @@ bool Test02()
                     continue;
                 }
 
-                D3D11_MAPPED_SUBRESOURCE res = {0};
+                D3D11_MAPPED_SUBRESOURCE res = {};
                 hr = context->Map( tex.Get(), 0, D3D11_MAP_WRITE, 0, &res );
                 if ( FAILED(hr) )
                 {

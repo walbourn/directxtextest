@@ -588,7 +588,7 @@ bool Test01()
                     }
 
                     float targMSE = 0.06f;
-                    float mse = 0, mseV[4] = {0};
+                    float mse = 0, mseV[4] = {};
                     const Image* img = imagePoint.GetImage(0,0,0);
                     hr = (img) ? ComputeMSE( *img, *imageLinear.GetImage(0,0,0), mse, mseV ) : E_POINTER;
                     if ( FAILED(hr) )
@@ -666,7 +666,7 @@ bool Test01()
                     }
 
                     float targMSE = 0.07f;
-                    float mse = 0, mseV[4] = {0};
+                    float mse = 0, mseV[4] = {};
                     const Image* img = imagePoint.GetImage(0,0,0);
                     hr = (img) ? ComputeMSE( *img, *imageCubic.GetImage(0,0,0), mse, mseV ) : E_POINTER;
                     if ( FAILED(hr) )
@@ -866,7 +866,7 @@ bool Test01()
                 else
                 {
                     float targMSE = ( ( g_ResizeMedia[index].options & FLAGS_SEPALPHA ) || ( twidth > metadata.width || theight > metadata.height) ) ? 0.071f : 0.003f;
-                    float mse = 0, mseV[4] = {0};
+                    float mse = 0, mseV[4] = {};
                     const Image* img = image.GetImage(0,0,0);
                     hr = (img) ? ComputeMSE( *img, *nwimage.GetImage(0,0,0), mse, mseV ) : E_POINTER;
                     if ( FAILED(hr) )
@@ -920,7 +920,7 @@ bool Test01()
                         if ( !(g_ResizeMedia[index].options & FLAGS_SKIP_POINTNOWIC) )
                         {
                             float targMSE = ( g_ResizeMedia[index].options & FLAGS_SEPALPHA ) ? 0.11f : 0.047f;
-                            float mse = 0, mseV[4] = {0};
+                            float mse = 0, mseV[4] = {};
                             const Image* img = imagePoint.GetImage(0,0,0);
                             hr = (img) ? ComputeMSE( *img, *nwimagePoint.GetImage(0,0,0), mse, mseV ) : E_POINTER;
                             if ( FAILED(hr) )
@@ -970,7 +970,7 @@ bool Test01()
                     else
                     {
                         float targMSE = ( g_ResizeMedia[index].options & FLAGS_SEPALPHA ) ? 0.072f : 0.003f;
-                        float mse = 0, mseV[4] = {0};
+                        float mse = 0, mseV[4] = {};
                         const Image* img = imageLinear.GetImage(0,0,0);
                         hr = (img) ? ComputeMSE( *img, *nwimageLinear.GetImage(0,0,0), mse, mseV ) : E_POINTER;
                         if ( FAILED(hr) )
@@ -1019,7 +1019,7 @@ bool Test01()
                     else
                     {
                         float targMSE = ( g_ResizeMedia[index].options & FLAGS_SEPALPHA ) ? 0.09f : 0.06f;
-                        float mse = 0, mseV[4] = {0};
+                        float mse = 0, mseV[4] = {};
                         const Image* img = imageCubic.GetImage(0,0,0);
                         hr = (img) ? ComputeMSE( *img, *nwimageCubic.GetImage(0,0,0), mse, mseV ) : E_POINTER;
                         if ( FAILED(hr) )
@@ -1107,7 +1107,7 @@ bool Test01()
                 else
                 {
                     float targMSE = 0.0011f;
-                    float mse = 0, mseV[4] = {0};
+                    float mse = 0, mseV[4] = {};
                     const Image* img = nwimage.GetImage(0,0,0);
                     hr = (img) ? ComputeMSE( *img, *srgbimage.GetImage(0,0,0), mse, mseV ) : E_POINTER;
                     if ( FAILED(hr) )
@@ -1165,7 +1165,7 @@ bool Test01()
                     else
                     {
                         float targMSE = 0.0011f;
-                        float mse = 0, mseV[4] = {0};
+                        float mse = 0, mseV[4] = {};
                         const Image* img = nwimageLinear.GetImage(0,0,0);
                         hr = (img) ? ComputeMSE( *img, *srgbimageLinear.GetImage(0,0,0), mse, mseV ) : E_POINTER;
                         if ( FAILED(hr) )
@@ -1221,7 +1221,7 @@ bool Test01()
                     else
                     {
                         float targMSE = 0.0011f;
-                        float mse = 0, mseV[4] = {0};
+                        float mse = 0, mseV[4] = {};
                         const Image* img = nwimageCubic.GetImage(0,0,0);
                         hr = (img) ? ComputeMSE( *img, *srgbimageCubic.GetImage(0,0,0), mse, mseV ) : E_POINTER;
                         if ( FAILED(hr) )
@@ -1277,7 +1277,7 @@ bool Test01()
                     else
                     {
                         float targMSE = 0.0011f;
-                        float mse = 0, mseV[4] = {0};
+                        float mse = 0, mseV[4] = {};
                         const Image* img = imageTriangle.GetImage(0,0,0);
                         hr = (img) ? ComputeMSE( *img, *srgbimageTriangle.GetImage(0,0,0), mse, mseV ) : E_POINTER;
                         if ( FAILED(hr) )
