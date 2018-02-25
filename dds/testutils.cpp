@@ -274,15 +274,15 @@ HRESULT IsDDSHeaderPresent( _In_bytecount_(size) const void* pSource, size_t siz
     assert( pHeader != nullptr );
 
     // Verify header to validate DDS file
-    if ( pHeader->dwSize != sizeof(DDS_HEADER)
-         || pHeader->ddspf.dwSize != sizeof(DDS_PIXELFORMAT) )
+    if ( pHeader->size != sizeof(DDS_HEADER)
+         || pHeader->ddspf.size != sizeof(DDS_PIXELFORMAT) )
     {
         return E_FAIL;
     }
 
     // Check for DX10 extension
-    if ( (pHeader->ddspf.dwFlags & DDS_FOURCC)
-         && (MAKEFOURCC( 'D', 'X', '1', '0' ) == pHeader->ddspf.dwFourCC) )
+    if ( (pHeader->ddspf.flags & DDS_FOURCC)
+         && (MAKEFOURCC( 'D', 'X', '1', '0' ) == pHeader->ddspf.fourCC) )
     {
         // Buffer must be big enough for both headers and magic value
         if ( size < (sizeof(DDS_HEADER)+sizeof(DWORD)+sizeof(DDS_HEADER_DXT10)) )
