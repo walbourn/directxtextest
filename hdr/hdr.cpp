@@ -113,7 +113,7 @@ bool Test01()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass );
+    print("%zu images tested, %zu images passed ", ncount, npass );
 
     return success;
 }
@@ -197,7 +197,7 @@ bool Test02()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass );
+    print("%zu images tested, %zu images passed ", ncount, npass );
 
     return success;
 }
@@ -269,7 +269,7 @@ bool Test03()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass );
+    print("%zu images tested, %zu images passed ", ncount, npass );
 
     return success;
 }
@@ -446,7 +446,7 @@ bool Test04()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass);
+    print("%zu images tested, %zu images passed ", ncount, npass);
 
     return success;
 }
@@ -646,7 +646,7 @@ bool Test05()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass);
+    print("%zu images tested, %zu images passed ", ncount, npass);
 
     return success;
 }
@@ -772,7 +772,7 @@ bool Test06()
         return false;
     }
 
-    print(" %Iu images tested ", ncount);
+    print(" %zu images tested ", ncount);
 
     return success;
 }

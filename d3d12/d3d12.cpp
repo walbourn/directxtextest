@@ -246,7 +246,7 @@ bool Test02()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass);
+    print("%zu images tested, %zu images passed ", ncount, npass);
 
     return success;
 }
@@ -361,7 +361,7 @@ bool Test03()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass);
+    print("%zu images tested, %zu images passed ", ncount, npass);
 
     return success;
 }
@@ -448,7 +448,7 @@ bool Test04()
                 if (subresources.size() != expected)
                 {
                     success = false;
-                    printe("Failed preparing texture with unexpected subresources result (%Iu..%Iu):\n%ls\n",
+                    printe("Failed preparing texture with unexpected subresources result (%zu..%zu):\n%ls\n",
                         subresources.size(), expected, szPath);
                 }
                 else
@@ -461,7 +461,7 @@ bool Test04()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass);
+    print("%zu images tested, %zu images passed ", ncount, npass);
 
     return success;
 }
@@ -595,7 +595,7 @@ bool Test05()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass);
+    print("%zu images tested, %zu images passed ", ncount, npass);
 
     queue.Reset();
     commandList.Reset();
@@ -785,7 +785,7 @@ bool Test06()
                             else if (!forceNoMips && image.GetImageCount() != image2.GetImageCount())
                             {
                                 success = false;
-                                printe("Image count in captured texture (%Iu) doesn't match source (%Iu) in:\n%ls\n", image2.GetImageCount(), image.GetImageCount(), szDestPath);
+                                printe("Image count in captured texture (%zu) doesn't match source (%zu) in:\n%ls\n", image2.GetImageCount(), image.GetImageCount(), szDestPath);
                             }
                             else
                             {
@@ -828,7 +828,7 @@ bool Test06()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass);
+    print("%zu images tested, %zu images passed ", ncount, npass);
 
     queue.Reset();
     commandList.Reset();

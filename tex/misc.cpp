@@ -194,7 +194,7 @@ bool Test09()
                 if (FAILED(hr))
                 {
                     success = false;
-                    printe( "Failed doing test->logo (%Iu,%Iu,%Iu,%Iu) offset %Iu by %Iu (HRESULT %08X)\n",
+                    printe( "Failed doing test->logo (%zu,%zu,%zu,%zu) offset %zu by %zu (HRESULT %08X)\n",
                             rct.x, rct.y, rct.w, rct.h, x, y, hr );
                 }
                 else
@@ -202,7 +202,7 @@ bool Test09()
                     // TODO - Verify the image data (perhaps MD5 checksum)
 
                     wchar_t tname[MAX_PATH] = {};
-                    swprintf_s( tname, L"offset_%s_%Iu_%Iu", fname, x, y );
+                    swprintf_s( tname, L"offset_%s_%zu_%zu", fname, x, y );
 
                     wchar_t szDestPath[MAX_PATH] = {};
                     _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
@@ -233,14 +233,14 @@ bool Test09()
                 if (FAILED(hr))
                 {
                     success = false;
-                    printe( "Failed doing logo->earth offset %Iu by %Iu (HRESULT %08X)\n", x, y, hr );
+                    printe( "Failed doing logo->earth offset %zu by %zu (HRESULT %08X)\n", x, y, hr );
                 }
                 else
                 {
                     // TODO - Verify the image data (perhaps MD5 checksum)
 
                     wchar_t tname[MAX_PATH] = {};
-                    swprintf_s( tname, L"cvt_%s_%Iu_%Iu", fname, x, y );
+                    swprintf_s( tname, L"cvt_%s_%zu_%zu", fname, x, y );
 
                     wchar_t szDestPath[MAX_PATH] = {};
                     _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
@@ -270,7 +270,7 @@ bool Test09()
                 if (FAILED(hr))
                 {
                     success = false;
-                    printe( "Failed doing logo->earth (%Iu,%Iu,%Iu,%Iu) offset %Iu by %Iu (HRESULT %08X)\n",
+                    printe( "Failed doing logo->earth (%zu,%zu,%zu,%zu) offset %zu by %zu (HRESULT %08X)\n",
                             rct.x, rct.y, rct.w, rct.h, x, y, hr );
                 }
                 else
@@ -278,7 +278,7 @@ bool Test09()
                     // TODO - Verify the image data (perhaps MD5 checksum)
 
                     wchar_t tname[MAX_PATH] = {};
-                    swprintf_s( tname, L"cvt_offset_%s_%Iu_%Iu", fname, x, y );
+                    swprintf_s( tname, L"cvt_offset_%s_%zu_%zu", fname, x, y );
 
                     wchar_t szDestPath[MAX_PATH] = {};
                     _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
@@ -538,7 +538,7 @@ bool Test14()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass );
+    print("%zu images tested, %zu images passed ", ncount, npass );
 
     return success;
 }
@@ -732,7 +732,7 @@ bool Test16()
         }
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass);
+    print("%zu images tested, %zu images passed ", ncount, npass);
 
     return success;
 }
@@ -1148,7 +1148,7 @@ bool Test17()
         }
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass);
+    print("%zu images tested, %zu images passed ", ncount, npass);
 
     return success;
 }

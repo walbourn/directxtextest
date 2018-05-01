@@ -705,7 +705,7 @@ bool Test01()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass );
+    print("%zu images tested, %zu images passed ", ncount, npass );
 
     return success;
 }
@@ -895,7 +895,7 @@ bool Test02()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass );
+    print("%zu images tested, %zu images passed ", ncount, npass );
 
     return success;
 }
@@ -1001,7 +1001,7 @@ bool Test03()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass );
+    print("%zu images tested, %zu images passed ", ncount, npass );
 
     return success;
 }
@@ -1097,7 +1097,7 @@ bool Test04()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass );
+    print("%zu images tested, %zu images passed ", ncount, npass );
 
     return success;
 }
@@ -1269,7 +1269,7 @@ bool Test05()
                         { // We are forcing uncompressed in the custom props, so new image should be strictly larger than original
                             success = false;
                             pass = false;
-                            printe( "Failed wic custom props (%ls) from memory sizes unchanged (%Iu ... %Iu):\n%ls\n", g_SaveMedia[index].ext, blob.GetBufferSize(), original, szPath );
+                            printe( "Failed wic custom props (%ls) from memory sizes unchanged (%zu ... %zu):\n%ls\n", g_SaveMedia[index].ext, blob.GetBufferSize(), original, szPath );
                         }
                     }
                 }
@@ -1339,7 +1339,7 @@ bool Test05()
         }
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass );
+    print("%zu images tested, %zu images passed ", ncount, npass );
 
     return success;
 }
@@ -1544,7 +1544,7 @@ bool Test06()
                         { // We are forcing uncompressed in the custom props, so new image should be strictly larger than original
                             success = false;
                             pass = false;
-                            printe( "Failed wic custom props sizes unchanged (%Iu ... %Iu):\n%ls\n", uncompressed, original, szDestPath3 );
+                            printe( "Failed wic custom props sizes unchanged (%zu ... %zu):\n%ls\n", uncompressed, original, szDestPath3 );
                         }
                     }
                 }
@@ -1622,7 +1622,7 @@ bool Test06()
         }
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass );
+    print("%zu images tested, %zu images passed ", ncount, npass );
 
     return success;
 }
@@ -1777,7 +1777,7 @@ bool Test07()
         return false;
     }
 
-    print(" %Iu images tested, %Iu images passed ", ncount, npass);
+    print(" %zu images tested, %zu images passed ", ncount, npass);
 
     return success;
 }
@@ -1866,7 +1866,7 @@ bool Test08()
         return false;
     }
 
-    print(" %Iu images tested ", ncount);
+    print(" %zu images tested ", ncount);
 
     return success;
 }

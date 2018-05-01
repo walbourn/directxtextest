@@ -106,9 +106,9 @@ bool Test15()
             {
                 success = false;
                 pass = false;
-                printe( "Failed conversion result is %Iu x %Iu (format %ls):\n",
+                printe( "Failed conversion result is %zu x %zu (format %ls):\n",
                         image.GetMetadata().width, image.GetMetadata().height, GetName( image.GetMetadata().format ) );
-                printe( "\n...(check) %Iu x %Iu (format %ls):\n%ls\n",
+                printe( "\n...(check) %zu x %zu (format %ls):\n%ls\n",
                         srcimage.GetMetadata().width, srcimage.GetMetadata().height, GetName( g_TestMedia[index].tformat ), szPath );
             }
             else
@@ -153,7 +153,7 @@ bool Test15()
         }
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass );
+    print("%zu images tested, %zu images passed ", ncount, npass );
 
     return success;
 }

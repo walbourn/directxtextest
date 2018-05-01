@@ -887,7 +887,7 @@ bool Test01()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass );
+    print("%zu images tested, %zu images passed ", ncount, npass );
 
     return success;
 }
@@ -1162,7 +1162,7 @@ bool Test02()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass );
+    print("%zu images tested, %zu images passed ", ncount, npass );
 
     return success;
 }
@@ -1427,7 +1427,7 @@ bool Test03()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass );
+    print("%zu images tested, %zu images passed ", ncount, npass );
 
     return success;
 }
@@ -1715,7 +1715,7 @@ bool Test04()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed creating wide test image - result is same as source: %Iu %Iu\n%ls\n", image.GetImage(0,0,0)->rowPitch, imageWide.GetImage(0,0,0)->rowPitch, szPath );
+                        printe( "Failed creating wide test image - result is same as source: %zu %zu\n%ls\n", image.GetImage(0,0,0)->rowPitch, imageWide.GetImage(0,0,0)->rowPitch, szPath );
                     }
                     else
                     {
@@ -1784,7 +1784,7 @@ bool Test04()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass );
+    print("%zu images tested, %zu images passed ", ncount, npass );
 
     return success;
 }
@@ -2170,7 +2170,7 @@ bool Test05()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass );
+    print("%zu images tested, %zu images passed ", ncount, npass );
 
     return success;
 }
@@ -2304,7 +2304,7 @@ bool Test06()
         return false;
     }
 
-    print(" %Iu images tested ", ncount);
+    print(" %zu images tested ", ncount);
 
     return success;
 }

@@ -34,10 +34,10 @@
 
 #define printxmv(v) print("%s: %f,%f,%f,%f\n", #v, XMVectorGetX(v), XMVectorGetY(v), XMVectorGetZ(v), XMVectorGetW(v))
 
-#define printmeta(md) print( "(actual) w: %Iu x h: %Iu x d: %Iu\narraySize: %Iu  mips: %Iu\nmiscFlags: %08X miscFlags2: %08X format: %u dimension: %u\n", \
+#define printmeta(md) print( "(actual) w: %zu x h: %zu x d: %zu\narraySize: %zu  mips: %zu\nmiscFlags: %08X miscFlags2: %08X format: %u dimension: %u\n", \
                               (md)->width, (md)->height, (md)->depth, (md)->arraySize, (md)->mipLevels, (md)->miscFlags, (md)->miscFlags2, (md)->format, (md)->dimension );
 
-#define printmetachk(md) print( "...\n(check) w: %Iu x h: %Iu x d: %Iu\narraySize: %Iu  mips: %Iu\nmiscFlags: %08X miscFlags2: %08X format: %u dimension: %u\n", \
+#define printmetachk(md) print( "...\n(check) w: %zu x h: %zu x d: %zu\narraySize: %zu  mips: %zu\nmiscFlags: %08X miscFlags2: %08X format: %u dimension: %u\n", \
                               (md)->width, (md)->height, (md)->depth, (md)->arraySize, (md)->mipLevels, (md)->miscFlags, (md)->miscFlags2, (md)->format, (md)->dimension );
 
 #define printdigest(str,digest) print( "%s:\n0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x\n", str, \

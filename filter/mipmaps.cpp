@@ -401,7 +401,7 @@ bool Test02()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed mip-map Fant/Box generation result is %Iu mip levels:\n%ls\n", mipChain.GetMetadata().mipLevels, szPath );
+                    printe( "Failed mip-map Fant/Box generation result is %zu mip levels:\n%ls\n", mipChain.GetMetadata().mipLevels, szPath );
                 }
                 else
                 {
@@ -500,7 +500,7 @@ bool Test02()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed mip-map Point generation result is %Iu mip levels:\n%ls\n", mipChainPoint.GetMetadata().mipLevels, szPath );
+                    printe( "Failed mip-map Point generation result is %zu mip levels:\n%ls\n", mipChainPoint.GetMetadata().mipLevels, szPath );
                 }
                 else
                 {
@@ -578,7 +578,7 @@ bool Test02()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed mip-map Linear generation result is %Iu mip levels:\n%ls\n", mipChainLinear.GetMetadata().mipLevels, szPath );
+                    printe( "Failed mip-map Linear generation result is %zu mip levels:\n%ls\n", mipChainLinear.GetMetadata().mipLevels, szPath );
                 }
                 else
                 {
@@ -672,7 +672,7 @@ bool Test02()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed mip-map Cubic generation result is %Iu mip levels:\n%ls\n", mipChainCubic.GetMetadata().mipLevels, szPath );
+                    printe( "Failed mip-map Cubic generation result is %zu mip levels:\n%ls\n", mipChainCubic.GetMetadata().mipLevels, szPath );
                 }
                 else
                 {
@@ -781,7 +781,7 @@ bool Test02()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed mip-map Triangle generation result is %Iu mip levels:\n%ls\n", mipChainTriangle.GetMetadata().mipLevels, szPath );
+                    printe( "Failed mip-map Triangle generation result is %zu mip levels:\n%ls\n", mipChainTriangle.GetMetadata().mipLevels, szPath );
                 }
                 else
                 {
@@ -861,7 +861,7 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map separate alpha generation result is %Iu mip levels:\n%ls\n", mipChainSepAlpha.GetMetadata().mipLevels, szPath );
+                        printe( "Failed mip-map separate alpha generation result is %zu mip levels:\n%ls\n", mipChainSepAlpha.GetMetadata().mipLevels, szPath );
                     }
                     else
                     {
@@ -946,7 +946,7 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map non-WIC generation result is %Iu mip levels:\n%ls\n", nwMipChain.GetMetadata().mipLevels, szPath );
+                        printe( "Failed mip-map non-WIC generation result is %zu mip levels:\n%ls\n", nwMipChain.GetMetadata().mipLevels, szPath );
                     }
                     else
                     {
@@ -994,7 +994,7 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map non-WIC Point generation result is %Iu mip levels:\n%ls\n", nwMipChainPoint.GetMetadata().mipLevels, szPath );
+                        printe( "Failed mip-map non-WIC Point generation result is %zu mip levels:\n%ls\n", nwMipChainPoint.GetMetadata().mipLevels, szPath );
                     }
                     else
                     {
@@ -1044,7 +1044,7 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map non-WIC Linear generation result is %Iu mip levels:\n%ls\n", nwMipChainLinear.GetMetadata().mipLevels, szPath );
+                        printe( "Failed mip-map non-WIC Linear generation result is %zu mip levels:\n%ls\n", nwMipChainLinear.GetMetadata().mipLevels, szPath );
                     }
                     else
                     {
@@ -1106,7 +1106,7 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map non-WIC Cubic generation result is %Iu mip levels:\n%ls\n", nwMipChainCubic.GetMetadata().mipLevels, szPath );
+                        printe( "Failed mip-map non-WIC Cubic generation result is %zu mip levels:\n%ls\n", nwMipChainCubic.GetMetadata().mipLevels, szPath );
                     }
                     else
                     {
@@ -1191,7 +1191,7 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map sRGB generation result is %Iu mip levels:\n%ls\n", srgbMipChain.GetMetadata().mipLevels, szPath );
+                        printe( "Failed mip-map sRGB generation result is %zu mip levels:\n%ls\n", srgbMipChain.GetMetadata().mipLevels, szPath );
                     }
                     else
                     {
@@ -1245,7 +1245,7 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map sRGB Linear generation result is %Iu mip levels:\n%ls\n", srgbMipChainLinear.GetMetadata().mipLevels, szPath );
+                        printe( "Failed mip-map sRGB Linear generation result is %zu mip levels:\n%ls\n", srgbMipChainLinear.GetMetadata().mipLevels, szPath );
                     }
                     else
                     {
@@ -1299,7 +1299,7 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map sRGB Cubic generation result is %Iu mip levels:\n%ls\n", srgbMipChainCubic.GetMetadata().mipLevels, szPath );
+                        printe( "Failed mip-map sRGB Cubic generation result is %zu mip levels:\n%ls\n", srgbMipChainCubic.GetMetadata().mipLevels, szPath );
                     }
                     else
                     {
@@ -1353,7 +1353,7 @@ bool Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map sRGB Triangle generation result is %Iu mip levels:\n%ls\n", srgbMipChainTriangle.GetMetadata().mipLevels, szPath );
+                        printe( "Failed mip-map sRGB Triangle generation result is %zu mip levels:\n%ls\n", srgbMipChainTriangle.GetMetadata().mipLevels, szPath );
                     }
                     else
                     {
@@ -1426,7 +1426,7 @@ bool Test02()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed mip-map complex Fant/Box generation result is %Iu mip levels:\n%ls\n", metadata2.mipLevels, szPath );
+                            printe( "Failed mip-map complex Fant/Box generation result is %zu mip levels:\n%ls\n", metadata2.mipLevels, szPath );
                             printmeta( &metadata2 );
                             printmetachk( check );
                         }
@@ -1518,7 +1518,7 @@ bool Test02()
         }
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass );
+    print("%zu images tested, %zu images passed ", ncount, npass );
 
     return success;
 }
@@ -1608,7 +1608,7 @@ bool Test03()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed volume mip-map Fant/Box generation result is %Iu mip levels:\n%ls\n", mipChain.GetMetadata().mipLevels, szPath );
+                    printe( "Failed volume mip-map Fant/Box generation result is %zu mip levels:\n%ls\n", mipChain.GetMetadata().mipLevels, szPath );
                 }
                 else
                 {
@@ -1680,7 +1680,7 @@ bool Test03()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed volume mip-map Point generation result is %Iu mip levels:\n%ls\n", mipChainPoint.GetMetadata().mipLevels, szPath );
+                    printe( "Failed volume mip-map Point generation result is %zu mip levels:\n%ls\n", mipChainPoint.GetMetadata().mipLevels, szPath );
                 }
                 else
                 {
@@ -1754,7 +1754,7 @@ bool Test03()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed volume mip-map Linear generation result is %Iu mip levels:\n%ls\n", mipChainLinear.GetMetadata().mipLevels, szPath );
+                    printe( "Failed volume mip-map Linear generation result is %zu mip levels:\n%ls\n", mipChainLinear.GetMetadata().mipLevels, szPath );
                 }
                 else
                 {
@@ -1828,7 +1828,7 @@ bool Test03()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed volume mip-map Cubic generation result is %Iu mip levels:\n%ls\n", mipChainCubic.GetMetadata().mipLevels, szPath );
+                    printe( "Failed volume mip-map Cubic generation result is %zu mip levels:\n%ls\n", mipChainCubic.GetMetadata().mipLevels, szPath );
                 }
                 else
                 {
@@ -1902,7 +1902,7 @@ bool Test03()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed volume mip-map Triangle generation result is %Iu mip levels:\n%ls\n", mipChainTriangle.GetMetadata().mipLevels, szPath );
+                    printe( "Failed volume mip-map Triangle generation result is %zu mip levels:\n%ls\n", mipChainTriangle.GetMetadata().mipLevels, szPath );
                 }
                 else
                 {
@@ -1989,7 +1989,7 @@ bool Test03()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed volume mip-map complex Fant/Box generation result is %Iu mip levels:\n%ls\n", metadata2.mipLevels, szPath );
+                        printe( "Failed volume mip-map complex Fant/Box generation result is %zu mip levels:\n%ls\n", metadata2.mipLevels, szPath );
                         printmeta( &metadata2 );
                         printmetachk( check );
                     }
@@ -2060,7 +2060,7 @@ bool Test03()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass );
+    print("%zu images tested, %zu images passed ", ncount, npass );
 
     return success;
 }

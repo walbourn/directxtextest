@@ -131,9 +131,9 @@ bool Test04()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed flip/rotating result is %Iu x %Iu:\n", 
+                    printe( "Failed flip/rotating result is %zu x %zu:\n", 
                             image.GetMetadata().width, image.GetMetadata().height );
-                    printe( "\n...(check) %Iu x %Iu:\n%ls\n", srcimage.GetMetadata().height, srcimage.GetMetadata().width, szPath );
+                    printe( "\n...(check) %zu x %zu:\n%ls\n", srcimage.GetMetadata().height, srcimage.GetMetadata().width, szPath );
                 }
                 else if ( !(dwFlags & (TEX_FR_ROTATE90|TEX_FR_ROTATE270))
                           && ( image.GetMetadata().width != srcimage.GetMetadata().width
@@ -141,9 +141,9 @@ bool Test04()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed flip/rotating result is %Iu x %Iu:\n",
+                    printe( "Failed flip/rotating result is %zu x %zu:\n",
                             image.GetMetadata().width, image.GetMetadata().height );
-                    printe( "\n...(check) %Iu x %Iu:\n%ls\n", srcimage.GetMetadata().width, srcimage.GetMetadata().height, szPath );
+                    printe( "\n...(check) %zu x %zu:\n%ls\n", srcimage.GetMetadata().width, srcimage.GetMetadata().height, szPath );
                 }
                 else
                 {
@@ -177,9 +177,9 @@ bool Test04()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed flip/rotating complex result is %Iu x %Iu:\n", 
+                        printe( "Failed flip/rotating complex result is %zu x %zu:\n", 
                                 metadata2.width, metadata2.height );
-                        printe( "\n...(check) %Iu x %Iu:\n%ls\n", srcimage.GetMetadata().height, srcimage.GetMetadata().width, szPath );
+                        printe( "\n...(check) %zu x %zu:\n%ls\n", srcimage.GetMetadata().height, srcimage.GetMetadata().width, szPath );
                     }
                     else if ( !(dwFlags & (TEX_FR_ROTATE90|TEX_FR_ROTATE270))
                               && ( metadata2.width != srcimage.GetMetadata().width
@@ -187,9 +187,9 @@ bool Test04()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed flip/rotating complex result is %Iu x %Iu:\n",
+                        printe( "Failed flip/rotating complex result is %zu x %zu:\n",
                                 metadata2.width, metadata2.height );
-                        printe( "\n...(check) %Iu x %Iu:\n%ls\n", srcimage.GetMetadata().width, srcimage.GetMetadata().height, szPath );
+                        printe( "\n...(check) %zu x %zu:\n%ls\n", srcimage.GetMetadata().width, srcimage.GetMetadata().height, szPath );
                     }
                     else if ( metadata2.mipLevels != check->mipLevels
                               || metadata2.depth != check->depth
@@ -227,7 +227,7 @@ bool Test04()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass );
+    print("%zu images tested, %zu images passed ", ncount, npass );
 
     return success;
 }

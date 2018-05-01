@@ -175,7 +175,7 @@ bool Test01()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass);
+    print("%zu images tested, %zu images passed ", ncount, npass);
 
     return success;
 }
@@ -289,7 +289,7 @@ bool Test02()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass);
+    print("%zu images tested, %zu images passed ", ncount, npass);
 
     return success;
 }
@@ -388,7 +388,7 @@ bool Test03()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass);
+    print("%zu images tested, %zu images passed ", ncount, npass);
 
     return success;
 }
@@ -481,7 +481,7 @@ bool Test04()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass);
+    print("%zu images tested, %zu images passed ", ncount, npass);
 
     CleanupRenderTest();
 
@@ -621,7 +621,7 @@ bool Test05()
                         else if (!forceNoMips && image.GetImageCount() != image2.GetImageCount())
                         {
                             success = false;
-                            printe("Image count in captured texture (%Iu) doesn't match source (%Iu) in:\n%ls\n", image2.GetImageCount(), image.GetImageCount(), szDestPath);
+                            printe("Image count in captured texture (%zu) doesn't match source (%zu) in:\n%ls\n", image2.GetImageCount(), image.GetImageCount(), szDestPath);
                         }
                         else
                         {
@@ -691,7 +691,7 @@ bool Test05()
                         else if (!forceNoMips && image.GetImageCount() != image2.GetImageCount())
                         {
                             success = false;
-                            printe("Image count in captured texture staging texture (%Iu) doesn't match source (%Iu) in:\n%ls\n", image2.GetImageCount(), image.GetImageCount(), szDestPath);
+                            printe("Image count in captured texture staging texture (%zu) doesn't match source (%zu) in:\n%ls\n", image2.GetImageCount(), image.GetImageCount(), szDestPath);
                         }
                         else
                         {
@@ -742,7 +742,7 @@ bool Test05()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass);
+    print("%zu images tested, %zu images passed ", ncount, npass);
 
     return success;
 }

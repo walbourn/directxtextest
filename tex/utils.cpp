@@ -422,49 +422,49 @@ bool Test02()
     ComputePitch( DXGI_FORMAT_B5G6R5_UNORM, 1, 6, rowPitch, slicePitch );
     if ( rowPitch != 2 || slicePitch != 12 )
     {
-        printe("ERROR: CP RGB565 1x1 failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: CP RGB565 1x1 failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
         success = false;
     }
 
     ComputePitch( DXGI_FORMAT_B5G6R5_UNORM, 1, 6, rowPitch, slicePitch, CP_FLAGS_LEGACY_DWORD );
     if ( rowPitch != 4 || slicePitch != 24 )
     {
-        printe("ERROR: CP RGB565 1x1 DWORD failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: CP RGB565 1x1 DWORD failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
         success = false;
     }
 
     ComputePitch( DXGI_FORMAT_B5G6R5_UNORM, 1, 6, rowPitch, slicePitch, CP_FLAGS_PARAGRAPH );
     if ( rowPitch != 16 || slicePitch != 96 )
     {
-        printe("ERROR: CP RGB565 1x1 PARAGRAPH failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: CP RGB565 1x1 PARAGRAPH failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
         success = false;
     }
 
     ComputePitch( DXGI_FORMAT_B5G6R5_UNORM, 1, 6, rowPitch, slicePitch, CP_FLAGS_YMM );
     if ( rowPitch != 32 || slicePitch != 192 )
     {
-        printe("ERROR: CP RGB565 1x1 YMM failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: CP RGB565 1x1 YMM failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
         success = false;
     }
 
     ComputePitch( DXGI_FORMAT_B5G6R5_UNORM, 1, 6, rowPitch, slicePitch, CP_FLAGS_ZMM );
     if ( rowPitch != 64 || slicePitch != 384 )
     {
-        printe("ERROR: CP RGB565 1x1 ZMM failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: CP RGB565 1x1 ZMM failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
         success = false;
     }
 
     ComputePitch( DXGI_FORMAT_B5G6R5_UNORM, 1, 6, rowPitch, slicePitch, CP_FLAGS_PAGE4K );
     if ( rowPitch != 4096 || slicePitch != 24576 )
     {
-        printe("ERROR: CP RGB565 1x1 PAGE4K failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: CP RGB565 1x1 PAGE4K failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
         success = false;
     }
 
     size_t rows = ComputeScanlines(DXGI_FORMAT_B5G6R5_UNORM, 6);
     if (rows != 6)
     {
-        printe("ERROR: CS RGB565 6 failed rows %Iu\n", rows );
+        printe("ERROR: CS RGB565 6 failed rows %zu\n", rows );
         success = false;
     }
 
@@ -472,35 +472,35 @@ bool Test02()
     ComputePitch( DXGI_FORMAT_R8G8B8A8_UNORM, 2, 1, rowPitch, slicePitch, CP_FLAGS_NONE );
     if ( rowPitch != 8 || slicePitch != 8 )
     {
-        printe("ERROR: CP R8G8B8A8_UNORM failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: CP R8G8B8A8_UNORM failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
         success = false;
     }
 
     ComputePitch( DXGI_FORMAT_R8G8B8A8_UNORM, 2, 1, rowPitch, slicePitch, CP_FLAGS_24BPP );
     if ( rowPitch != 6 || slicePitch != 6 )
     {
-        printe("ERROR: CP 24BPP failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: CP 24BPP failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
         success = false;
     }
 
     ComputePitch( DXGI_FORMAT_R8G8B8A8_UNORM, 2, 1, rowPitch, slicePitch, CP_FLAGS_16BPP );
     if ( rowPitch != 4 || slicePitch != 4 )
     {
-        printe("ERROR: CP 16BPP failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: CP 16BPP failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
         success = false;
     }
 
     ComputePitch( DXGI_FORMAT_R8G8B8A8_UNORM, 2, 1, rowPitch, slicePitch, CP_FLAGS_8BPP );
     if ( rowPitch != 2 || slicePitch != 2 )
     {
-        printe("ERROR: CP 8PP failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: CP 8PP failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
         success = false;
     }
 
     rows = ComputeScanlines(DXGI_FORMAT_R8G8B8A8_UNORM, 1);
     if (rows != 1)
     {
-        printe("ERROR: CS R8G8B8A8_UNORM failed rows %Iu\n", rows );
+        printe("ERROR: CS R8G8B8A8_UNORM failed rows %zu\n", rows );
         success = false;
     }
 
@@ -508,21 +508,21 @@ bool Test02()
     ComputePitch( XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT, 2, 1, rowPitch, slicePitch );
     if ( rowPitch != 8 || slicePitch != 8 )
     {
-        printe("ERROR: R10G10B10_7E3_A2_FLOAT [Xbox] A failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: R10G10B10_7E3_A2_FLOAT [Xbox] A failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
         success = false;
     }
 
     ComputePitch( XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT, 128, 64, rowPitch, slicePitch );
     if ( rowPitch != 512 || slicePitch != 32768 )
     {
-        printe("ERROR: R10G10B10_7E3_A2_FLOAT [Xbox] B failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: R10G10B10_7E3_A2_FLOAT [Xbox] B failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
         success = false;
     }
 
     rows = ComputeScanlines(XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT, 64);
     if (rows != 64)
     {
-        printe("ERROR: CS R10G10B10_7E3_A2_FLOAT [Xbox] failed rows %Iu\n", rows );
+        printe("ERROR: CS R10G10B10_7E3_A2_FLOAT [Xbox] failed rows %zu\n", rows );
         success = false;
     }
 
@@ -530,21 +530,21 @@ bool Test02()
     ComputePitch( XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT, 2, 1, rowPitch, slicePitch );
     if ( rowPitch != 8 || slicePitch != 8 )
     {
-        printe("ERROR: R10G10B10_6E4_A2_FLOAT [Xbox] A failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: R10G10B10_6E4_A2_FLOAT [Xbox] A failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
         success = false;
     }
 
     ComputePitch( XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT, 128, 64, rowPitch, slicePitch );
     if ( rowPitch != 512 || slicePitch != 32768 )
     {
-        printe("ERROR: R10G10B10_6E4_A2_FLOAT [Xbox] B failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: R10G10B10_6E4_A2_FLOAT [Xbox] B failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
         success = false;
     }
 
     rows = ComputeScanlines(XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT, 64);
     if (rows != 64)
     {
-        printe("ERROR: CS R10G10B10_6E4_A2_FLOAT [Xbox] failed rows %Iu\n", rows );
+        printe("ERROR: CS R10G10B10_6E4_A2_FLOAT [Xbox] failed rows %zu\n", rows );
         success = false;
     }
 
@@ -553,14 +553,14 @@ bool Test02()
         ComputePitch( DXGI_FORMAT(j), 4, 2, rowPitch, slicePitch );
         if ( rowPitch != 8 || slicePitch != 24 )
         {
-            printe("ERROR: CP %ls A failed rowPitch %Iu, slicePitch %Iu\n", GetName( DXGI_FORMAT(j) ), rowPitch, slicePitch );
+            printe("ERROR: CP %ls A failed rowPitch %zu, slicePitch %zu\n", GetName( DXGI_FORMAT(j) ), rowPitch, slicePitch );
             success = false;
         }
 
         ComputePitch( DXGI_FORMAT(j), 128, 64, rowPitch, slicePitch );
         if ( rowPitch != 256 || slicePitch != 24576 )
         {
-            printe("ERROR: CP %ls B failed rowPitch %Iu, slicePitch %Iu\n", GetName( DXGI_FORMAT(j) ), rowPitch, slicePitch );
+            printe("ERROR: CP %ls B failed rowPitch %zu, slicePitch %zu\n", GetName( DXGI_FORMAT(j) ), rowPitch, slicePitch );
             success = false;
         }
 
@@ -570,28 +570,28 @@ bool Test02()
         GetSurfaceInfo( 4, 2, DXGI_FORMAT(j), &numBytes, &rowBytes, &numRows );
         if ( rowBytes != 8 || numBytes != 24 || numRows != 3 )
         {
-            printe("ERROR: CP %ls A failed rowBytes %Iu, numBytes %Iu, numRows %Iu\n", GetName( DXGI_FORMAT(j) ), rowBytes, numBytes, numRows );
+            printe("ERROR: CP %ls A failed rowBytes %zu, numBytes %zu, numRows %zu\n", GetName( DXGI_FORMAT(j) ), rowBytes, numBytes, numRows );
             success = false;
         }
 
         rows = ComputeScanlines(DXGI_FORMAT(j), 2);
         if ( rows != 3 )
         {
-            printe("ERROR: CS %ls A failed rows %Iu\n", GetName( DXGI_FORMAT(j) ), rows );
+            printe("ERROR: CS %ls A failed rows %zu\n", GetName( DXGI_FORMAT(j) ), rows );
             success = false;
         }
 
         GetSurfaceInfo( 128, 64, DXGI_FORMAT(j), &numBytes, &rowBytes, &numRows );
         if ( rowBytes != 256 || numBytes != 24576 || numRows != (64+32) )
         {
-            printe("ERROR: CP %ls B failed rowBytes %Iu, numBytes %Iu, numRows %Iu\n", GetName( DXGI_FORMAT(j) ), rowBytes, numBytes, numRows );
+            printe("ERROR: CP %ls B failed rowBytes %zu, numBytes %zu, numRows %zu\n", GetName( DXGI_FORMAT(j) ), rowBytes, numBytes, numRows );
             success = false;
         }
 
         rows = ComputeScanlines(DXGI_FORMAT(j), 64);
         if ( rows != 96 )
         {
-            printe("ERROR: CS %ls B failed rows %Iu\n", GetName( DXGI_FORMAT(j) ), rows );
+            printe("ERROR: CS %ls B failed rows %zu\n", GetName( DXGI_FORMAT(j) ), rows );
             success = false;
         }
     }
@@ -600,28 +600,28 @@ bool Test02()
     ComputePitch( WIN10_DXGI_FORMAT_P208, 2, 1, rowPitch, slicePitch );
     if ( rowPitch != 2 || slicePitch != 4 )
     {
-        printe("ERROR: JPEG HW P208: CP A failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: JPEG HW P208: CP A failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
         success = false;
     }
 
     ComputePitch( WIN10_DXGI_FORMAT_P208, 128, 64, rowPitch, slicePitch );
     if ( rowPitch != 128 || slicePitch != 16384 )
     {
-        printe("ERROR: JPEG HW P208: CP B failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: JPEG HW P208: CP B failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
         success = false;
     }
 
     ComputePitch( WIN10_DXGI_FORMAT_P208, 128, 65, rowPitch, slicePitch );
     if ( rowPitch != 128 || slicePitch != 16640 )
     {
-        printe("ERROR: JPEG HW P208: CP C failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: JPEG HW P208: CP C failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
         success = false;
     }
 
     rows = ComputeScanlines(WIN10_DXGI_FORMAT_P208, 64);
     if (rows != 128)
     {
-        printe("ERROR: CS JPEG HW P208 failed rows %Iu\n", rows );
+        printe("ERROR: CS JPEG HW P208 failed rows %zu\n", rows );
         success = false;
     }
 
@@ -629,28 +629,28 @@ bool Test02()
     ComputePitch( WIN10_DXGI_FORMAT_V208, 2, 1, rowPitch, slicePitch );
     if ( rowPitch != 2 || slicePitch != 6 )
     {
-        printe("ERROR: JPEG HW V208: CP A failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: JPEG HW V208: CP A failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
         success = false;
     }
 
     ComputePitch( WIN10_DXGI_FORMAT_V208, 128, 64, rowPitch, slicePitch );
     if ( rowPitch != 128 || slicePitch != 16384 )
     {
-        printe("ERROR: JPEG HW V208: CP B failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: JPEG HW V208: CP B failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
         success = false;
     }
 
     ComputePitch( WIN10_DXGI_FORMAT_V208, 128, 65, rowPitch, slicePitch );
     if ( rowPitch != 128 || slicePitch != 16768 )
     {
-        printe("ERROR: JPEG HW V208: CP C failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: JPEG HW V208: CP C failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
         success = false;
     }
 
     rows = ComputeScanlines(WIN10_DXGI_FORMAT_V208, 64);
     if (rows != 128)
     {
-        printe("ERROR: CS JPEG HW V208 failed rows %Iu\n", rows );
+        printe("ERROR: CS JPEG HW V208 failed rows %zu\n", rows );
         success = false;
     }
 
@@ -658,28 +658,28 @@ bool Test02()
     ComputePitch( WIN10_DXGI_FORMAT_V408, 2, 1, rowPitch, slicePitch );
     if ( rowPitch != 2 || slicePitch != 2 )
     {
-        printe("ERROR: JPEG HW V408: CP A failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: JPEG HW V408: CP A failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
         success = false;
     }
 
     ComputePitch( WIN10_DXGI_FORMAT_V408, 128, 64, rowPitch, slicePitch );
     if ( rowPitch != 128 || slicePitch != 24576 )
     {
-        printe("ERROR: JPEG HW V408: CP B failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: JPEG HW V408: CP B failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
         success = false;
     }
 
     ComputePitch( WIN10_DXGI_FORMAT_V408, 128, 65, rowPitch, slicePitch );
     if ( rowPitch != 128 || slicePitch != 24704 )
     {
-        printe("ERROR: JPEG HW V408: CP C failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+        printe("ERROR: JPEG HW V408: CP C failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
         success = false;
     }
 
     rows = ComputeScanlines(WIN10_DXGI_FORMAT_V408, 64);
     if (rows != 192)
     {
-        printe("ERROR: CS JPEG HW V408 failed rows %Iu\n", rows );
+        printe("ERROR: CS JPEG HW V408 failed rows %zu\n", rows );
         success = false;
     }
 
@@ -688,14 +688,14 @@ bool Test02()
         ComputePitch( XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, 2, 1, rowPitch, slicePitch );
         if ( rowPitch != 8 || slicePitch != 8 )
         {
-            printe("ERROR: R10G10B10_SNORM_A2_UNORM [Xbox] CP A failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+            printe("ERROR: R10G10B10_SNORM_A2_UNORM [Xbox] CP A failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
             success = false;
         }
 
         ComputePitch( XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, 128, 64, rowPitch, slicePitch );
         if ( rowPitch != 512 || slicePitch != 32768 )
         {
-            printe("ERROR: R10G10B10_SNORM_A2_UNORM [Xbox] CP B failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+            printe("ERROR: R10G10B10_SNORM_A2_UNORM [Xbox] CP B failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
             success = false;
         }
 
@@ -705,21 +705,21 @@ bool Test02()
         GetSurfaceInfo( 4, 2, XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, &numBytes, &rowBytes, &numRows );
         if ( rowBytes != 16 || numBytes != 32 || numRows != 2 )
         {
-            printe("ERROR: R10G10B10_SNORM_A2_UNORM [Xbox] CP A failed rowBytes %Iu, numBytes %Iu, numRows %Iu\n", rowBytes, numBytes, numRows );
+            printe("ERROR: R10G10B10_SNORM_A2_UNORM [Xbox] CP A failed rowBytes %zu, numBytes %zu, numRows %zu\n", rowBytes, numBytes, numRows );
             success = false;
         }
 
         GetSurfaceInfo( 128, 64, XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, &numBytes, &rowBytes, &numRows );
         if ( rowBytes != 512 || numBytes != 32768 || numRows != 64 )
         {
-            printe("ERROR: R10G10B10_SNORM_A2_UNORM [Xbox] CP B failed rowBytes %Iu, numBytes %Iu, numRows %Iu\n", rowBytes, numBytes, numRows );
+            printe("ERROR: R10G10B10_SNORM_A2_UNORM [Xbox] CP B failed rowBytes %zu, numBytes %zu, numRows %zu\n", rowBytes, numBytes, numRows );
             success = false;
         }
 
         rows = ComputeScanlines(XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, 64);
         if (rows != 64)
         {
-            printe("ERROR: CS R10G10B10_SNORM_A2_UNORM [Xbox] failed rows %Iu\n", rows );
+            printe("ERROR: CS R10G10B10_SNORM_A2_UNORM [Xbox] failed rows %zu\n", rows );
             success = false;
         }
     }
@@ -729,14 +729,14 @@ bool Test02()
         ComputePitch( XBOX_DXGI_FORMAT_R4G4_UNORM, 2, 1, rowPitch, slicePitch );
         if ( rowPitch != 2 || slicePitch != 2 )
         {
-            printe("ERROR: R4G4_UNORM [Xbox] CP A failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+            printe("ERROR: R4G4_UNORM [Xbox] CP A failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
             success = false;
         }
 
         ComputePitch( XBOX_DXGI_FORMAT_R4G4_UNORM, 128, 64, rowPitch, slicePitch );
         if ( rowPitch != 128 || slicePitch != 8192 )
         {
-            printe("ERROR: R4G4_UNORM [Xbox] CP B failed rowPitch %Iu, slicePitch %Iu\n", rowPitch, slicePitch );
+            printe("ERROR: R4G4_UNORM [Xbox] CP B failed rowPitch %zu, slicePitch %zu\n", rowPitch, slicePitch );
             success = false;
         }
 
@@ -746,21 +746,21 @@ bool Test02()
         GetSurfaceInfo( 4, 2, XBOX_DXGI_FORMAT_R4G4_UNORM, &numBytes, &rowBytes, &numRows );
         if ( rowBytes != 4 || numBytes != 8 || numRows != 2 )
         {
-            printe("ERROR: R4G4_UNORM [Xbox] CP A failed rowBytes %Iu, numBytes %Iu, numRows %Iu\n", rowBytes, numBytes, numRows );
+            printe("ERROR: R4G4_UNORM [Xbox] CP A failed rowBytes %zu, numBytes %zu, numRows %zu\n", rowBytes, numBytes, numRows );
             success = false;
         }
 
         GetSurfaceInfo( 128, 64, XBOX_DXGI_FORMAT_R4G4_UNORM, &numBytes, &rowBytes, &numRows );
         if ( rowBytes != 128 || numBytes != 8192 || numRows != 64 )
         {
-            printe("ERROR: R4G4_UNORM [Xbox] CP B failed rowBytes %Iu, numBytes %Iu, numRows %Iu\n", rowBytes, numBytes, numRows );
+            printe("ERROR: R4G4_UNORM [Xbox] CP B failed rowBytes %zu, numBytes %zu, numRows %zu\n", rowBytes, numBytes, numRows );
             success = false;
         }
 
         rows = ComputeScanlines(XBOX_DXGI_FORMAT_R4G4_UNORM, 64);
         if (rows != 64)
         {
-            printe("ERROR: CS R4G4_UNORM [Xbox] failed rows %Iu\n", rows );
+            printe("ERROR: CS R4G4_UNORM [Xbox] failed rows %zu\n", rows );
             success = false;
         }
     }
@@ -940,7 +940,7 @@ bool Test02()
                 ComputePitch( DXGI_FORMAT(f), vals[i], vals[j], rowPitch, slicePitch, CP_FLAGS_NONE );
                 if ( rowPitch != res.RowPitch || slicePitch != res.DepthPitch )
                 {
-                    printe("ERROR: %ls (%u) failed rowPitch %Iu, slicePitch %Iu (%u by %u)...check rowPitch %u slicePitch %u\n",
+                    printe("ERROR: %ls (%u) failed rowPitch %zu, slicePitch %zu (%u by %u)...check rowPitch %u slicePitch %u\n",
                            GetName( DXGI_FORMAT(f) ), f, rowPitch, slicePitch, vals[i], vals[j], res.RowPitch, res.DepthPitch );
                     success = false;
                 }
@@ -969,7 +969,7 @@ bool Test02()
                     size_t rowCount = ComputeScanlines( DXGI_FORMAT(f), vals[j] );
                     if ( rowCount != targetRows )
                     {
-                        printe("ERROR: %ls (%u) failed scanlines %Iu (%u)...check scanlines %u\n",
+                        printe("ERROR: %ls (%u) failed scanlines %zu (%u)...check scanlines %u\n",
                                GetName( DXGI_FORMAT(f) ), f, rowCount, vals[j], targetRows );
                         success = false;
                     }
@@ -982,7 +982,7 @@ bool Test02()
 
                         if ( rowBytes != res.RowPitch || numBytes != res.DepthPitch || numRows != targetRows )
                         {
-                            printe("ERROR: %ls (%u) failed rowBytes %Iu, numBytes %Iu, numRows %Iu (%u by %u)...check rowBytes %u numBytes %u numRows %u\n",
+                            printe("ERROR: %ls (%u) failed rowBytes %zu, numBytes %zu, numRows %zu (%u by %u)...check rowBytes %u numBytes %u numRows %u\n",
                                    GetName( DXGI_FORMAT(f) ), f, rowBytes, numBytes, numRows, vals[i], vals[j],
                                    res.RowPitch, res.DepthPitch, targetRows );
                             success = false;
@@ -997,7 +997,7 @@ bool Test02()
         }
     }
 
-    print("%Iu formats/sizes tested vs. DX, %Iu passed ", ncount, npass );
+    print("%zu formats/sizes tested vs. DX, %zu passed ", ncount, npass );
 
     return success;
 }

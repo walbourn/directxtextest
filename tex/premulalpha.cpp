@@ -368,12 +368,12 @@ bool Test13()
                         if (FAILED(hr))
                         {
                             success = false;
-                            printe("Failed comparing premultiply alpha [complex] of image data (HRESULT %08X, %Iu)\n", hr, j);
+                            printe("Failed comparing premultiply alpha [complex] of image data (HRESULT %08X, %zu)\n", hr, j);
                         }
                         else if (!IsEqual(mse, result[j]))
                         {
                             success = false;
-                            printe("Failed comparing premultiply alpha [complex] of image data (%f, %Iu)\n", mse, j);
+                            printe("Failed comparing premultiply alpha [complex] of image data (%f, %zu)\n", mse, j);
                         }
                     }
                 }

@@ -391,7 +391,7 @@ bool Test01()
             {
                 success = false;
                 pass = false;
-                printe( "Unexpected decompress result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
+                printe( "Unexpected decompress result %zu x %zu %ls\n... %zu x %zu %ls:\n%ls\n",
                         image.GetMetadata().width, image.GetMetadata().height, GetName( image.GetMetadata().format ),
                         metadata.width, metadata.height, GetName( g_BCMedia[index].format ), szPath );
             }
@@ -416,7 +416,7 @@ bool Test01()
                     {
                         success = false;
                         pass = false;
-                        printe( "Unexpected decompress [complex] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
+                        printe( "Unexpected decompress [complex] result %zu x %zu %ls\n... %zu x %zu %ls:\n%ls\n",
                                 image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ),
                                 metadata.width, metadata.height, GetName( g_BCMedia[index].format ), szPath );
                     }
@@ -444,7 +444,7 @@ bool Test01()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed creating wide test image - result is same as source: %Iu %Iu\n%ls\n", srcimage.GetImage(0,0,0)->rowPitch, imageWide.GetImage(0,0,0)->rowPitch, szPath );
+                        printe( "Failed creating wide test image - result is same as source: %zu %zu\n%ls\n", srcimage.GetImage(0,0,0)->rowPitch, imageWide.GetImage(0,0,0)->rowPitch, szPath );
                     }
                     else
                     {
@@ -462,7 +462,7 @@ bool Test01()
                         {
                             success = false;
                             pass = false;
-                            printe( "Unexpected decompress [wide] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
+                            printe( "Unexpected decompress [wide] result %zu x %zu %ls\n... %zu x %zu %ls:\n%ls\n",
                                     image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ),
                                     metadata.width, metadata.height, GetName( g_BCMedia[index].format ), szPath );
                         }
@@ -494,7 +494,7 @@ bool Test01()
         ++ncount;
     }
 
-    print("%Iu images tested, %Iu images passed ", ncount, npass );
+    print("%zu images tested, %zu images passed ", ncount, npass );
                                                                                                                               
     return success;
 }
@@ -648,7 +648,7 @@ bool Test02()
                 {
                     success = false;
                     pass = false;
-                    printe( "Unexpected compress [single M/T] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
+                    printe( "Unexpected compress [single M/T] result %zu x %zu %ls\n... %zu x %zu %ls:\n%ls\n",
                             image.GetMetadata().width, image.GetMetadata().height, GetName( image.GetMetadata().format ),
                             metadata.width, metadata.height, GetName( cformat ), szPath );
                 }
@@ -708,7 +708,7 @@ bool Test02()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Unexpected compress [single S/T] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
+                                printe( "Unexpected compress [single S/T] result %zu x %zu %ls\n... %zu x %zu %ls:\n%ls\n",
                                         image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ),
                                         metadata.width, metadata.height, GetName( cformat ), szPath );
                             }
@@ -753,7 +753,7 @@ bool Test02()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Unexpected compress [dithering] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
+                                printe( "Unexpected compress [dithering] result %zu x %zu %ls\n... %zu x %zu %ls:\n%ls\n",
                                         image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ),
                                         metadata.width, metadata.height, GetName( cformat ), szPath );
                             }
@@ -797,7 +797,7 @@ bool Test02()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Unexpected compress [uniform] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
+                                printe( "Unexpected compress [uniform] result %zu x %zu %ls\n... %zu x %zu %ls:\n%ls\n",
                                         image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ),
                                         metadata.width, metadata.height, GetName( cformat ), szPath );
                             }
@@ -839,7 +839,7 @@ bool Test02()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Unexpected compress [quick] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
+                                printe( "Unexpected compress [quick] result %zu x %zu %ls\n... %zu x %zu %ls:\n%ls\n",
                                         image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ),
                                         metadata.width, metadata.height, GetName( cformat ), szPath );
                             }
@@ -881,7 +881,7 @@ bool Test02()
                             {
                                 success = false;
                                 pass = false;
-                                printe("Unexpected compress [3subsets] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
+                                printe("Unexpected compress [3subsets] result %zu x %zu %ls\n... %zu x %zu %ls:\n%ls\n",
                                     image2.GetMetadata().width, image2.GetMetadata().height, GetName(image2.GetMetadata().format),
                                     metadata.width, metadata.height, GetName(cformat), szPath);
                             }
@@ -921,7 +921,7 @@ bool Test02()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed creating wide test image - result is same as source: %Iu %Iu\n%ls\n", srcimage.GetImage(0,0,0)->rowPitch, imageWide.GetImage(0,0,0)->rowPitch, szPath );
+                                printe( "Failed creating wide test image - result is same as source: %zu %zu\n%ls\n", srcimage.GetImage(0,0,0)->rowPitch, imageWide.GetImage(0,0,0)->rowPitch, szPath );
                             }
                             else
                             {
@@ -939,7 +939,7 @@ bool Test02()
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Unexpected compress [wide image] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
+                                    printe( "Unexpected compress [wide image] result %zu x %zu %ls\n... %zu x %zu %ls:\n%ls\n",
                                             image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ),
                                             metadata.width, metadata.height, GetName( cformat ), szPath );
                                 }
@@ -998,7 +998,7 @@ bool Test02()
                         {
                             success = false;
                             pass = false;
-                            printe( "Unexpected compress [complex] result %Iu x %Iu %ls %Iu\n... %Iu x %Iu %ls %Iu:\n%ls\n",
+                            printe( "Unexpected compress [complex] result %zu x %zu %ls %zu\n... %zu x %zu %ls %zu:\n%ls\n",
                                     image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ), image2.GetImageCount(),
                                     metadata.width, metadata.height, GetName( cformat ), srcimage.GetImageCount(), szPath );
                         }
@@ -1021,14 +1021,14 @@ bool Test02()
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed comparing source [complex , %Iu] to BC image (HRESULT %08X) converting to %ls:\n%ls\n", j, hr, GetName(cformat), szPath );
+                                    printe( "Failed comparing source [complex , %zu] to BC image (HRESULT %08X) converting to %ls:\n%ls\n", j, hr, GetName(cformat), szPath );
                                     break;
                                 }
                                 else if ( IsErrorTooLarge( mse, targMSE ) )
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed comparing source [complex, %Iu] to BC image MSE = %f (%f %f %f %f)... %f converting to %ls:\n%ls\n",
+                                    printe( "Failed comparing source [complex, %zu] to BC image MSE = %f (%f %f %f %f)... %f converting to %ls:\n%ls\n",
                                             j, mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, GetName(cformat), szPath );
                                 }
                             }
@@ -1048,7 +1048,7 @@ bool Test02()
         }
     }
 
-    print("\n%Iu images tested, %Iu images passed (%Iu source images) ", ncount, npass, _countof(g_CompressMedia) );
+    print("\n%zu images tested, %zu images passed (%zu source images) ", ncount, npass, _countof(g_CompressMedia) );
 
     return success;
  }
@@ -1165,7 +1165,7 @@ bool Test03()
                 {
                     success = false;
                     pass = false;
-                    printe( "Unexpected GPU compress [single] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
+                    printe( "Unexpected GPU compress [single] result %zu x %zu %ls\n... %zu x %zu %ls:\n%ls\n",
                             image.GetMetadata().width, image.GetMetadata().height, GetName( image.GetMetadata().format ),
                             metadata.width, metadata.height, GetName( cformat ), szPath );
                 }
@@ -1214,7 +1214,7 @@ bool Test03()
                         {
                             success = false;
                             pass = false;
-                            printe( "Unexpected GPU compress [complex] result %Iu x %Iu %ls %Iu\n... %Iu x %Iu %ls %Iu:\n%ls\n",
+                            printe( "Unexpected GPU compress [complex] result %zu x %zu %ls %zu\n... %zu x %zu %ls %zu:\n%ls\n",
                                     image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ), image2.GetImageCount(),
                                     metadata.width, metadata.height, GetName( cformat ), srcimage.GetImageCount(), szPath );
                         }
@@ -1237,14 +1237,14 @@ bool Test03()
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed comparing source [complex , %Iu] to GPU BC image (HRESULT %08X) converting to %ls:\n%ls\n", j, hr, GetName(cformat), szPath );
+                                    printe( "Failed comparing source [complex , %zu] to GPU BC image (HRESULT %08X) converting to %ls:\n%ls\n", j, hr, GetName(cformat), szPath );
                                     break;
                                 }
                                 else if ( IsErrorTooLarge( mse, targMSE ) )
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed comparing source [complex, %Iu] to GPU BC image MSE = %f (%f %f %f %f)... %f converting to %ls:\n%ls\n",
+                                    printe( "Failed comparing source [complex, %zu] to GPU BC image MSE = %f (%f %f %f %f)... %f converting to %ls:\n%ls\n",
                                             j, mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, GetName(cformat), szPath );
                                 }
                             }
@@ -1272,7 +1272,7 @@ bool Test03()
                         {
                             success = false;
                             pass = false;
-                            printe( "Unexpected GPU compress [alpha weight] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
+                            printe( "Unexpected GPU compress [alpha weight] result %zu x %zu %ls\n... %zu x %zu %ls:\n%ls\n",
                                     image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ),
                                     metadata.width, metadata.height, GetName( cformat ), szPath );
                         }
@@ -1314,7 +1314,7 @@ bool Test03()
                         {
                             success = false;
                             pass = false;
-                            printe("Unexpected GPU compress [quick] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
+                            printe("Unexpected GPU compress [quick] result %zu x %zu %ls\n... %zu x %zu %ls:\n%ls\n",
                                 image2.GetMetadata().width, image2.GetMetadata().height, GetName(image2.GetMetadata().format),
                                 metadata.width, metadata.height, GetName(cformat), szPath);
                         }
@@ -1356,7 +1356,7 @@ bool Test03()
                         {
                             success = false;
                             pass = false;
-                            printe( "Unexpected GPU compress [3subsets] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
+                            printe( "Unexpected GPU compress [3subsets] result %zu x %zu %ls\n... %zu x %zu %ls:\n%ls\n",
                                     image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ),
                                     metadata.width, metadata.height, GetName( cformat ), szPath );
                         }
@@ -1396,7 +1396,7 @@ bool Test03()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed creating wide test image - result is same as source: %Iu %Iu\n%ls\n", srcimage.GetImage(0,0,0)->rowPitch, imageWide.GetImage(0,0,0)->rowPitch, szPath );
+                            printe( "Failed creating wide test image - result is same as source: %zu %zu\n%ls\n", srcimage.GetImage(0,0,0)->rowPitch, imageWide.GetImage(0,0,0)->rowPitch, szPath );
                         }
                         else
                         {
@@ -1414,7 +1414,7 @@ bool Test03()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Unexpected GPU compress [wide] result %Iu x %Iu %ls\n... %Iu x %Iu %ls:\n%ls\n",
+                                printe( "Unexpected GPU compress [wide] result %zu x %zu %ls\n... %zu x %zu %ls:\n%ls\n",
                                         image2.GetMetadata().width, image2.GetMetadata().height, GetName( image2.GetMetadata().format ),
                                         metadata.width, metadata.height, GetName( cformat ), szPath );
                             }
@@ -1449,7 +1449,7 @@ bool Test03()
         }
     }
 
-    print("\n%Iu images tested, %Iu images passed (%Iu source images) ", ncount, npass, _countof(g_CompressMedia) );
+    print("\n%zu images tested, %zu images passed (%zu source images) ", ncount, npass, _countof(g_CompressMedia) );
 
     return success;
 }

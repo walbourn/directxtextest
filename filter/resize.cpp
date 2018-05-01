@@ -411,7 +411,7 @@ bool Test01()
             {
                 success = false;
                 pass = false;
-                printe( "Failed resizing result is %Iu x %Iu:\n",
+                printe( "Failed resizing result is %zu x %zu:\n",
                         image.GetMetadata().width, image.GetMetadata().height );
                 printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
             }
@@ -490,7 +490,7 @@ bool Test01()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed resizing Point result is %Iu x %Iu:\n",
+                    printe( "Failed resizing Point result is %zu x %zu:\n",
                             imagePoint.GetMetadata().width, imagePoint.GetMetadata().height );
                     printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                 }
@@ -552,7 +552,7 @@ bool Test01()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed resizing Linear result is %Iu x %Iu:\n",
+                    printe( "Failed resizing Linear result is %zu x %zu:\n",
                             imageLinear.GetMetadata().width, imageLinear.GetMetadata().height );
                     printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                 }
@@ -630,7 +630,7 @@ bool Test01()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed resizing Cubic result is %Iu x %Iu:\n",
+                    printe( "Failed resizing Cubic result is %zu x %zu:\n",
                             imageCubic.GetMetadata().width, imageCubic.GetMetadata().height );
                     printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                 }
@@ -723,7 +723,7 @@ bool Test01()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed resizing Triangle result is %Iu x %Iu:\n",
+                    printe( "Failed resizing Triangle result is %zu x %zu:\n",
                             imageTriangle.GetMetadata().width, imageTriangle.GetMetadata().height );
                     printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                 }
@@ -789,7 +789,7 @@ bool Test01()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed resizing sep alpha result is %Iu x %Iu:\n",
+                    printe( "Failed resizing sep alpha result is %zu x %zu:\n",
                             imageSepAlpha.GetMetadata().width, imageSepAlpha.GetMetadata().height );
                     printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                 }
@@ -859,7 +859,7 @@ bool Test01()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed non-WIC resizing result is %Iu x %Iu:\n",
+                    printe( "Failed non-WIC resizing result is %zu x %zu:\n",
                             nwimage.GetMetadata().width, nwimage.GetMetadata().height );
                     printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                 }
@@ -911,7 +911,7 @@ bool Test01()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed non-WIC Point resizing result is %Iu x %Iu:\n",
+                        printe( "Failed non-WIC Point resizing result is %zu x %zu:\n",
                                 nwimagePoint.GetMetadata().width, nwimagePoint.GetMetadata().height );
                         printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                     }
@@ -963,7 +963,7 @@ bool Test01()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed non-WIC Linear resizing result is %Iu x %Iu:\n",
+                        printe( "Failed non-WIC Linear resizing result is %zu x %zu:\n",
                                 nwimageLinear.GetMetadata().width, nwimageLinear.GetMetadata().height );
                         printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                     }
@@ -1012,7 +1012,7 @@ bool Test01()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed non-WIC Cubic resizing result is %Iu x %Iu:\n",
+                        printe( "Failed non-WIC Cubic resizing result is %zu x %zu:\n",
                                 nwimageCubic.GetMetadata().width, nwimageCubic.GetMetadata().height );
                         printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                     }
@@ -1100,7 +1100,7 @@ bool Test01()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed sRGB resizing result is %Iu x %Iu:\n",
+                    printe( "Failed sRGB resizing result is %zu x %zu:\n",
                             srgbimage.GetMetadata().width, srgbimage.GetMetadata().height );
                     printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                 }
@@ -1158,7 +1158,7 @@ bool Test01()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed sRGB Linear resizing result is %Iu x %Iu:\n",
+                        printe( "Failed sRGB Linear resizing result is %zu x %zu:\n",
                                 srgbimageLinear.GetMetadata().width, srgbimageLinear.GetMetadata().height );
                         printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                     }
@@ -1214,7 +1214,7 @@ bool Test01()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed sRGB Cubic resizing result is %Iu x %Iu:\n",
+                        printe( "Failed sRGB Cubic resizing result is %zu x %zu:\n",
                                 srgbimageCubic.GetMetadata().width, srgbimageCubic.GetMetadata().height );
                         printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                     }
@@ -1270,7 +1270,7 @@ bool Test01()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed sRGB Triangle resizing result is %Iu x %Iu:\n",
+                        printe( "Failed sRGB Triangle resizing result is %zu x %zu:\n",
                                 srgbimageTriangle.GetMetadata().width, srgbimageTriangle.GetMetadata().height );
                         printe( "\n...(check) %u x %u:\n%ls\n", twidth, theight, szPath );
                     }
@@ -1348,7 +1348,7 @@ bool Test01()
                         printe( "Failed resizing complex result:\n%ls\n", szPath );
                         printmeta( &metadata2 );
                         printmetachk( check );
-                        printe( "...\n(check) w: %u x h: %u x d: %Iu\narraySize: %Iu  mips: 1\nmiscFlags: %08X miscFlags2: %08X format: %u dimension: %u\n", 
+                        printe( "...\n(check) w: %u x h: %u x d: %zu\narraySize: %zu  mips: 1\nmiscFlags: %08X miscFlags2: %08X format: %u dimension: %u\n", 
                                 twidth, theight, check->depth, check->arraySize, check->miscFlags, check->miscFlags2, check->format, check->dimension );
                     }
                     else
@@ -1402,7 +1402,7 @@ bool Test01()
         ++ncount;
     }
 
-    print("\n%Iu images tested, %Iu images passed ", ncount, npass );
+    print("\n%zu images tested, %zu images passed ", ncount, npass );
 
     return success;
 }
