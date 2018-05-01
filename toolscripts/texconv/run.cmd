@@ -2,8 +2,8 @@
 
 setlocal
 
-set TARGETEXE=..\..\..\Texconv\Bin\Desktop_2013\Win32\Debug\texconv.exe
-REM set TARGETEXE=..\..\..\Texconv\Bin\Desktop_2013\Win32\Release\texconv.exe
+set TARGETEXE=..\..\..\Texconv\Bin\Desktop_2015\Win32\Debug\texconv.exe
+REM set TARGETEXE=..\..\..\Texconv\Bin\Desktop_2015\Win32\Release\texconv.exe
 set SPEC=*
 
 call onetime.cmd
