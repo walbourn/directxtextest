@@ -64,7 +64,7 @@ static_assert(OPT_MAX <= 32, "dwOptions is a DWORD bitfield");
 
 struct SConversion
 {
-    wchar_t szSrc[MAX_PATH];
+    wchar_t szSrc[MAX_PATH] = {};
 };
 
 struct SValue

@@ -528,7 +528,7 @@ bool Test01()
         if ( (g_TestMedia[index].options & FLAGS_WIC2) && !iswic2 )
             continue;
 
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -728,7 +728,7 @@ bool Test02()
         if ( (g_TestMedia[index].options & FLAGS_WIC2) && !iswic2 )
             continue;
 
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -918,7 +918,7 @@ bool Test03()
         if ( (g_TestMedia[index].options & FLAGS_WIC2) && !iswic2 )
             continue;
 
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -1024,7 +1024,7 @@ bool Test04()
         if ( (g_TestMedia[index].options & FLAGS_WIC2) && !iswic2 )
             continue;
 
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -1114,7 +1114,7 @@ bool Test05()
 
     for( size_t index=0; index < _countof(g_SaveMedia); ++index )
     {
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_SaveMedia[index].source, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -1284,7 +1284,7 @@ bool Test05()
 
     // Multiframe
     {
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(MEDIA_PATH L"testvol8888.dds", szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -1356,7 +1356,7 @@ bool Test06()
 
     for( size_t index=0; index < _countof(g_SaveMedia); ++index )
     {
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_SaveMedia[index].source, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -1369,7 +1369,7 @@ bool Test06()
         wchar_t fname[_MAX_FNAME];
         _wsplitpath_s( szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
-        wchar_t tempDir[MAX_PATH];
+        wchar_t tempDir[MAX_PATH] = {};
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"wic", tempDir, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -1379,16 +1379,16 @@ bool Test06()
 
         CreateDirectoryW( tempDir, nullptr );
 
-        wchar_t szDestPath[MAX_PATH];
+        wchar_t szDestPath[MAX_PATH] = {};
         _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, fname, g_SaveMedia[index].ext );
 
-        wchar_t szDestPath2[MAX_PATH];
+        wchar_t szDestPath2[MAX_PATH] = {};
         wchar_t tname[_MAX_FNAME] = {};
         wcscpy_s( tname, fname );
         wcscat_s( tname, L"_tf" );
         _wmakepath_s( szDestPath2, MAX_PATH, nullptr, tempDir, tname, g_SaveMedia[index].ext );
 
-        wchar_t szDestPath3[MAX_PATH];
+        wchar_t szDestPath3[MAX_PATH] = {};
         wcscpy_s( tname, fname );
         wcscat_s( tname, L"_props" );
         _wmakepath_s( szDestPath3, MAX_PATH, nullptr, tempDir, tname, g_SaveMedia[index].ext );
@@ -1559,7 +1559,7 @@ bool Test06()
 
     // Multiframe
     {
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(MEDIA_PATH L"testvol8888.dds", szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -1567,7 +1567,7 @@ bool Test06()
             return false;
         }
 
-        wchar_t szDestPath[MAX_PATH];
+        wchar_t szDestPath[MAX_PATH] = {};
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"wic\\multiframe.tif", szDestPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {

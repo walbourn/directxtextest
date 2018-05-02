@@ -22,7 +22,7 @@ bool Test11()
     bool success = true;
 
     // Heightmap
-    wchar_t szPath[MAX_PATH];
+    wchar_t szPath[MAX_PATH] = {};
     DWORD ret = ExpandEnvironmentStringsW(MEDIA_PATH L"heightmap.dds", szPath, MAX_PATH);
     if ( !ret || ret > MAX_PATH )
     {
@@ -40,7 +40,7 @@ bool Test11()
     wchar_t fname[_MAX_FNAME];
     _wsplitpath_s( szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
-    wchar_t tempDir[MAX_PATH];
+    wchar_t tempDir[MAX_PATH] = {};
     ret = ExpandEnvironmentStringsW(TEMP_PATH L"nmap", tempDir, MAX_PATH);
     if ( !ret || ret > MAX_PATH )
     {
@@ -81,7 +81,7 @@ bool Test11()
         {
             // TODO - Verify the image data (perhaps MD5 checksum)
 
-            wchar_t szDestPath[MAX_PATH];
+            wchar_t szDestPath[MAX_PATH] = {};
             _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, fname, L".dds" );
 
             SaveScratchImage( szDestPath, DDS_FLAGS_NONE, normalMap );
@@ -106,7 +106,7 @@ bool Test11()
             wcscpy_s( tname, fname );
             wcscat_s( tname, L"_c" );
 
-            wchar_t szDestPath[MAX_PATH];
+            wchar_t szDestPath[MAX_PATH] = {};
             _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
             SaveScratchImage( szDestPath, DDS_FLAGS_NONE, normalMap );

@@ -324,7 +324,7 @@ bool Test01()
 
     for( size_t index=0; index < _countof(g_BCMedia); ++index )
     {
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_BCMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -342,7 +342,7 @@ bool Test01()
         wchar_t fname[_MAX_FNAME];
         _wsplitpath_s( szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
-        wchar_t tempDir[MAX_PATH];
+        wchar_t tempDir[MAX_PATH] = {};
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"bc_dec", tempDir, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -352,7 +352,7 @@ bool Test01()
 
         CreateDirectoryW( tempDir, nullptr );
 
-        wchar_t szDestPath[MAX_PATH];
+        wchar_t szDestPath[MAX_PATH] = {};
         _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, fname, L".dds" );
 
         TexMetadata metadata;
@@ -522,7 +522,7 @@ bool Test02()
 
     for( size_t index=0; index < _countof(g_CompressMedia); ++index )
     {
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_CompressMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -540,7 +540,7 @@ bool Test02()
         wchar_t fname[_MAX_FNAME];
         _wsplitpath_s( szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
-        wchar_t tempDir[MAX_PATH];
+        wchar_t tempDir[MAX_PATH] = {};
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"bc_enc", tempDir, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -972,7 +972,7 @@ bool Test02()
                     wcscat_s( tname, L"_" );
                     wcscat_s( tname, GetName(cformat) );
 
-                    wchar_t szDestPath[MAX_PATH];
+                    wchar_t szDestPath[MAX_PATH] = {};
                     _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                     if ( metadata.mipLevels > 1 || metadata.arraySize > 1 || metadata.depth > 1 )
@@ -1077,7 +1077,7 @@ bool Test03()
 
     for( size_t index=0; index < _countof(g_CompressMedia); ++index )
     {
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_CompressMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -1095,7 +1095,7 @@ bool Test03()
         wchar_t fname[_MAX_FNAME];
         _wsplitpath_s( szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
-        wchar_t tempDir[MAX_PATH];
+        wchar_t tempDir[MAX_PATH] = {};
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"bc_gpu", tempDir, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -1193,7 +1193,7 @@ bool Test03()
                     wcscat_s( tname, L"_" );
                     wcscat_s( tname, GetName(cformat) );
 
-                    wchar_t szDestPath[MAX_PATH];
+                    wchar_t szDestPath[MAX_PATH] = {};
                     _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                     if ( metadata.mipLevels > 1 || metadata.arraySize > 1 || metadata.depth > 1 )

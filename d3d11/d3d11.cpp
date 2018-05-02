@@ -100,7 +100,7 @@ bool Test01()
 
     for (size_t index = 0; index < _countof(g_TestMedia); ++index)
     {
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
         if (!ret || ret > MAX_PATH)
         {
@@ -204,7 +204,7 @@ bool Test02()
             continue;
         }
 
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
         if (!ret || ret > MAX_PATH)
         {
@@ -319,7 +319,7 @@ bool Test03()
             continue;
         }
 
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
         if (!ret || ret > MAX_PATH)
         {
@@ -418,7 +418,7 @@ bool Test04()
             continue;
         }
 
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
         if (!ret || ret > MAX_PATH)
         {
@@ -513,7 +513,7 @@ bool Test05()
             continue;
         }
 
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
         if (!ret || ret > MAX_PATH)
         {
@@ -530,7 +530,7 @@ bool Test05()
         wchar_t fname[_MAX_FNAME];
         _wsplitpath_s(szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT);
 
-        wchar_t tempDir[MAX_PATH];
+        wchar_t tempDir[MAX_PATH] = {};
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"d3d11", tempDir, MAX_PATH);
         if (!ret || ret > MAX_PATH)
         {
@@ -540,7 +540,7 @@ bool Test05()
 
         CreateDirectoryW(tempDir, nullptr);
 
-        wchar_t szDestPath[MAX_PATH];
+        wchar_t szDestPath[MAX_PATH] = {};
         _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, fname, L".dds");
 
         TexMetadata metadata;
@@ -699,7 +699,7 @@ bool Test05()
                             wcscpy_s(tname, fname);
                             wcscat_s(tname, L"_staging");
 
-                            wchar_t szDestPath2[MAX_PATH];
+                            wchar_t szDestPath2[MAX_PATH] = {};
                             _wmakepath_s(szDestPath2, MAX_PATH, nullptr, tempDir, tname, L".dds");
 
                             hr = SaveToDDSFile(image2.GetImages(), image2.GetImageCount(), image2.GetMetadata(), DDS_FLAGS_NONE, szDestPath2);

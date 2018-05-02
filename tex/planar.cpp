@@ -43,7 +43,7 @@ bool Test15()
 
     for( size_t index=0; index < _countof(g_TestMedia); ++index )
     {
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -61,7 +61,7 @@ bool Test15()
         wchar_t fname[_MAX_FNAME];
         _wsplitpath_s( szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
-        wchar_t tempDir[MAX_PATH];
+        wchar_t tempDir[MAX_PATH] = {};
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"plane", tempDir, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -120,7 +120,7 @@ bool Test15()
                 wcscat_s( tname, L"_" );
                 wcscat_s( tname, GetName(g_TestMedia[index].tformat) );
 
-                wchar_t szDestPath[MAX_PATH];
+                wchar_t szDestPath[MAX_PATH] = {};
                 _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                 SaveScratchImage( szDestPath, DDS_FLAGS_NONE, image );

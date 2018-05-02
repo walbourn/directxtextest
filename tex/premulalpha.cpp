@@ -34,7 +34,7 @@ bool Test13()
     bool success = true;
 
     // Alpha image
-    wchar_t szPath[MAX_PATH];
+    wchar_t szPath[MAX_PATH] = {};
     DWORD ret = ExpandEnvironmentStringsW(MEDIA_PATH L"tree02S.dds", szPath, MAX_PATH);
     if ( !ret || ret > MAX_PATH )
     {
@@ -52,7 +52,7 @@ bool Test13()
     wchar_t fname[_MAX_FNAME];
     _wsplitpath_s( szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
-    wchar_t tempDir[MAX_PATH];
+    wchar_t tempDir[MAX_PATH] = {};
     ret = ExpandEnvironmentStringsW(TEMP_PATH L"premul", tempDir, MAX_PATH);
     if ( !ret || ret > MAX_PATH )
     {
@@ -225,7 +225,7 @@ bool Test13()
             wcscpy_s( tname, fname );
             wcscat_s( tname, L"_sRGB" );
 
-            wchar_t szDestPath[MAX_PATH];
+            wchar_t szDestPath[MAX_PATH] = {};
             _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
             SaveScratchImage( szDestPath, DDS_FLAGS_NONE, pmAlphaSRGB );
@@ -382,7 +382,7 @@ bool Test13()
                 wcscpy_s(tname, fname);
                 wcscat_s(tname, L"_c");
 
-                wchar_t szDestPath[MAX_PATH];
+                wchar_t szDestPath[MAX_PATH] = {};
                 _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds");
 
                 SaveScratchImage(szDestPath, DDS_FLAGS_NONE, pmAlpha);

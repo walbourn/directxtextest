@@ -31,7 +31,7 @@ bool Test09()
     bool success = true;
 
     // Test image
-    wchar_t szPath[MAX_PATH];
+    wchar_t szPath[MAX_PATH] = {};
     DWORD ret = ExpandEnvironmentStringsW(MEDIA_PATH L"test8888.dds", szPath, MAX_PATH);
     if ( !ret || ret > MAX_PATH )
     {
@@ -49,7 +49,7 @@ bool Test09()
     wchar_t fname[_MAX_FNAME];
     _wsplitpath_s( szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
-    wchar_t tempDir[MAX_PATH];
+    wchar_t tempDir[MAX_PATH] = {};
     ret = ExpandEnvironmentStringsW(TEMP_PATH L"cpy", tempDir, MAX_PATH);
     if ( !ret || ret > MAX_PATH )
     {
@@ -302,7 +302,7 @@ bool Test10()
     // Load source images (must be same size)
 
     // Windows Logo
-    wchar_t szPath[MAX_PATH];
+    wchar_t szPath[MAX_PATH] = {};
     DWORD ret = ExpandEnvironmentStringsW(MEDIA_PATH L"windowslogo_X8R8G8B8.dds", szPath, MAX_PATH);
     if ( !ret || ret > MAX_PATH )
     {
@@ -493,7 +493,7 @@ bool Test14()
 
     for( size_t index=0; index < _countof(s_TestMedia); ++index )
     {
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(s_TestMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -605,7 +605,7 @@ bool Test16()
 
     for (size_t index = 0; index < _countof(s_TestMedia); ++index)
     {
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(s_TestMedia[index].fname, szPath, MAX_PATH);
         if (!ret || ret > MAX_PATH)
         {
@@ -833,7 +833,7 @@ bool Test17()
 
     for (size_t index = 0; index < _countof(s_TestMedia); ++index)
     {
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(s_TestMedia[index].fname, szPath, MAX_PATH);
         if (!ret || ret > MAX_PATH)
         {

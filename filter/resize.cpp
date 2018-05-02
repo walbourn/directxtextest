@@ -326,7 +326,7 @@ bool Test01()
 
     for( size_t index=0; index < _countof(g_ResizeMedia); ++index )
     {
-        wchar_t szPath[MAX_PATH];
+        wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_ResizeMedia[index].fname, szPath, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
@@ -349,7 +349,7 @@ bool Test01()
             wcscat_s( fname, L"B" );
         }
 
-        wchar_t tempDir[MAX_PATH];
+        wchar_t tempDir[MAX_PATH] = {};
         ret = ExpandEnvironmentStringsW(TEMP_PATH L"resize", tempDir, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
