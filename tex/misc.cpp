@@ -436,6 +436,35 @@ bool Test10()
 // IsAlphaAllOpaque
 bool Test14()
 {
+    bool success = true;
+
+    {
+        ScratchImage image;
+        HRESULT hr = image.Initialize1D(DXGI_FORMAT_R8G8B8A8_UNORM, 1, 1, 1);
+        if (FAILED(hr))
+        {
+            success = false;
+            printe("Failed creating test image (HRESULT %08X)\n", hr);
+        }
+        else
+        {
+            auto img = image.GetImage(0, 0, 0);
+
+            for (unsigned j = 0; j < 256; ++j)
+            {
+                DWORD pixel = j | (j << 8) | (j << 16) | (j << 24);
+                *reinterpret_cast<uint32_t*>(img->pixels) = pixel;
+
+                bool isao = image.IsAlphaAllOpaque();
+                if (isao != (j >= 255))
+                {
+                    success = false;
+                    printe("Failed IsAlphaAllOpaque (%u): %s ... %s\n", j, (isao) ? "true" : "false", (j >= 255) ? "true" : "false");
+                }
+            }
+        }
+    }
+
     struct TestMedia
     {
         TexMetadata metadata;
@@ -485,8 +514,6 @@ bool Test14()
         { { 800, 800, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"SplashScreen2.dds", false },
         { { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lena.dds", true },
     };
-
-    bool success = true;
     
     size_t ncount = 0;
     size_t npass = 0;
