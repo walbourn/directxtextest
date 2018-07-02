@@ -149,6 +149,8 @@ static const CompressMedia g_CompressMedia[] =
   | FLAGS_SKIP_WIDE, { 2048, 2048, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"tex4.png" },
 
 { FLAGS_BC6H,   { 268, 204, 1, 1, 1, 0, 0, DXGI_FORMAT_R32G32B32A32_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"hdrtest.dds" },
+{ FLAGS_NOBC1
+  | FLAGS_BC6H, { 1296, 972, 1, 1, 11, 0, 0, DXGI_FORMAT_R16G16B16A16_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"yucca.dds" },
 #if (_WIN32_WINNT >= 0x0602 /*_WIN32_WINNT_WIN8*/) || defined(_WIN7_PLATFORM_UPDATE)
 { FLAGS_BC6H,   { 768, 512, 1, 1, 1, 0, 0, DXGI_FORMAT_R32G32B32_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"96bpp_RGB_FP.TIF" },
 #endif
@@ -270,7 +272,7 @@ static inline bool SkipCompressCases( DXGI_FORMAT format, DXGI_FORMAT cformat, D
             filter = true;
 
         // BC2 and BC3 are not HDR formats
-        else if ( format == DXGI_FORMAT_R32G32B32A32_FLOAT )
+        else if ( format == DXGI_FORMAT_R16G16B16A16_FLOAT || format == DXGI_FORMAT_R32G32B32A32_FLOAT )
             filter = true;
         break;
 
@@ -663,11 +665,11 @@ bool Test02()
                         pass = false;
                         printe( "Failed comparing source to BC image (HRESULT %08X) converting to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                     }
-                    else if ( IsErrorTooLarge( mse, 0.02f ) )
+                    else if ( IsErrorTooLarge( mse, 0.024f ) )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing source to BC image MSE = %f (%f %f %f %f)... 0.02f converting to %ls:\n%ls\n",
+                        printe( "Failed comparing source to BC image MSE = %f (%f %f %f %f)... 0.024f converting to %ls:\n%ls\n",
                                 mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName(cformat), szPath );
                     }
 
@@ -812,11 +814,11 @@ bool Test02()
                                     pass = false;
                                     printe( "Failed comparing straight vs. uniform images (HRESULT %08X) converting to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                                 }
-                                else if ( IsErrorTooLarge( mse, 0.02f ) )
+                                else if ( IsErrorTooLarge( mse, 0.022f ) )
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed comparing straight vs. uniform images MSE = %f (%f %f %f %f)... 0.02f converting to %ls:\n%ls\n",
+                                    printe( "Failed comparing straight vs. uniform images MSE = %f (%f %f %f %f)... 0.022f converting to %ls:\n%ls\n",
                                             mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName(cformat), szPath );
                                 }
                             }
@@ -1180,11 +1182,11 @@ bool Test03()
                         pass = false;
                         printe( "Failed comparing source to GPU BC image (HRESULT %08X) converting to %ls:\n%ls\n", hr, GetName(cformat), szPath );
                     }
-                    else if ( IsErrorTooLarge( mse, 0.02f ) )
+                    else if ( IsErrorTooLarge( mse, 0.022f ) )
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing source to GPU BC image MSE = %f (%f %f %f %f)... 0.02f converting to %ls:\n%ls\n",
+                        printe( "Failed comparing source to GPU BC image MSE = %f (%f %f %f %f)... 0.022f converting to %ls:\n%ls\n",
                                 mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName(cformat), szPath );
                     }
 
