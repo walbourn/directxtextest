@@ -777,7 +777,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
 
         wprintf(L"\nImage: %ls%ls\n", fname, ext);
 
-        wprintf(L"\tCompression: %ls (%ls)\n", LookupByValue(bcformat, g_pCodecs), (bc6hbc7 && pDevice) ? L"GPU" : L"CPU");
+        wprintf(L"\tCompression: %ls (%ls)\n", LookupByValue(format, g_pCodecs), (bc6hbc7 && pDevice) ? L"GPU" : L"CPU");
 
         if (timeDelta > 0)
         {
@@ -788,7 +788,9 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
             10.0 * log10(3.0 / (double(mseV[0]) + double(mseV[1]) + double(mseV[2]))));
 
         // Consider adding SSIM metric...
-        // Zhou, W., A. C. Bovik, H. R. Sheikh, and E. P. Simoncelli. "Image Qualifty Assessment: From Error Visibility to Structural Similarity." IEEE Transactions on Image Processing. Vol. 13, Issue 4, April 2004, pp. 600–612.
+        // Zhou, W., A. C. Bovik, H. R. Sheikh, and E. P. Simoncelli.
+        // "Image Qualifty Assessment: From Error Visibility to Structural Similarity."
+        // IEEE Transactions on Image Processing. Vol. 13, Issue 4, April 2004, pp. 600-612.
 
         if (dwOptions & (1 << OPT_WRITE))
         {
