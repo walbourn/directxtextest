@@ -352,3 +352,82 @@ const wchar_t* GetName( DXGI_FORMAT fmt )
         return L"UNKNOWN";
     }
 }
+
+
+//-------------------------------------------------------------------------------------
+// See https://www.gamasutra.com/view/news/169203/Exceptional_floating_point.php
+int __cdecl DescribeException(PEXCEPTION_POINTERS pData)
+
+{
+    // Clear the exception or else every FP instruction will
+    // trigger it again.
+    _clearfp();
+
+    DWORD exceptionCode = pData->ExceptionRecord->ExceptionCode;
+
+    const char* pDescription = nullptr;
+    switch (exceptionCode)
+    {
+        case STATUS_FLOAT_INVALID_OPERATION:
+            pDescription = "float invalid operation";
+            break;
+
+        case STATUS_FLOAT_DIVIDE_BY_ZERO:
+            pDescription = "float divide by zero";
+            break;
+
+        case STATUS_FLOAT_OVERFLOW:
+            pDescription = "float overflow";
+            break;
+
+        case STATUS_FLOAT_UNDERFLOW:
+            pDescription = "float underflow";
+            break;
+
+        case STATUS_FLOAT_INEXACT_RESULT:
+            pDescription = "float inexact result";
+            break;
+
+        case STATUS_FLOAT_MULTIPLE_TRAPS:
+            // This seems to occur with SSE code.
+            pDescription = "float multiple traps";
+            break;
+
+        case STATUS_ACCESS_VIOLATION:
+            pDescription = "access violation";
+            break;
+
+        default:
+            pDescription = "unknown exception";
+            break;
+    }
+
+    void* pErrorOffset = 0;
+#if defined(_M_IX86)
+    void* pIP = (void*)pData->ContextRecord->Eip;
+    pErrorOffset = (void*)pData->ContextRecord->FloatSave.ErrorOffset;
+#elif defined(_M_X64)
+    void* pIP = (void*)pData->ContextRecord->Rip;
+#else
+#error Unknown processor
+#endif
+
+    printf("ERROR: Crash with exception %x (%s) at %p!n",
+        exceptionCode, pDescription, pIP);
+
+    if (pErrorOffset)
+    {
+        // Float exceptions may be reported in a delayed manner -- report the
+        // actual instruction as well.
+
+        printf("Faulting instruction may actually be at %p.n", pErrorOffset);
+    }
+
+    // Return this value to execute the __except block and continue as if
+    // all was fine, which is a terrible idea in shipping code.
+    return EXCEPTION_EXECUTE_HANDLER;
+
+    // Return this value to let the normal exception handling process
+    // continue after printing diagnostics/saving crash dumps/etc.
+    //return EXCEPTION_CONTINUE_SEARCH;
+}

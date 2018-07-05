@@ -706,6 +706,12 @@ inline float DecodeSRGB( float f )
 // Convert (internalA)
 bool Test05()
 {
+    // Can't catch _EM_INVALID as conversion cases can generate and handle these cases
+    unsigned int fpcw = 0;
+    _controlfp_s(&fpcw, _MCW_EM, _MCW_EM);
+
+    _controlfp_s(nullptr, _EM_INVALID, _EM_INVALID);
+
     // Test Load/Store of pixels
     bool success = true;
     __declspec(align(16)) XMVECTOR temp;
@@ -914,6 +920,9 @@ static const TestPixels s_TestPartialTypeless[] =
             }
         }
     }
+
+    _clearfp();
+    _controlfp_s(nullptr, fpcw, _MCW_EM);
 
     return success;
 }

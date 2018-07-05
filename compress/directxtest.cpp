@@ -32,10 +32,20 @@ TestInfo g_Tests[] =
     { "Compress (GPU)", Test03 },
 };
 
+extern int __cdecl DescribeException(PEXCEPTION_POINTERS pData);
 
 //-------------------------------------------------------------------------------------
 bool RunTests()
 {
+    // Enable floating-point exceptions for validation purposes
+    // NOTE: This should only be done in test code, NOT production code!
+    unsigned int fpcw = 0;
+    _controlfp_s(&fpcw, _MCW_EM, _MCW_EM);
+
+    _clearfp();
+
+    _controlfp_s(nullptr, 0, _EM_ZERODIVIDE | _EM_OVERFLOW | _EM_INVALID);
+
     UINT nPass = 0;
     UINT nFail = 0;
 
@@ -43,7 +53,18 @@ bool RunTests()
     {
         print("%s: ", g_Tests[i].name );
 
-        if ( g_Tests[i].func() )
+        bool pass = false;
+
+        __try
+        {
+            pass = g_Tests[i].func();
+        }
+        __except (DescribeException(GetExceptionInformation()))
+        {
+            pass = false;
+        }
+
+        if (pass)
         {
             ++nPass;
             print("PASS\n");
@@ -54,6 +75,9 @@ bool RunTests()
             print("FAIL\n");
         }
     }
+
+    _clearfp();
+    _controlfp_s(nullptr, fpcw, _MCW_EM);
 
     print("Ran %d tests, %d pass, %d fail\n", nPass+nFail, nPass, nFail);
 
