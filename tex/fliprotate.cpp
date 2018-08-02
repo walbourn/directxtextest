@@ -19,7 +19,6 @@ struct FlipRotateMedia
 
 static const FlipRotateMedia g_FlipRotateMedia[] = 
 {
-
 // DWORD flags | <source> width height depth arraySize mipLevels miscFlags miscFlags2 format dimension | filename
 { TEX_FR_ROTATE90, { 200, 150, 1, 1, 1, 0, 0, DXGI_FORMAT_B5G5R5A1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test555.dds" },
 { TEX_FR_ROTATE90, { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test8888.dds" },
@@ -46,6 +45,11 @@ static const FlipRotateMedia g_FlipRotateMedia[] =
 { TEX_FR_ROTATE90, { 1280, 1024, 1, 1, 1, 0, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testpatternYUY2.dds" },
 { TEX_FR_ROTATE90, { 200, 200, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaCubeYUY2.dds" },
 { TEX_FR_ROTATE90, { 200, 200, 4, 1, 1, 0, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"lenaVolYUY2.dds" },
+
+#ifdef _M_X64
+{ TEX_FR_ROTATE90, { 16384, 16384, 1, 1, 15, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth16kby16k.dds" },
+{ TEX_FR_ROTATE90, { 16384, 16384, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_SNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth16kby16k_snorm.dds" },
+#endif
 };
 
 //-------------------------------------------------------------------------------------
