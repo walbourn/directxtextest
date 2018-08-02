@@ -1,4 +1,4 @@
-﻿//
+//
 // DeviceResources.cpp - A wrapper for the Direct3D 12 device and swapchain
 //
 
@@ -24,20 +24,24 @@ namespace
 };
 
 // Constructor for DeviceResources.
-DX::DeviceResources::DeviceResources(DXGI_FORMAT backBufferFormat, DXGI_FORMAT depthBufferFormat, UINT backBufferCount, D3D_FEATURE_LEVEL minFeatureLevel) :
-    m_backBufferIndex(0),
-    m_fenceValues{},
-    m_rtvDescriptorSize(0),
-    m_screenViewport{},
-    m_scissorRect{},
-    m_backBufferFormat(backBufferFormat),
-    m_depthBufferFormat(depthBufferFormat),
-    m_backBufferCount(backBufferCount),
-    m_d3dMinFeatureLevel(minFeatureLevel),
-    m_window(0),
-    m_d3dFeatureLevel(D3D_FEATURE_LEVEL_11_0),
-    m_outputSize{0, 0, 1, 1},
-    m_deviceNotify(nullptr)
+DX::DeviceResources::DeviceResources(
+    DXGI_FORMAT backBufferFormat,
+    DXGI_FORMAT depthBufferFormat,
+    UINT backBufferCount,
+    D3D_FEATURE_LEVEL minFeatureLevel) noexcept(false) :
+        m_backBufferIndex(0),
+        m_fenceValues{},
+        m_rtvDescriptorSize(0),
+        m_screenViewport{},
+        m_scissorRect{},
+        m_backBufferFormat(backBufferFormat),
+        m_depthBufferFormat(depthBufferFormat),
+        m_backBufferCount(backBufferCount),
+        m_d3dMinFeatureLevel(minFeatureLevel),
+        m_window(0),
+        m_d3dFeatureLevel(D3D_FEATURE_LEVEL_11_0),
+        m_outputSize{0, 0, 1, 1},
+        m_deviceNotify(nullptr)
 {
     if (backBufferCount > MAX_BACK_BUFFER_COUNT)
     {

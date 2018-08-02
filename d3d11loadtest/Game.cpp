@@ -26,7 +26,7 @@ namespace
     };
 }
 
-Game::Game() :
+Game::Game() noexcept(false) :
     m_frame(0)
 {
     // Use gamma-correct rendering.

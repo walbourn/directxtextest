@@ -1,4 +1,4 @@
-﻿//
+//
 // DeviceResources.h - A wrapper for the Direct3D 12 device and swapchain
 //
 
@@ -20,7 +20,7 @@ namespace DX
         DeviceResources(DXGI_FORMAT backBufferFormat = DXGI_FORMAT_B8G8R8A8_UNORM,
                         DXGI_FORMAT depthBufferFormat = DXGI_FORMAT_D32_FLOAT,
                         UINT backBufferCount = 2,
-                        D3D_FEATURE_LEVEL minFeatureLevel = D3D_FEATURE_LEVEL_11_0);
+                        D3D_FEATURE_LEVEL minFeatureLevel = D3D_FEATURE_LEVEL_11_0) noexcept(false);
         ~DeviceResources();
 
         void CreateDeviceResources();
