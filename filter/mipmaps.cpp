@@ -937,9 +937,9 @@ bool Test02()
                 ScratchImage nwMipChain;
                 ScratchImage nwMipChainLinear;
                 ScratchImage nwMipChainCubic;
-                if ( BitsPerColor( metadata.format ) <= 8 )
+                if ( BitsPerColor( metadata.format ) <= 8 && !IsSRGB(metadata.format) )
                 {
-                    // non-WIC is already used when color-depth is > 8
+                    // non-WIC is already used when color-depth is > 8 and for sRGB
 
                     hr = GenerateMipMaps( *srcimage.GetImage(0,0,0), TEX_FILTER_FORCE_NON_WIC, 0, nwMipChain, false );
                     if ( FAILED(hr) )
@@ -1407,7 +1407,7 @@ bool Test02()
 
 
                 //--- Complex mipmaps 1D/2D -----------------------------------------------
-                if ( srcimage.GetImageCount() > 1 )
+                if ( srcimage.GetImageCount() > 1 && ( (metadata.width * metadata.height) < (16384 * 16384) ) )
                 {
                     ScratchImage mipChainComplex;
                     hr = GenerateMipMaps( srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), TEX_FILTER_DEFAULT, 0, mipChainComplex );

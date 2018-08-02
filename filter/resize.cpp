@@ -258,8 +258,14 @@ static const ResizeMedia g_ResizeMedia[] =
     {0} },
 
 // TODO -
-{ FLAGS_SKIP_EXHAUSTIVE, 8192, 8192, { 16384, 16384, 1, 1, 15, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth16kby16k.dds" },
-{ FLAGS_SKIP_EXHAUSTIVE, 8192, 8192, { 16384, 16384, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_SNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth16kby16k_snorm.dds" },
+{ FLAGS_SKIP_EXHAUSTIVE, 8192, 8192, { 16384, 16384, 1, 1, 15, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth16kby16k.dds",
+    {0xf1,0xcb,0xce,0x07,0x80,0x4c,0x7f,0x82,0x24,0x62,0x70,0xbe,0x63,0x36,0xef,0x37},{ 0 },{ 0 },
+    { 0 },{ 0 },{ 0 },
+    { 0 } },
+{ FLAGS_SKIP_EXHAUSTIVE, 8192, 8192, { 16384, 16384, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_SNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth16kby16k_snorm.dds",
+    {0xc4,0xba,0xac,0x85,0x6f,0x2f,0xc7,0x18,0x91,0x52,0x03,0x4e,0x46,0xa5,0xb3,0x0a}, { 0 }, { 0 },
+    { 0 }, { 0 }, { 0 },
+    { 0 } },
 #endif
 };
 
@@ -848,9 +854,9 @@ bool Test01()
             ScratchImage nwimage;
             ScratchImage nwimageLinear;
             ScratchImage nwimageCubic;
-            if ( BitsPerColor( metadata.format ) <= 8 )
+            if ( BitsPerColor( metadata.format ) <= 8 && !IsSRGB(metadata.format) )
             {
-                // non-WIC is already used when color-depth is > 8
+                // non-WIC is already used when color-depth is > 8 and for sRGB
 
                 hr = Resize( *srcimage.GetImage(0,0,0), twidth, theight, TEX_FILTER_FORCE_NON_WIC, nwimage );
                 if ( FAILED(hr) )
@@ -1324,7 +1330,7 @@ bool Test01()
 // TODO - TEX_FILTER_WRAP_U, TEX_FILTER_WRAP_V
 
             //--- Complex resize ------------------------------------------------------
-            if ( srcimage.GetImageCount() > 1 )
+            if ( srcimage.GetImageCount() > 1 && ( (metadata.width * metadata.height) < (16384 * 16384) ) )
             {
                 ScratchImage imageComplex;
                 hr = Resize( srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), twidth, theight, TEX_FILTER_DEFAULT, imageComplex );
