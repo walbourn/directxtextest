@@ -21,6 +21,7 @@ enum
     FLAGS_SKIP_POINTNOWIC   = 0x2,
     FLAGS_SKIP_SRGB         = 0x4,
     FLAGS_SKIP_TOPTEST      = 0x8,
+    FLAGS_SKIP_EXHAUSTIVE   = 0x10,
     FLAGS_ALTMD5_MASK       = 0xff0,
     FLAGS_ALTMD5_MASKB      = 0xff000,
     FLAGS_ALTMD5_MASKC      = 0xff00000,
@@ -201,9 +202,14 @@ static const MipMapMedia g_MipMapMedia[] =
 
 #ifdef _M_X64
 // Very large images
-// TODO -
-{ FLAGS_NONE, { 16384, 16384, 1, 1, 15, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth16kby16k.dds" },
-{ FLAGS_NONE, { 16384, 16384, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_SNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth16kby16k_snorm.dds" },
+{ FLAGS_SKIP_EXHAUSTIVE, { 16384, 16384, 1, 1, 15, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth16kby16k.dds",
+    {0x8a,0xde,0x0f,0xaf,0xd6,0xab,0x6d,0x2a,0x3a,0x83,0x9f,0x59,0x4d,0xdd,0xd3,0x2c}, {0}, {0},
+    {0},{0},{0},
+    {0},{0} },
+{ FLAGS_SKIP_EXHAUSTIVE, { 16384, 16384, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_SNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth16kby16k_snorm.dds",
+    {0xf5,0x8e,0x8f,0xd7,0xb6,0xbf,0x37,0x5b,0xc1,0x5b,0x25,0x41,0xc3,0xbc,0xb6,0x24}, { 0 }, { 0 },
+    {0},{0},{0},
+    {0},{0} },
 #endif
 };
 
@@ -493,691 +499,697 @@ bool Test02()
                 if (FAILED(hr))
                     continue;
 
-                // POINT
                 ScratchImage mipChainPoint;
-                hr = GenerateMipMaps( *srcimage.GetImage(0,0,0), TEX_FILTER_POINT, 0, mipChainPoint, false );
-                if ( FAILED(hr) )
-                {
-                    success = false;
-                    pass = false;
-                    printe( "Failed mip-map Point generation (HRESULT %08X):\n%ls\n", hr, szPath );
-                }
-                else if ( mipChainPoint.GetMetadata().mipLevels < 2 )
-                {
-                    success = false;
-                    pass = false;
-                    printe( "Failed mip-map Point generation result is %zu mip levels:\n%ls\n", mipChainPoint.GetMetadata().mipLevels, szPath );
-                }
-                else
-                {
-                    // Verfy the top-level of mipchain matches our source data
-                    uint8_t digest[16];
-                    hr = MD5Checksum( mipChainPoint, digest, 1 );
-                    if ( FAILED(hr) )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
-                    }
-                    else if ( !(g_MipMapMedia[index].options & FLAGS_SKIP_TOPTEST) && memcmp( digest, srcdigest, 16 ) != 0 )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed comparing Point top MD5 checksum:\n%ls\n", szPath );
-                        printdigest( "computed", digest );
-                        printdigest( "expected", srcdigest );
-                    }
-
-                    // Verify the mip-chain image data 
-                    const uint8_t* expected2 = nullptr;
-                    if ( g_MipMapMedia[index].options & FLAGS_ALTMD5_MASK )
-                    {
-                        expected2 = g_AltMD5[ ((g_MipMapMedia[index].options & FLAGS_ALTMD5_MASK) >> 4) - 1 ].md5_point;
-                    }
-
-                    hr = MD5Checksum( mipChainPoint, digest );
-                    if ( FAILED(hr) )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath );
-                    }
-                    else if ( memcmp( digest, g_MipMapMedia[index].md5_point, 16 ) != 0
-                              && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed comparing Point mipchain MD5 checksum:\n%ls\n", szPath );
-                        printdigest( "computed", digest );
-                        printdigest( "expected", g_MipMapMedia[index].md5_point );
-                        if ( expected2 )
-                        {
-                            printdigest( "expected2", expected2 );
-                        }
-                    }
-
-                    wchar_t tname[MAX_PATH] = {};
-                    wcscpy_s( tname, fname );
-                    wcscat_s( tname, L"_POINT" );
-
-                    wchar_t szDestPath[MAX_PATH] = {};
-                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
-
-                    SaveScratchImage( szDestPath, DDS_FLAGS_NONE, mipChainPoint );
-
-#if defined(DEBUG) && !defined(NO_WMP)
-                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                    SaveToWICFile( *mipChainPoint.GetImage(1,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
-#endif
-                }
-
-                // LINEAR
                 ScratchImage mipChainLinear;
-                hr = GenerateMipMaps( *srcimage.GetImage(0,0,0), TEX_FILTER_LINEAR, 0, mipChainLinear, false );
-                if ( FAILED(hr) )
-                {
-                    success = false;
-                    pass = false;
-                    printe( "Failed mip-map Linear generation (HRESULT %08X):\n%ls\n", hr, szPath );
-                }
-                else if ( mipChainLinear.GetMetadata().mipLevels < 2 )
-                {
-                    success = false;
-                    pass = false;
-                    printe( "Failed mip-map Linear generation result is %zu mip levels:\n%ls\n", mipChainLinear.GetMetadata().mipLevels, szPath );
-                }
-                else
-                {
-                    // Verfy the top-level of mipchain matches our source data
-                    uint8_t digest[16];
-                    hr = MD5Checksum( mipChainLinear, digest, 1 );
-                    if ( FAILED(hr) )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
-                    }
-                    else if ( !(g_MipMapMedia[index].options & FLAGS_SKIP_TOPTEST) && memcmp( digest, srcdigest, 16 ) != 0 )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed comparing Linear top MD5 checksum:\n%ls\n", szPath );
-                        printdigest( "computed", digest );
-                        printdigest( "expected", srcdigest );
-                    }
-
-                    // Verify the mip-chain image data
-                    const uint8_t* expected2 = nullptr;
-                    if ( g_MipMapMedia[index].options & FLAGS_ALTMD5_MASK )
-                    {
-                        expected2 = g_AltMD5[ ((g_MipMapMedia[index].options & FLAGS_ALTMD5_MASK) >> 4) - 1 ].md5_linear;
-                    }
-
-                    hr = MD5Checksum( mipChainLinear, digest );
-                    if ( FAILED(hr) )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath );
-                    }
-                    else if ( memcmp( digest, g_MipMapMedia[index].md5_linear, 16 ) != 0
-                              && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed comparing Linear mipchain MD5 checksum:\n%ls\n", szPath );
-                        printdigest( "computed", digest );
-                        printdigest( "expected", g_MipMapMedia[index].md5_linear );
-                        if ( expected2 )
-                        {
-                            printdigest( "expected2", expected2 );
-                        }
-                    }
-
-                    float targMSE = 0.023f;
-                    float mse = 0, mseV[4] = {};
-                    const Image* img = mipChainPoint.GetImage(1,0,0);
-                    hr = (img) ? ComputeMSE( *img, *mipChainLinear.GetImage(1,0,0), mse, mseV ) : E_POINTER;
-                    if ( FAILED(hr) )
-                    {
-                        success = false;
-                        printe( "Failed comparing Point vs. Linear image data (HRESULT %08X):\n%ls\n", hr, szPath );
-                    }
-                    else if ( IsErrorTooLarge( mse, targMSE ) )
-                    {
-                        success = false;
-                        printe( "Failed comparing Point vs. Linear MSE = %f (%f %f %f %f)... %f:\n%ls\n",
-                                mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
-                    }
-
-                    wchar_t tname[MAX_PATH] = {};
-                    wcscpy_s( tname, fname );
-                    wcscat_s( tname, L"_LINEAR" );
-
-                    wchar_t szDestPath[MAX_PATH] = {};
-                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
-
-                    SaveScratchImage( szDestPath, DDS_FLAGS_NONE, mipChainLinear );
-
-#if defined(DEBUG) && !defined(NO_WMP)
-                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                    SaveToWICFile( *mipChainLinear.GetImage(1,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
-#endif
-                }
-
-                // CUBIC
                 ScratchImage mipChainCubic;
-                hr = GenerateMipMaps( *srcimage.GetImage(0,0,0), TEX_FILTER_CUBIC, 0, mipChainCubic, false );
-                if ( FAILED(hr) )
-                {
-                    success = false;
-                    pass = false;
-                    printe( "Failed mip-map Cubic generation (HRESULT %08X):\n%ls\n", hr, szPath );
-                }
-                else if ( mipChainCubic.GetMetadata().mipLevels < 2 )
-                {
-                    success = false;
-                    pass = false;
-                    printe( "Failed mip-map Cubic generation result is %zu mip levels:\n%ls\n", mipChainCubic.GetMetadata().mipLevels, szPath );
-                }
-                else
-                {
-                    // Verfy the top-level of mipchain matches our source data
-                    uint8_t digest[16];
-                    hr = MD5Checksum( mipChainCubic, digest, 1 );
-                    if ( FAILED(hr) )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
-                    }
-                    else if ( !(g_MipMapMedia[index].options & FLAGS_SKIP_TOPTEST) && memcmp( digest, srcdigest, 16 ) != 0 )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed comparing Cubic top MD5 checksum:\n%ls\n", szPath );
-                        printdigest( "computed", digest );
-                        printdigest( "expected", srcdigest );
-                    }
-
-                    // Verify the mip-chain image data
-                    const uint8_t* expected2 = nullptr;
-                    if ( g_MipMapMedia[index].options & FLAGS_ALTMD5_MASK )
-                    {
-                        expected2 = g_AltMD5[ ((g_MipMapMedia[index].options & FLAGS_ALTMD5_MASK) >> 4) - 1 ].md5_cubic;
-                    }
-
-                    hr = MD5Checksum( mipChainCubic, digest );
-                    if ( FAILED(hr) )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath );
-                    }
-                    else if ( memcmp( digest, g_MipMapMedia[index].md5_cubic, 16 ) != 0
-                              && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed comparing Cubic mipchain MD5 checksum:\n%ls\n", szPath );
-                        printdigest( "computed", digest );
-                        printdigest( "expected", g_MipMapMedia[index].md5_cubic );
-                        if ( expected2 )
-                        {
-                            printdigest( "expected2", expected2 );
-                        }
-                    }
-
-                    float targMSE = 0.023f;
-                    float mse = 0, mseV[4] = {};
-                    const Image* img = mipChainPoint.GetImage(1,0,0);
-                    hr = (img) ? ComputeMSE( *img, *mipChainCubic.GetImage(1,0,0), mse, mseV ) : E_POINTER;
-                    if ( FAILED(hr) )
-                    {
-                        success = false;
-                        printe( "Failed comparing Point vs. Cubic image data (HRESULT %08X):\n%ls\n", hr, szPath );
-                    }
-                    else if ( IsErrorTooLarge( mse, targMSE ) )
-                    {
-                        success = false;
-                        printe( "Failed comparing Point vs. Cubic MSE = %f (%f %f %f %f)... %f:\n%ls\n",
-                                mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
-                    }
-
-                    targMSE = ( BitsPerColor( metadata.format ) > 8 ) ? 0.03f : 0.01f;
-                    img = mipChainLinear.GetImage(1,0,0);
-                    hr = (img) ? ComputeMSE( *img, *mipChainCubic.GetImage(1,0,0), mse, mseV ) : E_POINTER;
-                    if ( FAILED(hr) )
-                    {
-                        success = false;
-                        printe( "Failed comparing Linear vs. Cubic image data (HRESULT %08X):\n%ls\n", hr, szPath );
-                    }
-                    else if ( IsErrorTooLarge( mse, targMSE ) )
-                    {
-                        success = false;
-                        printe( "Failed comparing Linear vs. Cubic MSE = %f (%f %f %f %f)... %f:\n%ls\n",
-                                mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
-                    }
-
-                    wchar_t tname[MAX_PATH] = {};
-                    wcscpy_s( tname, fname );
-                    wcscat_s( tname, L"_CUBIC" );
-
-                    wchar_t szDestPath[MAX_PATH] = {};
-                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
-
-                    SaveScratchImage( szDestPath, DDS_FLAGS_NONE, mipChainCubic );
-
-#if defined(DEBUG) && !defined(NO_WMP)
-                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                    SaveToWICFile( *mipChainCubic.GetImage(1,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
-#endif
-                }
-
-                // TRIANGLE
                 ScratchImage mipChainTriangle;
-                hr = GenerateMipMaps( *srcimage.GetImage(0,0,0), TEX_FILTER_TRIANGLE, 0, mipChainTriangle, false );
-                if ( FAILED(hr) )
+                if (!(g_MipMapMedia[index].options & FLAGS_SKIP_EXHAUSTIVE))
                 {
-                    success = false;
-                    pass = false;
-                    printe( "Failed mip-map Triangle generation (HRESULT %08X):\n%ls\n", hr, szPath );
-                }
-                else if ( mipChainTriangle.GetMetadata().mipLevels < 2 )
-                {
-                    success = false;
-                    pass = false;
-                    printe( "Failed mip-map Triangle generation result is %zu mip levels:\n%ls\n", mipChainTriangle.GetMetadata().mipLevels, szPath );
-                }
-                else
-                {
-                    // Verfy the top-level of mipchain matches our source data
-                    uint8_t digest[16];
-                    hr = MD5Checksum( mipChainTriangle, digest, 1 );
-                    if ( FAILED(hr) )
+                    // POINT
+                    hr = GenerateMipMaps(*srcimage.GetImage(0, 0, 0), TEX_FILTER_POINT, 0, mipChainPoint, false);
+                    if (FAILED(hr))
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe("Failed mip-map Point generation (HRESULT %08X):\n%ls\n", hr, szPath);
                     }
-                    else if ( !(g_MipMapMedia[index].options & FLAGS_SKIP_TOPTEST) && memcmp( digest, srcdigest, 16 ) != 0 )
+                    else if (mipChainPoint.GetMetadata().mipLevels < 2)
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed comparing Triangle top MD5 checksum:\n%ls\n", szPath );
-                        printdigest( "computed", digest );
-                        printdigest( "expected", srcdigest );
-                    }
-
-                    // Verify the mip-chain image data
-                    const uint8_t* expected2 = nullptr;
-                    if ( g_MipMapMedia[index].options & FLAGS_ALTMD5_MASK )
-                    {
-                        expected2 = g_AltMD5[ ((g_MipMapMedia[index].options & FLAGS_ALTMD5_MASK) >> 4) - 1 ].md5_tri;
-                    }
-
-                    hr = MD5Checksum( mipChainTriangle, digest );
-                    if ( FAILED(hr) )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath );
-                    }
-                    else if ( memcmp( digest, g_MipMapMedia[index].md5_tri, 16 ) != 0
-                              && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed comparing Triangle mipchain MD5 checksum:\n%ls\n", szPath );
-                        printdigest( "computed", digest );
-                        printdigest( "expected", g_MipMapMedia[index].md5_tri );
-                        if ( expected2 )
-                        {
-                            printdigest( "expected2", expected2 );
-                        }
-                    }
-
-                    wchar_t tname[MAX_PATH] = {};
-                    wcscpy_s( tname, fname );
-                    wcscat_s( tname, L"_TRIANGLE" );
-
-                    wchar_t szDestPath[MAX_PATH] = {};
-                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
-
-                    SaveScratchImage( szDestPath, DDS_FLAGS_NONE, mipChainTriangle );
-
-#if defined(DEBUG) && !defined(NO_WMP)
-                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                    SaveToWICFile( *mipChainTriangle.GetImage(1,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
-#endif
-                }
-
-                // SEPALPHA
-                if ( g_MipMapMedia[index].options & FLAGS_SEPALPHA )
-                {
-                    ScratchImage mipChainSepAlpha;
-                    hr = GenerateMipMaps( *srcimage.GetImage(0,0,0), TEX_FILTER_SEPARATE_ALPHA, 0, mipChainSepAlpha, false );
-                    if ( FAILED(hr) )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed mip-map separate alpha generation (HRESULT %08X):\n%ls\n", hr, szPath );
-                    }
-                    else if ( mipChainSepAlpha.GetMetadata().mipLevels < 2 )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed mip-map separate alpha generation result is %zu mip levels:\n%ls\n", mipChainSepAlpha.GetMetadata().mipLevels, szPath );
+                        printe("Failed mip-map Point generation result is %zu mip levels:\n%ls\n", mipChainPoint.GetMetadata().mipLevels, szPath);
                     }
                     else
                     {
                         // Verfy the top-level of mipchain matches our source data
                         uint8_t digest[16];
-                        hr = MD5Checksum( mipChainSepAlpha, digest, 1 );
-                        if ( FAILED(hr) )
+                        hr = MD5Checksum(mipChainPoint, digest, 1);
+                        if (FAILED(hr))
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                            printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath);
                         }
-                        else if ( !(g_MipMapMedia[index].options & FLAGS_SKIP_TOPTEST) && memcmp( digest, srcdigest, 16 ) != 0 )
+                        else if (!(g_MipMapMedia[index].options & FLAGS_SKIP_TOPTEST) && memcmp(digest, srcdigest, 16) != 0)
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed comparing separate alpha top MD5 checksum:\n%ls\n", szPath );
-                            printdigest( "computed", digest );
-                            printdigest( "expected", srcdigest );
+                            printe("Failed comparing Point top MD5 checksum:\n%ls\n", szPath);
+                            printdigest("computed", digest);
+                            printdigest("expected", srcdigest);
+                        }
+
+                        // Verify the mip-chain image data 
+                        const uint8_t* expected2 = nullptr;
+                        if (g_MipMapMedia[index].options & FLAGS_ALTMD5_MASK)
+                        {
+                            expected2 = g_AltMD5[((g_MipMapMedia[index].options & FLAGS_ALTMD5_MASK) >> 4) - 1].md5_point;
+                        }
+
+                        hr = MD5Checksum(mipChainPoint, digest);
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath);
+                        }
+                        else if (memcmp(digest, g_MipMapMedia[index].md5_point, 16) != 0
+                            && (!expected2 || memcmp(digest, expected2, 16) != 0))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed comparing Point mipchain MD5 checksum:\n%ls\n", szPath);
+                            printdigest("computed", digest);
+                            printdigest("expected", g_MipMapMedia[index].md5_point);
+                            if (expected2)
+                            {
+                                printdigest("expected2", expected2);
+                            }
+                        }
+
+                        wchar_t tname[MAX_PATH] = {};
+                        wcscpy_s(tname, fname);
+                        wcscat_s(tname, L"_POINT");
+
+                        wchar_t szDestPath[MAX_PATH] = {};
+                        _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds");
+
+                        SaveScratchImage(szDestPath, DDS_FLAGS_NONE, mipChainPoint);
+
+                    #if defined(DEBUG) && !defined(NO_WMP)
+                        _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp");
+                        SaveToWICFile(*mipChainPoint.GetImage(1, 0, 0), WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_WMP), szDestPath);
+                    #endif
+                    }
+
+                    // LINEAR
+                    hr = GenerateMipMaps(*srcimage.GetImage(0, 0, 0), TEX_FILTER_LINEAR, 0, mipChainLinear, false);
+                    if (FAILED(hr))
+                    {
+                        success = false;
+                        pass = false;
+                        printe("Failed mip-map Linear generation (HRESULT %08X):\n%ls\n", hr, szPath);
+                    }
+                    else if (mipChainLinear.GetMetadata().mipLevels < 2)
+                    {
+                        success = false;
+                        pass = false;
+                        printe("Failed mip-map Linear generation result is %zu mip levels:\n%ls\n", mipChainLinear.GetMetadata().mipLevels, szPath);
+                    }
+                    else
+                    {
+                        // Verfy the top-level of mipchain matches our source data
+                        uint8_t digest[16];
+                        hr = MD5Checksum(mipChainLinear, digest, 1);
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                        }
+                        else if (!(g_MipMapMedia[index].options & FLAGS_SKIP_TOPTEST) && memcmp(digest, srcdigest, 16) != 0)
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed comparing Linear top MD5 checksum:\n%ls\n", szPath);
+                            printdigest("computed", digest);
+                            printdigest("expected", srcdigest);
                         }
 
                         // Verify the mip-chain image data
                         const uint8_t* expected2 = nullptr;
-                        if ( g_MipMapMedia[index].options & FLAGS_ALTMD5_MASK )
+                        if (g_MipMapMedia[index].options & FLAGS_ALTMD5_MASK)
                         {
-                            expected2 = g_AltMD5[ ((g_MipMapMedia[index].options & FLAGS_ALTMD5_MASK) >> 4) - 1 ].md5_sepalpha;
+                            expected2 = g_AltMD5[((g_MipMapMedia[index].options & FLAGS_ALTMD5_MASK) >> 4) - 1].md5_linear;
                         }
 
-                        hr = MD5Checksum( mipChainSepAlpha, digest );
-                        if ( FAILED(hr) )
+                        hr = MD5Checksum(mipChainLinear, digest);
+                        if (FAILED(hr))
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed computing MD5 checksum of mipchain separate alpha data (HRESULT %08X):\n%ls\n", hr, szPath );
+                            printe("Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath);
                         }
-                        else if ( memcmp( digest, g_MipMapMedia[index].md5_sepalpha, 16 ) != 0
-                                  && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
+                        else if (memcmp(digest, g_MipMapMedia[index].md5_linear, 16) != 0
+                            && (!expected2 || memcmp(digest, expected2, 16) != 0))
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed comparing separate alpha mipchain MD5 checksum:\n%ls\n", szPath );
-                            printdigest( "computed", digest );
-                            printdigest( "expected", g_MipMapMedia[index].md5_sepalpha );
-                            if ( expected2 )
+                            printe("Failed comparing Linear mipchain MD5 checksum:\n%ls\n", szPath);
+                            printdigest("computed", digest);
+                            printdigest("expected", g_MipMapMedia[index].md5_linear);
+                            if (expected2)
                             {
-                                printdigest( "expected2", expected2 );
+                                printdigest("expected2", expected2);
                             }
                         }
-                        
+
+                        float targMSE = 0.023f;
+                        float mse = 0, mseV[4] = {};
+                        const Image* img = mipChainPoint.GetImage(1, 0, 0);
+                        hr = (img) ? ComputeMSE(*img, *mipChainLinear.GetImage(1, 0, 0), mse, mseV) : E_POINTER;
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            printe("Failed comparing Point vs. Linear image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                        }
+                        else if (IsErrorTooLarge(mse, targMSE))
+                        {
+                            success = false;
+                            printe("Failed comparing Point vs. Linear MSE = %f (%f %f %f %f)... %f:\n%ls\n",
+                                mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath);
+                        }
+
                         wchar_t tname[MAX_PATH] = {};
-                        wcscpy_s( tname, fname );
-                        wcscat_s( tname, L"_SEPALPHA" );
+                        wcscpy_s(tname, fname);
+                        wcscat_s(tname, L"_LINEAR");
 
                         wchar_t szDestPath[MAX_PATH] = {};
-                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
+                        _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds");
 
-                        SaveScratchImage( szDestPath, DDS_FLAGS_NONE, mipChainSepAlpha );
+                        SaveScratchImage(szDestPath, DDS_FLAGS_NONE, mipChainLinear);
 
-#if defined(DEBUG) && !defined(NO_WMP)
-                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                        SaveToWICFile( *mipChainSepAlpha.GetImage(1,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
-#endif
+                    #if defined(DEBUG) && !defined(NO_WMP)
+                        _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp");
+                        SaveToWICFile(*mipChainLinear.GetImage(1, 0, 0), WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_WMP), szDestPath);
+                    #endif
+                    }
+
+                    // CUBIC
+                    hr = GenerateMipMaps(*srcimage.GetImage(0, 0, 0), TEX_FILTER_CUBIC, 0, mipChainCubic, false);
+                    if (FAILED(hr))
+                    {
+                        success = false;
+                        pass = false;
+                        printe("Failed mip-map Cubic generation (HRESULT %08X):\n%ls\n", hr, szPath);
+                    }
+                    else if (mipChainCubic.GetMetadata().mipLevels < 2)
+                    {
+                        success = false;
+                        pass = false;
+                        printe("Failed mip-map Cubic generation result is %zu mip levels:\n%ls\n", mipChainCubic.GetMetadata().mipLevels, szPath);
+                    }
+                    else
+                    {
+                        // Verfy the top-level of mipchain matches our source data
+                        uint8_t digest[16];
+                        hr = MD5Checksum(mipChainCubic, digest, 1);
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                        }
+                        else if (!(g_MipMapMedia[index].options & FLAGS_SKIP_TOPTEST) && memcmp(digest, srcdigest, 16) != 0)
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed comparing Cubic top MD5 checksum:\n%ls\n", szPath);
+                            printdigest("computed", digest);
+                            printdigest("expected", srcdigest);
+                        }
+
+                        // Verify the mip-chain image data
+                        const uint8_t* expected2 = nullptr;
+                        if (g_MipMapMedia[index].options & FLAGS_ALTMD5_MASK)
+                        {
+                            expected2 = g_AltMD5[((g_MipMapMedia[index].options & FLAGS_ALTMD5_MASK) >> 4) - 1].md5_cubic;
+                        }
+
+                        hr = MD5Checksum(mipChainCubic, digest);
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath);
+                        }
+                        else if (memcmp(digest, g_MipMapMedia[index].md5_cubic, 16) != 0
+                            && (!expected2 || memcmp(digest, expected2, 16) != 0))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed comparing Cubic mipchain MD5 checksum:\n%ls\n", szPath);
+                            printdigest("computed", digest);
+                            printdigest("expected", g_MipMapMedia[index].md5_cubic);
+                            if (expected2)
+                            {
+                                printdigest("expected2", expected2);
+                            }
+                        }
+
+                        float targMSE = 0.023f;
+                        float mse = 0, mseV[4] = {};
+                        const Image* img = mipChainPoint.GetImage(1, 0, 0);
+                        hr = (img) ? ComputeMSE(*img, *mipChainCubic.GetImage(1, 0, 0), mse, mseV) : E_POINTER;
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            printe("Failed comparing Point vs. Cubic image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                        }
+                        else if (IsErrorTooLarge(mse, targMSE))
+                        {
+                            success = false;
+                            printe("Failed comparing Point vs. Cubic MSE = %f (%f %f %f %f)... %f:\n%ls\n",
+                                mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath);
+                        }
+
+                        targMSE = (BitsPerColor(metadata.format) > 8) ? 0.03f : 0.01f;
+                        img = mipChainLinear.GetImage(1, 0, 0);
+                        hr = (img) ? ComputeMSE(*img, *mipChainCubic.GetImage(1, 0, 0), mse, mseV) : E_POINTER;
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            printe("Failed comparing Linear vs. Cubic image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                        }
+                        else if (IsErrorTooLarge(mse, targMSE))
+                        {
+                            success = false;
+                            printe("Failed comparing Linear vs. Cubic MSE = %f (%f %f %f %f)... %f:\n%ls\n",
+                                mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath);
+                        }
+
+                        wchar_t tname[MAX_PATH] = {};
+                        wcscpy_s(tname, fname);
+                        wcscat_s(tname, L"_CUBIC");
+
+                        wchar_t szDestPath[MAX_PATH] = {};
+                        _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds");
+
+                        SaveScratchImage(szDestPath, DDS_FLAGS_NONE, mipChainCubic);
+
+                    #if defined(DEBUG) && !defined(NO_WMP)
+                        _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp");
+                        SaveToWICFile(*mipChainCubic.GetImage(1, 0, 0), WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_WMP), szDestPath);
+                    #endif
+                    }
+
+                    // TRIANGLE
+                    hr = GenerateMipMaps(*srcimage.GetImage(0, 0, 0), TEX_FILTER_TRIANGLE, 0, mipChainTriangle, false);
+                    if (FAILED(hr))
+                    {
+                        success = false;
+                        pass = false;
+                        printe("Failed mip-map Triangle generation (HRESULT %08X):\n%ls\n", hr, szPath);
+                    }
+                    else if (mipChainTriangle.GetMetadata().mipLevels < 2)
+                    {
+                        success = false;
+                        pass = false;
+                        printe("Failed mip-map Triangle generation result is %zu mip levels:\n%ls\n", mipChainTriangle.GetMetadata().mipLevels, szPath);
+                    }
+                    else
+                    {
+                        // Verfy the top-level of mipchain matches our source data
+                        uint8_t digest[16];
+                        hr = MD5Checksum(mipChainTriangle, digest, 1);
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                        }
+                        else if (!(g_MipMapMedia[index].options & FLAGS_SKIP_TOPTEST) && memcmp(digest, srcdigest, 16) != 0)
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed comparing Triangle top MD5 checksum:\n%ls\n", szPath);
+                            printdigest("computed", digest);
+                            printdigest("expected", srcdigest);
+                        }
+
+                        // Verify the mip-chain image data
+                        const uint8_t* expected2 = nullptr;
+                        if (g_MipMapMedia[index].options & FLAGS_ALTMD5_MASK)
+                        {
+                            expected2 = g_AltMD5[((g_MipMapMedia[index].options & FLAGS_ALTMD5_MASK) >> 4) - 1].md5_tri;
+                        }
+
+                        hr = MD5Checksum(mipChainTriangle, digest);
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath);
+                        }
+                        else if (memcmp(digest, g_MipMapMedia[index].md5_tri, 16) != 0
+                            && (!expected2 || memcmp(digest, expected2, 16) != 0))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed comparing Triangle mipchain MD5 checksum:\n%ls\n", szPath);
+                            printdigest("computed", digest);
+                            printdigest("expected", g_MipMapMedia[index].md5_tri);
+                            if (expected2)
+                            {
+                                printdigest("expected2", expected2);
+                            }
+                        }
+
+                        wchar_t tname[MAX_PATH] = {};
+                        wcscpy_s(tname, fname);
+                        wcscat_s(tname, L"_TRIANGLE");
+
+                        wchar_t szDestPath[MAX_PATH] = {};
+                        _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds");
+
+                        SaveScratchImage(szDestPath, DDS_FLAGS_NONE, mipChainTriangle);
+
+                    #if defined(DEBUG) && !defined(NO_WMP)
+                        _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp");
+                        SaveToWICFile(*mipChainTriangle.GetImage(1, 0, 0), WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_WMP), szDestPath);
+                    #endif
+                    }
+
+                    // SEPALPHA
+                    if (g_MipMapMedia[index].options & FLAGS_SEPALPHA)
+                    {
+                        ScratchImage mipChainSepAlpha;
+                        hr = GenerateMipMaps(*srcimage.GetImage(0, 0, 0), TEX_FILTER_SEPARATE_ALPHA, 0, mipChainSepAlpha, false);
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed mip-map separate alpha generation (HRESULT %08X):\n%ls\n", hr, szPath);
+                        }
+                        else if (mipChainSepAlpha.GetMetadata().mipLevels < 2)
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed mip-map separate alpha generation result is %zu mip levels:\n%ls\n", mipChainSepAlpha.GetMetadata().mipLevels, szPath);
+                        }
+                        else
+                        {
+                            // Verfy the top-level of mipchain matches our source data
+                            uint8_t digest[16];
+                            hr = MD5Checksum(mipChainSepAlpha, digest, 1);
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                            }
+                            else if (!(g_MipMapMedia[index].options & FLAGS_SKIP_TOPTEST) && memcmp(digest, srcdigest, 16) != 0)
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed comparing separate alpha top MD5 checksum:\n%ls\n", szPath);
+                                printdigest("computed", digest);
+                                printdigest("expected", srcdigest);
+                            }
+
+                            // Verify the mip-chain image data
+                            const uint8_t* expected2 = nullptr;
+                            if (g_MipMapMedia[index].options & FLAGS_ALTMD5_MASK)
+                            {
+                                expected2 = g_AltMD5[((g_MipMapMedia[index].options & FLAGS_ALTMD5_MASK) >> 4) - 1].md5_sepalpha;
+                            }
+
+                            hr = MD5Checksum(mipChainSepAlpha, digest);
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed computing MD5 checksum of mipchain separate alpha data (HRESULT %08X):\n%ls\n", hr, szPath);
+                            }
+                            else if (memcmp(digest, g_MipMapMedia[index].md5_sepalpha, 16) != 0
+                                && (!expected2 || memcmp(digest, expected2, 16) != 0))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed comparing separate alpha mipchain MD5 checksum:\n%ls\n", szPath);
+                                printdigest("computed", digest);
+                                printdigest("expected", g_MipMapMedia[index].md5_sepalpha);
+                                if (expected2)
+                                {
+                                    printdigest("expected2", expected2);
+                                }
+                            }
+
+                            wchar_t tname[MAX_PATH] = {};
+                            wcscpy_s(tname, fname);
+                            wcscat_s(tname, L"_SEPALPHA");
+
+                            wchar_t szDestPath[MAX_PATH] = {};
+                            _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds");
+
+                            SaveScratchImage(szDestPath, DDS_FLAGS_NONE, mipChainSepAlpha);
+
+                        #if defined(DEBUG) && !defined(NO_WMP)
+                            _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp");
+                            SaveToWICFile(*mipChainSepAlpha.GetImage(1, 0, 0), WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_WMP), szDestPath);
+                        #endif
+                        }
                     }
                 }
-
+                
                 //--- WIC vs. non-WIC mipgen ----------------------------------------------
                 ScratchImage nwMipChain;
                 ScratchImage nwMipChainLinear;
                 ScratchImage nwMipChainCubic;
-                if ( BitsPerColor( metadata.format ) <= 8 && !IsSRGB(metadata.format) )
+                if (BitsPerColor(metadata.format) <= 8 && !IsSRGB(metadata.format))
                 {
                     // non-WIC is already used when color-depth is > 8 and for sRGB
 
-                    hr = GenerateMipMaps( *srcimage.GetImage(0,0,0), TEX_FILTER_FORCE_NON_WIC, 0, nwMipChain, false );
-                    if ( FAILED(hr) )
+                    hr = GenerateMipMaps(*srcimage.GetImage(0, 0, 0), TEX_FILTER_FORCE_NON_WIC, 0, nwMipChain, false);
+                    if (FAILED(hr))
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map non-WIC generation (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe("Failed mip-map non-WIC generation (HRESULT %08X):\n%ls\n", hr, szPath);
                     }
-                    else if ( nwMipChain.GetMetadata().mipLevels < 2 )
+                    else if (nwMipChain.GetMetadata().mipLevels < 2)
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map non-WIC generation result is %zu mip levels:\n%ls\n", nwMipChain.GetMetadata().mipLevels, szPath );
+                        printe("Failed mip-map non-WIC generation result is %zu mip levels:\n%ls\n", nwMipChain.GetMetadata().mipLevels, szPath);
                     }
                     else
                     {
-                        float targMSE = ( g_MipMapMedia[index].options & FLAGS_SEPALPHA ) ? 0.071f : 0.003f;
+                        float targMSE = (g_MipMapMedia[index].options & FLAGS_SEPALPHA) ? 0.071f : 0.003f;
                         float mse = 0, mseV[4] = {};
-                        const Image* img = mipChain.GetImage(1,0,0);
-                        hr = (img) ? ComputeMSE( *img, *nwMipChain.GetImage(1,0,0), mse, mseV ) : E_POINTER;
-                        if ( FAILED(hr) )
+                        const Image* img = mipChain.GetImage(1, 0, 0);
+                        hr = (img) ? ComputeMSE(*img, *nwMipChain.GetImage(1, 0, 0), mse, mseV) : E_POINTER;
+                        if (FAILED(hr))
                         {
                             success = false;
-                            printe( "Failed comparing non-WIC to WIC image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                            printe("Failed comparing non-WIC to WIC image data (HRESULT %08X):\n%ls\n", hr, szPath);
                         }
-                        else if ( IsErrorTooLarge( mse, targMSE ) )
+                        else if (IsErrorTooLarge(mse, targMSE))
                         {
                             success = false;
-                            printe( "Failed comparing non-WIC to WIC MSE = %f (%f %f %f %f)... %f:\n%ls\n",
-                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
+                            printe("Failed comparing non-WIC to WIC MSE = %f (%f %f %f %f)... %f:\n%ls\n",
+                                mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath);
                         }
 
                         wchar_t tname[MAX_PATH] = {};
-                        wcscpy_s( tname, fname );
-                        wcscat_s( tname, L"_nowic" );
+                        wcscpy_s(tname, fname);
+                        wcscat_s(tname, L"_nowic");
 
                         wchar_t szDestPath[MAX_PATH] = {};
-                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
+                        _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds");
 
-                        SaveScratchImage( szDestPath, DDS_FLAGS_NONE, nwMipChain );
+                        SaveScratchImage(szDestPath, DDS_FLAGS_NONE, nwMipChain);
 
-#if defined(DEBUG) && !defined(NO_WMP)
-                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                        SaveToWICFile( *nwMipChain.GetImage(1,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
-#endif
+                    #if defined(DEBUG) && !defined(NO_WMP)
+                        _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp");
+                        SaveToWICFile(*nwMipChain.GetImage(1, 0, 0), WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_WMP), szDestPath);
+                    #endif
                     }
 
-                    // POINT
-                    ScratchImage nwMipChainPoint;
-                    hr = GenerateMipMaps( *srcimage.GetImage(0,0,0), TEX_FILTER_FORCE_NON_WIC | TEX_FILTER_POINT, 0, nwMipChainPoint, false );
-                    if ( FAILED(hr) )
+                    if (!(g_MipMapMedia[index].options & FLAGS_SKIP_EXHAUSTIVE))
                     {
-                        success = false;
-                        pass = false;
-                        printe( "Failed mip-map non-WIC Point generation (HRESULT %08X):\n%ls\n", hr, szPath );
-                    }
-                    else if ( nwMipChainPoint.GetMetadata().mipLevels < 2 )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed mip-map non-WIC Point generation result is %zu mip levels:\n%ls\n", nwMipChainPoint.GetMetadata().mipLevels, szPath );
-                    }
-                    else
-                    {
-                        if ( !(g_MipMapMedia[index].options & FLAGS_SKIP_POINTNOWIC) )
+                        // POINT
+                        ScratchImage nwMipChainPoint;
+                        hr = GenerateMipMaps(*srcimage.GetImage(0, 0, 0), TEX_FILTER_FORCE_NON_WIC | TEX_FILTER_POINT, 0, nwMipChainPoint, false);
+                        if (FAILED(hr))
                         {
-                            float targMSE = ( g_MipMapMedia[index].options & FLAGS_SEPALPHA ) ? 0.11f : 0.047f;
+                            success = false;
+                            pass = false;
+                            printe("Failed mip-map non-WIC Point generation (HRESULT %08X):\n%ls\n", hr, szPath);
+                        }
+                        else if (nwMipChainPoint.GetMetadata().mipLevels < 2)
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed mip-map non-WIC Point generation result is %zu mip levels:\n%ls\n", nwMipChainPoint.GetMetadata().mipLevels, szPath);
+                        }
+                        else
+                        {
+                            if (!(g_MipMapMedia[index].options & FLAGS_SKIP_POINTNOWIC))
+                            {
+                                float targMSE = (g_MipMapMedia[index].options & FLAGS_SEPALPHA) ? 0.11f : 0.047f;
+                                float mse = 0, mseV[4] = {};
+                                const Image* img = mipChainPoint.GetImage(1, 0, 0);
+                                hr = (img) ? ComputeMSE(*img, *nwMipChainPoint.GetImage(1, 0, 0), mse, mseV) : E_POINTER;
+                                if (FAILED(hr))
+                                {
+                                    success = false;
+                                    printe("Failed comparing non-WIC to WIC Point image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                                }
+                                else if (IsErrorTooLarge(mse, targMSE))
+                                {
+                                    success = false;
+                                    printe("Failed comparing non-WIC to WIC Point MSE = %f (%f %f %f %f)... %f:\n%ls\n",
+                                        mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath);
+                                }
+                            }
+
+                            wchar_t tname[MAX_PATH] = {};
+                            wcscpy_s(tname, fname);
+                            wcscat_s(tname, L"_POINT_nowic");
+
+                            wchar_t szDestPath[MAX_PATH] = {};
+                            _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds");
+
+                            SaveScratchImage(szDestPath, DDS_FLAGS_NONE, nwMipChainPoint);
+
+                        #if defined(DEBUG) && !defined(NO_WMP)
+                            _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp");
+                            SaveToWICFile(*nwMipChainPoint.GetImage(1, 0, 0), WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_WMP), szDestPath);
+                        #endif
+                        }
+
+                        // LINEAR
+                        hr = GenerateMipMaps(*srcimage.GetImage(0, 0, 0), TEX_FILTER_FORCE_NON_WIC | TEX_FILTER_LINEAR, 0, nwMipChainLinear, false);
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed mip-map non-WIC Linear generation (HRESULT %08X):\n%ls\n", hr, szPath);
+                        }
+                        else if (nwMipChainLinear.GetMetadata().mipLevels < 2)
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed mip-map non-WIC Linear generation result is %zu mip levels:\n%ls\n", nwMipChainLinear.GetMetadata().mipLevels, szPath);
+                        }
+                        else
+                        {
+                            float targMSE = (g_MipMapMedia[index].options & FLAGS_SEPALPHA) ? 0.072f : 0.003f;
                             float mse = 0, mseV[4] = {};
-                            const Image* img = mipChainPoint.GetImage(1,0,0);
-                            hr = (img) ? ComputeMSE( *img, *nwMipChainPoint.GetImage(1,0,0), mse, mseV ) : E_POINTER;
-                            if ( FAILED(hr) )
+                            const Image* img = mipChainLinear.GetImage(1, 0, 0);
+                            hr = (img) ? ComputeMSE(*img, *nwMipChainLinear.GetImage(1, 0, 0), mse, mseV) : E_POINTER;
+                            if (FAILED(hr))
                             {
                                 success = false;
-                                printe( "Failed comparing non-WIC to WIC Point image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                                printe("Failed comparing non-WIC to WIC Linear image data (HRESULT %08X):\n%ls\n", hr, szPath);
                             }
-                            else if ( IsErrorTooLarge( mse, targMSE ) )
+                            else if (IsErrorTooLarge(mse, targMSE))
                             {
                                 success = false;
-                                printe( "Failed comparing non-WIC to WIC Point MSE = %f (%f %f %f %f)... %f:\n%ls\n",
-                                        mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
+                                printe("Failed comparing non-WIC to WIC Linear MSE = %f (%f %f %f %f)... %f:\n%ls\n",
+                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath);
                             }
-                        }
 
-                        wchar_t tname[MAX_PATH] = {};
-                        wcscpy_s( tname, fname );
-                        wcscat_s( tname, L"_POINT_nowic" );
-
-                        wchar_t szDestPath[MAX_PATH] = {};
-                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
-
-                        SaveScratchImage( szDestPath, DDS_FLAGS_NONE, nwMipChainPoint );
-
-#if defined(DEBUG) && !defined(NO_WMP)
-                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                        SaveToWICFile( *nwMipChainPoint.GetImage(1,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
-#endif
-                    }
-
-                    // LINEAR
-                    hr = GenerateMipMaps( *srcimage.GetImage(0,0,0), TEX_FILTER_FORCE_NON_WIC | TEX_FILTER_LINEAR, 0, nwMipChainLinear, false );
-                    if ( FAILED(hr) )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed mip-map non-WIC Linear generation (HRESULT %08X):\n%ls\n", hr, szPath );
-                    }
-                    else if ( nwMipChainLinear.GetMetadata().mipLevels < 2 )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed mip-map non-WIC Linear generation result is %zu mip levels:\n%ls\n", nwMipChainLinear.GetMetadata().mipLevels, szPath );
-                    }
-                    else
-                    {
-                        float targMSE = ( g_MipMapMedia[index].options & FLAGS_SEPALPHA ) ? 0.072f : 0.003f;
-                        float mse = 0, mseV[4] = {};
-                        const Image* img = mipChainLinear.GetImage(1,0,0);
-                        hr = (img) ? ComputeMSE( *img, *nwMipChainLinear.GetImage(1,0,0), mse, mseV ) : E_POINTER;
-                        if ( FAILED(hr) )
-                        {
-                            success = false;
-                            printe( "Failed comparing non-WIC to WIC Linear image data (HRESULT %08X):\n%ls\n", hr, szPath );
-                        }
-                        else if ( IsErrorTooLarge( mse, targMSE ) )
-                        {
-                            success = false;
-                            printe( "Failed comparing non-WIC to WIC Linear MSE = %f (%f %f %f %f)... %f:\n%ls\n",
-                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
-                        }
-
-                        targMSE = 0.022f;
-                        img = nwMipChainPoint.GetImage(1,0,0);
-                        hr = (img) ? ComputeMSE( *img, *nwMipChainLinear.GetImage(1,0,0), mse, mseV ) : E_POINTER;
-                        if ( FAILED(hr) )
-                        {
-                            success = false;
-                            printe( "Failed comparing non-WIC Point vs. Linear image data (HRESULT %08X):\n%ls\n", hr, szPath );
-                        }
-                        else if ( IsErrorTooLarge( mse, targMSE ) )
-                        {
-                            success = false;
-                            printe( "Failed comparing non-WIC Point vs. Linear MSE = %f (%f %f %f %f)... %f:\n%ls\n",
-                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
-                        }
-
-                        wchar_t tname[MAX_PATH] = {};
-                        wcscpy_s( tname, fname );
-                        wcscat_s( tname, L"_LINEAR_nowic" );
-
-                        wchar_t szDestPath[MAX_PATH] = {};
-                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
-
-                        SaveScratchImage( szDestPath, DDS_FLAGS_NONE, nwMipChainLinear );
-
-#if defined(DEBUG) && !defined(NO_WMP)
-                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                        SaveToWICFile( *nwMipChainLinear.GetImage(1,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
-#endif
-                    }
-
-                    // CUBIC
-                    hr = GenerateMipMaps( *srcimage.GetImage(0,0,0), TEX_FILTER_FORCE_NON_WIC | TEX_FILTER_CUBIC, 0, nwMipChainCubic, false );
-                    if ( FAILED(hr) )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed mip-map non-WIC Cubic generation (HRESULT %08X):\n%ls\n", hr, szPath );
-                    }
-                    else if ( nwMipChainCubic.GetMetadata().mipLevels < 2 )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed mip-map non-WIC Cubic generation result is %zu mip levels:\n%ls\n", nwMipChainCubic.GetMetadata().mipLevels, szPath );
-                    }
-                    else
-                    {
-                        float targMSE = ( g_MipMapMedia[index].options & FLAGS_SEPALPHA ) ? 0.09f : 0.06f;
-                        float mse = 0, mseV[4] = {};
-                        const Image* img = mipChainCubic.GetImage(1,0,0);
-                        hr = (img) ? ComputeMSE( *img, *nwMipChainCubic.GetImage(1,0,0), mse, mseV ) : E_POINTER;
-                        if ( FAILED(hr) )
-                        {
-                            success = false;
-                            printe( "Failed comparing non-WIC to WIC Cubic image data (HRESULT %08X):\n%ls\n", hr, szPath );
-                        }
-                        else if ( IsErrorTooLarge( mse, targMSE ) )
-                        {
-                            success = false;
-                            printe( "Failed comparing non-WIC to WIC Cubic MSE = %f (%f %f %f %f)... %f:\n%ls\n",
-                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
-                        }
-
-                        if ( !(g_MipMapMedia[index].options & FLAGS_SKIP_POINTNOWIC) )
-                        {
-                            targMSE = 0.052f;
-                            img = nwMipChainPoint.GetImage(1,0,0);
-                            hr = (img) ? ComputeMSE( *img, *nwMipChainCubic.GetImage(1,0,0), mse, mseV ) : E_POINTER;
-                            if ( FAILED(hr) )
+                            targMSE = 0.022f;
+                            img = nwMipChainPoint.GetImage(1, 0, 0);
+                            hr = (img) ? ComputeMSE(*img, *nwMipChainLinear.GetImage(1, 0, 0), mse, mseV) : E_POINTER;
+                            if (FAILED(hr))
                             {
                                 success = false;
-                                printe( "Failed comparing non-WIC Point vs. Cubic image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                                printe("Failed comparing non-WIC Point vs. Linear image data (HRESULT %08X):\n%ls\n", hr, szPath);
                             }
-                            else if ( IsErrorTooLarge( mse, targMSE ) )
+                            else if (IsErrorTooLarge(mse, targMSE))
                             {
                                 success = false;
-                                printe( "Failed comparing non-WIC Point vs. Cubic MSE = %f (%f %f %f %f)... %f:\n%ls\n",
-                                        mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
+                                printe("Failed comparing non-WIC Point vs. Linear MSE = %f (%f %f %f %f)... %f:\n%ls\n",
+                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath);
                             }
+
+                            wchar_t tname[MAX_PATH] = {};
+                            wcscpy_s(tname, fname);
+                            wcscat_s(tname, L"_LINEAR_nowic");
+
+                            wchar_t szDestPath[MAX_PATH] = {};
+                            _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds");
+
+                            SaveScratchImage(szDestPath, DDS_FLAGS_NONE, nwMipChainLinear);
+
+                        #if defined(DEBUG) && !defined(NO_WMP)
+                            _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp");
+                            SaveToWICFile(*nwMipChainLinear.GetImage(1, 0, 0), WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_WMP), szDestPath);
+                        #endif
                         }
 
-                        targMSE = (g_MipMapMedia[index].options & FLAGS_SKIP_POINTNOWIC) ? 0.053f : 0.03f;
-                        img = nwMipChainLinear.GetImage(1,0,0);
-                        hr = (img) ? ComputeMSE( *img, *nwMipChainCubic.GetImage(1,0,0), mse, mseV ) : E_POINTER;
-                        if ( FAILED(hr) )
+                        // CUBIC
+                        hr = GenerateMipMaps(*srcimage.GetImage(0, 0, 0), TEX_FILTER_FORCE_NON_WIC | TEX_FILTER_CUBIC, 0, nwMipChainCubic, false);
+                        if (FAILED(hr))
                         {
                             success = false;
-                            printe( "Failed comparing non-WIC Linear vs. Cubic image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                            pass = false;
+                            printe("Failed mip-map non-WIC Cubic generation (HRESULT %08X):\n%ls\n", hr, szPath);
                         }
-                        else if ( IsErrorTooLarge( mse, targMSE ) )
+                        else if (nwMipChainCubic.GetMetadata().mipLevels < 2)
                         {
                             success = false;
-                            printe( "Failed comparing non-WIC Linear vs. Cubic MSE = %f (%f %f %f %f)... %f:\n%ls\n",
-                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
+                            pass = false;
+                            printe("Failed mip-map non-WIC Cubic generation result is %zu mip levels:\n%ls\n", nwMipChainCubic.GetMetadata().mipLevels, szPath);
                         }
+                        else
+                        {
+                            float targMSE = (g_MipMapMedia[index].options & FLAGS_SEPALPHA) ? 0.09f : 0.06f;
+                            float mse = 0, mseV[4] = {};
+                            const Image* img = mipChainCubic.GetImage(1, 0, 0);
+                            hr = (img) ? ComputeMSE(*img, *nwMipChainCubic.GetImage(1, 0, 0), mse, mseV) : E_POINTER;
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                printe("Failed comparing non-WIC to WIC Cubic image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                            }
+                            else if (IsErrorTooLarge(mse, targMSE))
+                            {
+                                success = false;
+                                printe("Failed comparing non-WIC to WIC Cubic MSE = %f (%f %f %f %f)... %f:\n%ls\n",
+                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath);
+                            }
 
-                        wchar_t tname[MAX_PATH] = {};
-                        wcscpy_s( tname, fname );
-                        wcscat_s( tname, L"_CUBIC_nowic" );
+                            if (!(g_MipMapMedia[index].options & FLAGS_SKIP_POINTNOWIC))
+                            {
+                                targMSE = 0.052f;
+                                img = nwMipChainPoint.GetImage(1, 0, 0);
+                                hr = (img) ? ComputeMSE(*img, *nwMipChainCubic.GetImage(1, 0, 0), mse, mseV) : E_POINTER;
+                                if (FAILED(hr))
+                                {
+                                    success = false;
+                                    printe("Failed comparing non-WIC Point vs. Cubic image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                                }
+                                else if (IsErrorTooLarge(mse, targMSE))
+                                {
+                                    success = false;
+                                    printe("Failed comparing non-WIC Point vs. Cubic MSE = %f (%f %f %f %f)... %f:\n%ls\n",
+                                        mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath);
+                                }
+                            }
 
-                        wchar_t szDestPath[MAX_PATH] = {};
-                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
+                            targMSE = (g_MipMapMedia[index].options & FLAGS_SKIP_POINTNOWIC) ? 0.053f : 0.03f;
+                            img = nwMipChainLinear.GetImage(1, 0, 0);
+                            hr = (img) ? ComputeMSE(*img, *nwMipChainCubic.GetImage(1, 0, 0), mse, mseV) : E_POINTER;
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                printe("Failed comparing non-WIC Linear vs. Cubic image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                            }
+                            else if (IsErrorTooLarge(mse, targMSE))
+                            {
+                                success = false;
+                                printe("Failed comparing non-WIC Linear vs. Cubic MSE = %f (%f %f %f %f)... %f:\n%ls\n",
+                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath);
+                            }
 
-                        SaveScratchImage( szDestPath, DDS_FLAGS_NONE, nwMipChainCubic );
+                            wchar_t tname[MAX_PATH] = {};
+                            wcscpy_s(tname, fname);
+                            wcscat_s(tname, L"_CUBIC_nowic");
 
-#if defined(DEBUG) && !defined(NO_WMP)
-                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                        SaveToWICFile( *nwMipChainCubic.GetImage(1,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
-#endif
+                            wchar_t szDestPath[MAX_PATH] = {};
+                            _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds");
+
+                            SaveScratchImage(szDestPath, DDS_FLAGS_NONE, nwMipChainCubic);
+
+                        #if defined(DEBUG) && !defined(NO_WMP)
+                            _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp");
+                            SaveToWICFile(*nwMipChainCubic.GetImage(1, 0, 0), WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_WMP), szDestPath);
+                        #endif
+                        }
                     }
                 }
 
@@ -1238,166 +1250,169 @@ bool Test02()
 #endif
                     }
 
-                    // LINEAR
-                    ScratchImage srgbMipChainLinear;
-                    hr = GenerateMipMaps( *srcimage.GetImage(0,0,0), TEX_FILTER_SRGB | TEX_FILTER_LINEAR, 0, srgbMipChainLinear, false );
-                    if ( FAILED(hr) )
+                    if (!(g_MipMapMedia[index].options & FLAGS_SKIP_EXHAUSTIVE))
                     {
-                        success = false;
-                        pass = false;
-                        printe( "Failed mip-map sRGB Linear generation (HRESULT %08X):\n%ls\n", hr, szPath );
-                    }
-                    else if ( srgbMipChainLinear.GetMetadata().mipLevels < 2 )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed mip-map sRGB Linear generation result is %zu mip levels:\n%ls\n", srgbMipChainLinear.GetMetadata().mipLevels, szPath );
-                    }
-                    else
-                    {
-                        float targMSE = 0.0011f;
-                        float mse = 0, mseV[4] = {};
-                        const Image* img = nwMipChainLinear.GetImage(1,0,0);
-                        hr = (img) ? ComputeMSE( *img, *srgbMipChainLinear.GetImage(1,0,0), mse, mseV ) : E_POINTER;
-                        if ( FAILED(hr) )
+                        // LINEAR
+                        ScratchImage srgbMipChainLinear;
+                        hr = GenerateMipMaps(*srcimage.GetImage(0, 0, 0), TEX_FILTER_SRGB | TEX_FILTER_LINEAR, 0, srgbMipChainLinear, false);
+                        if (FAILED(hr))
                         {
                             success = false;
-                            printe( "Failed comparing sRGB Linear to non-WIC image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                            pass = false;
+                            printe("Failed mip-map sRGB Linear generation (HRESULT %08X):\n%ls\n", hr, szPath);
                         }
-                        else if ( IsErrorTooSmall( mse, 0.00005f ) )
+                        else if (srgbMipChainLinear.GetMetadata().mipLevels < 2)
                         {
                             success = false;
-                            printe( "Failed comparing sRGB Linear to WIC which appear near identical MSE = %f (%f %f %f %f):\n%ls\n",
-                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], szPath );
+                            pass = false;
+                            printe("Failed mip-map sRGB Linear generation result is %zu mip levels:\n%ls\n", srgbMipChainLinear.GetMetadata().mipLevels, szPath);
                         }
-                        else if ( IsErrorTooLarge( mse, targMSE ) )
+                        else
+                        {
+                            float targMSE = 0.0011f;
+                            float mse = 0, mseV[4] = {};
+                            const Image* img = nwMipChainLinear.GetImage(1, 0, 0);
+                            hr = (img) ? ComputeMSE(*img, *srgbMipChainLinear.GetImage(1, 0, 0), mse, mseV) : E_POINTER;
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                printe("Failed comparing sRGB Linear to non-WIC image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                            }
+                            else if (IsErrorTooSmall(mse, 0.00005f))
+                            {
+                                success = false;
+                                printe("Failed comparing sRGB Linear to WIC which appear near identical MSE = %f (%f %f %f %f):\n%ls\n",
+                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], szPath);
+                            }
+                            else if (IsErrorTooLarge(mse, targMSE))
+                            {
+                                success = false;
+                                printe("Failed comparing sRGB Linear to WIC MSE = %f (%f %f %f %f)... %f:\n%ls\n",
+                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath);
+                            }
+
+                            wchar_t tname[MAX_PATH] = {};
+                            wcscpy_s(tname, fname);
+                            wcscat_s(tname, L"_LINEAR_srgb");
+
+                            wchar_t szDestPath[MAX_PATH] = {};
+                            _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds");
+
+                            SaveScratchImage(szDestPath, DDS_FLAGS_NONE, srgbMipChainLinear);
+
+                        #if defined(DEBUG) && !defined(NO_WMP)
+                            _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp");
+                            SaveToWICFile(*srgbMipChainLinear.GetImage(1, 0, 0), WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_WMP), szDestPath);
+                        #endif
+                        }
+
+                        // CUBIC
+                        ScratchImage srgbMipChainCubic;
+                        hr = GenerateMipMaps(*srcimage.GetImage(0, 0, 0), TEX_FILTER_SRGB | TEX_FILTER_CUBIC, 0, srgbMipChainCubic, false);
+                        if (FAILED(hr))
                         {
                             success = false;
-                            printe( "Failed comparing sRGB Linear to WIC MSE = %f (%f %f %f %f)... %f:\n%ls\n",
-                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
+                            pass = false;
+                            printe("Failed mip-map sRGB Cubic generation (HRESULT %08X):\n%ls\n", hr, szPath);
                         }
-
-                        wchar_t tname[MAX_PATH] = {};
-                        wcscpy_s( tname, fname );
-                        wcscat_s( tname, L"_LINEAR_srgb" );
-
-                        wchar_t szDestPath[MAX_PATH] = {};
-                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
-
-                        SaveScratchImage( szDestPath, DDS_FLAGS_NONE, srgbMipChainLinear );
-
-#if defined(DEBUG) && !defined(NO_WMP)
-                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                        SaveToWICFile( *srgbMipChainLinear.GetImage(1,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
-#endif
-                    }
-
-                    // CUBIC
-                    ScratchImage srgbMipChainCubic;
-                    hr = GenerateMipMaps( *srcimage.GetImage(0,0,0), TEX_FILTER_SRGB | TEX_FILTER_CUBIC, 0, srgbMipChainCubic, false );
-                    if ( FAILED(hr) )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed mip-map sRGB Cubic generation (HRESULT %08X):\n%ls\n", hr, szPath );
-                    }
-                    else if ( srgbMipChainCubic.GetMetadata().mipLevels < 2 )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed mip-map sRGB Cubic generation result is %zu mip levels:\n%ls\n", srgbMipChainCubic.GetMetadata().mipLevels, szPath );
-                    }
-                    else
-                    {
-                        float targMSE = 0.0011f;
-                        float mse = 0, mseV[4] = {};
-                        const Image* img = nwMipChainCubic.GetImage(1,0,0);
-                        hr = (img) ? ComputeMSE( *img, *srgbMipChainCubic.GetImage(1,0,0), mse, mseV ) : E_POINTER;
-                        if ( FAILED(hr) )
+                        else if (srgbMipChainCubic.GetMetadata().mipLevels < 2)
                         {
                             success = false;
-                            printe( "Failed comparing sRGB Cubic to non-WIC image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                            pass = false;
+                            printe("Failed mip-map sRGB Cubic generation result is %zu mip levels:\n%ls\n", srgbMipChainCubic.GetMetadata().mipLevels, szPath);
                         }
-                        else if ( IsErrorTooSmall( mse, 0.00005f ) )
+                        else
+                        {
+                            float targMSE = 0.0011f;
+                            float mse = 0, mseV[4] = {};
+                            const Image* img = nwMipChainCubic.GetImage(1, 0, 0);
+                            hr = (img) ? ComputeMSE(*img, *srgbMipChainCubic.GetImage(1, 0, 0), mse, mseV) : E_POINTER;
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                printe("Failed comparing sRGB Cubic to non-WIC image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                            }
+                            else if (IsErrorTooSmall(mse, 0.00005f))
+                            {
+                                success = false;
+                                printe("Failed comparing sRGB Cubic to non-WIC which appear near identical MSE = %f (%f %f %f %f):\n%ls\n",
+                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], szPath);
+                            }
+                            else if (IsErrorTooLarge(mse, targMSE))
+                            {
+                                success = false;
+                                printe("Failed comparing sRGB Cubic to non-WIC WIC MSE = %f (%f %f %f %f)... %f:\n%ls\n",
+                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath);
+                            }
+
+                            wchar_t tname[MAX_PATH] = {};
+                            wcscpy_s(tname, fname);
+                            wcscat_s(tname, L"_CUBIC_srgb");
+
+                            wchar_t szDestPath[MAX_PATH] = {};
+                            _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds");
+
+                            SaveScratchImage(szDestPath, DDS_FLAGS_NONE, srgbMipChainCubic);
+
+                        #if defined(DEBUG) && !defined(NO_WMP)
+                            _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp");
+                            SaveToWICFile(*srgbMipChainCubic.GetImage(1, 0, 0), WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_WMP), szDestPath);
+                        #endif
+                        }
+
+                        // TRIANGLE
+                        ScratchImage srgbMipChainTriangle;
+                        hr = GenerateMipMaps(*srcimage.GetImage(0, 0, 0), TEX_FILTER_SRGB | TEX_FILTER_TRIANGLE, 0, srgbMipChainTriangle, false);
+                        if (FAILED(hr))
                         {
                             success = false;
-                            printe( "Failed comparing sRGB Cubic to non-WIC which appear near identical MSE = %f (%f %f %f %f):\n%ls\n",
-                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], szPath );
+                            pass = false;
+                            printe("Failed mip-map sRGB Triangle generation (HRESULT %08X):\n%ls\n", hr, szPath);
                         }
-                        else if ( IsErrorTooLarge( mse, targMSE ) )
+                        else if (srgbMipChainTriangle.GetMetadata().mipLevels < 2)
                         {
                             success = false;
-                            printe( "Failed comparing sRGB Cubic to non-WIC WIC MSE = %f (%f %f %f %f)... %f:\n%ls\n",
-                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
+                            pass = false;
+                            printe("Failed mip-map sRGB Triangle generation result is %zu mip levels:\n%ls\n", srgbMipChainTriangle.GetMetadata().mipLevels, szPath);
                         }
-
-                        wchar_t tname[MAX_PATH] = {};
-                        wcscpy_s( tname, fname );
-                        wcscat_s( tname, L"_CUBIC_srgb" );
-
-                        wchar_t szDestPath[MAX_PATH] = {};
-                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
-
-                        SaveScratchImage( szDestPath, DDS_FLAGS_NONE, srgbMipChainCubic );
-
-#if defined(DEBUG) && !defined(NO_WMP)
-                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                        SaveToWICFile( *srgbMipChainCubic.GetImage(1,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
-#endif
-                    }
-
-                    // TRIANGLE
-                    ScratchImage srgbMipChainTriangle;
-                    hr = GenerateMipMaps( *srcimage.GetImage(0,0,0), TEX_FILTER_SRGB | TEX_FILTER_TRIANGLE, 0, srgbMipChainTriangle, false );
-                    if ( FAILED(hr) )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed mip-map sRGB Triangle generation (HRESULT %08X):\n%ls\n", hr, szPath );
-                    }
-                    else if ( srgbMipChainTriangle.GetMetadata().mipLevels < 2 )
-                    {
-                        success = false;
-                        pass = false;
-                        printe( "Failed mip-map sRGB Triangle generation result is %zu mip levels:\n%ls\n", srgbMipChainTriangle.GetMetadata().mipLevels, szPath );
-                    }
-                    else
-                    {
-                        float targMSE = 0.0011f;
-                        float mse = 0, mseV[4] = {};
-                        const Image* img = mipChainTriangle.GetImage(1,0,0);
-                        hr = (img) ? ComputeMSE( *img, *srgbMipChainTriangle.GetImage(1,0,0), mse, mseV ) : E_POINTER;
-                        if ( FAILED(hr) )
+                        else
                         {
-                            success = false;
-                            printe( "Failed comparing sRGB Triangle to default data (HRESULT %08X):\n%ls\n", hr, szPath );
+                            float targMSE = 0.0011f;
+                            float mse = 0, mseV[4] = {};
+                            const Image* img = mipChainTriangle.GetImage(1, 0, 0);
+                            hr = (img) ? ComputeMSE(*img, *srgbMipChainTriangle.GetImage(1, 0, 0), mse, mseV) : E_POINTER;
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                printe("Failed comparing sRGB Triangle to default data (HRESULT %08X):\n%ls\n", hr, szPath);
+                            }
+                            else if (IsErrorTooSmall(mse, 0.00005f))
+                            {
+                                success = false;
+                                printe("Failed comparing sRGB Triangle to default which appear near identical MSE = %f (%f %f %f %f):\n%ls\n",
+                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], szPath);
+                            }
+                            else if (IsErrorTooLarge(mse, targMSE))
+                            {
+                                success = false;
+                                printe("Failed comparing sRGB Triangle to default MSE = %f (%f %f %f %f)... %f:\n%ls\n",
+                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath);
+                            }
+
+                            wchar_t tname[MAX_PATH] = {};
+                            wcscpy_s(tname, fname);
+                            wcscat_s(tname, L"_TRIANGLE_srgb");
+
+                            wchar_t szDestPath[MAX_PATH] = {};
+                            _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds");
+
+                            SaveScratchImage(szDestPath, DDS_FLAGS_NONE, srgbMipChainTriangle);
+
+                        #if defined(DEBUG) && !defined(NO_WMP)
+                            _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp");
+                            SaveToWICFile(*srgbMipChainTriangle.GetImage(1, 0, 0), WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_WMP), szDestPath);
+                        #endif
                         }
-                        else if ( IsErrorTooSmall( mse, 0.00005f ) )
-                        {
-                            success = false;
-                            printe( "Failed comparing sRGB Triangle to default which appear near identical MSE = %f (%f %f %f %f):\n%ls\n",
-                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], szPath );
-                        }
-                        else if ( IsErrorTooLarge( mse, targMSE ) )
-                        {
-                            success = false;
-                            printe( "Failed comparing sRGB Triangle to default MSE = %f (%f %f %f %f)... %f:\n%ls\n",
-                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
-                        }
-
-                        wchar_t tname[MAX_PATH] = {};
-                        wcscpy_s( tname, fname );
-                        wcscat_s( tname, L"_TRIANGLE_srgb" );
-
-                        wchar_t szDestPath[MAX_PATH] = {};
-                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
-
-                        SaveScratchImage( szDestPath, DDS_FLAGS_NONE, srgbMipChainTriangle );
-
-#if defined(DEBUG) && !defined(NO_WMP)
-                        _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                        SaveToWICFile( *srgbMipChainTriangle.GetImage(1,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
-#endif
                     }
                 }
 
