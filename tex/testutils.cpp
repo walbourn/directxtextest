@@ -139,6 +139,9 @@ HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags, _In_ c
         return E_FAIL;
     }
 
+    if (image.GetPixelsSize() > UINT32_MAX)
+        return HRESULT_FROM_WIN32(ERROR_ARITHMETIC_OVERFLOW);
+
     // Scratch image is already formatted in memory how the DDS file is laid out, so write all pixel data...
     if ( !WriteFile( hFile.get(), image.GetPixels(), static_cast<DWORD>( image.GetPixelsSize() ), &bytesWritten, nullptr ) )
     {

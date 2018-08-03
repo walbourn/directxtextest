@@ -467,7 +467,7 @@ HRESULT SetupRenderTest(ID3D12Device** pDev, ID3D12CommandQueue** pCommandQ, ID3
                 D3D12_TEXTURE_ADDRESS_MODE_WRAP,
                 D3D12_TEXTURE_ADDRESS_MODE_WRAP);
 
-            CD3DX12_ROOT_PARAMETER rootParameters[RootParameterIndex::RootParameterCount];
+            CD3DX12_ROOT_PARAMETER rootParameters[RootParameterIndex::RootParameterCount] = {};
             rootParameters[RootParameterIndex::TextureSRV].InitAsDescriptorTable(1, &textureSRV);
             rootParameters[RootParameterIndex::CBNever].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
             rootParameters[RootParameterIndex::CBOnResize].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);
