@@ -26,8 +26,42 @@ static const FlipRotateMedia g_FlipRotateMedia[] =
 { TEX_FR_ROTATE90, { 32, 32, 1, 6, 6, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcube8888mip.dds" },
 { TEX_FR_ROTATE90, { 32, 32, 4, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888.dds" },
 { TEX_FR_ROTATE90, { 32, 32, 4, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888mip.dds" },
+
 { TEX_FR_ROTATE90, { 512, 256, 1, 1, 10, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth_A2B10G10R10.dds" },
 { TEX_FR_ROTATE90, { 512, 256, 1, 1, 10, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth_A2R10G10B10.dds" },
+
+{ TEX_FR_ROTATE180, { 512, 256, 1, 1, 10, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth_A2B10G10R10.dds" },
+{ TEX_FR_ROTATE270, { 512, 256, 1, 1, 10, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth_A2R10G10B10.dds" },
+
+{ TEX_FR_FLIP_HORIZONTAL,  { 512, 256, 1, 1, 10, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth_A2B10G10R10.dds" },
+{ TEX_FR_FLIP_VERTICAL, { 512, 256, 1, 1, 10, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth_A2B10G10R10.dds" },
+{ TEX_FR_FLIP_HORIZONTAL
+  | TEX_FR_FLIP_VERTICAL, { 512, 256, 1, 1, 10, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth_A2B10G10R10.dds" },
+
+{ TEX_FR_ROTATE90
+  | TEX_FR_FLIP_HORIZONTAL, { 512, 256, 1, 1, 10, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth_A2B10G10R10.dds" },
+{ TEX_FR_ROTATE90
+  | TEX_FR_FLIP_VERTICAL, { 512, 256, 1, 1, 10, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth_A2B10G10R10.dds" },
+{ TEX_FR_ROTATE90
+  | TEX_FR_FLIP_HORIZONTAL
+  | TEX_FR_FLIP_VERTICAL, { 512, 256, 1, 1, 10, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth_A2B10G10R10.dds" },
+
+{ TEX_FR_ROTATE180
+  | TEX_FR_FLIP_HORIZONTAL, { 512, 256, 1, 1, 10, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth_A2B10G10R10.dds" },
+{ TEX_FR_ROTATE180
+  | TEX_FR_FLIP_VERTICAL, { 512, 256, 1, 1, 10, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth_A2B10G10R10.dds" },
+{ TEX_FR_ROTATE180
+  | TEX_FR_FLIP_HORIZONTAL
+  | TEX_FR_FLIP_VERTICAL, { 512, 256, 1, 1, 10, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth_A2B10G10R10.dds" },
+
+{ TEX_FR_ROTATE270
+  | TEX_FR_FLIP_HORIZONTAL, { 512, 256, 1, 1, 10, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth_A2B10G10R10.dds" },
+{ TEX_FR_ROTATE270
+  | TEX_FR_FLIP_VERTICAL, { 512, 256, 1, 1, 10, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth_A2B10G10R10.dds" },
+{ TEX_FR_ROTATE270
+  | TEX_FR_FLIP_HORIZONTAL
+  | TEX_FR_FLIP_VERTICAL, { 512, 256, 1, 1, 10, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth_A2B10G10R10.dds" },
+
 { TEX_FR_ROTATE90, { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B5G5R5A1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_A1R5G5B5.dds" },
 { TEX_FR_ROTATE90, { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B5G6R5_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_R5G6B5.dds" },
 { TEX_FR_ROTATE90, { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_X8B8G8R8.dds" },
@@ -118,6 +152,8 @@ bool Test04()
             
             DWORD dwFlags = g_FlipRotateMedia[index].flags;
 
+            int rotateMode = static_cast<int>(dwFlags & (TEX_FR_ROTATE0 | TEX_FR_ROTATE90 | TEX_FR_ROTATE180 | TEX_FR_ROTATE270));
+
             //--- Simple flip/rotate --------------------------------------------------
             ScratchImage image;
             hr = FlipRotate( *srcimage.GetImage(0,0,0), dwFlags, image );
@@ -129,7 +165,7 @@ bool Test04()
             }
             else
             {
-                if ( (dwFlags & (TEX_FR_ROTATE90|TEX_FR_ROTATE270))
+                if ( ((rotateMode == TEX_FR_ROTATE90) || (rotateMode == TEX_FR_ROTATE270))
                       && ( image.GetMetadata().width != srcimage.GetMetadata().height
                            || image.GetMetadata().height != srcimage.GetMetadata().width ) )
                 {
@@ -139,7 +175,7 @@ bool Test04()
                             image.GetMetadata().width, image.GetMetadata().height );
                     printe( "\n...(check) %zu x %zu:\n%ls\n", srcimage.GetMetadata().height, srcimage.GetMetadata().width, szPath );
                 }
-                else if ( !(dwFlags & (TEX_FR_ROTATE90|TEX_FR_ROTATE270))
+                else if ( ((rotateMode == TEX_FR_ROTATE0) || (rotateMode == TEX_FR_ROTATE180))
                           && ( image.GetMetadata().width != srcimage.GetMetadata().width
                                || image.GetMetadata().height != srcimage.GetMetadata().height ) )
                 {
@@ -153,8 +189,25 @@ bool Test04()
                 {
                     // TODO - Verify the image data (perhaps MD5 checksum)
 
+                    wchar_t tname[MAX_PATH] = {};
+                    wcscpy_s(tname, fname);
+
+                    switch (rotateMode)
+                    {
+                    case TEX_FR_ROTATE0: wcscat_s(tname, L"_0"); break;
+                    case TEX_FR_ROTATE90: wcscat_s(tname, L"_90"); break;
+                    case TEX_FR_ROTATE180: wcscat_s(tname, L"_180"); break;
+                    case TEX_FR_ROTATE270: wcscat_s(tname, L"_270"); break;
+                    }
+
+                    if (dwFlags & TEX_FR_FLIP_HORIZONTAL)
+                        wcscat_s(tname, L"_hf");
+
+                    if (dwFlags & TEX_FR_FLIP_VERTICAL)
+                        wcscat_s(tname, L"_vf");
+
                     wchar_t szDestPath[MAX_PATH] = {};
-                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, fname, L".dds" );
+                    _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
 
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, image );
                 }
@@ -175,7 +228,7 @@ bool Test04()
                 {
                     const TexMetadata& metadata2 = imageComplex.GetMetadata();
 
-                    if ( (dwFlags & (TEX_FR_ROTATE90|TEX_FR_ROTATE270))
+                    if ( ((rotateMode == TEX_FR_ROTATE90) || (rotateMode == TEX_FR_ROTATE270))
                           && ( metadata2.width != srcimage.GetMetadata().height
                                || metadata2.height != srcimage.GetMetadata().width ) )
                     {
@@ -185,7 +238,7 @@ bool Test04()
                                 metadata2.width, metadata2.height );
                         printe( "\n...(check) %zu x %zu:\n%ls\n", srcimage.GetMetadata().height, srcimage.GetMetadata().width, szPath );
                     }
-                    else if ( !(dwFlags & (TEX_FR_ROTATE90|TEX_FR_ROTATE270))
+                    else if ( ((rotateMode == TEX_FR_ROTATE0) || (rotateMode == TEX_FR_ROTATE180))
                               && ( metadata2.width != srcimage.GetMetadata().width
                                    || metadata2.height != srcimage.GetMetadata().height ) )
                     {
@@ -215,6 +268,20 @@ bool Test04()
                         wchar_t tname[MAX_PATH] = {};
                         wcscpy_s( tname, fname );
                         wcscat_s( tname, L"_complex" );
+
+                        switch (rotateMode)
+                        {
+                        case TEX_FR_ROTATE0: wcscat_s(tname, L"_0"); break;
+                        case TEX_FR_ROTATE90: wcscat_s(tname, L"_90"); break;
+                        case TEX_FR_ROTATE180: wcscat_s(tname, L"_180"); break;
+                        case TEX_FR_ROTATE270: wcscat_s(tname, L"_270"); break;
+                        }
+
+                        if (dwFlags & TEX_FR_FLIP_HORIZONTAL)
+                            wcscat_s(tname, L"_hf");
+
+                        if (dwFlags & TEX_FR_FLIP_VERTICAL)
+                            wcscat_s(tname, L"_vf");
 
                         wchar_t szDestPath[MAX_PATH] = {};
                         _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
