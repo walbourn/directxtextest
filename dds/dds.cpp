@@ -687,6 +687,7 @@ static const TestMedia g_TestMedia[] =
 // NVIDIA DDS hacks
 { FLAGS_NONE, { 4, 4, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testnvtt.dds",{ 0x1a,0xb3,0x14,0x78,0xe2,0x3e,0xd9,0xd6,0xc4,0x10,0xfb,0xbe,0x77,0xff,0x2b,0xba } },
 { FLAGS_NONE, { 768, 512, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testnvttsrgb.dds",{ 0xf4,0xc8,0x9b,0x0c,0x0e,0x13,0x59,0xb8,0x86,0x74,0xca,0x10,0x30,0x5e,0x9f,0x9e } },
+{ FLAGS_NONE,{ 64, 64, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"ui_Button_DPAD_0.dds",{ 0xc6,0x64,0x7f,0x9b,0x90,0xa3,0xbb,0x73,0xbd,0xbd,0x78,0x7d,0x75,0xa4,0xea,0x35 } },
 
 #ifdef _M_X64
 // Very large images
@@ -2261,7 +2262,11 @@ bool Test06()
 
                     if (FAILED(hr) && isdds)
                     {
-                        if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                        if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED)
+#ifndef _M_X64
+                            && (hr != E_OUTOFMEMORY)
+#endif
+                            )
                         {
                             success = false;
                             printe("ERROR: frommemory expected success! (%08X)\n%ls\n", hr, szPath);
@@ -2287,7 +2292,11 @@ bool Test06()
 
                 if (FAILED(hr) && isdds)
                 {
-                    if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                    if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED)
+#ifndef _M_X64
+                        && (hr != E_OUTOFMEMORY)
+#endif
+                        )
                     {
                         success = false;
                         printe("ERROR: fromfile expected success ! (%08X)\n%ls\n", hr, szPath);
