@@ -270,7 +270,7 @@ HRESULT CreateCommmandList(ID3D12Device* pDev, ID3D12CommandQueue** pCommandQ, I
     // Note the test code uses a simplified fence model, but this is not a recommended code pattern
     g_fenceValue = 1;
 
-    g_fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+    g_fenceEvent = CreateEventEx(nullptr, nullptr, 0, EVENT_MODIFY_STATE | SYNCHRONIZE);
     if (!g_fenceEvent)
         return E_FAIL;
 
