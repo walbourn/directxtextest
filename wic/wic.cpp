@@ -1279,7 +1279,7 @@ bool Test05()
                     }
                 }
 
-                // WIC_FLAGS_FORCE_SRGB
+                // WIC_FLAGS_FORCE_SRGB / WIC_FLAGS_FORCE_LINEAR
                 if (g_SaveMedia[index].tcodec == WIC_CODEC_PNG
                     || g_SaveMedia[index].tcodec == WIC_CODEC_JPEG
                     || g_SaveMedia[index].tcodec == WIC_CODEC_TIFF)
@@ -1313,6 +1313,40 @@ bool Test05()
                                 success = false;
                                 pass = false;
                                 printe("Metadata error in force srgb (%ls) memory readback:\n%ls\n", g_SaveMedia[index].ext, szPath);
+                                printmeta(&metadata2);
+                                printmetachk(&metadata);
+                            }
+                        }
+                    }
+                    break;
+
+                    case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
+                    case DXGI_FORMAT_B8G8R8A8_UNORM_SRGB:
+                    case DXGI_FORMAT_B8G8R8X8_UNORM_SRGB:
+                    {
+                        hr = SaveToWICMemory(*image.GetImage(0, 0, 0), WIC_FLAGS_FORCE_LINEAR, GetWICCodec(g_SaveMedia[index].tcodec), blob);
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed writing wic with force linear (%ls) to memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, hr, szPath);
+                        }
+                        else
+                        {
+                            TexMetadata metadata2;
+                            ScratchImage image2;
+                            hr = LoadFromWICMemory(blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO, &metadata2, image2);
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed reading back written force linear (%ls) from memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, hr, szPath);
+                            }
+                            else if (IsSRGB(metadata2.format))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Metadata error in force linear (%ls) memory readback:\n%ls\n", g_SaveMedia[index].ext, szPath);
                                 printmeta(&metadata2);
                                 printmetachk(&metadata);
                             }
@@ -1445,6 +1479,11 @@ bool Test06()
         wcscpy_s(tname, fname);
         wcscat_s(tname, L"_srgb");
         _wmakepath_s(szDestPath4, MAX_PATH, nullptr, tempDir, tname, g_SaveMedia[index].ext);
+
+        wchar_t szDestPath5[MAX_PATH] = {};
+        wcscpy_s(tname, fname);
+        wcscat_s(tname, L"_linear");
+        _wmakepath_s(szDestPath5, MAX_PATH, nullptr, tempDir, tname, g_SaveMedia[index].ext);
 
 #ifdef _DEBUG
         OutputDebugString(szPath);
@@ -1603,7 +1642,7 @@ bool Test06()
                 }
             }
 
-            // WIC_FLAGS_FORCE_SRGB
+            // WIC_FLAGS_FORCE_SRGB / WIC_FLAGS_FORCE_LINEAR
             if (g_SaveMedia[index].tcodec == WIC_CODEC_PNG
                 || g_SaveMedia[index].tcodec == WIC_CODEC_JPEG
                 || g_SaveMedia[index].tcodec == WIC_CODEC_TIFF)
@@ -1637,6 +1676,40 @@ bool Test06()
                             success = false;
                             pass = false;
                             printe("Metadata error in force srgb readback:\n%ls\n", szDestPath4);
+                            printmeta(&metadata2);
+                            printmetachk(&metadata);
+                        }
+                    }
+                }
+                break;
+
+                case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
+                case DXGI_FORMAT_B8G8R8A8_UNORM_SRGB:
+                case DXGI_FORMAT_B8G8R8X8_UNORM_SRGB:
+                {
+                    hr = SaveToWICFile(*image.GetImage(0, 0, 0), WIC_FLAGS_FORCE_LINEAR, GetWICCodec(g_SaveMedia[index].tcodec), szDestPath5);
+                    if (FAILED(hr))
+                    {
+                        success = false;
+                        pass = false;
+                        printe("Failed writing wic with force linear to (HRESULT %08X):\n%ls\n", hr, szDestPath5);
+                    }
+                    else
+                    {
+                        TexMetadata metadata2;
+                        ScratchImage image2;
+                        hr = LoadFromWICFile(szDestPath5, WIC_FLAGS_ALLOW_MONO, &metadata2, image2);
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed reading back written force linear (HRESULT %08X):\n%ls\n", hr, szDestPath5);
+                        }
+                        else if (IsSRGB(metadata2.format))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Metadata error in force linear readback:\n%ls\n", szDestPath5);
                             printmeta(&metadata2);
                             printmetachk(&metadata);
                         }
@@ -1822,6 +1895,7 @@ bool Test07()
 
             if (hr == HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED)
                 || hr == WINCODEC_ERR_COMPONENTNOTFOUND
+                || hr == E_OUTOFMEMORY
                 || metadata.width >= 8192)
             {
                 if (!FindNextFile(hFile.get(), &findData))
@@ -1931,16 +2005,19 @@ bool Test08()
             {
                 Blob blob;
                 HRESULT hr = LoadBlobFromFile(szPath, blob);
-                if (FAILED(hr))
+                if (hr != E_OUTOFMEMORY)
                 {
-                    success = false;
-                    printe("Failed getting raw file data from (HRESULT %08X):\n%ls\n", hr, szPath);
-                }
-                else
-                {
-                    TexMetadata metadata;
-                    ScratchImage image;
-                    (void)LoadFromWICMemory(blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_NONE, &metadata, image);
+                    if (FAILED(hr))
+                    {
+                        success = false;
+                        printe("Failed getting raw file data from (HRESULT %08X):\n%ls\n", hr, szPath);
+                    }
+                    else
+                    {
+                        TexMetadata metadata;
+                        ScratchImage image;
+                        (void)LoadFromWICMemory(blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_NONE, &metadata, image);
+                    }
                 }
             }
 
