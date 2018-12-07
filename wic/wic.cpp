@@ -1278,6 +1278,49 @@ bool Test05()
                         }
                     }
                 }
+
+                // WIC_FLAGS_FORCE_SRGB
+                if (g_SaveMedia[index].tcodec == WIC_CODEC_PNG
+                    || g_SaveMedia[index].tcodec == WIC_CODEC_JPEG
+                    || g_SaveMedia[index].tcodec == WIC_CODEC_TIFF)
+                {
+                    switch (metadata.format)
+                    {
+                    case DXGI_FORMAT_R8G8B8A8_UNORM:
+                    case DXGI_FORMAT_B8G8R8A8_UNORM:
+                    case DXGI_FORMAT_B8G8R8X8_UNORM:
+                    {
+                        hr = SaveToWICMemory(*image.GetImage(0, 0, 0), WIC_FLAGS_FORCE_SRGB, GetWICCodec(g_SaveMedia[index].tcodec), blob);
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed writing wic with force srgb (%ls) to memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, hr, szPath);
+                        }
+                        else
+                        {
+                            TexMetadata metadata2;
+                            ScratchImage image2;
+                            hr = LoadFromWICMemory(blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO, &metadata2, image2);
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed reading back written force srgb (%ls) from memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, hr, szPath);
+                            }
+                            else if (!IsSRGB(metadata2.format))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Metadata error in force srgb (%ls) memory readback:\n%ls\n", g_SaveMedia[index].ext, szPath);
+                                printmeta(&metadata2);
+                                printmetachk(&metadata);
+                            }
+                        }
+                    }
+                    break;
+                    }
+                }
             }
 
             if ( pass )
@@ -1397,6 +1440,11 @@ bool Test06()
         wcscpy_s( tname, fname );
         wcscat_s( tname, L"_props" );
         _wmakepath_s( szDestPath3, MAX_PATH, nullptr, tempDir, tname, g_SaveMedia[index].ext );
+
+        wchar_t szDestPath4[MAX_PATH] = {};
+        wcscpy_s(tname, fname);
+        wcscat_s(tname, L"_srgb");
+        _wmakepath_s(szDestPath4, MAX_PATH, nullptr, tempDir, tname, g_SaveMedia[index].ext);
 
 #ifdef _DEBUG
         OutputDebugString(szPath);
@@ -1537,7 +1585,7 @@ bool Test06()
                     {   // miplevel is going to be 1 for WIC images, format changes
                         success = false;
                         pass = false;
-                        printe( "Metadata error in wic cusomt props readback:\n%ls\n", szDestPath3 );
+                        printe( "Metadata error in wic custom props readback:\n%ls\n", szDestPath3 );
                         printmeta( &metadata2 );
                         printmetachk( &metadata );
                     }
@@ -1552,6 +1600,49 @@ bool Test06()
                             printe( "Failed wic custom props sizes unchanged (%zu ... %zu):\n%ls\n", uncompressed, original, szDestPath3 );
                         }
                     }
+                }
+            }
+
+            // WIC_FLAGS_FORCE_SRGB
+            if (g_SaveMedia[index].tcodec == WIC_CODEC_PNG
+                || g_SaveMedia[index].tcodec == WIC_CODEC_JPEG
+                || g_SaveMedia[index].tcodec == WIC_CODEC_TIFF)
+            {
+                switch (metadata.format)
+                {
+                case DXGI_FORMAT_R8G8B8A8_UNORM:
+                case DXGI_FORMAT_B8G8R8A8_UNORM:
+                case DXGI_FORMAT_B8G8R8X8_UNORM:
+                {
+                    hr = SaveToWICFile(*image.GetImage(0, 0, 0), WIC_FLAGS_FORCE_SRGB, GetWICCodec(g_SaveMedia[index].tcodec), szDestPath4);
+                    if (FAILED(hr))
+                    {
+                        success = false;
+                        pass = false;
+                        printe("Failed writing wic with force srgb to (HRESULT %08X):\n%ls\n", hr, szDestPath4);
+                    }
+                    else
+                    {
+                        TexMetadata metadata2;
+                        ScratchImage image2;
+                        hr = LoadFromWICFile(szDestPath4, WIC_FLAGS_ALLOW_MONO, &metadata2, image2);
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed reading back written force srgb (HRESULT %08X):\n%ls\n", hr, szDestPath4);
+                        }
+                        else if (!IsSRGB(metadata2.format))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Metadata error in force srgb readback:\n%ls\n", szDestPath4);
+                            printmeta(&metadata2);
+                            printmetachk(&metadata);
+                        }
+                    }
+                }
+                break;
                 }
             }
 
