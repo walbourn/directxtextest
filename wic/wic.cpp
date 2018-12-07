@@ -2005,7 +2005,7 @@ bool Test08()
             {
                 Blob blob;
                 HRESULT hr = LoadBlobFromFile(szPath, blob);
-                if (hr != E_OUTOFMEMORY)
+                if (hr != E_OUTOFMEMORY && hr != HRESULT_FROM_WIN32(ERROR_FILE_TOO_LARGE))
                 {
                     if (FAILED(hr))
                     {
