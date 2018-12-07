@@ -713,29 +713,32 @@ bool Test06()
             {
                 Blob blob;
                 HRESULT hr = LoadBlobFromFile(szPath, blob);
-                if (FAILED(hr))
+                if (hr != E_OUTOFMEMORY && hr != HRESULT_FROM_WIN32(ERROR_FILE_TOO_LARGE))
                 {
-                    success = false;
-                    printe("Failed getting raw file data from (HRESULT %08X):\n%ls\n", hr, szPath);
-                }
-                else
-                {
-                    TexMetadata metadata;
-                    ScratchImage image;
-                    hr = LoadFromHDRMemory(blob.GetBufferPointer(), blob.GetBufferSize(), &metadata, image);
-
-                    if (FAILED(hr) && ishdr)
-                    {
-                        if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
-                        {
-                            success = false;
-                            printe("ERROR: frommemory expected success! (%08X)\n%ls\n", hr, szPath);
-                        }
-                    }
-                    else if (SUCCEEDED(hr) && !ishdr)
+                    if (FAILED(hr))
                     {
                         success = false;
-                        printe("ERROR: frommemory expected failure\n%ls\n", szPath);
+                        printe("Failed getting raw file data from (HRESULT %08X):\n%ls\n", hr, szPath);
+                    }
+                    else
+                    {
+                        TexMetadata metadata;
+                        ScratchImage image;
+                        hr = LoadFromHDRMemory(blob.GetBufferPointer(), blob.GetBufferSize(), &metadata, image);
+
+                        if (FAILED(hr) && ishdr)
+                        {
+                            if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                            {
+                                success = false;
+                                printe("ERROR: frommemory expected success! (%08X)\n%ls\n", hr, szPath);
+                            }
+                        }
+                        else if (SUCCEEDED(hr) && !ishdr)
+                        {
+                            success = false;
+                            printe("ERROR: frommemory expected failure\n%ls\n", szPath);
+                        }
                     }
                 }
             }
