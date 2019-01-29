@@ -24,12 +24,14 @@ struct TestInfo
 extern bool Test01();
 extern bool Test02();
 extern bool Test03();
+extern bool Test04();
 
 TestInfo g_Tests[] =
 {
     { "Resize", Test01 },
     { "GenerateMipMaps", Test02 },
     { "GenerateMipMaps3D", Test03 },
+    { "ScaleMipMapsAlphaForCoverage", Test04 },
 };
 
 extern int __cdecl DescribeException(PEXCEPTION_POINTERS pData);

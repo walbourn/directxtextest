@@ -162,6 +162,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="coverage.cpp" />
     <ClCompile Include="directxtest.cpp" />
     <ClCompile Include="mipmaps.cpp" />
     <ClCompile Include="resize.cpp" />

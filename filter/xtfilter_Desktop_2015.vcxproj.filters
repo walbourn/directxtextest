@@ -5,6 +5,7 @@
     <ClCompile Include="mipmaps.cpp" />
     <ClCompile Include="resize.cpp" />
     <ClCompile Include="testutils.cpp" />
+    <ClCompile Include="coverage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\directxtest.h" />
