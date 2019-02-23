@@ -299,15 +299,15 @@ HRESULT SetupRenderTest(ID3D12Device** pDev, ID3D12CommandQueue** pCommandQ, ID3
     static bool s_classExists;
     if (!s_classExists)
     {
-        WNDCLASSEX wcex = {};
+        WNDCLASSEXW wcex = {};
         wcex.cbSize = sizeof(WNDCLASSEX);
         wcex.style = CS_HREDRAW | CS_VREDRAW | CS_NOCLOSE;
         wcex.lpfnWndProc = WndProc;
-        wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
+        wcex.hCursor = LoadCursorW(nullptr, IDC_ARROW);
         wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
         wcex.lpszMenuName = nullptr;
         wcex.lpszClassName = L"DirectXTexClass";
-        if (!RegisterClassEx(&wcex))
+        if (!RegisterClassExW(&wcex))
             return E_FAIL;
 
         s_classExists = true;
@@ -315,7 +315,7 @@ HRESULT SetupRenderTest(ID3D12Device** pDev, ID3D12CommandQueue** pCommandQ, ID3
 
     RECT rc = { 0, 0, RENDER_WIDTH, RENDER_HEIGHT };
     AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
-    g_hWnd = CreateWindow(L"DirectXTexClass", L"DirectXTex (D3D12)", WS_OVERLAPPEDWINDOW,
+    g_hWnd = CreateWindowW(L"DirectXTexClass", L"DirectXTex (D3D12)", WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, nullptr, nullptr);
     if (!g_hWnd)
         return E_FAIL;
