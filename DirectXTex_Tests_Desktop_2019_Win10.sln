@@ -1,19 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
+# Visual Studio 16
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "d3d12loadtest_Desktop_2017_Win10", "d3d12loadtest\d3d12loadtest_Desktop_2017_Win10.vcxproj", "{1253F761-7821-47BD-8185-2FF0A54A4572}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "d3d12loadtest_Desktop_2019_Win10", "d3d12loadtest\d3d12loadtest_Desktop_2019_Win10.vcxproj", "{1253F761-7821-47BD-8185-2FF0A54A4572}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXTex", "..\DirectXTex\DirectXTex_Desktop_2017_Win10.vcxproj", "{371B9FA9-4C90-4AC6-A123-ACED756D6C77}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXTex", "..\DirectXTex\DirectXTex_Desktop_2019_Win10.vcxproj", "{371B9FA9-4C90-4AC6-A123-ACED756D6C77}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xtd3d11_Desktop_2017_Win10", "d3d11\xtd3d11_Desktop_2017_Win10.vcxproj", "{1B283FC1-7914-4B61-A618-0A83DAC6770A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xtd3d11_Desktop_2019_Win10", "d3d11\xtd3d11_Desktop_2019_Win10.vcxproj", "{1B283FC1-7914-4B61-A618-0A83DAC6770A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{5E7D3890-B614-4E2E-90EF-46B71AB3B913}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xtd3d12_Desktop_2017_Win10", "d3d12\xtd3d12_Desktop_2017_Win10.vcxproj", "{C211AD18-3C9A-4A12-BB1A-624F58E11E76}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xtd3d12_Desktop_2019_Win10", "d3d12\xtd3d12_Desktop_2019_Win10.vcxproj", "{C211AD18-3C9A-4A12-BB1A-624F58E11E76}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "d3d11loadtest_Desktop_2017_Win10", "d3d11loadtest\d3d11loadtest_Desktop_2017_Win10.vcxproj", "{D55BE9CB-952D-4650-856A-72AC7AA2805D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "d3d11loadtest_Desktop_2019_Win10", "d3d11loadtest\d3d11loadtest_Desktop_2019_Win10.vcxproj", "{D55BE9CB-952D-4650-856A-72AC7AA2805D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
