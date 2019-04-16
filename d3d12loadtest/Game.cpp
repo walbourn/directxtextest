@@ -28,7 +28,10 @@ namespace
     };
 }
 Game::Game() noexcept(false) :
-    m_frame(0)
+    m_frame(0),
+    m_vertexBufferView{},
+    m_indexBufferView{},
+    m_strideSRV(0)
 {
     // Use gamma-correct rendering.
     m_deviceResources = std::make_unique<DX::DeviceResources>(DXGI_FORMAT_B8G8R8A8_UNORM_SRGB);
