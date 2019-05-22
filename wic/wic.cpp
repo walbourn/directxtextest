@@ -1845,8 +1845,10 @@ bool Test07()
     {
         if (!(findData.dwFileAttributes & (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM)))
         {
+            // These files are not supported by the normal readers
             if (_wcsicmp(findData.cFileName, L"texture0.dds") == 0
-                || _wcsicmp(findData.cFileName, L"texture3.dds") == 0)
+                || _wcsicmp(findData.cFileName, L"texture3.dds") == 0
+                || _wcsicmp(findData.cFileName, L"extended_dxt3.bmp") == 0)
             {
                 if (!FindNextFile(hFile.get(), &findData))
                     break;
