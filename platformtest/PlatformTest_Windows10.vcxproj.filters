@@ -6,7 +6,7 @@
     </Filter>
     <Filter Include="Assets">
       <UniqueIdentifier>6c6fc17f-9297-466f-be7c-cc4d45a33261</UniqueIdentifier>
-      <Extensions>bmp;dds;fbx;gif;jpg;jpeg;tga;tiff;tif;png</Extensions>
+      <Extensions>bmp;dds;fbx;gif;jpg;jpeg;tga;tiff;tif;png;hdr;pfm;jxr;wdp</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -16,6 +16,8 @@
     <ClCompile Include="DeviceResourcesUWP.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="wic.cpp" />
+    <ClCompile Include="testutils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -43,5 +45,13 @@
     <Image Include="Assets\WideLogo.scale-200.png">
       <Filter>Assets</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\directxtexmedia\*" Exclude="$(MSBuildThisFileDirectory)..\..\..\directxtexmedia\.git*" >
+      <Filter>Assets</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="PackageUWP.appxmanifest" />
   </ItemGroup>
 </Project>

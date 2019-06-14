@@ -13,7 +13,7 @@ using Microsoft::WRL::ComPtr;
 
 Game::Game() noexcept(false)
 {
-    m_deviceResources = std::make_unique<DX::DeviceResources>();
+    m_deviceResources = std::make_unique<DX::DeviceResources>(DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_UNKNOWN);
     m_deviceResources->RegisterDeviceNotify(this);
 }
 
@@ -95,11 +95,9 @@ void Game::Clear()
 
     // Clear the views.
     auto renderTarget = m_deviceResources->GetRenderTargetView();
-    auto depthStencil = m_deviceResources->GetDepthStencilView();
 
     context->ClearRenderTargetView(renderTarget, Colors::CornflowerBlue);
-    context->ClearDepthStencilView(depthStencil, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-    context->OMSetRenderTargets(1, &renderTarget, depthStencil);
+    context->OMSetRenderTargets(1, &renderTarget, nullptr);
 
     // Set the viewport.
     auto viewport = m_deviceResources->GetScreenViewport();
