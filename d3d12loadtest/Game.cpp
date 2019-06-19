@@ -393,6 +393,7 @@ void Game::CreateDeviceDependentResources()
 
         // Test DDSTextureLoader
         ComPtr<ID3D12Resource> ddsUploadHeap;
+        ComPtr<ID3D12Resource> ddsUploadHeap2;
 
         CD3DX12_CPU_DESCRIPTOR_HANDLE cpuHandle(m_srvHeap->GetCPUDescriptorHandleForHeapStart());
         {
@@ -428,8 +429,34 @@ void Game::CreateDeviceDependentResources()
             device->CreateShaderResourceView(m_dx5logo.Get(), &srvDesc, cpuHandle.Offset(0, m_strideSRV));
         }
 
+        {
+            auto ddsData = DX::ReadData(L"dx5_logo.dds");
+
+            std::vector<D3D12_SUBRESOURCE_DATA> subresources;
+            DX::ThrowIfFailed(LoadDDSTextureFromMemory(device, ddsData.data(), ddsData.size(), m_test1.ReleaseAndGetAddressOf(),
+                subresources));
+
+            const UINT64 uploadBufferSize = GetRequiredIntermediateSize(m_test1.Get(), 0, static_cast<UINT>(subresources.size()));
+
+            // Create the GPU upload buffer.
+            DX::ThrowIfFailed(
+                device->CreateCommittedResource(
+                    &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+                    D3D12_HEAP_FLAG_NONE,
+                    &CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize),
+                    D3D12_RESOURCE_STATE_GENERIC_READ,
+                    nullptr,
+                    IID_PPV_ARGS(ddsUploadHeap2.GetAddressOf())));
+
+            UpdateSubresources(commandList, m_test1.Get(), ddsUploadHeap2.Get(), 0, 0, static_cast<UINT>(subresources.size()), subresources.data());
+            commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_test1.Get(),
+                D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
+        }
+
         // Test WICTextureLoader
         ComPtr<ID3D12Resource> wicUploadHeap;
+        ComPtr<ID3D12Resource> wicUploadHeap2;
+
         {
             std::unique_ptr<uint8_t[]> decodedData;
             D3D12_SUBRESOURCE_DATA subresource;
@@ -463,6 +490,31 @@ void Game::CreateDeviceDependentResources()
             device->CreateShaderResourceView(m_cup.Get(), &srvDesc, cpuHandle.Offset(1, m_strideSRV));
         }
 
+        {
+            auto blob = DX::ReadData(L"cup_small.jpg");
+
+            std::unique_ptr<uint8_t[]> decodedData;
+            D3D12_SUBRESOURCE_DATA subresource;
+            DX::ThrowIfFailed(LoadWICTextureFromMemory(device, blob.data(), blob.size(), m_test2.ReleaseAndGetAddressOf(),
+                decodedData, subresource));
+
+            const UINT64 uploadBufferSize = GetRequiredIntermediateSize(m_test2.Get(), 0, 1);
+
+            // Create the GPU upload buffer.
+            DX::ThrowIfFailed(
+                device->CreateCommittedResource(
+                    &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+                    D3D12_HEAP_FLAG_NONE,
+                    &CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize),
+                    D3D12_RESOURCE_STATE_GENERIC_READ,
+                    nullptr,
+                    IID_PPV_ARGS(wicUploadHeap2.GetAddressOf())));
+
+            UpdateSubresources(commandList, m_test2.Get(), wicUploadHeap2.Get(), 0, 0, 1, &subresource);
+            commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_test2.Get(),
+                D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
+        }
+
         DX::ThrowIfFailed(commandList->Close());
         m_deviceResources->GetCommandQueue()->ExecuteCommandLists(1, CommandListCast(&commandList));
 
@@ -481,6 +533,9 @@ void Game::OnDeviceLost()
      m_cup.Reset();
      m_dx5logo.Reset();
      m_screenshot.Reset();
+
+     m_test1.Reset();
+     m_test2.Reset();
 
      m_srvHeap.Reset();
      m_rootSignature.Reset();
