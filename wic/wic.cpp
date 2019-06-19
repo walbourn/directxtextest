@@ -10,7 +10,11 @@
 
 #include "directxtexp.h"
 
+#include "wic.h"
+
 #include <wrl.h>
+
+//#define VERBOSE
 
 DEFINE_GUID(GUID_WICPixelFormat24bppBGR, 0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x0c);
 
@@ -452,7 +456,7 @@ extern HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags,
 
 //-------------------------------------------------------------------------------------
 // GetWICFactory/SetWICFactory
-bool Test00()
+bool WICTest::Test00()
 {
     bool systemSupportsWIC2 = false;
 
@@ -518,7 +522,7 @@ bool Test00()
 
 //-------------------------------------------------------------------------------------
 // GetMetadataFromWICMemory
-bool Test01()
+bool WICTest::Test01()
 {
     bool success = true;
 
@@ -541,7 +545,7 @@ bool Test01()
             return false;
         }
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(VERBOSE)
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
@@ -718,7 +722,7 @@ bool Test01()
 
 //-------------------------------------------------------------------------------------
 // GetMetadataFromWICFile
-bool Test02()
+bool WICTest::Test02()
 {
     bool success = true;
 
@@ -741,7 +745,7 @@ bool Test02()
             return false;
         }
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(VERBOSE)
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
@@ -908,7 +912,7 @@ bool Test02()
 
 //-------------------------------------------------------------------------------------
 // LoadFromWICMemory
-bool Test03()
+bool WICTest::Test03()
 {
     bool success = true;
 
@@ -931,7 +935,7 @@ bool Test03()
             return false;
         }
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(VERBOSE)
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
@@ -1014,7 +1018,7 @@ bool Test03()
 
 //-------------------------------------------------------------------------------------
 // LoadFromWICFile
-bool Test04()
+bool WICTest::Test04()
 {
     bool success = true;
 
@@ -1037,7 +1041,7 @@ bool Test04()
             return false;
         }
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(VERBOSE)
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
@@ -1110,7 +1114,7 @@ bool Test04()
 
 //-------------------------------------------------------------------------------------
 // SaveWICToMemory
-bool Test05()
+bool WICTest::Test05()
 {
     bool success = true;
 
@@ -1127,7 +1131,7 @@ bool Test05()
             return false;
         }
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(VERBOSE)
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
@@ -1429,7 +1433,7 @@ bool Test05()
 
 //-------------------------------------------------------------------------------------
 // SaveWICToFile
-bool Test06()
+bool WICTest::Test06()
 {
     bool success = true;
 
@@ -1485,7 +1489,7 @@ bool Test06()
         wcscat_s(tname, L"_linear");
         _wmakepath_s(szDestPath5, MAX_PATH, nullptr, tempDir, tname, g_SaveMedia[index].ext);
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(VERBOSE)
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
@@ -1799,7 +1803,7 @@ bool Test06()
 
 //-------------------------------------------------------------------------------------
 // transcode
-bool Test07()
+bool WICTest::Test07()
 {
     static const GUID s_encoders[] =
     {
@@ -1859,8 +1863,10 @@ bool Test07()
             wcscpy_s(szPath, szMediaPath);
             wcscat_s(szPath, findData.cFileName);
 
+#if defined(_DEBUG) && defined(VERBOSE)
             OutputDebugString(findData.cFileName);
             OutputDebugStringA("\n");
+#endif
 
             wchar_t fname[_MAX_FNAME];
             wchar_t ext[_MAX_EXT];
@@ -1957,7 +1963,7 @@ bool Test07()
 
 //-------------------------------------------------------------------------------------
 // Fuzz
-bool Test08()
+bool WICTest::Test08()
 {
     bool success = true;
 
@@ -2000,8 +2006,10 @@ bool Test08()
             wcscpy_s(szPath, szMediaPath);
             wcscat_s(szPath, findData.cFileName);
 
+#if defined(_DEBUG) && defined(VERBOSE)
             OutputDebugString(findData.cFileName);
             OutputDebugStringA("\n");
+#endif
 
             // memory
             {

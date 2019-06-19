@@ -1,4 +1,4 @@
-﻿//
+//
 // pch.h
 // Header for standard system include files.
 //
@@ -19,12 +19,17 @@
 #endif
 
 #include <DirectXMath.h>
+#include <DirectXPackedVector.h>
 #include <DirectXColors.h>
 
 #include <algorithm>
+#include <atomic>
 #include <exception>
+#include <functional>
 #include <memory>
 #include <stdexcept>
+#include <thread>
+#include <vector>
 
 #include <stdio.h>
 #include <pix.h>
@@ -32,6 +37,11 @@
 #ifdef _DEBUG
 #include <dxgidebug.h>
 #endif
+
+#include <wincodec.h>
+#include <wrl.h>
+
+#include "DirectXTex.h"
 
 namespace DX
 {

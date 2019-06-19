@@ -15,6 +15,8 @@
 
 using namespace DirectX;
 
+//#define VERBOSE
+
 //-------------------------------------------------------------------------------------
 HRESULT LoadBlobFromFile( _In_z_ const wchar_t* szFile, Blob& blob )
 {
@@ -168,7 +170,7 @@ HRESULT MD5Checksum( _In_ const ScratchImage& image, _Out_bytecap_x_(16) uint8_t
     if ( !NT_SUCCESS(status) )
         return HRESULT_FROM_NT(status);
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(VERBOSE)
     char buff[1024] = ", { ";
     char tmp[16];
 

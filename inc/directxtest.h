@@ -6,6 +6,7 @@
 
 #pragma once
 
+#if !defined(WINAPI_FAMILY) || (WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP)
 #pragma warning(push)
 #pragma warning(disable : 4005)
 #define WIN32_LEAN_AND_MEAN
@@ -18,19 +19,37 @@
 #pragma warning(pop)
 
 #define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
 #include <crtdbg.h>
-#include <stdio.h>
 
 #include <windows.h>
+#endif
+
+#include <stdlib.h>
+#include <stdio.h>
 
 #include <directxmath.h>
 #include <directxpackedvector.h>
 
 #define _DIRECTX_TEST_NAME_ "DirectXTex"
 
+#if !defined(WINAPI_FAMILY) || (WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP)
 #define print printf
 #define printe printf
+#else
+inline void DebugPrint(_In_z_ _Printf_format_string_ const char* format, ...) noexcept
+{
+    va_list args;
+    va_start(args, format);
+
+    char buff[1024] = {};
+    vsprintf_s(buff, format, args);
+    OutputDebugStringA(buff);
+    va_end(args);
+}
+
+#define print DebugPrint
+#define printe DebugPrint
+#endif
 
 #define printxmv(v) print("%s: %f,%f,%f,%f\n", #v, XMVectorGetX(v), XMVectorGetY(v), XMVectorGetZ(v), XMVectorGetW(v))
 
@@ -44,6 +63,10 @@
                                        digest[0], digest[1], digest[2], digest[3], digest[4], digest[5], digest[6], digest[7], \
                                        digest[8], digest[9], digest[10], digest[11], digest[12], digest[13], digest[14], digest[15] );
 
+#if !defined(WINAPI_FAMILY) || (WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP)
 #define MEDIA_PATH L"D:\\Microsoft\\directxtexmedia\\"
+#else
+#define MEDIA_PATH L"Assets\\"
+#endif
 
 #define TEMP_PATH L"%TEMP%\\"

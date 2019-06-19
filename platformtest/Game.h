@@ -15,6 +15,7 @@ class Game final : public DX::IDeviceNotify
 public:
 
     Game() noexcept(false);
+    ~Game();
 
     // Initialization and management
     void Initialize(IUnknown* window, int width, int height, DXGI_MODE_ROTATION rotation);
@@ -52,4 +53,16 @@ private:
 
     // Rendering loop timer.
     DX::StepTimer                           m_timer;
+
+    float                                   m_delayTime;
+    int                                     m_cycle;
+    float                                   m_clearColor[4];
+
+    std::atomic<bool>                       m_terminateThread;
+    std::atomic<bool>                       m_suspendThread;
+    std::thread	*                           m_testThread;
+
+    Microsoft::WRL::Wrappers::Event         m_resumeSignal;
+
+    void TestThreadProc();
 };
