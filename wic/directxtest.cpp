@@ -5,10 +5,9 @@
 //-------------------------------------------------------------------------------------
 
 #include "directxtest.h"
+#include "wic.h"
 
 #include "directxtex.h"
-
-#include "wic.h"
 
 using namespace DirectX;
 

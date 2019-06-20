@@ -39,7 +39,8 @@
 #endif
 
 #include <wincodec.h>
-#include <wrl.h>
+
+#include <wrl/client.h>
 
 #include "DirectXTex.h"
 

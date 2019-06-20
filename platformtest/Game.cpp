@@ -8,6 +8,8 @@
 #include "DirectXTex.h"
 #include "directxtest.h"
 
+#include "..\filter\filter.h"
+#include "..\tex\tex.h"
 #include "..\wic\wic.h"
 
 extern void ExitGame();
@@ -39,7 +41,13 @@ namespace
         { "SaveWICToMemory", WICTest::Test05 },
         { "SaveWICToFile", WICTest::Test06 },
         { "*Transcode*", WICTest::Test07 },
-        { "Fuzz", WICTest::Test08 },
+
+        // TEX
+        { "Convert", TEXTest::Test06 },
+
+        // FILTER
+        { "Resize", FilterTest::Test01 },
+        { "GenerateMipMaps", FilterTest::Test02 },
     };
 }
 

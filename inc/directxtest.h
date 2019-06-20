@@ -70,3 +70,5 @@ inline void DebugPrint(_In_z_ _Printf_format_string_ const char* format, ...) no
 #endif
 
 #define TEMP_PATH L"%TEMP%\\"
+
+//#define VERBOSE

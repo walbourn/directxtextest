@@ -5,6 +5,7 @@
 //-------------------------------------------------------------------------------------
 
 #include "directxtest.h"
+#include "tex.h"
 
 #include "directxtex.h"
 
@@ -21,43 +22,25 @@ struct TestInfo
     TestFN func;
 };
 
-extern bool Test01();
-extern bool Test02();
-extern bool Test04();
-extern bool Test05();
-extern bool Test05B();
-extern bool Test05C();
-extern bool Test05D();
-extern bool Test06();
-extern bool Test09();
-extern bool Test10();
-extern bool Test11();
-extern bool Test12();
-extern bool Test13();
-extern bool Test14();
-extern bool Test15();
-extern bool Test16();
-extern bool Test17();
-
 TestInfo g_Tests[] =
 {
-    { "Is*/BPP/BPC", Test01 },
-    { "ComputePitch/Scanlines", Test02 },
-    { "Make*", Test12 },
-    { "ComputeMSE", Test10 },
-    { "EvaluateImage", Test16 },
-    { "TransformImage", Test17 },
-    { "IsAlphaAllOpaque", Test14 },
-    { "FlipRotate", Test04 },
-    { "Convert (internalA)", Test05 },
-    { "Convert (internalB)", Test05B },
-    { "Convert (internalC)", Test05C },
-    { "Convert (internalD)", Test05D },
-    { "Convert", Test06 },
-    { "ConvertToSinglePlane", Test15 },
-    { "CopyRectangle", Test09 },
-    { "ComputeNormalMap", Test11 },
-    { "PremultiplyAlpha", Test13 },
+    { "Is*/BPP/BPC", TEXTest::Test01 },
+    { "ComputePitch/Scanlines", TEXTest::Test02 },
+    { "Make*", TEXTest::Test12 },
+    { "ComputeMSE", TEXTest::Test10 },
+    { "EvaluateImage", TEXTest::Test16 },
+    { "TransformImage", TEXTest::Test17 },
+    { "IsAlphaAllOpaque", TEXTest::Test14 },
+    { "FlipRotate", TEXTest::Test04 },
+    { "Convert (internalA)", TEXTest::Test05 },
+    { "Convert (internalB)", TEXTest::Test05B },
+    { "Convert (internalC)", TEXTest::Test05C },
+    { "Convert (internalD)", TEXTest::Test05D },
+    { "Convert", TEXTest::Test06 },
+    { "ConvertToSinglePlane", TEXTest::Test15 },
+    { "CopyRectangle", TEXTest::Test09 },
+    { "ComputeNormalMap", TEXTest::Test11 },
+    { "PremultiplyAlpha", TEXTest::Test13 },
 };
 
 extern int __cdecl DescribeException(PEXCEPTION_POINTERS pData);

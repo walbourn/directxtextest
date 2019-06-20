@@ -1,20 +1,10 @@
 //-------------------------------------------------------------------------------------
-// wic.h
+// mipmaps.cpp
 //  
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //-------------------------------------------------------------------------------------
 
-#pragma once
+#include "pch.h"
 
-namespace WICTest
-{
-    bool Test00();
-    bool Test01();
-    bool Test02();
-    bool Test03();
-    bool Test04();
-    bool Test05();
-    bool Test06();
-    bool Test07();
-    bool Test08();
-}
+#include "../filter/mipmaps.cpp"
+

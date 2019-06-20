@@ -5,27 +5,31 @@
 //-------------------------------------------------------------------------------------
 
 #include "directxtest.h"
+#include "tex.h"
 
 #include "directxtex.h"
 
 using namespace DirectX;
 
-struct TestMedia
+namespace
 {
-    DXGI_FORMAT tformat;
-    TexMetadata metadata;
-    const wchar_t *fname;
-};
+    struct TestMedia
+    {
+        DXGI_FORMAT tformat;
+        TexMetadata metadata;
+        const wchar_t *fname;
+    };
 
-static const TestMedia g_TestMedia[] = 
-{
-//  resultFormat | width height depth arraySize mipLevels miscFlags miscFlags2 format dimension | filename
-{ DXGI_FORMAT_YUY2, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_NV12, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenanv12.dds" },
-{ DXGI_FORMAT_YUY2, { 3264, 2448, 1, 1, 1, 0, 0, DXGI_FORMAT_NV12, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"imagenv12.dds" },
-{ DXGI_FORMAT_Y210, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_P010, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaP010.dds" },
-{ DXGI_FORMAT_Y216, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_P016, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaP016.dds" },
-{ DXGI_FORMAT_YUY2, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_NV11, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenanv11.dds" },
-};
+    const TestMedia g_TestMedia[] =
+    {
+        //  resultFormat | width height depth arraySize mipLevels miscFlags miscFlags2 format dimension | filename
+        { DXGI_FORMAT_YUY2, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_NV12, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenanv12.dds" },
+        { DXGI_FORMAT_YUY2, { 3264, 2448, 1, 1, 1, 0, 0, DXGI_FORMAT_NV12, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"imagenv12.dds" },
+        { DXGI_FORMAT_Y210, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_P010, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaP010.dds" },
+        { DXGI_FORMAT_Y216, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_P016, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaP016.dds" },
+        { DXGI_FORMAT_YUY2, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_NV11, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenanv11.dds" },
+    };
+}
 
 //-------------------------------------------------------------------------------------
 
@@ -34,7 +38,7 @@ extern const wchar_t* GetName( DXGI_FORMAT fmt );
 
 //-------------------------------------------------------------------------------------
 // ConvertToSinglePlane
-bool Test15()
+bool TEXTest::Test15()
 {
     bool success = true;
 
@@ -51,7 +55,7 @@ bool Test15()
             return false;
         }
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(VERBOSE)
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif

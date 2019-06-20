@@ -7,6 +7,7 @@
 #include <assert.h>
 
 #include "directxtest.h"
+#include "tex.h"
 
 #include "directxtex.h"
 
@@ -19,14 +20,17 @@ extern HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags,
 
 //-------------------------------------------------------------------------------------
 
-inline bool IsEqual( float f1, float f2 )
+namespace
 {
-    return ( fabs(f1 - f2) < 0.000001 ) != 0;
+    inline bool IsEqual(float f1, float f2)
+    {
+        return (fabs(f1 - f2) < 0.000001) != 0;
+    }
 }
 
 //-------------------------------------------------------------------------------------
 // CopyRectangle
-bool Test09()
+bool TEXTest::Test09()
 {
     bool success = true;
 
@@ -39,7 +43,7 @@ bool Test09()
         return false;
     }
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(VERBOSE)
     OutputDebugString(szPath);
     OutputDebugStringA("\n");
 #endif
@@ -85,7 +89,7 @@ bool Test09()
         return false;
     }
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(VERBOSE)
     OutputDebugString(szPath);
     OutputDebugStringA("\n");
 #endif
@@ -115,7 +119,7 @@ bool Test09()
         return false;
     }
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(VERBOSE)
     OutputDebugString(szPath);
     OutputDebugStringA("\n");
 #endif
@@ -295,7 +299,7 @@ bool Test09()
 
 //-------------------------------------------------------------------------------------
 // ComputeMSE
-bool Test10()
+bool TEXTest::Test10()
 {
     bool success = true;
 
@@ -310,7 +314,7 @@ bool Test10()
         return false;
     }
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(VERBOSE)
     OutputDebugString(szPath);
     OutputDebugStringA("\n");
 #endif
@@ -331,7 +335,7 @@ bool Test10()
         return false;
     }
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(VERBOSE)
     OutputDebugString(szPath);
     OutputDebugStringA("\n");
 #endif
@@ -352,7 +356,7 @@ bool Test10()
         return false;
     }
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(VERBOSE)
     OutputDebugString(szPath);
     OutputDebugStringA("\n");
 #endif
@@ -373,7 +377,7 @@ bool Test10()
         return false;
     }
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(VERBOSE)
     OutputDebugString(szPath);
     OutputDebugStringA("\n");
 #endif
@@ -434,7 +438,7 @@ bool Test10()
 
 //-------------------------------------------------------------------------------------
 // IsAlphaAllOpaque
-bool Test14()
+bool TEXTest::Test14()
 {
     bool success = true;
 
@@ -528,7 +532,7 @@ bool Test14()
             return false;
         }
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(VERBOSE)
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
@@ -573,7 +577,7 @@ bool Test14()
 
 //-------------------------------------------------------------------------------------
 // EvaluateImage
-bool Test16()
+bool TEXTest::Test16()
 {
     struct TestMedia
     {
@@ -640,7 +644,7 @@ bool Test16()
             return false;
         }
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(VERBOSE)
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif
@@ -802,7 +806,7 @@ namespace
         }
     }
 }
-bool Test17()
+bool TEXTest::Test17()
 {
     struct TestMedia
     {
@@ -868,7 +872,7 @@ bool Test17()
             return false;
         }
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(VERBOSE)
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif

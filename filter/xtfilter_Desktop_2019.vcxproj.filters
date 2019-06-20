@@ -9,5 +9,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\directxtest.h" />
+    <ClInclude Include="filter.h" />
   </ItemGroup>
 </Project>
