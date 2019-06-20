@@ -19,6 +19,7 @@
 .vs
 Bin
 /ipch
+/AppPackages
 Debug
 Profile
 Release
