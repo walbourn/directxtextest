@@ -1898,7 +1898,7 @@ bool WICTest::Test07()
             }
 
 #ifdef NO_WMP
-            if (_wcsicmp(ext, L".wdp") == 0)
+            if (_wcsicmp(ext, L".wdp") == 0 || _wcsicmp(ext, L".jxr") == 0)
             {
                 if (!FindNextFile(hFile.get(), &findData))
                     break;
@@ -1942,6 +1942,7 @@ bool WICTest::Test07()
                 || hr == E_NOTIMPL
                 || hr == WINCODEC_ERR_COMPONENTNOTFOUND
                 || hr == E_OUTOFMEMORY
+                || hr == E_UNEXPECTED
                 || metadata.width >= 8192)
             {
                 if (!FindNextFile(hFile.get(), &findData))
@@ -1970,7 +1971,7 @@ bool WICTest::Test07()
                 {
                     Blob blob;
                     hr = SaveToWICMemory(image.GetImages(), image.GetImageCount(), WIC_FLAGS_NONE, s_encoders[j], blob);
-                    if (FAILED(hr) && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != E_OUTOFMEMORY)
+                    if (FAILED(hr) && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != E_OUTOFMEMORY && hr != E_UNEXPECTED)
                     {
                         success = false;
                         pass = false;
