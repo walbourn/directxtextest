@@ -1907,6 +1907,16 @@ bool WICTest::Test07()
             }
 #endif
 
+#ifdef NO_CMYK
+            if (wcsstr(fname, L"CMYK") != nullptr)
+            {
+                if (!FindNextFile(hFile.get(), &findData))
+                    break;
+
+                continue;
+            }
+#endif
+
             ScratchImage image;
             TexMetadata metadata;
             HRESULT hr;
@@ -1964,7 +1974,7 @@ bool WICTest::Test07()
                     {
                         success = false;
                         pass = false;
-                        printe("Failed writing with encoder #%d (HRESULT %08X):\n%ls\n", hr, j, szPath);
+                        printe("Failed writing with encoder #%d (HRESULT %08X):\n%ls\n", j, hr, szPath);
                     }
                 }
 
