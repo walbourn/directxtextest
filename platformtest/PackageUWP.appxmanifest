@@ -8,14 +8,14 @@
 
   <Identity
     Name="495f7f17-811a-4ad8-94ec-95efaab448ed"
-    Publisher="CN=chuckw"
+    Publisher="CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="495f7f17-811a-4ad8-94ec-95efaab448ed" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>PlatformTest</DisplayName>
-    <PublisherDisplayName>chuckw</PublisherDisplayName>
+    <PublisherDisplayName>Microsoft Corporation</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -35,7 +35,7 @@
         DisplayName="PlatformTest"
         Square150x150Logo="Assets\Logo.png"
         Square44x44Logo="Assets\SmallLogo.png"
-        Description="PlatformTest"
+        Description="PlatformTest for DirectXTex"
         BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\WideLogo.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />

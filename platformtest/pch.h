@@ -8,14 +8,20 @@
 // Use the C++ standard templated min/max
 #define NOMINMAX
 
+#include <winapifamily.h>
+
 #include <wrl.h>
 
-#include <d3d11_3.h>
-
-#if defined(NTDDI_WIN10_RS2)
-#include <dxgi1_6.h>
+#if defined(_XBOX_ONE) && defined(_TITLE)
+#include <xdk.h>
+#include <d3d11_x.h>
 #else
-#include <dxgi1_5.h>
+#include <d3d11_3.h>
+#include <dxgi1_6.h>
+
+#ifdef _DEBUG
+#include <dxgidebug.h>
+#endif
 #endif
 
 #include <DirectXMath.h>
@@ -33,10 +39,6 @@
 
 #include <stdio.h>
 #include <pix.h>
-
-#ifdef _DEBUG
-#include <dxgidebug.h>
-#endif
 
 #include <wincodec.h>
 

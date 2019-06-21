@@ -1,0 +1,3060 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Common">
+      <UniqueIdentifier>b26dc9f7-46f0-4c29-92c6-51f97f73b5de</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets">
+      <UniqueIdentifier>c4bd071a-2795-47bf-865e-a5956bc58e2a</UniqueIdentifier>
+      <Extensions>bmp;dds;fbx;gif;jpg;jpeg;tga;tiff;tif;png;hdr;pfm;jxr;wdp</Extensions>
+    </Filter>
+    <Filter Include="xtfilter">
+      <UniqueIdentifier>{52ba4098-e063-4041-b9d6-5f5b1ed04a89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="xttex">
+      <UniqueIdentifier>{407a4e33-392b-472e-8846-ef1bd3f11674}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="xtwic">
+      <UniqueIdentifier>{8b015662-7de2-4094-8983-eb0c967941ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test">
+      <UniqueIdentifier>{037b63e4-2a70-4099-9e4f-0f8fbdd6f87e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="StepTimer.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceResourcesXDK.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\directxtest.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MainXDK.cpp" />
+    <ClCompile Include="DeviceResourcesXDK.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="testutils.cpp" />
+    <ClCompile Include="wic.cpp">
+      <Filter>xtwic</Filter>
+    </ClCompile>
+    <ClCompile Include="resize.cpp">
+      <Filter>xtfilter</Filter>
+    </ClCompile>
+    <ClCompile Include="mipmaps.cpp">
+      <Filter>xtfilter</Filter>
+    </ClCompile>
+    <ClCompile Include="convert.cpp">
+      <Filter>xttex</Filter>
+    </ClCompile>
+    <ClCompile Include="fliprotate.cpp">
+      <Filter>xttex</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\Logo.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\SmallLogo.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\SplashScreen.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\StoreLogo.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\WideLogo.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="PackageXDK.appxmanifest">
+      <Filter>Test</Filter>
+    </AppxManifest>
+  </ItemGroup>
+</Project>

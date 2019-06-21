@@ -59,7 +59,10 @@ Game::Game() noexcept(false) :
     m_testThread(nullptr)
 {
     m_deviceResources = std::make_unique<DX::DeviceResources>(DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_UNKNOWN);
+
+#if !defined(_XBOX_ONE) || !defined(_TITLE)
     m_deviceResources->RegisterDeviceNotify(this);
+#endif
 }
 
 Game::~Game()
@@ -73,9 +76,22 @@ Game::~Game()
 }
 
 // Initialize the Direct3D resources required to run.
-void Game::Initialize(IUnknown* window, int width, int height, DXGI_MODE_ROTATION rotation)
+void Game::Initialize(
+#if !defined(WINAPI_FAMILY) || (WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP) 
+    HWND window,
+#else
+    IUnknown* window,
+#endif
+    int width, int height, DXGI_MODE_ROTATION rotation)
 {
+#if defined(_XBOX_ONE) && defined(_TITLE)
+    UNREFERENCED_PARAMETER(rotation);
+    UNREFERENCED_PARAMETER(width);
+    UNREFERENCED_PARAMETER(height);
+    m_deviceResources->SetWindow(window);
+#else
     m_deviceResources->SetWindow(window, width, height, rotation);
+#endif
 
     m_deviceResources->CreateDeviceResources();
     CreateDeviceDependentResources();
@@ -147,6 +163,10 @@ void Game::Render()
         return;
     }
 
+#if defined(_XBOX_ONE) && defined(_TITLE)
+    m_deviceResources->Prepare();
+#endif
+
     Clear();
 
     auto context = m_deviceResources->GetD3DDeviceContext();
@@ -195,33 +215,49 @@ void Game::OnSuspending()
     ResetEvent(m_resumeSignal.Get());
     m_suspendThread = true;
 
+#if defined(_XBOX_ONE) && defined(_TITLE)
     auto context = m_deviceResources->GetD3DDeviceContext();
-    context->ClearState();
-
+    context->Suspend(0);
+#else
     m_deviceResources->Trim();
+#endif
 }
 
 void Game::OnResuming()
 {
+#if defined(_XBOX_ONE) && defined(_TITLE)
+    auto context = m_deviceResources->GetD3DDeviceContext();
+    context->Resume();
+#endif
+
     m_timer.ResetElapsedTime();
 
     m_suspendThread = false;
     SetEvent(m_resumeSignal.Get());
 }
 
+#if !defined(_XBOX_ONE) || !defined(_TITLE)
 void Game::OnWindowSizeChanged(int width, int height, DXGI_MODE_ROTATION rotation)
 {
+#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_APP)
     if (!m_deviceResources->WindowSizeChanged(width, height, rotation))
         return;
+#else
+    UNREFERENCED_PARAMETER(rotation);
+    if (!m_deviceResources->WindowSizeChanged(width, height))
+        return;
+#endif
 
     CreateWindowSizeDependentResources();
 }
+#endif
 
+#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_APP)
 void Game::ValidateDevice()
 {
     m_deviceResources->ValidateDevice();
 }
-
+#endif
 // Properties
 void Game::GetDefaultSize(int& width, int& height) const
 {
@@ -241,6 +277,7 @@ void Game::CreateWindowSizeDependentResources()
 {
 }
 
+#if !defined(_XBOX_ONE) || !defined(_TITLE)
 void Game::OnDeviceLost()
 {
 }
@@ -251,6 +288,7 @@ void Game::OnDeviceRestored()
 
     CreateWindowSizeDependentResources();
 }
+#endif
 #pragma endregion
 
 void Game::TestThreadProc()
