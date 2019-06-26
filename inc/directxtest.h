@@ -66,6 +66,9 @@ inline void DebugPrint(_In_z_ _Printf_format_string_ const char* format, ...) no
 #if !defined(WINAPI_FAMILY) || (WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP)
 #define MEDIA_PATH L"D:\\Microsoft\\directxtexmedia\\"
 #define TEMP_PATH L"%TEMP%\\"
+#elif (WINAPI_FAMILY == WINAPI_FAMILY_APP)
+#define MEDIA_PATH L"Assets\\"
+#define TEMP_PATH L"%TEMP%\\"
 #else
 #define MEDIA_PATH L"Assets\\"
 #define TEMP_PATH L"T:\\"
