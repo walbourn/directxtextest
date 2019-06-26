@@ -5,6 +5,7 @@
 //-------------------------------------------------------------------------------------
 
 #include "directxtest.h"
+#include "wic.h"
 
 #include "directxtex.h"
 
@@ -21,27 +22,17 @@ struct TestInfo
     TestFN func;
 };
 
-extern bool Test00();
-extern bool Test01();
-extern bool Test02();
-extern bool Test03();
-extern bool Test04();
-extern bool Test05();
-extern bool Test06();
-extern bool Test07();
-extern bool Test08();
-
 TestInfo g_Tests[] =
 {
-    { "Get/SetWICFactory", Test00 },
-    { "GetMetadataFromWICMemory", Test01 },
-    { "GetMetadataFromWICFile", Test02 },
-    { "LoadFromWICMemory", Test03 },
-    { "LoadFromWICFile", Test04 },
-    { "SaveWICToMemory", Test05 },
-    { "SaveWICToFile", Test06 },
-    { "*Transcode*", Test07 },
-    { "Fuzz", Test08 },
+    { "Get/SetWICFactory", WICTest::Test00 },
+    { "GetMetadataFromWICMemory", WICTest::Test01 },
+    { "GetMetadataFromWICFile", WICTest::Test02 },
+    { "LoadFromWICMemory", WICTest::Test03 },
+    { "LoadFromWICFile", WICTest::Test04 },
+    { "SaveWICToMemory", WICTest::Test05 },
+    { "SaveWICToFile", WICTest::Test06 },
+    { "*Transcode*", WICTest::Test07 },
+    { "Fuzz", WICTest::Test08 },
 };
 
 

@@ -19,7 +19,9 @@
 .vs
 Bin
 /ipch
+/AppPackages
 Debug
+Durango
 Profile
 Release
 x64

@@ -5,18 +5,22 @@
 //-------------------------------------------------------------------------------------
 
 #include "directxtest.h"
+#include "tex.h"
 
 #include "directxtexp.h"
 
-#include <wrl.h>
+#include <wrl/client.h>
 
 #include <algorithm>
 
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
 
-static const UINT DXGI_START = 1;
-static const UINT DXGI_END = 190; // as of DXGI 1.3
+namespace
+{
+    const UINT DXGI_START = 1;
+    const UINT DXGI_END = 190; // as of DXGI 1.3
+}
 
 //-------------------------------------------------------------------------------------
 
@@ -46,7 +50,7 @@ static_assert(std::is_nothrow_move_assignable<Blob>::value, "Move Assign.");
 // IsTypeless
 // BitsPerPixel
 // BitsPerColor
-bool Test01()
+bool TEXTest::Test01()
 {
     static const DXGI_FORMAT bcFmts[] =
     {
@@ -435,7 +439,7 @@ namespace
 //-------------------------------------------------------------------------------------
 // ComputePitch
 // ComputeScanlines
-bool Test02()
+bool TEXTest::Test02()
 {
     size_t rowPitch = 0;
     size_t slicePitch = 0;
@@ -1032,7 +1036,7 @@ bool Test02()
 // MakeTypeless
 // MakeTypelessUNORM
 // MakeTypelessFLOAT
-bool Test12()
+bool TEXTest::Test12()
 {
     bool success = true;
 

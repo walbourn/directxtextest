@@ -5,6 +5,7 @@
 //-------------------------------------------------------------------------------------
 
 #include "directxtest.h"
+#include "tex.h"
 
 #include "directxtex.h"
 
@@ -17,19 +18,22 @@ extern HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags,
 
 //-------------------------------------------------------------------------------------
 
-inline bool IsEqual( float f1, float f2 )
+namespace
 {
-    return ( fabs(f1 - f2) < 0.000001 ) != 0;
-}
+    inline bool IsEqual(float f1, float f2)
+    {
+        return (fabs(f1 - f2) < 0.000001) != 0;
+    }
 
-inline bool IsErrorTooLarge(float f, float threshold)
-{
-    return (fabs(f) > threshold) != 0;
+    inline bool IsErrorTooLarge(float f, float threshold)
+    {
+        return (fabs(f) > threshold) != 0;
+    }
 }
 
 //-------------------------------------------------------------------------------------
 // PremultiplyAlpha
-bool Test13()
+bool TEXTest::Test13()
 {
     bool success = true;
 
@@ -42,7 +46,7 @@ bool Test13()
         return false;
     }
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(VERBOSE)
     OutputDebugString(szPath);
     OutputDebugStringA("\n");
 #endif

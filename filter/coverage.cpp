@@ -7,6 +7,7 @@
 #include <assert.h>
 
 #include "directxtest.h"
+#include "filter.h"
 
 #include "directxtex.h"
 
@@ -14,30 +15,32 @@ using namespace DirectX;
 
 #pragma warning(disable:6262) // test code doesn't need conservative stack size
 
-enum
+namespace
 {
-    FLAGS_NONE              = 0x0,
-};
+    enum
+    {
+        FLAGS_NONE = 0x0,
+    };
 
-struct MipMapMedia
-{
-    DWORD options;
-    TexMetadata metadata;
-    const wchar_t *fname;
-};
+    struct MipMapMedia
+    {
+        DWORD options;
+        TexMetadata metadata;
+        const wchar_t *fname;
+    };
 
-static const MipMapMedia g_MipMapMedia[] = 
-{
-// <source> test-options | width height depth arraySize mipLevels miscFlags miscFlags2 format dimension | filename
-{ FLAGS_NONE, { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test8888.dds" },
-{ FLAGS_NONE, { 32, 32, 1, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test8888mip.dds"  },
-{ FLAGS_NONE, { 32, 32, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcube8888.dds" },
-{ FLAGS_NONE, { 32, 32, 1, 6, 6, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcube8888mip.dds" },
-{ FLAGS_NONE, { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"alphaedge.dds" },
-{ FLAGS_NONE, { 304, 268, 1, 1, 9, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"tree02S.dds" },
-{ FLAGS_NONE, { 1024, 512, 1, 1, 11, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthdiffuse.dds" }
-};
-
+    const MipMapMedia g_MipMapMedia[] =
+    {
+        // <source> test-options | width height depth arraySize mipLevels miscFlags miscFlags2 format dimension | filename
+        { FLAGS_NONE, { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test8888.dds" },
+        { FLAGS_NONE, { 32, 32, 1, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test8888mip.dds"  },
+        { FLAGS_NONE, { 32, 32, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcube8888.dds" },
+        { FLAGS_NONE, { 32, 32, 1, 6, 6, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcube8888mip.dds" },
+        { FLAGS_NONE, { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"alphaedge.dds" },
+        { FLAGS_NONE, { 304, 268, 1, 1, 9, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"tree02S.dds" },
+        { FLAGS_NONE, { 1024, 512, 1, 1, 11, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthdiffuse.dds" }
+    };
+}
 
 //-------------------------------------------------------------------------------------
 
@@ -46,7 +49,7 @@ extern HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags,
 
 //-------------------------------------------------------------------------------------
 // ScaleMipMapsAlphaForCoverage
-bool Test04()
+bool FilterTest::Test04()
 {
     bool success = true;
 
@@ -65,7 +68,7 @@ bool Test04()
             return false;
         }
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(VERBOSE)
         OutputDebugString(szPath);
         OutputDebugStringA("\n");
 #endif

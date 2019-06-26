@@ -5,6 +5,7 @@
 //-------------------------------------------------------------------------------------
 
 #include "directxtest.h"
+#include "tex.h"
 
 #include "directxtex.h"
 
@@ -17,7 +18,7 @@ extern HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags,
 
 //-------------------------------------------------------------------------------------
 // ComputeNormalMap
-bool Test11()
+bool TEXTest::Test11()
 {
     bool success = true;
 
@@ -30,7 +31,7 @@ bool Test11()
         return false;
     }
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(VERBOSE)
     OutputDebugString(szPath);
     OutputDebugStringA("\n");
 #endif
