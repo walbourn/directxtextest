@@ -60,6 +60,9 @@ private:
     Microsoft::WRL::ComPtr<ID3D12Resource>          m_dx5logo;
     Microsoft::WRL::ComPtr<ID3D12Resource>          m_screenshot;
 
+    Microsoft::WRL::ComPtr<ID3D12Resource>          m_test1;
+    Microsoft::WRL::ComPtr<ID3D12Resource>          m_test2;
+
     Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>    m_srvHeap;
     Microsoft::WRL::ComPtr<ID3D12RootSignature>     m_rootSignature;
     Microsoft::WRL::ComPtr<ID3D12PipelineState>     m_pipelineState;

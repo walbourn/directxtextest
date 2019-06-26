@@ -288,14 +288,33 @@ void Game::CreateDeviceDependentResources()
 
     // Test DDSTextureLoader
     DX::ThrowIfFailed(
-        CreateDDSTextureFromFileEx(device, L"dx5_logo.dds", 0,
-            D3D11_USAGE_IMMUTABLE, D3D11_BIND_SHADER_RESOURCE, 0, 0, true,
+        CreateDDSTextureFromFileEx(device, L"dx5_logo.dds",
+            0, D3D11_USAGE_IMMUTABLE, D3D11_BIND_SHADER_RESOURCE, 0, 0, true,
             nullptr, m_dx5logo.ReleaseAndGetAddressOf()));
+
+    {
+        auto blob = DX::ReadData(L"dx5_logo.dds");
+
+        ComPtr<ID3D11ShaderResourceView> srv;
+        DX::ThrowIfFailed(
+            CreateDDSTextureFromMemoryEx(device, blob.data(), blob.size(),
+                0, D3D11_USAGE_IMMUTABLE, D3D11_BIND_SHADER_RESOURCE, 0, 0, true,
+                nullptr, srv.ReleaseAndGetAddressOf()));
+    }
 
     // Test WICTextureLoader
     DX::ThrowIfFailed(
         CreateWICTextureFromFile(device, L"cup_small.jpg",
             nullptr, m_cup.ReleaseAndGetAddressOf()));
+
+    {
+        auto blob = DX::ReadData(L"cup_small.jpg");
+
+        ComPtr<ID3D11ShaderResourceView> srv;
+        DX::ThrowIfFailed(
+            CreateWICTextureFromMemory(device, blob.data(), blob.size(),
+                nullptr, srv.ReleaseAndGetAddressOf()));
+    }
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.
