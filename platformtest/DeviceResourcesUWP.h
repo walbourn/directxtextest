@@ -1,4 +1,4 @@
-﻿//
+//
 // DeviceResources.h - A wrapper for the Direct3D 11 device and swapchain
 //
 
@@ -11,6 +11,9 @@ namespace DX
     {
         virtual void OnDeviceLost() = 0;
         virtual void OnDeviceRestored() = 0;
+
+    protected:
+        ~IDeviceNotify() {}
     };
 
     // Controls all the DirectX device resources.
