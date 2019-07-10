@@ -1251,8 +1251,8 @@ bool WICTest::Test05()
                                             [&](IPropertyBag2* props)
                                             {
                                                 PROPBAG2 options[2] = { 0, 0 };
-                                                options[0].pstrName = L"CompressionQuality";
-                                                options[1].pstrName = L"TiffCompressionMethod";
+                                                options[0].pstrName = const_cast<LPOLESTR>(L"CompressionQuality");
+                                                options[1].pstrName = const_cast<LPOLESTR>(L"TiffCompressionMethod");
 
                                                 VARIANT varValues[2];
                                                 varValues[0].vt = VT_R4;
@@ -1608,8 +1608,8 @@ bool WICTest::Test06()
                                         [&](IPropertyBag2* props)
                                         {
                                             PROPBAG2 options[2] = { 0, 0 };
-                                            options[0].pstrName = L"CompressionQuality";
-                                            options[1].pstrName = L"TiffCompressionMethod";
+                                            options[0].pstrName = const_cast<LPOLESTR>(L"CompressionQuality");
+                                            options[1].pstrName = const_cast<LPOLESTR>(L"TiffCompressionMethod");
 
                                             VARIANT varValues[2];
                                             varValues[0].vt = VT_R4;
