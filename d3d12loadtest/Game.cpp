@@ -83,6 +83,13 @@ void Game::Tick()
 
         DX::ThrowIfFailed(
             SaveWICTextureToFile(commandQ, m_screenshot.Get(),
+                GUID_ContainerFormatPng, L"screenshot.png",
+                D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_PRESENT,
+                nullptr, nullptr, true)
+        );
+
+        DX::ThrowIfFailed(
+            SaveWICTextureToFile(commandQ, m_screenshot.Get(),
                 GUID_ContainerFormatJpeg, L"screenshot.jpg",
                 D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_PRESENT)
             );

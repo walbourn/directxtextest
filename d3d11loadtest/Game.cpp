@@ -123,6 +123,8 @@ void Game::Render()
 
         DX::ThrowIfFailed(SaveDDSTextureToFile(context, backbuffer.Get(), L"screenshot.dds"));
 
+        DX::ThrowIfFailed(SaveWICTextureToFile(context, backbuffer.Get(), GUID_ContainerFormatPng, L"screenshot.png", nullptr, nullptr, true));
+
         DX::ThrowIfFailed(SaveWICTextureToFile(context, backbuffer.Get(), GUID_ContainerFormatJpeg, L"screenshot.jpg"));
 
         ScratchImage image;
