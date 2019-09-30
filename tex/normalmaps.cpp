@@ -51,7 +51,7 @@ bool TEXTest::Test11()
 
     CreateDirectoryW( tempDir, nullptr );
 
-    const TexMetadata checkhmap = { 1024, 1024, 1, 1, 11, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D };
+    const TexMetadata checkhmap = { 1024, 1024, 1, 1, 11, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D };
 
     TexMetadata metadata;
     ScratchImage imagehmap;
