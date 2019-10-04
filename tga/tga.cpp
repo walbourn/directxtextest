@@ -202,17 +202,19 @@ namespace
         DWORD options;
         DXGI_FORMAT src_format;
         DXGI_FORMAT sav_format;
+        TEX_ALPHA_MODE save_alpha;
         const wchar_t *source;
     };
 
     const SaveMedia g_SaveMedia[] =
     {
         // flags | source-dxgi-format save-dxgi-format | source-filename
-        { ALTMD5(2), DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"test8888.dds" },
-        { ALTMD5(3), DXGI_FORMAT_B8G8R8X8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"windowslogo_X8R8G8B8.dds" },
-        { FLAGS_NONE, DXGI_FORMAT_B5G5R5A1_UNORM, DXGI_FORMAT_B5G5R5A1_UNORM, MEDIA_PATH L"test555.dds" },
-        { FLAGS_NONE, DXGI_FORMAT_R8_UNORM, DXGI_FORMAT_R8_UNORM, MEDIA_PATH L"windowslogo_L8.dds" },
-        { FLAGS_NONE, DXGI_FORMAT_A8_UNORM, DXGI_FORMAT_R8_UNORM, MEDIA_PATH L"alphaedge.dds" },
+        //{ ALTMD5(2), DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_ALPHA_MODE_OPAQUE, MEDIA_PATH L"test8888.dds" },
+        //{ ALTMD5(3), DXGI_FORMAT_B8G8R8X8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_ALPHA_MODE_OPAQUE, MEDIA_PATH L"windowslogo_X8R8G8B8.dds" },
+        //{ FLAGS_NONE, DXGI_FORMAT_B5G5R5A1_UNORM, DXGI_FORMAT_B5G5R5A1_UNORM, TEX_ALPHA_MODE_OPAQUE, MEDIA_PATH L"test555.dds" },
+        { FLAGS_NONE, DXGI_FORMAT_R8_UNORM, DXGI_FORMAT_R8_UNORM, TEX_ALPHA_MODE_UNKNOWN, MEDIA_PATH L"windowslogo_L8.dds" },
+        //{ FLAGS_NONE, DXGI_FORMAT_A8_UNORM, DXGI_FORMAT_R8_UNORM, TEX_ALPHA_MODE_UNKNOWN, MEDIA_PATH L"alphaedge.dds" },
+        //{ ALTMD5(4), DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_ALPHA_MODE_UNKNOWN, MEDIA_PATH L"tree02S.dds" },
     };
 
     struct AltMD5
@@ -225,6 +227,15 @@ namespace
         { 0xa9,0xc6,0xf1,0xfa,0xe0,0x92,0x4f,0x44,0x31,0x24,0x3e,0xa2,0xc2,0xec,0x3a,0xa1 }, // ALTMD5(1)
         { 0x35,0x80,0x55,0xf9,0xd6,0x91,0x58,0x0a,0x8c,0xf3,0x37,0x29,0x57,0xc1,0x85,0xf0 }, // ALTMD5(2)
         { 0x8d,0x2c,0xc5,0xd3,0xb1,0x44,0x64,0x39,0x30,0xe0,0xca,0x36,0x1c,0xeb,0x17,0xaa }, // ALTMD5(3)
+        { 0x8c,0xeb,0x7a,0x9a,0x80,0xc0,0xe7,0xf3,0xfe,0x75,0x2f,0xdf,0xf5,0x72,0x3e,0x46 }, // ALTMD5(4)
+    };
+
+    const TEX_ALPHA_MODE g_AlphaModes[] =
+    {
+        TEX_ALPHA_MODE_STRAIGHT,
+        TEX_ALPHA_MODE_PREMULTIPLIED,
+        TEX_ALPHA_MODE_OPAQUE,
+        TEX_ALPHA_MODE_CUSTOM,
     };
 }
 
@@ -503,22 +514,25 @@ bool Test04()
             }
             else
             {
+                bool pass = true;
+
                 Blob blob;
                 hr = SaveToTGAMemory( *image.GetImage(0,0,0), blob );
                 if ( FAILED(hr) )
                 {
                     success = false;
+                    pass = false;
                     printe( "Failed writing tga to memory (HRESULT %08X):\n%ls\n", hr, szPath );
                 }
                 else
                 {
-                    //TESTEST- { HANDLE h = CreateFileW( L"C:\\TEMP\\XXX.TGA", GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, 0, 0 ); DWORD bytesWritten; WriteFile( h, blob.GetBufferPointer(), static_cast<DWORD>( blob.GetBufferSize() ), &bytesWritten, 0 ); CloseHandle(h); }
                     TexMetadata metadata2;
                     ScratchImage image2;
                     hr = LoadFromTGAMemory( blob.GetBufferPointer(), blob.GetBufferSize(), &metadata2, image2 );
                     if ( FAILED(hr) )
                     {
                         success = false;
+                        pass = false;
                         printe( "Failed reading back written tga to memory (HRESULT %08X):\n%ls\n", hr, szPath );
                     }
                     else if ( metadata.width != metadata2.width
@@ -526,19 +540,17 @@ bool Test04()
                               || metadata.arraySize != metadata2.arraySize
                               || metadata2.mipLevels != 1
                               || metadata.dimension != metadata2.dimension
+                              || g_SaveMedia[index].save_alpha != metadata2.GetAlphaMode()
                               || g_SaveMedia[index].sav_format != metadata2.format )
                     { // Formats can vary for readback, and miplevel is going to be 1 for TGA images
                         success = false;
+                        pass = false;
                         printe( "Metadata error in tga memory readback:\n%ls\n", szPath );
                         printmeta( &metadata2 );
                         printmetachk( &metadata );
                     }
                     else
                     {
-    // TESTTEST- SaveScratchImage( L"C:\\Temp\\XXX1.DDS", DDS_FLAGS_NONE, image2 );
-
-
-
                         const uint8_t* expected = digest;
                         if ( g_SaveMedia[index].options & FLAGS_ALTMD5_MASK )
                         {
@@ -550,17 +562,87 @@ bool Test04()
                         if ( FAILED(hr) )
                         {
                             success = false;
+                            pass = false;
                             printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( memcmp( expected, digest2, 16 ) != 0 )
                         {
                             success = false;
+                            pass = false;
                             printe( "MD5 checksum of reloaded data doesn't match original:\n%ls\n", szPath );
                         }
-                        else
-                            ++npass;
                     }
                 }
+
+                // TGA 2.0 tests
+                if (g_SaveMedia[index].save_alpha != TEX_ALPHA_MODE_OPAQUE)
+                {
+                    for (size_t j = 0; j < _countof(g_AlphaModes); ++j)
+                    {
+                        TexMetadata alphamdata = metadata;
+                        alphamdata.SetAlphaMode(g_AlphaModes[j]);
+
+                        hr = SaveToTGAMemory(*image.GetImage(0, 0, 0), blob, &alphamdata);
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed writing tga to memory [tga20] (HRESULT %08X):\n%ls\n", hr, szPath);
+                        }
+                        else
+                        {
+                            TexMetadata metadata2;
+                            ScratchImage image2;
+                            hr = LoadFromTGAMemory(blob.GetBufferPointer(), blob.GetBufferSize(), &metadata2, image2);
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed reading back written tga to memory [tga20] (HRESULT %08X):\n%ls\n", hr, szPath);
+                            }
+                            else if (alphamdata.width != metadata2.width
+                                || alphamdata.height != metadata2.height
+                                || alphamdata.arraySize != metadata2.arraySize
+                                || metadata2.mipLevels != 1
+                                || alphamdata.dimension != metadata2.dimension
+                                || metadata2.GetAlphaMode() != g_AlphaModes[j]
+                                || g_SaveMedia[index].sav_format != metadata2.format)
+                            { // Formats can vary for readback, and miplevel is going to be 1 for TGA images
+                                success = false;
+                                pass = false;
+                                printe("Metadata error in tga memory readback [tga20]:\n%ls\n", szPath);
+                                printmeta(&metadata2);
+                                printmetachk(&alphamdata);
+                            }
+                            else
+                            {
+                                const uint8_t* expected = digest;
+                                if (g_SaveMedia[index].options & FLAGS_ALTMD5_MASK)
+                                {
+                                    expected = g_AltMD5[((g_SaveMedia[index].options & 0xf0) >> 4) - 1].md5;
+                                }
+
+                                uint8_t digest2[16];
+                                hr = MD5Checksum(image2, digest2);
+                                if (FAILED(hr))
+                                {
+                                    success = false;
+                                    pass = false;
+                                    printe("Failed computing MD5 checksum of reloaded image  [tga20] (HRESULT %08X):\n%ls\n", hr, szPath);
+                                }
+                                else if (memcmp(expected, digest2, 16) != 0)
+                                {
+                                    success = false;
+                                    pass = false;
+                                    printe("MD5 checksum of reloaded data doesn't match original [tga20]:\n%ls\n", szPath);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (pass)
+                    ++npass;
             }
         }
 
@@ -615,6 +697,12 @@ bool Test05()
         wchar_t szDestPath[MAX_PATH] = {};
         _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, fname, L".tga" );
 
+        wchar_t szDestPath2[MAX_PATH] = {};
+        wchar_t tname[_MAX_FNAME] = {};
+        wcscpy_s(tname, fname);
+        wcscat_s(tname, L"_tga20");
+        _wmakepath_s(szDestPath2, MAX_PATH, nullptr, tempDir, tname, L".tga");
+
         TexMetadata metadata;
         ScratchImage image;
         HRESULT hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, &metadata, image );
@@ -641,11 +729,14 @@ bool Test05()
             }
             else
             {
+                bool pass = true;
+
                 hr = SaveToTGAFile( *image.GetImage(0,0,0), szDestPath );
                 if ( FAILED(hr) )
                 {
                     success = false;
-                    printe( "Failed writing tga to (HRESULT %08X):\n%ls\n", hr, szDestPath );
+                    pass = false;
+                    printe( "Failed writing tga to file (HRESULT %08X):\n%ls\n", hr, szDestPath );
                 }
                 else
                 {
@@ -655,16 +746,19 @@ bool Test05()
                     if ( FAILED(hr) )
                     {
                         success = false;
-                        printe( "Failed reading back written tga to (HRESULT %08X):\n%ls\n", hr, szDestPath );
+                        pass = false;
+                        printe( "Failed reading back written tga to file (HRESULT %08X):\n%ls\n", hr, szDestPath );
                     }
                     else if ( metadata.width != metadata2.width
                               || metadata.height != metadata2.height
                               || metadata.arraySize != metadata2.arraySize
                               || metadata2.mipLevels != 1
                               || metadata.dimension != metadata2.dimension
+                              || g_SaveMedia[index].save_alpha != metadata2.GetAlphaMode()
                               || g_SaveMedia[index].sav_format != metadata2.format  )
                     {   // Formats can vary for readback, and miplevel is going to be 1 for TGA images
                         success = false;
+                        pass = false;
                         printe( "Metadata error in tga readback:\n%ls\n", szDestPath );
                         printmeta( &metadata2 );
                         printmetachk( &metadata );
@@ -683,18 +777,88 @@ bool Test05()
                         hr = MD5Checksum( image2, digest2 );
                         if ( FAILED(hr) )
                         {
+                            pass = false;
                             success = false;
                             printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%ls\n", hr, szPath );
                         }
                         else if ( memcmp( expected, digest2, 16 ) != 0 )
                         {
+                            pass = false;
                             success = false;
                             printe( "MD5 checksum of reloaded data doesn't match original:\n%ls\n", szPath );
                         }
-                        else
-                            ++npass;
                     }
                 }
+
+                // TGA 2.0 tests
+                if (g_SaveMedia[index].save_alpha != TEX_ALPHA_MODE_OPAQUE)
+                {
+                    for (size_t j = 0; j < _countof(g_AlphaModes); ++j)
+                    {
+                        TexMetadata alphamdata = metadata;
+                        alphamdata.SetAlphaMode(g_AlphaModes[j]);
+
+                        hr = SaveToTGAFile(*image.GetImage(0, 0, 0), szDestPath2, &alphamdata);
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed writing tga to file [tga20] (HRESULT %08X):\n%ls\n", hr, szDestPath2);
+                        }
+                        else
+                        {
+                            TexMetadata metadata2;
+                            ScratchImage image2;
+                            hr = LoadFromTGAFile(szDestPath2, &metadata2, image2);
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed reading back written tga to file [tga20] (HRESULT %08X):\n%ls\n", hr, szDestPath2);
+                            }
+                            else if (alphamdata.width != metadata2.width
+                                || alphamdata.height != metadata2.height
+                                || alphamdata.arraySize != metadata2.arraySize
+                                || metadata2.mipLevels != 1
+                                || alphamdata.dimension != metadata2.dimension
+                                || metadata2.GetAlphaMode() != g_AlphaModes[j]
+                                || g_SaveMedia[index].sav_format != metadata2.format)
+                            {   // Formats can vary for readback, and miplevel is going to be 1 for TGA images
+                                success = false;
+                                pass = false;
+                                printe("Metadata error in tga readback [tga20]:\n%ls\n", szDestPath2);
+                                printmeta(&metadata2);
+                                printmetachk(&metadata);
+                            }
+                            else
+                            {
+                                const uint8_t* expected = digest;
+                                if (g_SaveMedia[index].options & FLAGS_ALTMD5_MASK)
+                                {
+                                    expected = g_AltMD5[((g_SaveMedia[index].options & 0xf0) >> 4) - 1].md5;
+                                }
+
+                                uint8_t digest2[16];
+                                hr = MD5Checksum(image2, digest2);
+                                if (FAILED(hr))
+                                {
+                                    pass = false;
+                                    success = false;
+                                    printe("Failed computing MD5 checksum of reloaded image data [tga20] (HRESULT %08X):\n%ls\n", hr, szPath);
+                                }
+                                else if (memcmp(expected, digest2, 16) != 0)
+                                {
+                                    pass = false;
+                                    success = false;
+                                    printe("MD5 checksum of reloaded data doesn't match original [tga20]:\n%ls\n", szPath);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (pass)
+                    ++npass;
             }
         }
 
