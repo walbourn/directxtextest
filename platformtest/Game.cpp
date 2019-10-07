@@ -104,6 +104,10 @@ void Game::Initialize(
         throw std::exception("CreateEvent");
 
     m_testThread = new std::thread(&Game::TestThreadProc, this);
+
+#if defined(_XBOX_ONE) && defined(_TITLE)
+    SetThreadAffinityMask(m_testThread->native_handle(), 0x2);
+#endif
 }
 
 #pragma region Frame Update

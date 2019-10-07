@@ -50,6 +50,9 @@ public:
         window->Closed +=
             ref new TypedEventHandler<CoreWindow^, CoreWindowEventArgs^>(this, &ViewProvider::OnWindowClosed);
 
+        // Default window thread to CPU 0
+        SetThreadAffinityMask(GetCurrentThread(), 0x1);
+
         m_game->Initialize(reinterpret_cast<IUnknown*>(window), 1920, 1080, DXGI_MODE_ROTATION_IDENTITY);
     }
 
@@ -119,6 +122,9 @@ int __cdecl main(Platform::Array<Platform::String^>^ /*argv*/)
     {
         throw std::exception("XMVerifyCPUSupport");
     }
+
+    // Default main thread to CPU 0
+    SetThreadAffinityMask(GetCurrentThread(), 0x1);
 
     auto viewProviderFactory = ref new ViewProviderFactory();
     CoreApplication::Run(viewProviderFactory);
