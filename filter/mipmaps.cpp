@@ -218,7 +218,6 @@ namespace
 
     const MipMapMedia g_MipMapMedia3D[] =
     {
-
         // <source> test-options | width height depth arraySize mipLevels miscFlags format dimension | filename
         #ifdef _M_X64
         { FLAGS_NONE, { 32, 32, 4, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888.dds",
@@ -247,6 +246,11 @@ namespace
             {0x1c,0xe3,0xd4,0xbd,0x62,0x11,0xe9,0x1c,0xbd,0xd7,0x8d,0xab,0x65,0x39,0x91,0xf5},{0},{0x86,0xb5,0x4b,0x9e,0x4d,0xa1,0xb5,0x37,0xaf,0xb8,0x5d,0x1f,0x09,0x23,0xbb,0x38},
             {0x86,0xb5,0x4b,0x9e,0x4d,0xa1,0xb5,0x37,0xaf,0xb8,0x5d,0x1f,0x09,0x23,0xbb,0x38},{0} },
         #endif
+
+        { FLAGS_NONE, { 1, 1, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH "MASTER_Interior_01_Material_NormalUnc.DDS",
+            {0xec,0x30,0x79,0xd6,0x97,0xd4,0xa7,0xab,0xa0,0xb9,0x77,0x0d,0xfb,0x6d,0x01,0xbb}, {0}, {0},
+            {0},{0},{0},
+            {0},{0} },
     };
 
     //-------------------------------------------------------------------------------------
@@ -418,6 +422,9 @@ bool FilterTest::Test02()
                 //--- Simple mipmaps 1D/2D ------------------------------------------------
                 ScratchImage mipChain;
                 hr = GenerateMipMaps( *srcimage.GetImage(0,0,0), TEX_FILTER_DEFAULT, 0, mipChain, false );
+                if (hr == E_INVALIDARG && metadata.width == 1 && metadata.height == 1)
+                    continue;
+
                 if ( FAILED(hr) )
                 {
                     success = false;
@@ -1618,7 +1625,11 @@ bool FilterTest::Test03()
         }
         else
         {
-            assert( metadata.IsVolumemap() );
+            if (!metadata.IsVolumemap())
+            {
+                // Fix-up for edge-cases
+                metadata.dimension = TEX_DIMENSION_TEXTURE3D;
+            }
 
             uint8_t srcdigest[16];
             hr = MD5Checksum( srcimage, srcdigest, metadata.depth );
@@ -1634,6 +1645,9 @@ bool FilterTest::Test03()
                 //--- Simple mipmaps volume -----------------------------------------------
                 ScratchImage mipChain;
                 hr = GenerateMipMaps3D( srcimage.GetImages(), metadata.depth, TEX_FILTER_DEFAULT, 0, mipChain );
+                if (hr == E_INVALIDARG && metadata.width == 1 && metadata.height == 1 && metadata.depth == 1)
+                    continue;
+
                 if ( FAILED(hr) )
                 {
                     success = false;
