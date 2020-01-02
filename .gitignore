@@ -18,6 +18,7 @@
 *.VC.db
 .vs
 Bin
+out
 /ipch
 /AppPackages
 Debug
