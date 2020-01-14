@@ -106,8 +106,10 @@ const SValue g_pCodecs[] =
     { L"BC1",   DXGI_FORMAT_BC1_UNORM },
     { L"BC2",   DXGI_FORMAT_BC2_UNORM },
     { L"BC3",   DXGI_FORMAT_BC3_UNORM },
-    { L"BC4",   DXGI_FORMAT_BC4_UNORM },
-    { L"BC5",   DXGI_FORMAT_BC5_UNORM },
+    { L"BC4S",  DXGI_FORMAT_BC4_SNORM },
+    { L"BC5S",  DXGI_FORMAT_BC5_SNORM },
+    { L"BC4U",  DXGI_FORMAT_BC4_UNORM },
+    { L"BC5U",  DXGI_FORMAT_BC5_UNORM },
     { L"BC6U",  DXGI_FORMAT_BC6H_UF16 },
     { L"BC6S",  DXGI_FORMAT_BC6H_SF16 },
     { L"BC7",   DXGI_FORMAT_BC7_UNORM },
@@ -306,7 +308,7 @@ namespace
         wprintf(L"Usage: bcvalidator <options> <files>\n");
         wprintf(L"\n");
         wprintf(L"   -r                  wildcard filename search is recursive\n");
-        wprintf(L"   -c                  Which codec to validate\n");
+        wprintf(L"   -c <codec>          Which codec to validate\n");
 #ifdef _OPENMP
         wprintf(L"   -singleproc         Do not use multi-threaded compression\n");
 #endif
@@ -317,7 +319,7 @@ namespace
         wprintf(L"   -bcmax              Use exhaustive compression (BC7 only)\n");
         wprintf(L"   -bcquick            Use quick compression (BC7 only)\n");
 
-        wprintf(L"\n   <filter>: ");
+        wprintf(L"\n   <codec>: ");
         PrintList(13, g_pCodecs);
 
         ComPtr<IDXGIFactory1> dxgiFactory;
