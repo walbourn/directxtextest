@@ -66,6 +66,7 @@ enum OPTIONS
     OPT_COMPRESS_MAX,
     OPT_COMPRESS_QUICK,
     OPT_COMPRESS_DITHER,
+    OPT_X2_BIAS,
     OPT_MAX
 };
 
@@ -98,6 +99,7 @@ const SValue g_pOptions [] =
     { L"bcmax",         OPT_COMPRESS_MAX },
     { L"bcquick",       OPT_COMPRESS_QUICK },
     { L"bcdither",      OPT_COMPRESS_DITHER },
+    { L"x2bias",        OPT_X2_BIAS },
     { nullptr,          0 }
 };
 
@@ -318,6 +320,7 @@ namespace
         wprintf(L"   -bcdither           Use dithering for BC1-3\n");
         wprintf(L"   -bcmax              Use exhaustive compression (BC7 only)\n");
         wprintf(L"   -bcquick            Use quick compression (BC7 only)\n");
+        wprintf(L"   -x2bias             Enable *2 - 1 conversion cases for unorm/pos-only-float\n");
 
         wprintf(L"\n   <codec>: ");
         PrintList(13, g_pCodecs);
@@ -662,6 +665,38 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
         DXGI_FORMAT bcformat = format;
         if (IsSRGB(info.format))
             bcformat = MakeSRGB(format);
+
+        // Handle x2bias UNORM to SNORM
+        if (dwOptions & (DWORD64(1) << OPT_X2_BIAS))
+        {
+            std::unique_ptr<ScratchImage> timage(new (std::nothrow) ScratchImage);
+            if (!timage)
+            {
+                wprintf(L"\nERROR: Memory allocation failed\n");
+                return 1;
+            }
+
+            hr = Convert(image->GetImages(), image->GetImageCount(), image->GetMetadata(), DXGI_FORMAT_R32G32B32A32_FLOAT, TEX_FILTER_FLOAT_X2BIAS, TEX_THRESHOLD_DEFAULT, *timage);
+            if (FAILED(hr))
+            {
+                wprintf(L" FAILED [convert] (%x)\n", static_cast<unsigned int>(hr));
+                return 1;
+            }
+
+            auto& tinfo = timage->GetMetadata();
+
+            info.format = tinfo.format;
+
+            assert(info.width == tinfo.width);
+            assert(info.height == tinfo.height);
+            assert(info.depth == tinfo.depth);
+            assert(info.arraySize == tinfo.arraySize);
+            assert(info.mipLevels == tinfo.mipLevels);
+            assert(info.miscFlags == tinfo.miscFlags);
+            assert(info.dimension == tinfo.dimension);
+
+            image.swap(timage);
+        }
 
         // Perform compression
         bool bc6hbc7 = false;
