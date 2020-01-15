@@ -257,7 +257,7 @@ namespace
         // TODO - GUID_WICPixelFormat64bppRGBHalf (wdp), GUID_WICPixelFormat128bppRGBFixedPoint (wdp)
         #endif
 
-        // Kodak Lossless True Color Image Suite
+        // Kodak Lossless True Color Image Suite
         { FLAGS_NONE, { 768, 512, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"kodim01.png", { 0x4b,0xe8,0xe3,0xd8,0x4c,0x78,0x63,0x24,0x8c,0x2a,0xa0,0x55,0x45,0x2e,0x86,0x10 } },
         { FLAGS_NONE, { 768, 512, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"kodim02.png", { 0xdb,0x28,0x77,0xe0,0x34,0x59,0xb2,0x19,0x6f,0xfe,0x5a,0xf1,0xdf,0x94,0x92,0x6d } },
         { FLAGS_NONE, { 768, 512, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"kodim03.png", { 0xc5,0x70,0xe9,0x1c,0x02,0x4f,0xb9,0x9f,0x5e,0x7f,0x98,0xfc,0x0c,0x24,0x5f,0xab } },
