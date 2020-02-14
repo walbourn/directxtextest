@@ -322,6 +322,14 @@ namespace
         { FLAGS_NONE, { 550, 481, 1, 1, 1, 0, 0, DXGI_FORMAT_R32G32B32A32_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"Desert 128bpp RGBA - converted to pRGBA.tif",{ 0xe8,0xdc,0x45,0xab,0x67,0x3a,0x13,0x96,0x1f,0x3f,0x0b,0xb6,0xdc,0x39,0xf9,0xe2 } },
         // TODO - GUID_WICPixelFormat32bppPBGRA (tiff), GUID_WICPixelFormat64bppPRGBA (tiff)
 
+        // Legacy DirectX SDK textures
+        { FLAGS_NONE, { 512, 512, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"rocks.jpg",
+          { 0xda,0xce,0x15,0x24,0x96,0xc5,0x59,0xde,0xc2,0xf9,0x9a,0x2a,0x1f,0xea,0x5a,0x9c } },
+        { FLAGS_NONE, { 512, 512, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"wall.jpg",
+          { 0x2c,0x79,0x80,0x35,0xc9,0xc0,0x3f,0x12,0x50,0xad,0x6f,0x60,0xa3,0xbb,0xb8,0x0f } },
+        { FLAGS_NONE, { 512, 512, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"wood.jpg",
+          { 0x31,0xc0,0xd2,0x6e,0x8d,0xdc,0x3a,0x60,0xf8,0xda,0x86,0x3d,0x05,0x1a,0x10,0x1b } },
+
         // CMYK
         #ifndef NO_CMYK
         #ifdef _M_X64
@@ -478,7 +486,7 @@ bool WICTest::Test00()
             SetWICFactory(wic.Get());
 
             bool iswic2 = false;
-            IWICImagingFactory* pWIC = GetWICFactory(iswic2);
+            auto pWIC = GetWICFactory(iswic2);
             if (pWIC != wic.Get() || !iswic2)
             {
                 printe("SetWICFactory failed (WIC2)\n");
@@ -494,7 +502,7 @@ bool WICTest::Test00()
                 SetWICFactory(wic.Get());
 
                 bool iswic2 = false;
-                IWICImagingFactory* pWIC = GetWICFactory(iswic2);
+                auto pWIC = GetWICFactory(iswic2);
                 if (pWIC != wic.Get() || iswic2)
                 {
                     printe("SetWICFactory failed (WIC1)\n");
@@ -508,7 +516,7 @@ bool WICTest::Test00()
 
     {
         bool iswic2 = false;
-        IWICImagingFactory* pWIC = GetWICFactory(iswic2);
+        auto pWIC = GetWICFactory(iswic2);
 
         if (!pWIC)
         {
