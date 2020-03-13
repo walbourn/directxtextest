@@ -42,13 +42,13 @@ namespace
 {
     struct handle_closer { void operator()(HANDLE h) { if (h) CloseHandle(h); } };
 
-    typedef std::unique_ptr<void, handle_closer> ScopedHandle;
+    using ScopedHandle = std::unique_ptr<void, handle_closer>;
 
     inline HANDLE safe_handle(HANDLE h) { return (h == INVALID_HANDLE_VALUE) ? nullptr : h; }
 
     struct find_closer { void operator()(HANDLE h) { assert(h != INVALID_HANDLE_VALUE); if (h) FindClose(h); } };
 
-    typedef std::unique_ptr<void, find_closer> ScopedFindHandle;
+    using ScopedFindHandle = std::unique_ptr<void, find_closer>;
 }
 
 using namespace DirectX;
@@ -460,7 +460,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
     HRESULT hr = hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
     if (FAILED(hr))
     {
-        wprintf(L"Failed to initialize COM (%08X)\n", hr);
+        wprintf(L"Failed to initialize COM (%08X)\n", static_cast<unsigned int>(hr));
         return 1;
     }
 
@@ -623,7 +623,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
             hr = LoadFromDDSFile(pConv->szSrc, DDS_FLAGS_NONE, &info, *image);
             if (FAILED(hr))
             {
-                wprintf(L" FAILED (%x)\n", hr);
+                wprintf(L" FAILED (%x)\n", static_cast<unsigned int>(hr));
                 return 1;
             }
 
@@ -638,7 +638,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
             hr = LoadFromTGAFile(pConv->szSrc, &info, *image);
             if (FAILED(hr))
             {
-                wprintf(L" FAILED (%x)\n", hr);
+                wprintf(L" FAILED (%x)\n", static_cast<unsigned int>(hr));
                 return 1;
             }
         }
@@ -647,7 +647,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
             hr = LoadFromHDRFile(pConv->szSrc, &info, *image);
             if (FAILED(hr))
             {
-                wprintf(L" FAILED (%x)\n", hr);
+                wprintf(L" FAILED (%x)\n", static_cast<unsigned int>(hr));
                 return 1;
             }
         }
@@ -656,7 +656,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
             hr = LoadFromWICFile(pConv->szSrc, WIC_FLAGS_NONE, &info, *image);
             if (FAILED(hr))
             {
-                wprintf(L" FAILED (%x)\n", hr);
+                wprintf(L" FAILED (%x)\n", static_cast<unsigned int>(hr));
                 return 1;
             }
         }
@@ -764,7 +764,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
             }
             if (FAILED(hr))
             {
-                wprintf(L" FAILED [compress] (%x)\n", hr);
+                wprintf(L" FAILED [compress] (%x)\n", static_cast<unsigned int>(hr));
                 return 1;
             }
 
@@ -791,7 +791,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
             hr = Decompress(cimage->GetImage(0, 0, 0), cimage->GetImageCount(), cimage->GetMetadata(), DXGI_FORMAT_UNKNOWN /* picks good default */, *image2);
             if (FAILED(hr))
             {
-                wprintf(L" FAILED [decompress] (%x)\n", hr);
+                wprintf(L" FAILED [decompress] (%x)\n", static_cast<unsigned int>(hr));
                 return 1;
             }
 

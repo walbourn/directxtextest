@@ -105,7 +105,7 @@ bool FilterTest::Test04()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting DDS data from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed getting DDS data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
@@ -123,7 +123,7 @@ bool FilterTest::Test04()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed computing MD5 checksum (HRESULT %08X):\n%ls\n", hr, szPath );
+                printe( "Failed computing MD5 checksum (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
             }
             else
             {
@@ -135,7 +135,7 @@ bool FilterTest::Test04()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed mip-map Fant/Box generation (HRESULT %08X):\n%ls\n", hr, szPath );
+                    printe( "Failed mip-map Fant/Box generation (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                 }
                 else if ( mipChain.GetMetadata().mipLevels < 2 )
                 {
@@ -152,7 +152,7 @@ bool FilterTest::Test04()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing Fant/Box MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe( "Failed computing Fant/Box MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                     }
                     else if ( memcmp( digest, srcdigest, 16 ) != 0 )
                     {
@@ -171,7 +171,7 @@ bool FilterTest::Test04()
                     {
                         success = false;
                         pass = false;
-                        printe("Failing creating coverage mipchain (HRESULT %08X):\n%ls\n", hr, szPath);
+                        printe("Failing creating coverage mipchain (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                     }
                     else
                     {
@@ -187,7 +187,7 @@ bool FilterTest::Test04()
                             {
                                 success = false;
                                 pass = false;
-                                printe("Failing scaling mips coverage 0.5 mipchain (HRESULT %08X):\n%ls\n", hr, szPath);
+                                printe("Failing scaling mips coverage 0.5 mipchain (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                             }
                             else
                             {
@@ -214,7 +214,7 @@ bool FilterTest::Test04()
                             {
                                 success = false;
                                 pass = false;
-                                printe("Failing scaling mips coverage 0.8 mipchain (HRESULT %08X):\n%ls\n", hr, szPath);
+                                printe("Failing scaling mips coverage 0.8 mipchain (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                             }
                             else
                             {

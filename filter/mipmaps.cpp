@@ -395,7 +395,7 @@ bool FilterTest::Test02()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting DDS data from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed getting DDS data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
@@ -413,7 +413,7 @@ bool FilterTest::Test02()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed computing MD5 checksum (HRESULT %08X):\n%ls\n", hr, szPath );
+                printe( "Failed computing MD5 checksum (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
             }
             else
             {
@@ -429,7 +429,7 @@ bool FilterTest::Test02()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed mip-map Fant/Box generation (HRESULT %08X):\n%ls\n", hr, szPath );
+                    printe( "Failed mip-map Fant/Box generation (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                 }
                 else if ( mipChain.GetMetadata().mipLevels < 2 )
                 {
@@ -446,7 +446,7 @@ bool FilterTest::Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing Fant/Box MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe( "Failed computing Fant/Box MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                     }
                     else if ( !(g_MipMapMedia[index].options & FLAGS_SKIP_TOPTEST) && memcmp( digest, srcdigest, 16 ) != 0 )
                     {
@@ -481,7 +481,7 @@ bool FilterTest::Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                     }
                     else if ( memcmp( digest, g_MipMapMedia[index].md5, 16 ) != 0
                               && (!expected2 || memcmp( digest, expected2, 16 ) != 0 )
@@ -533,7 +533,7 @@ bool FilterTest::Test02()
                     {
                         success = false;
                         pass = false;
-                        printe("Failed mip-map Point generation (HRESULT %08X):\n%ls\n", hr, szPath);
+                        printe("Failed mip-map Point generation (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                     }
                     else if (mipChainPoint.GetMetadata().mipLevels < 2)
                     {
@@ -550,7 +550,7 @@ bool FilterTest::Test02()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else if (!(g_MipMapMedia[index].options & FLAGS_SKIP_TOPTEST) && memcmp(digest, srcdigest, 16) != 0)
                         {
@@ -573,7 +573,7 @@ bool FilterTest::Test02()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else if (memcmp(digest, g_MipMapMedia[index].md5_point, 16) != 0
                             && (!expected2 || memcmp(digest, expected2, 16) != 0))
@@ -610,7 +610,7 @@ bool FilterTest::Test02()
                     {
                         success = false;
                         pass = false;
-                        printe("Failed mip-map Linear generation (HRESULT %08X):\n%ls\n", hr, szPath);
+                        printe("Failed mip-map Linear generation (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                     }
                     else if (mipChainLinear.GetMetadata().mipLevels < 2)
                     {
@@ -627,7 +627,7 @@ bool FilterTest::Test02()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else if (!(g_MipMapMedia[index].options & FLAGS_SKIP_TOPTEST) && memcmp(digest, srcdigest, 16) != 0)
                         {
@@ -650,7 +650,7 @@ bool FilterTest::Test02()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else if (memcmp(digest, g_MipMapMedia[index].md5_linear, 16) != 0
                             && (!expected2 || memcmp(digest, expected2, 16) != 0))
@@ -673,7 +673,7 @@ bool FilterTest::Test02()
                         if (FAILED(hr))
                         {
                             success = false;
-                            printe("Failed comparing Point vs. Linear image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed comparing Point vs. Linear image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else if (IsErrorTooLarge(mse, targMSE))
                         {
@@ -703,7 +703,7 @@ bool FilterTest::Test02()
                     {
                         success = false;
                         pass = false;
-                        printe("Failed mip-map Cubic generation (HRESULT %08X):\n%ls\n", hr, szPath);
+                        printe("Failed mip-map Cubic generation (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                     }
                     else if (mipChainCubic.GetMetadata().mipLevels < 2)
                     {
@@ -720,7 +720,7 @@ bool FilterTest::Test02()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else if (!(g_MipMapMedia[index].options & FLAGS_SKIP_TOPTEST) && memcmp(digest, srcdigest, 16) != 0)
                         {
@@ -743,7 +743,7 @@ bool FilterTest::Test02()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else if (memcmp(digest, g_MipMapMedia[index].md5_cubic, 16) != 0
                             && (!expected2 || memcmp(digest, expected2, 16) != 0))
@@ -766,7 +766,7 @@ bool FilterTest::Test02()
                         if (FAILED(hr))
                         {
                             success = false;
-                            printe("Failed comparing Point vs. Cubic image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed comparing Point vs. Cubic image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else if (IsErrorTooLarge(mse, targMSE))
                         {
@@ -781,7 +781,7 @@ bool FilterTest::Test02()
                         if (FAILED(hr))
                         {
                             success = false;
-                            printe("Failed comparing Linear vs. Cubic image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed comparing Linear vs. Cubic image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else if (IsErrorTooLarge(mse, targMSE))
                         {
@@ -811,7 +811,7 @@ bool FilterTest::Test02()
                     {
                         success = false;
                         pass = false;
-                        printe("Failed mip-map Triangle generation (HRESULT %08X):\n%ls\n", hr, szPath);
+                        printe("Failed mip-map Triangle generation (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                     }
                     else if (mipChainTriangle.GetMetadata().mipLevels < 2)
                     {
@@ -828,7 +828,7 @@ bool FilterTest::Test02()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else if (!(g_MipMapMedia[index].options & FLAGS_SKIP_TOPTEST) && memcmp(digest, srcdigest, 16) != 0)
                         {
@@ -851,7 +851,7 @@ bool FilterTest::Test02()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else if (memcmp(digest, g_MipMapMedia[index].md5_tri, 16) != 0
                             && (!expected2 || memcmp(digest, expected2, 16) != 0))
@@ -891,7 +891,7 @@ bool FilterTest::Test02()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed mip-map separate alpha generation (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed mip-map separate alpha generation (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else if (mipChainSepAlpha.GetMetadata().mipLevels < 2)
                         {
@@ -908,7 +908,7 @@ bool FilterTest::Test02()
                             {
                                 success = false;
                                 pass = false;
-                                printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                                printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                             }
                             else if (!(g_MipMapMedia[index].options & FLAGS_SKIP_TOPTEST) && memcmp(digest, srcdigest, 16) != 0)
                             {
@@ -931,7 +931,7 @@ bool FilterTest::Test02()
                             {
                                 success = false;
                                 pass = false;
-                                printe("Failed computing MD5 checksum of mipchain separate alpha data (HRESULT %08X):\n%ls\n", hr, szPath);
+                                printe("Failed computing MD5 checksum of mipchain separate alpha data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                             }
                             else if (memcmp(digest, g_MipMapMedia[index].md5_sepalpha, 16) != 0
                                 && (!expected2 || memcmp(digest, expected2, 16) != 0))
@@ -977,7 +977,7 @@ bool FilterTest::Test02()
                     {
                         success = false;
                         pass = false;
-                        printe("Failed mip-map non-WIC generation (HRESULT %08X):\n%ls\n", hr, szPath);
+                        printe("Failed mip-map non-WIC generation (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                     }
                     else if (nwMipChain.GetMetadata().mipLevels < 2)
                     {
@@ -994,7 +994,7 @@ bool FilterTest::Test02()
                         if (FAILED(hr))
                         {
                             success = false;
-                            printe("Failed comparing non-WIC to WIC image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed comparing non-WIC to WIC image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else if (IsErrorTooLarge(mse, targMSE))
                         {
@@ -1027,7 +1027,7 @@ bool FilterTest::Test02()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed mip-map non-WIC Point generation (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed mip-map non-WIC Point generation (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else if (nwMipChainPoint.GetMetadata().mipLevels < 2)
                         {
@@ -1046,7 +1046,7 @@ bool FilterTest::Test02()
                                 if (FAILED(hr))
                                 {
                                     success = false;
-                                    printe("Failed comparing non-WIC to WIC Point image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                                    printe("Failed comparing non-WIC to WIC Point image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                                 }
                                 else if (IsErrorTooLarge(mse, targMSE))
                                 {
@@ -1077,7 +1077,7 @@ bool FilterTest::Test02()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed mip-map non-WIC Linear generation (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed mip-map non-WIC Linear generation (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else if (nwMipChainLinear.GetMetadata().mipLevels < 2)
                         {
@@ -1094,7 +1094,7 @@ bool FilterTest::Test02()
                             if (FAILED(hr))
                             {
                                 success = false;
-                                printe("Failed comparing non-WIC to WIC Linear image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                                printe("Failed comparing non-WIC to WIC Linear image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                             }
                             else if (IsErrorTooLarge(mse, targMSE))
                             {
@@ -1109,7 +1109,7 @@ bool FilterTest::Test02()
                             if (FAILED(hr))
                             {
                                 success = false;
-                                printe("Failed comparing non-WIC Point vs. Linear image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                                printe("Failed comparing non-WIC Point vs. Linear image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                             }
                             else if (IsErrorTooLarge(mse, targMSE))
                             {
@@ -1139,7 +1139,7 @@ bool FilterTest::Test02()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed mip-map non-WIC Cubic generation (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed mip-map non-WIC Cubic generation (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else if (nwMipChainCubic.GetMetadata().mipLevels < 2)
                         {
@@ -1156,7 +1156,7 @@ bool FilterTest::Test02()
                             if (FAILED(hr))
                             {
                                 success = false;
-                                printe("Failed comparing non-WIC to WIC Cubic image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                                printe("Failed comparing non-WIC to WIC Cubic image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                             }
                             else if (IsErrorTooLarge(mse, targMSE))
                             {
@@ -1173,7 +1173,7 @@ bool FilterTest::Test02()
                                 if (FAILED(hr))
                                 {
                                     success = false;
-                                    printe("Failed comparing non-WIC Point vs. Cubic image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                                    printe("Failed comparing non-WIC Point vs. Cubic image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                                 }
                                 else if (IsErrorTooLarge(mse, targMSE))
                                 {
@@ -1189,7 +1189,7 @@ bool FilterTest::Test02()
                             if (FAILED(hr))
                             {
                                 success = false;
-                                printe("Failed comparing non-WIC Linear vs. Cubic image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                                printe("Failed comparing non-WIC Linear vs. Cubic image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                             }
                             else if (IsErrorTooLarge(mse, targMSE))
                             {
@@ -1225,7 +1225,7 @@ bool FilterTest::Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map sRGB generation (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe( "Failed mip-map sRGB generation (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                     }
                     else if ( srgbMipChain.GetMetadata().mipLevels < 2 )
                     {
@@ -1242,7 +1242,7 @@ bool FilterTest::Test02()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed comparing sRGB to non-WIC image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                            printe( "Failed comparing sRGB to non-WIC image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                         }
                         else if ( IsErrorTooSmall( mse, 0.00005f ) )
                         {
@@ -1281,7 +1281,7 @@ bool FilterTest::Test02()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed mip-map sRGB Linear generation (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed mip-map sRGB Linear generation (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else if (srgbMipChainLinear.GetMetadata().mipLevels < 2)
                         {
@@ -1298,7 +1298,7 @@ bool FilterTest::Test02()
                             if (FAILED(hr))
                             {
                                 success = false;
-                                printe("Failed comparing sRGB Linear to non-WIC image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                                printe("Failed comparing sRGB Linear to non-WIC image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                             }
                             else if (IsErrorTooSmall(mse, 0.00005f))
                             {
@@ -1335,7 +1335,7 @@ bool FilterTest::Test02()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed mip-map sRGB Cubic generation (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed mip-map sRGB Cubic generation (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else if (srgbMipChainCubic.GetMetadata().mipLevels < 2)
                         {
@@ -1352,7 +1352,7 @@ bool FilterTest::Test02()
                             if (FAILED(hr))
                             {
                                 success = false;
-                                printe("Failed comparing sRGB Cubic to non-WIC image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                                printe("Failed comparing sRGB Cubic to non-WIC image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                             }
                             else if (IsErrorTooSmall(mse, 0.00005f))
                             {
@@ -1389,7 +1389,7 @@ bool FilterTest::Test02()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed mip-map sRGB Triangle generation (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed mip-map sRGB Triangle generation (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else if (srgbMipChainTriangle.GetMetadata().mipLevels < 2)
                         {
@@ -1406,7 +1406,7 @@ bool FilterTest::Test02()
                             if (FAILED(hr))
                             {
                                 success = false;
-                                printe("Failed comparing sRGB Triangle to default data (HRESULT %08X):\n%ls\n", hr, szPath);
+                                printe("Failed comparing sRGB Triangle to default data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                             }
                             else if (IsErrorTooSmall(mse, 0.00005f))
                             {
@@ -1452,7 +1452,7 @@ bool FilterTest::Test02()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed mip-map complex Fant/Box generation (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe( "Failed mip-map complex Fant/Box generation (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                     }
                     else
                     {
@@ -1482,7 +1482,7 @@ bool FilterTest::Test02()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                             }
                             else if ( !(g_MipMapMedia[index].options & FLAGS_SKIP_TOPTEST) && memcmp( digest, srcdigest, 16 ) != 0 )
                             {
@@ -1517,7 +1517,7 @@ bool FilterTest::Test02()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed computing MD5 checksum of complex mipchain data (HRESULT %08X):\n%ls\n", hr, szPath );
+                                printe( "Failed computing MD5 checksum of complex mipchain data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                             }
                             else if ( memcmp( digest, g_MipMapMedia[index].md5_c, 16 ) != 0
                                       && (!expected2 || memcmp( digest, expected2, 16 ) != 0 )
@@ -1614,7 +1614,7 @@ bool FilterTest::Test03()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting DDS data from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed getting DDS data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
@@ -1636,7 +1636,7 @@ bool FilterTest::Test03()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed computing MD5 checksum (HRESULT %08X):\n%ls\n", hr, szPath );
+                printe( "Failed computing MD5 checksum (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
             }
             else
             {
@@ -1652,7 +1652,7 @@ bool FilterTest::Test03()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed volume mip-map Fant/Box generation (HRESULT %08X):\n%ls\n", hr, szPath );
+                    printe( "Failed volume mip-map Fant/Box generation (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                 }
                 else if ( mipChain.GetMetadata().mipLevels < 2 )
                 {
@@ -1669,7 +1669,7 @@ bool FilterTest::Test03()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                     }
                     else if ( memcmp( digest, srcdigest, 16 ) != 0 )
                     {
@@ -1692,7 +1692,7 @@ bool FilterTest::Test03()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                     }
                     else if ( memcmp( digest, g_MipMapMedia3D[index].md5, 16 ) != 0
                               && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
@@ -1724,7 +1724,7 @@ bool FilterTest::Test03()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed volume mip-map Point generation (HRESULT %08X):\n%ls\n", hr, szPath );
+                    printe( "Failed volume mip-map Point generation (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                 }
                 else if ( mipChainPoint.GetMetadata().mipLevels < 2 )
                 {
@@ -1741,7 +1741,7 @@ bool FilterTest::Test03()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                     }
                     else if ( memcmp( digest, srcdigest, 16 ) != 0 )
                     {
@@ -1764,7 +1764,7 @@ bool FilterTest::Test03()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                     }
                     else if ( memcmp( digest, g_MipMapMedia3D[index].md5_point, 16 ) != 0
                               && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
@@ -1798,7 +1798,7 @@ bool FilterTest::Test03()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed volume mip-map Linear generation (HRESULT %08X):\n%ls\n", hr, szPath );
+                    printe( "Failed volume mip-map Linear generation (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                 }
                 else if ( mipChainLinear.GetMetadata().mipLevels < 2 )
                 {
@@ -1815,7 +1815,7 @@ bool FilterTest::Test03()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                     }
                     else if ( memcmp( digest, srcdigest, 16 ) != 0 )
                     {
@@ -1838,7 +1838,7 @@ bool FilterTest::Test03()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                     }
                     else if ( memcmp( digest, g_MipMapMedia3D[index].md5_linear, 16 ) != 0
                               && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
@@ -1872,7 +1872,7 @@ bool FilterTest::Test03()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed volume mip-map Cubic generation (HRESULT %08X):\n%ls\n", hr, szPath );
+                    printe( "Failed volume mip-map Cubic generation (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                 }
                 else if ( mipChainCubic.GetMetadata().mipLevels < 2 )
                 {
@@ -1889,7 +1889,7 @@ bool FilterTest::Test03()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                     }
                     else if ( memcmp( digest, srcdigest, 16 ) != 0 )
                     {
@@ -1912,7 +1912,7 @@ bool FilterTest::Test03()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                     }
                     else if ( memcmp( digest, g_MipMapMedia3D[index].md5_cubic, 16 ) != 0
                               && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
@@ -1946,7 +1946,7 @@ bool FilterTest::Test03()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed volume mip-map Triangle generation (HRESULT %08X):\n%ls\n", hr, szPath );
+                    printe( "Failed volume mip-map Triangle generation (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                 }
                 else if ( mipChainTriangle.GetMetadata().mipLevels < 2 )
                 {
@@ -1963,7 +1963,7 @@ bool FilterTest::Test03()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                     }
                     else if ( memcmp( digest, srcdigest, 16 ) != 0 )
                     {
@@ -1986,7 +1986,7 @@ bool FilterTest::Test03()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                     }
                     else if ( memcmp( digest, g_MipMapMedia3D[index].md5_tri, 16 ) != 0
                               && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )
@@ -2022,7 +2022,7 @@ bool FilterTest::Test03()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed volume mip-map complex Fant/Box generation (HRESULT %08X):\n%ls\n", hr, szPath );
+                    printe( "Failed volume mip-map complex Fant/Box generation (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                 }
                 else
                 {
@@ -2052,7 +2052,7 @@ bool FilterTest::Test03()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                            printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                         }
                         else if ( memcmp( digest, srcdigest, 16 ) != 0 )
                         {
@@ -2075,7 +2075,7 @@ bool FilterTest::Test03()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", hr, szPath );
+                            printe( "Failed computing MD5 checksum of mipchain data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                         }
                         else if ( memcmp( digest, g_MipMapMedia3D[index].md5_c, 16 ) != 0
                                   && (!expected2 || memcmp( digest, expected2, 16 ) != 0 ) )

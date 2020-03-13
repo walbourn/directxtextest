@@ -86,7 +86,7 @@ bool TEXTest::Test11()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed loading dds (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed loading dds (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
@@ -114,7 +114,7 @@ bool TEXTest::Test11()
                     {
                         success = false;
                         pass = false;
-                        printe("Failed computing normal map for format %u [single] (HRESULT %08X)\n", hr, fmt);
+                        printe("Failed computing normal map for format %u [single] (HRESULT %08X)\n", static_cast<unsigned int>(hr), fmt);
                     }
                     else
                     {
@@ -141,7 +141,7 @@ bool TEXTest::Test11()
                     {
                         success = false;
                         pass = false;
-                        printe("Failed computing normal map for format %u [mipmap] (HRESULT %08X)\n", hr, fmt);
+                        printe("Failed computing normal map for format %u [mipmap] (HRESULT %08X)\n", static_cast<unsigned int>(hr), fmt);
                     }
                     else
                     {

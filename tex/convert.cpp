@@ -980,7 +980,7 @@ bool TEXTest::Test05B()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting DDS data from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed getting DDS data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
@@ -1017,7 +1017,7 @@ bool TEXTest::Test05B()
                 if ( FAILED(hr) )
                 {
                     success = false;
-                    printe( "Failed comparing internal convert images (HRESULT %08X):\n%ls\n", hr, szPath );
+                    printe( "Failed comparing internal convert images (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                 }
                 else if ( IsErrorTooLarge( mse, targMSE ) )
                 {
@@ -2693,7 +2693,7 @@ bool TEXTest::Test06()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting DDS data from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed getting DDS data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
@@ -2770,7 +2770,7 @@ bool TEXTest::Test06()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed conversion (HRESULT %08X) to %ls:\n%ls\n", hr, GetName( tformat ), szPath );
+                    printe( "Failed conversion (HRESULT %08X) to %ls:\n%ls\n", static_cast<unsigned int>(hr), GetName( tformat ), szPath );
                 }
                 else if ( image.GetMetadata().format != tformat
                           || image.GetMetadata().width != srcimage.GetMetadata().width || image.GetMetadata().height != srcimage.GetMetadata().height )
@@ -2826,7 +2826,7 @@ bool TEXTest::Test06()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed DITHER conversion (HRESULT %08X) to %ls:\n%ls\n", hr, GetName( tformat ), szPath );
+                        printe( "Failed DITHER conversion (HRESULT %08X) to %ls:\n%ls\n", static_cast<unsigned int>(hr), GetName( tformat ), szPath );
                     }
                     else if ( imageDither.GetMetadata().format != tformat
                               || imageDither.GetMetadata().width != srcimage.GetMetadata().width || imageDither.GetMetadata().height != srcimage.GetMetadata().height )
@@ -2863,7 +2863,7 @@ bool TEXTest::Test06()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed comparing simple vs. DITHER image data (HRESULT %08X)\n", hr );
+                            printe( "Failed comparing simple vs. DITHER image data (HRESULT %08X)\n", static_cast<unsigned int>(hr) );
                         }
                         else if ( IsErrorTooLarge( mse, targMSE ) )
                         {
@@ -2905,7 +2905,7 @@ bool TEXTest::Test06()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed Diffusion DITHER conversion (HRESULT %08X) to %ls:\n%ls\n", hr, GetName( tformat ), szPath );
+                        printe( "Failed Diffusion DITHER conversion (HRESULT %08X) to %ls:\n%ls\n", static_cast<unsigned int>(hr), GetName( tformat ), szPath );
                     }
                     else if ( imageDitherDiffusion.GetMetadata().format != tformat
                               || imageDitherDiffusion.GetMetadata().width != srcimage.GetMetadata().width || imageDitherDiffusion.GetMetadata().height != srcimage.GetMetadata().height )
@@ -2942,7 +2942,7 @@ bool TEXTest::Test06()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed comparing simple vs. Diffusion DITHER image data (HRESULT %08X)\n", hr );
+                            printe( "Failed comparing simple vs. Diffusion DITHER image data (HRESULT %08X)\n", static_cast<unsigned int>(hr) );
                         }
                         else if ( IsErrorTooLarge( mse, targMSE ) )
                         {
@@ -2992,7 +2992,7 @@ bool TEXTest::Test06()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed non-WIC conversion (HRESULT %08X) to %ls:\n%ls\n", hr, GetName( tformat ), szPath );
+                        printe( "Failed non-WIC conversion (HRESULT %08X) to %ls:\n%ls\n", static_cast<unsigned int>(hr), GetName( tformat ), szPath );
                     }
                     else if ( nwimage.GetMetadata().format != tformat
                               || nwimage.GetMetadata().width != srcimage.GetMetadata().width
@@ -3030,7 +3030,7 @@ bool TEXTest::Test06()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed comparing simple vs. non-WIC image data (HRESULT %08X)\n", hr );
+                            printe( "Failed comparing simple vs. non-WIC image data (HRESULT %08X)\n", static_cast<unsigned int>(hr) );
                         }
 
                         if ( tformat == DXGI_FORMAT_R1_UNORM && SkipMonoCase( metadata.format ) )
@@ -3084,7 +3084,7 @@ bool TEXTest::Test06()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed non-WIC DITHER conversion (HRESULT %08X) to %ls:\n%ls\n", hr, GetName( tformat ), szPath );
+                        printe( "Failed non-WIC DITHER conversion (HRESULT %08X) to %ls:\n%ls\n", static_cast<unsigned int>(hr), GetName( tformat ), szPath );
                     }
                     else if ( nwimageDither.GetMetadata().format != tformat
                               || nwimageDither.GetMetadata().width != srcimage.GetMetadata().width || nwimageDither.GetMetadata().height != srcimage.GetMetadata().height )
@@ -3119,7 +3119,7 @@ bool TEXTest::Test06()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed comparing non-WIC simple vs. DITHER image data (HRESULT %08X)\n", hr );
+                            printe( "Failed comparing non-WIC simple vs. DITHER image data (HRESULT %08X)\n", static_cast<unsigned int>(hr) );
                         }
                         else if ( IsErrorTooLarge( mse, targMSE ) )
                         {
@@ -3162,7 +3162,7 @@ bool TEXTest::Test06()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed non-WIC Diffusion DITHER conversion (HRESULT %08X) to %ls:\n%ls\n", hr, GetName( tformat ), szPath );
+                        printe( "Failed non-WIC Diffusion DITHER conversion (HRESULT %08X) to %ls:\n%ls\n", static_cast<unsigned int>(hr), GetName( tformat ), szPath );
                     }
                     else if ( nwimageDitherDiffusion.GetMetadata().format != tformat
                               || nwimageDitherDiffusion.GetMetadata().width != srcimage.GetMetadata().width || nwimageDitherDiffusion.GetMetadata().height != srcimage.GetMetadata().height )
@@ -3199,7 +3199,7 @@ bool TEXTest::Test06()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed comparing non-WIC simple vs. Diffusion DITHER image data (HRESULT %08X)\n", hr );
+                            printe( "Failed comparing non-WIC simple vs. Diffusion DITHER image data (HRESULT %08X)\n", static_cast<unsigned int>(hr) );
                         }
                         else if ( IsErrorTooLarge( mse, targMSE ) )
                         {
@@ -3378,7 +3378,7 @@ bool TEXTest::Test06()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed comparing sRGB vs. RGB image data (HRESULT %08X)\n", hr );
+                            printe( "Failed comparing sRGB vs. RGB image data (HRESULT %08X)\n", static_cast<unsigned int>(hr) );
                         }
 
                         if ( IsErrorTooLarge( mse, targMSE ) )
@@ -3397,7 +3397,7 @@ bool TEXTest::Test06()
                     {
                         success = false;
                         pass = false;
-                        printe("Failed conversion x2 bias (HRESULT %08X) to %ls:\n%ls\n", hr, GetName(tformat), szPath);
+                        printe("Failed conversion x2 bias (HRESULT %08X) to %ls:\n%ls\n", static_cast<unsigned int>(hr), GetName(tformat), szPath);
                     }
                     else if (image.GetMetadata().format != tformat
                         || image.GetMetadata().width != srcimage.GetMetadata().width || image.GetMetadata().height != srcimage.GetMetadata().height)
@@ -3435,7 +3435,7 @@ bool TEXTest::Test06()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed convert complex (HRESULT %08X) to %ls:\n%ls\n", hr, GetName( tformat ), szPath );
+                        printe( "Failed convert complex (HRESULT %08X) to %ls:\n%ls\n", static_cast<unsigned int>(hr), GetName( tformat ), szPath );
                     }
                     else
                     {
@@ -3465,7 +3465,7 @@ bool TEXTest::Test06()
                             if ( FAILED(hr) )
                             {
                                 success = false;
-                                printe( "Failed comparing simple vs. complex image data (HRESULT %08X)\n", hr );
+                                printe( "Failed comparing simple vs. complex image data (HRESULT %08X)\n", static_cast<unsigned int>(hr) );
                             }
 
                             if ( IsErrorTooLarge( mse, 0.00001f ) )

@@ -101,7 +101,7 @@ bool Test01()
     HRESULT hr = CreateDevice(device.GetAddressOf());
     if (FAILED(hr))
     {
-        printe("Failed creating device (HRESULT %08X)\n", hr);
+        printe("Failed creating device (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         return false;
     }
 
@@ -163,7 +163,7 @@ bool Test02()
     HRESULT hr = CreateDevice(device.GetAddressOf());
     if (FAILED(hr))
     {
-        printe("Failed creating device (HRESULT %08X)\n", hr);
+        printe("Failed creating device (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         return false;
     }
 
@@ -205,7 +205,7 @@ bool Test02()
         if (FAILED(hr))
         {
             success = false;
-            printe("Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath);
+            printe("Failed getting data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
         }
         else if (memcmp(&metadata, check, sizeof(TexMetadata)) != 0)
         {
@@ -236,7 +236,7 @@ bool Test02()
                 {
                     success = false;
                     pass = false;
-                    printe("Failed testing data from (HRESULT %08X):\n%ls\n", hr, szPath);
+                    printe("Failed testing data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                 }
             }
 
@@ -263,7 +263,7 @@ bool Test03()
     HRESULT hr = CreateDevice(device.GetAddressOf());
     if (FAILED(hr))
     {
-        printe("Failed creating device (HRESULT %08X)\n", hr);
+        printe("Failed creating device (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         return false;
     }
 
@@ -311,7 +311,7 @@ bool Test03()
         if (FAILED(hr))
         {
             success = false;
-            printe("Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath);
+            printe("Failed getting data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
         }
         else if (memcmp(&metadata, check, sizeof(TexMetadata)) != 0)
         {
@@ -342,7 +342,7 @@ bool Test03()
             if (FAILED(hr))
             {
                 success = false;
-                printe("Failed creating texture from (HRESULT %08X):\n%ls\n", hr, szPath);
+                printe("Failed creating texture from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
             }
             else
             {
@@ -352,7 +352,7 @@ bool Test03()
                 if (FAILED(hr))
                 {
                     success = false;
-                    printe("Failed creating texture ex from (HRESULT %08X):\n%ls\n", hr, szPath);
+                    printe("Failed creating texture ex from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                 }
                 else
                 {
@@ -378,7 +378,7 @@ bool Test04()
     HRESULT hr = CreateDevice(device.GetAddressOf());
     if (FAILED(hr))
     {
-        printe("Failed creating device (HRESULT %08X)\n", hr);
+        printe("Failed creating device (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         return false;
     }
 
@@ -422,7 +422,7 @@ bool Test04()
         if (FAILED(hr))
         {
             success = false;
-            printe("Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath);
+            printe("Failed getting data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
         }
         else if (memcmp(&metadata, check, sizeof(TexMetadata)) != 0)
         {
@@ -438,7 +438,7 @@ bool Test04()
             if (FAILED(hr))
             {
                 success = false;
-                printe("Failed preparing texture from (HRESULT %08X):\n%ls\n", hr, szPath);
+                printe("Failed preparing texture from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
             }
             else if (subresources.empty())
             {
@@ -480,7 +480,7 @@ bool Test05()
     HRESULT hr = SetupRenderTest(device.GetAddressOf(), queue.GetAddressOf(), commandList.GetAddressOf());
     if (FAILED(hr))
     {
-        printe("Failed creating device (HRESULT %08X)\n", hr);
+        printe("Failed creating device (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         return false;
     }
 
@@ -530,7 +530,7 @@ bool Test05()
         if (FAILED(hr))
         {
             success = false;
-            printe("Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath);
+            printe("Failed getting data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
         }
         else if (memcmp(&metadata, check, sizeof(TexMetadata)) != 0)
         {
@@ -546,7 +546,7 @@ bool Test05()
             if (FAILED(hr))
             {
                 success = false;
-                printe("Failed preparing texture from (HRESULT %08X):\n%ls\n", hr, szPath);
+                printe("Failed preparing texture from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
             }
             else
             {
@@ -555,7 +555,7 @@ bool Test05()
                 if (FAILED(hr))
                 {
                     success = false;
-                    printe("Failed preparing texture from (HRESULT %08X):\n%ls\n", hr, szPath);
+                    printe("Failed preparing texture from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                 }
                 else if (subresources.empty())
                 {
@@ -578,7 +578,7 @@ bool Test05()
                     if (FAILED(hr))
                     {
                         success = false;
-                        printe("Failed creating upload texture from (HRESULT %08X):\n%ls\n", hr, szPath);
+                        printe("Failed creating upload texture from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                     }
                     else
                     {
@@ -617,7 +617,7 @@ bool Test06()
     HRESULT hr = CreateDevice(device.GetAddressOf());
     if (FAILED(hr))
     {
-        printe("Failed creating device (HRESULT %08X)\n", hr);
+        printe("Failed creating device (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         return false;
     }
 
@@ -626,7 +626,7 @@ bool Test06()
     hr = CreateCommmandList(device.Get(), queue.GetAddressOf(), commandList.GetAddressOf());
     if (FAILED(hr))
     {
-        printe("Failed creating command list (HRESULT %08X)\n", hr);
+        printe("Failed creating command list (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         return false;
     }
 
@@ -692,7 +692,7 @@ bool Test06()
         if (FAILED(hr))
         {
             success = false;
-            printe("Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath);
+            printe("Failed getting data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
         }
         else if (memcmp(&metadata, check, sizeof(TexMetadata)) != 0)
         {
@@ -724,7 +724,7 @@ bool Test06()
             if (FAILED(hr))
             {
                 success = false;
-                printe("Failed preparing texture from (HRESULT %08X):\n%ls\n", hr, szPath);
+                printe("Failed preparing texture from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
             }
             else
             {
@@ -733,7 +733,7 @@ bool Test06()
                 if (FAILED(hr))
                 {
                     success = false;
-                    printe("Failed preparing texture from (HRESULT %08X):\n%ls\n", hr, szPath);
+                    printe("Failed preparing texture from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                 }
                 else
                 {
@@ -751,7 +751,7 @@ bool Test06()
                     if (FAILED(hr))
                     {
                         success = false;
-                        printe("Failed creating upload texture from (HRESULT %08X):\n%ls\n", hr, szPath);
+                        printe("Failed creating upload texture from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                     }
                     else
                     {
@@ -772,7 +772,7 @@ bool Test06()
                         if (FAILED(hr))
                         {
                             success = false;
-                            printe("Failed capturing texture from (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed capturing texture from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else
                         {
@@ -804,7 +804,7 @@ bool Test06()
                                 {
                                     success = false;
                                     pass = false;
-                                    printe("Failed writing DDS to (HRESULT %08X):\n%ls\n", hr, szDestPath);
+                                    printe("Failed writing DDS to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath);
                                 }
 
                                 if (!IsPlanar(metadata.format))
@@ -815,7 +815,7 @@ bool Test06()
                                     {
                                         success = false;
                                         pass = false;
-                                        printe("Failed comparing captured image (HRESULT %08X):\n%ls\n", hr, szPath);
+                                        printe("Failed comparing captured image (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                                     }
                                     else if (fabs(mse) > 0.000001f)
                                     {

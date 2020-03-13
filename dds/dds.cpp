@@ -844,7 +844,7 @@ bool Test01()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed getting data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
@@ -956,7 +956,7 @@ bool Test02()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting raw file data from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed getting raw file data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
         else
         {
@@ -978,7 +978,7 @@ bool Test02()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed loading dds from memory (HRESULT %08X):\n%ls\n", hr, szPath );
+                printe( "Failed loading dds from memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
             }
             else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
             {
@@ -994,7 +994,7 @@ bool Test02()
                 if ( FAILED(hr) )
                 {
                     success = false;
-                    printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                    printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                 }
                 else if ( memcmp( digest, g_TestMedia[index].md5, 16 ) != 0 )
                 {
@@ -1018,7 +1018,7 @@ bool Test02()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed loading dds from memory with NO_R10B10G10A2_FIXUP (HRESULT %08X):\n%ls\n", hr, szPath );
+                            printe( "Failed loading dds from memory with NO_R10B10G10A2_FIXUP (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                         }
                         else
                         {
@@ -1026,7 +1026,7 @@ bool Test02()
                             if ( FAILED(hr) )
                             {
                                 success = false;
-                                printe( "Failed computing MD5 checksum of NO_R10B10G10A2_FIXUP image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                                printe( "Failed computing MD5 checksum of NO_R10B10G10A2_FIXUP image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                             }
                             else
                             {
@@ -1066,7 +1066,7 @@ bool Test02()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed loading dds from memory with FORCE_RGB (HRESULT %08X):\n%ls\n", hr, szPath );
+                            printe( "Failed loading dds from memory with FORCE_RGB (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                         }
                         else
                         {
@@ -1103,7 +1103,7 @@ bool Test02()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed loading dds from memory with NO_16BPP (HRESULT %08X):\n%ls\n", hr, szPath );
+                            printe( "Failed loading dds from memory with NO_16BPP (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                         }
                         else
                         {
@@ -1136,7 +1136,7 @@ bool Test02()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed loading dds from memory with EXPAND_LUMINANCE (HRESULT %08X):\n%ls\n", hr, szPath );
+                            printe( "Failed loading dds from memory with EXPAND_LUMINANCE (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                         }
                         else
                         {
@@ -1155,7 +1155,7 @@ bool Test02()
                                     if ( FAILED(hr) )
                                     {
                                         success = false;
-                                        printe( "Failed computing MD5 checksum of EXPAND_LUMINANCE image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                                        printe( "Failed computing MD5 checksum of EXPAND_LUMINANCE image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                                     }
                                     else
                                     {
@@ -1244,7 +1244,7 @@ bool Test03()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed loading dds from memory (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed loading dds from memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
@@ -1260,7 +1260,7 @@ bool Test03()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
             }
             else if ( memcmp( digest, g_TestMedia[index].md5, 16 ) != 0 )
             {
@@ -1284,7 +1284,7 @@ bool Test03()
                     if ( FAILED(hr) )
                     {
                         success = false;
-                        printe( "Failed loading dds from memory with NO_R10B10G10A2_FIXUP (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe( "Failed loading dds from memory with NO_R10B10G10A2_FIXUP (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                     }
                     else
                     {
@@ -1292,7 +1292,7 @@ bool Test03()
                         if ( FAILED(hr) )
                         {
                             success = false;
-                            printe( "Failed computing MD5 checksum of NO_R10B10G10A2_FIXUP image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                            printe( "Failed computing MD5 checksum of NO_R10B10G10A2_FIXUP image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                         }
                         else
                         {
@@ -1332,7 +1332,7 @@ bool Test03()
                     if ( FAILED(hr) )
                     {
                         success = false;
-                        printe( "Failed loading dds from memory with FORCE_RGB (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe( "Failed loading dds from memory with FORCE_RGB (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                     }
                     else
                     {
@@ -1369,7 +1369,7 @@ bool Test03()
                     if ( FAILED(hr) )
                     {
                         success = false;
-                        printe( "Failed loading dds from memory with NO_16BPP (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe( "Failed loading dds from memory with NO_16BPP (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                     }
                     else
                     {
@@ -1402,7 +1402,7 @@ bool Test03()
                     if ( FAILED(hr) )
                     {
                         success = false;
-                        printe( "Failed loading dds from memory with EXPAND_LUMINANCE (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe( "Failed loading dds from memory with EXPAND_LUMINANCE (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                     }
                     else
                     {
@@ -1421,7 +1421,7 @@ bool Test03()
                                 if ( FAILED(hr) )
                                 {
                                     success = false;
-                                    printe( "Failed computing MD5 checksum of EXPAND_LUMINANCE image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                                    printe( "Failed computing MD5 checksum of EXPAND_LUMINANCE image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                                 }
                                 else
                                 {
@@ -1498,7 +1498,7 @@ bool Test04()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed loading DDS from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed loading DDS from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
         else
         {
@@ -1510,7 +1510,7 @@ bool Test04()
             {
                 success = false;
                 pass = false;
-                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
             }
             else
             {
@@ -1520,7 +1520,7 @@ bool Test04()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed writing DDS to memory (HRESULT %08X):\n%ls\n", hr, szPath );
+                    printe( "Failed writing DDS to memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                 }
                 else
                 {
@@ -1531,7 +1531,7 @@ bool Test04()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed reading back written DDS to memory (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe( "Failed reading back written DDS to memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                     }
                     else
                     {
@@ -1583,7 +1583,7 @@ bool Test04()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                                printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                             }
                             else if ( memcmp( digest, digest2, 16 ) != 0 )
                             {
@@ -1602,7 +1602,7 @@ bool Test04()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed writing DDS with DDS_FLAGS_FORCE_DX10_EXT to memory (HRESULT %08X):\n%ls\n", hr, szPath );
+                    printe( "Failed writing DDS with DDS_FLAGS_FORCE_DX10_EXT to memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                 }
                 else
                 {
@@ -1613,7 +1613,7 @@ bool Test04()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_DX10_EXT to memory (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_DX10_EXT to memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                     }
                     else if ( metadata.width != metadata2.width
                               || metadata.height != metadata2.height
@@ -1636,7 +1636,7 @@ bool Test04()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed checking DDS header type in memory (HRESULT %08X):\n%ls\n", hr, szPath );
+                            printe( "Failed checking DDS header type in memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                         }
                         else if ( hr == S_FALSE )
                         {
@@ -1652,7 +1652,7 @@ bool Test04()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed computing MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT reloaded image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                                printe( "Failed computing MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT reloaded image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                             }
                             else if ( memcmp( digest, digest2, 16 ) != 0 )
                             {
@@ -1671,7 +1671,7 @@ bool Test04()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed writing DDS with DDS_FLAGS_FORCE_DX10_EXT_MISC2 to memory (HRESULT %08X):\n%ls\n", hr, szPath );
+                    printe( "Failed writing DDS with DDS_FLAGS_FORCE_DX10_EXT_MISC2 to memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                 }
                 else
                 {
@@ -1682,7 +1682,7 @@ bool Test04()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_DX10_EXT_MISC2 to memory (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_DX10_EXT_MISC2 to memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                     }
                     else if ( metadata.width != metadata2.width
                               || metadata.height != metadata2.height
@@ -1705,7 +1705,7 @@ bool Test04()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed checking DDS header type in memory (HRESULT %08X):\n%ls\n", hr, szPath );
+                            printe( "Failed checking DDS header type in memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                         }
                         else if ( hr == S_FALSE )
                         {
@@ -1721,7 +1721,7 @@ bool Test04()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed computing MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT_MISC2 reloaded image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                                printe( "Failed computing MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT_MISC2 reloaded image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                             }
                             else if ( memcmp( digest, digest2, 16 ) != 0 )
                             {
@@ -1743,7 +1743,7 @@ bool Test04()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed creating wide test image (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe( "Failed creating wide test image (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                     }
                     else if ( image.GetImage(0,0,0)->rowPitch >= imageWide.GetImage(0,0,0)->rowPitch )
                     {
@@ -1760,7 +1760,7 @@ bool Test04()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed writing DDS with wide image to memory (HRESULT %08X):\n%ls\n", hr, szPath );
+                            printe( "Failed writing DDS with wide image to memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                         }
                         else
                         {
@@ -1771,7 +1771,7 @@ bool Test04()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed reading back written DDS with wide image to memory (HRESULT %08X):\n%ls\n", hr, szPath );
+                                printe( "Failed reading back written DDS with wide image to memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                             }
                             else if ( metadata.width != metadata2.width
                                       || metadata.height != metadata2.height
@@ -1795,7 +1795,7 @@ bool Test04()
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed computing MD5 checksum of wide image reloaded image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                                    printe( "Failed computing MD5 checksum of wide image reloaded image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                                 }
                                 else if ( memcmp( digest, digest2, 16 ) != 0 )
                                 {
@@ -1895,7 +1895,7 @@ bool Test05()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed loading DDS from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed loading DDS from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
         else
         {
@@ -1907,7 +1907,7 @@ bool Test05()
             {
                 success = false;
                 pass = false;
-                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
             }
             else
             {
@@ -1916,7 +1916,7 @@ bool Test05()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed writing DDS to (HRESULT %08X):\n%ls\n", hr, szDestPath );
+                    printe( "Failed writing DDS to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath );
                 }
                 else
                 {
@@ -1927,7 +1927,7 @@ bool Test05()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed reading back written DDS to (HRESULT %08X):\n%ls\n", hr, szDestPath );
+                        printe( "Failed reading back written DDS to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath );
                     }
                     else
                     {
@@ -1978,7 +1978,7 @@ bool Test05()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%ls\n", hr, szDestPath );
+                                printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath );
                             }
                             else if ( memcmp( digest, digest2, 16 ) != 0 )
                             {
@@ -1996,7 +1996,7 @@ bool Test05()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed writing DDS with DDS_FLAGS_FORCE_DX10_EXT to (HRESULT %08X):\n%ls\n", hr, szDestPathDX10 );
+                    printe( "Failed writing DDS with DDS_FLAGS_FORCE_DX10_EXT to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPathDX10 );
                 }
                 else
                 {
@@ -2007,7 +2007,7 @@ bool Test05()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_DX10_EXT to (HRESULT %08X):\n%ls\n", hr, szDestPathDX10 );
+                        printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_DX10_EXT to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPathDX10 );
                     }
                     else if ( metadata.width != metadata2.width
                               || metadata.height != metadata2.height
@@ -2030,7 +2030,7 @@ bool Test05()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed checking DDS header type (HRESULT %08X):\n%ls\n", hr, szDestPathDX10 );
+                            printe( "Failed checking DDS header type (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPathDX10 );
                         }
                         else if ( hr == S_FALSE )
                         {
@@ -2046,7 +2046,7 @@ bool Test05()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed computing MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT reloaded image data (HRESULT %08X):\n%ls\n", hr, szDestPathDX10 );
+                                printe( "Failed computing MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT reloaded image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPathDX10 );
                             }
                             else if ( memcmp( digest, digest2, 16 ) != 0 )
                             {
@@ -2064,7 +2064,7 @@ bool Test05()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed writing DDS with DDS_FLAGS_FORCE_DX10_EXT_MISC2 to (HRESULT %08X):\n%ls\n", hr, szDestPathDX10_2 );
+                    printe( "Failed writing DDS with DDS_FLAGS_FORCE_DX10_EXT_MISC2 to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPathDX10_2 );
                 }
                 else
                 {
@@ -2075,7 +2075,7 @@ bool Test05()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_DX10_EXT_MISC2 to (HRESULT %08X):\n%ls\n", hr, szDestPathDX10_2 );
+                        printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_DX10_EXT_MISC2 to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPathDX10_2 );
                     }
                     else if ( metadata.width != metadata2.width
                               || metadata.height != metadata2.height
@@ -2098,7 +2098,7 @@ bool Test05()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed checking DDS header type (HRESULT %08X):\n%ls\n", hr, szDestPathDX10_2 );
+                            printe( "Failed checking DDS header type (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPathDX10_2 );
                         }
                         else if ( hr == S_FALSE )
                         {
@@ -2114,7 +2114,7 @@ bool Test05()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed computing MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT_MISC2 reloaded image data (HRESULT %08X):\n%ls\n", hr, szDestPathDX10_2 );
+                                printe( "Failed computing MD5 checksum of DDS_FLAGS_FORCE_DX10_EXT_MISC2 reloaded image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPathDX10_2 );
                             }
                             else if ( memcmp( digest, digest2, 16 ) != 0 )
                             {
@@ -2135,7 +2135,7 @@ bool Test05()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed creating wide test image (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe( "Failed creating wide test image (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                     }
                     else
                     {
@@ -2146,7 +2146,7 @@ bool Test05()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed writing DDS with wide image to (HRESULT %08X):\n%ls\n", hr, szDestPathWide );
+                            printe( "Failed writing DDS with wide image to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPathWide );
                         }
                         else
                         {
@@ -2157,7 +2157,7 @@ bool Test05()
                             {
                                 success = false;
                                 pass = false;
-                                printe( "Failed reading back written DDS with wide image to (HRESULT %08X):\n%ls\n", hr, szDestPathWide );
+                                printe( "Failed reading back written DDS with wide image to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPathWide );
                             }
                             else if ( metadata.width != metadata2.width
                                       || metadata.height != metadata2.height
@@ -2181,7 +2181,7 @@ bool Test05()
                                 {
                                     success = false;
                                     pass = false;
-                                    printe( "Failed computing MD5 checksum of wide image reloaded image data (HRESULT %08X):\n%ls\n", hr, szDestPathWide );
+                                    printe( "Failed computing MD5 checksum of wide image reloaded image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPathWide );
                                 }
                                 else if ( memcmp( digest, digest2, 16 ) != 0 )
                                 {
@@ -2276,7 +2276,7 @@ bool Test06()
                     if (FAILED(hr))
                     {
                         success = false;
-                        printe("Failed getting raw file data from (HRESULT %08X):\n%ls\n", hr, szPath);
+                        printe("Failed getting raw file data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                     }
                     else
                     {
@@ -2297,7 +2297,7 @@ bool Test06()
                                 )
                             {
                                 success = false;
-                                printe("ERROR: frommemory expected success! (%08X)\n%ls\n", hr, szPath);
+                                printe("ERROR: frommemory expected success! (%08X)\n%ls\n", static_cast<unsigned int>(hr), szPath);
                             }
                         }
                         else if (SUCCEEDED(hr) && !isdds)
@@ -2328,7 +2328,7 @@ bool Test06()
                         )
                     {
                         success = false;
-                        printe("ERROR: fromfile expected success ! (%08X)\n%ls\n", hr, szPath);
+                        printe("ERROR: fromfile expected success ! (%08X)\n%ls\n", static_cast<unsigned int>(hr), szPath);
                     }
                 }
                 else if (SUCCEEDED(hr) && !isdds)

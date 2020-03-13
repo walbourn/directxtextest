@@ -278,7 +278,7 @@ bool Test01()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed getting data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
         else if (metadata.width != check->width
                  || metadata.height != check->height
@@ -337,7 +337,7 @@ bool Test02()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting raw file data from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed getting raw file data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
         else
         {
@@ -349,7 +349,7 @@ bool Test02()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed loading tga from memory (HRESULT %08X):\n%ls\n", hr, szPath );
+                printe( "Failed loading tga from memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
             }
             else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
             {
@@ -365,7 +365,7 @@ bool Test02()
                 if ( FAILED(hr) )
                 {
                     success = false;
-                    printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                    printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                 }
                 else if ( memcmp( digest, g_TestMedia[index].md5, 16 ) != 0 )
                 {
@@ -424,7 +424,7 @@ bool Test03()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed loading tga from memory (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed loading tga from memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
@@ -440,7 +440,7 @@ bool Test03()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
             }
             else if ( memcmp( digest, g_TestMedia[index].md5, 16 ) != 0 )
             {
@@ -495,7 +495,7 @@ bool Test04()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed loading DDS from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed loading DDS from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
         else
         {
@@ -510,7 +510,7 @@ bool Test04()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
             }
             else
             {
@@ -522,7 +522,7 @@ bool Test04()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed writing tga to memory (HRESULT %08X):\n%ls\n", hr, szPath );
+                    printe( "Failed writing tga to memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                 }
                 else
                 {
@@ -533,7 +533,7 @@ bool Test04()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed reading back written tga to memory (HRESULT %08X):\n%ls\n", hr, szPath );
+                        printe( "Failed reading back written tga to memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                     }
                     else if ( metadata.width != metadata2.width
                               || metadata.height != metadata2.height
@@ -563,7 +563,7 @@ bool Test04()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                            printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                         }
                         else if ( memcmp( expected, digest2, 16 ) != 0 )
                         {
@@ -587,7 +587,7 @@ bool Test04()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed writing tga to memory [tga20] (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed writing tga to memory [tga20] (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else
                         {
@@ -598,7 +598,7 @@ bool Test04()
                             {
                                 success = false;
                                 pass = false;
-                                printe("Failed reading back written tga to memory [tga20] (HRESULT %08X):\n%ls\n", hr, szPath);
+                                printe("Failed reading back written tga to memory [tga20] (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                             }
                             else if (alphamdata.width != metadata2.width
                                 || alphamdata.height != metadata2.height
@@ -628,7 +628,7 @@ bool Test04()
                                 {
                                     success = false;
                                     pass = false;
-                                    printe("Failed computing MD5 checksum of reloaded image  [tga20] (HRESULT %08X):\n%ls\n", hr, szPath);
+                                    printe("Failed computing MD5 checksum of reloaded image  [tga20] (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                                 }
                                 else if (memcmp(expected, digest2, 16) != 0)
                                 {
@@ -710,7 +710,7 @@ bool Test05()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed loading DDS from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed loading DDS from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
         else
         {
@@ -725,7 +725,7 @@ bool Test05()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
             }
             else
             {
@@ -736,7 +736,7 @@ bool Test05()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed writing tga to file (HRESULT %08X):\n%ls\n", hr, szDestPath );
+                    printe( "Failed writing tga to file (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath );
                 }
                 else
                 {
@@ -747,7 +747,7 @@ bool Test05()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed reading back written tga to file (HRESULT %08X):\n%ls\n", hr, szDestPath );
+                        printe( "Failed reading back written tga to file (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath );
                     }
                     else if ( metadata.width != metadata2.width
                               || metadata.height != metadata2.height
@@ -779,7 +779,7 @@ bool Test05()
                         {
                             pass = false;
                             success = false;
-                            printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                            printe( "Failed computing MD5 checksum of reloaded image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                         }
                         else if ( memcmp( expected, digest2, 16 ) != 0 )
                         {
@@ -803,7 +803,7 @@ bool Test05()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed writing tga to file [tga20] (HRESULT %08X):\n%ls\n", hr, szDestPath2);
+                            printe("Failed writing tga to file [tga20] (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath2);
                         }
                         else
                         {
@@ -814,7 +814,7 @@ bool Test05()
                             {
                                 success = false;
                                 pass = false;
-                                printe("Failed reading back written tga to file [tga20] (HRESULT %08X):\n%ls\n", hr, szDestPath2);
+                                printe("Failed reading back written tga to file [tga20] (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath2);
                             }
                             else if (alphamdata.width != metadata2.width
                                 || alphamdata.height != metadata2.height
@@ -844,7 +844,7 @@ bool Test05()
                                 {
                                     pass = false;
                                     success = false;
-                                    printe("Failed computing MD5 checksum of reloaded image data [tga20] (HRESULT %08X):\n%ls\n", hr, szPath);
+                                    printe("Failed computing MD5 checksum of reloaded image data [tga20] (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                                 }
                                 else if (memcmp(expected, digest2, 16) != 0)
                                 {
@@ -937,7 +937,7 @@ bool Test06()
                     if (FAILED(hr))
                     {
                         success = false;
-                        printe("Failed getting raw file data from (HRESULT %08X):\n%ls\n", hr, szPath);
+                        printe("Failed getting raw file data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                     }
                     else
                     {
@@ -950,7 +950,7 @@ bool Test06()
                             if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
                             {
                                 success = false;
-                                printe("ERROR: frommemory expected success! (%08X)\n%ls\n", hr, szPath);
+                                printe("ERROR: frommemory expected success! (%08X)\n%ls\n", static_cast<unsigned int>(hr), szPath);
                             }
                         }
                         else if (SUCCEEDED(hr) && !istga)
@@ -973,7 +973,7 @@ bool Test06()
                     if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
                     {
                         success = false;
-                        printe("ERROR: fromfile expected success ! (%08X)\n%ls\n", hr, szPath);
+                        printe("ERROR: fromfile expected success ! (%08X)\n%ls\n", static_cast<unsigned int>(hr), szPath);
                     }
                 }
                 else if (SUCCEEDED(hr) && !istga)

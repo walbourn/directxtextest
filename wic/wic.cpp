@@ -570,7 +570,7 @@ bool WICTest::Test01()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting raw file data from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed getting raw file data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
         else
         {
@@ -611,7 +611,7 @@ bool WICTest::Test01()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed getting data from memory (HRESULT %08X):\n%ls\n", hr, szPath );
+                printe( "Failed getting data from memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
             }
             else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
             {
@@ -802,7 +802,7 @@ bool WICTest::Test02()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed getting data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
@@ -960,7 +960,7 @@ bool WICTest::Test03()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting raw file data from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed getting raw file data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
         else
         {
@@ -977,7 +977,7 @@ bool WICTest::Test03()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed loading wic from memory (HRESULT %08X):\n%ls\n", hr, szPath );
+                printe( "Failed loading wic from memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
             }
             else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
             {
@@ -1003,7 +1003,7 @@ bool WICTest::Test03()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                    printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                 }
                 else if ( memcmp( digest, g_TestMedia[index].md5, 16 ) != 0
                           && (!expected2 || memcmp( digest, expected2, 16 ) != 0 )
@@ -1079,7 +1079,7 @@ bool WICTest::Test04()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed loading wic from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed loading wic from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
@@ -1105,7 +1105,7 @@ bool WICTest::Test04()
             {
                 success = false;
                 pass = false;
-                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath );
+                printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
             }
             else if ( memcmp( digest, g_TestMedia[index].md5, 16 ) != 0
                       && (!expected2 || memcmp( digest, expected2, 16 ) != 0 )
@@ -1180,7 +1180,7 @@ bool WICTest::Test05()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed loading image from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed loading image from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
         else
         {
@@ -1192,7 +1192,7 @@ bool WICTest::Test05()
             {
                 success = false;
                 pass = false;
-                printe( "Failed writing wic (%ls) to memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, hr, szPath );
+                printe( "Failed writing wic (%ls) to memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, static_cast<unsigned int>(hr), szPath );
             }
             else
             {
@@ -1203,7 +1203,7 @@ bool WICTest::Test05()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed reading back written wic (%ls) from memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, hr, szPath );
+                    printe( "Failed reading back written wic (%ls) from memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, static_cast<unsigned int>(hr), szPath );
                 }
                 else if ( metadata.width != metadata2.width
                           || metadata.height != metadata2.height
@@ -1225,7 +1225,7 @@ bool WICTest::Test05()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed writing wic 24bpp (%ls) to memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, hr, szPath );
+                    printe( "Failed writing wic 24bpp (%ls) to memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, static_cast<unsigned int>(hr), szPath );
                 }
                 else
                 {
@@ -1236,7 +1236,7 @@ bool WICTest::Test05()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed reading back written wic 24bpp (%ls) from memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, hr, szPath );
+                        printe( "Failed reading back written wic 24bpp (%ls) from memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, static_cast<unsigned int>(hr), szPath );
                     }
                     else if ( metadata.width != metadata2.width
                               || metadata.height != metadata2.height
@@ -1275,7 +1275,7 @@ bool WICTest::Test05()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed writing wic with custom props (%ls) to memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, hr, szPath );
+                        printe( "Failed writing wic with custom props (%ls) to memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, static_cast<unsigned int>(hr), szPath );
                     }
                     else
                     {
@@ -1286,7 +1286,7 @@ bool WICTest::Test05()
                         {
                             success = false;
                             pass = false;
-                            printe( "Failed reading back written wic custom props (%ls) from memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, hr, szPath );
+                            printe( "Failed reading back written wic custom props (%ls) from memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, static_cast<unsigned int>(hr), szPath );
                         }
                         else if ( metadata.width != metadata2.width
                                     || metadata.height != metadata2.height
@@ -1324,7 +1324,7 @@ bool WICTest::Test05()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed writing wic with force srgb (%ls) to memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, hr, szPath);
+                            printe("Failed writing wic with force srgb (%ls) to memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, static_cast<unsigned int>(hr), szPath);
                         }
                         else
                         {
@@ -1335,7 +1335,7 @@ bool WICTest::Test05()
                             {
                                 success = false;
                                 pass = false;
-                                printe("Failed reading back written force srgb (%ls) from memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, hr, szPath);
+                                printe("Failed reading back written force srgb (%ls) from memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, static_cast<unsigned int>(hr), szPath);
                             }
                             else if (!IsSRGB(metadata2.format))
                             {
@@ -1358,7 +1358,7 @@ bool WICTest::Test05()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed writing wic with force linear (%ls) to memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, hr, szPath);
+                            printe("Failed writing wic with force linear (%ls) to memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, static_cast<unsigned int>(hr), szPath);
                         }
                         else
                         {
@@ -1369,7 +1369,7 @@ bool WICTest::Test05()
                             {
                                 success = false;
                                 pass = false;
-                                printe("Failed reading back written force linear (%ls) from memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, hr, szPath);
+                                printe("Failed reading back written force linear (%ls) from memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, static_cast<unsigned int>(hr), szPath);
                             }
                             else if (IsSRGB(metadata2.format))
                             {
@@ -1411,7 +1411,7 @@ bool WICTest::Test05()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed loading DDS from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed loading DDS from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
         else
         {
@@ -1420,7 +1420,7 @@ bool WICTest::Test05()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed writing mf wic .tiff to memory (HRESULT %08X):\n%ls\n", hr, szPath );
+                printe( "Failed writing mf wic .tiff to memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
             }
             else
             {
@@ -1430,7 +1430,7 @@ bool WICTest::Test05()
                 if ( FAILED(hr) )
                 {
                     success = false;
-                    printe( "Failed reading back written mf wic .tiff to memory (HRESULT %08X):\n%ls\n", hr, szPath );
+                    printe( "Failed reading back written mf wic .tiff to memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                 }
                 else if ( metadata.width != metadata2.width
                           || metadata.height != metadata2.height
@@ -1535,7 +1535,7 @@ bool WICTest::Test06()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed loading image from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed loading image from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
         else
         {
@@ -1546,7 +1546,7 @@ bool WICTest::Test06()
             {
                 success = false;
                 pass = false;
-                printe( "Failed writing wic to (HRESULT %08X):\n%ls\n", hr, szDestPath );
+                printe( "Failed writing wic to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath );
             }
             else
             {
@@ -1557,7 +1557,7 @@ bool WICTest::Test06()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed reading back written wic (HRESULT %08X):\n%ls\n", hr, szDestPath );
+                    printe( "Failed reading back written wic (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath );
                 }
                 else if ( metadata.width != metadata2.width
                           || metadata.height != metadata2.height
@@ -1581,7 +1581,7 @@ bool WICTest::Test06()
             {
                 success = false;
                 pass = false;
-                printe( "Failed writing wic 24bpp to (HRESULT %08X):\n%ls\n", hr, szDestPath2 );
+                printe( "Failed writing wic 24bpp to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath2 );
             }
             else
             {
@@ -1592,7 +1592,7 @@ bool WICTest::Test06()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed reading back written wic 24bpp (HRESULT %08X):\n%ls\n", hr, szDestPath2 );
+                    printe( "Failed reading back written wic 24bpp (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath2 );
                 }
                 else if ( metadata.width != metadata2.width
                           || metadata.height != metadata2.height
@@ -1632,7 +1632,7 @@ bool WICTest::Test06()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed writing wic with custom props to (HRESULT %08X):\n%ls\n", hr, szDestPath3 );
+                    printe( "Failed writing wic with custom props to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath3 );
                 }
                 else
                 {
@@ -1643,7 +1643,7 @@ bool WICTest::Test06()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed reading back written wic custom props (HRESULT %08X):\n%ls\n", hr, szDestPath3 );
+                        printe( "Failed reading back written wic custom props (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath3 );
                     }
                     else if ( metadata.width != metadata2.width
                                 || metadata.height != metadata2.height
@@ -1687,7 +1687,7 @@ bool WICTest::Test06()
                     {
                         success = false;
                         pass = false;
-                        printe("Failed writing wic with force srgb to (HRESULT %08X):\n%ls\n", hr, szDestPath4);
+                        printe("Failed writing wic with force srgb to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath4);
                     }
                     else
                     {
@@ -1698,7 +1698,7 @@ bool WICTest::Test06()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed reading back written force srgb (HRESULT %08X):\n%ls\n", hr, szDestPath4);
+                            printe("Failed reading back written force srgb (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath4);
                         }
                         else if (!IsSRGB(metadata2.format))
                         {
@@ -1721,7 +1721,7 @@ bool WICTest::Test06()
                     {
                         success = false;
                         pass = false;
-                        printe("Failed writing wic with force linear to (HRESULT %08X):\n%ls\n", hr, szDestPath5);
+                        printe("Failed writing wic with force linear to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath5);
                     }
                     else
                     {
@@ -1732,7 +1732,7 @@ bool WICTest::Test06()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed reading back written force linear (HRESULT %08X):\n%ls\n", hr, szDestPath5);
+                            printe("Failed reading back written force linear (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath5);
                         }
                         else if (IsSRGB(metadata2.format))
                         {
@@ -1781,7 +1781,7 @@ bool WICTest::Test06()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed loading DDS from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed loading DDS from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
         else
         {
@@ -1789,7 +1789,7 @@ bool WICTest::Test06()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed writing mf wic to (HRESULT %08X):\n%ls\n", hr, szDestPath );
+                printe( "Failed writing mf wic to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath );
             }
             else
             {
@@ -1799,7 +1799,7 @@ bool WICTest::Test06()
                 if ( FAILED(hr) )
                 {
                     success = false;
-                    printe( "Failed reading back written mf wic to (HRESULT %08X):\n%ls\n", hr, szDestPath );
+                    printe( "Failed reading back written mf wic to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath );
                 }
                 else if ( metadata.width != metadata2.width
                           || metadata.height != metadata2.height
@@ -1969,7 +1969,7 @@ bool WICTest::Test07()
             if (FAILED(hr))
             {
                 success = false;
-                printe("Failed loading image from (HRESULT %08X):\n%ls\n", hr, szPath);
+                printe("Failed loading image from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
             }
             else
             {
@@ -1983,7 +1983,7 @@ bool WICTest::Test07()
                     {
                         success = false;
                         pass = false;
-                        printe("Failed writing with encoder #%d (HRESULT %08X):\n%ls\n", j, hr, szPath);
+                        printe("Failed writing with encoder #%d (HRESULT %08X):\n%ls\n", j, static_cast<unsigned int>(hr), szPath);
                     }
                 }
 
@@ -2067,7 +2067,7 @@ bool WICTest::Test08()
                     if (FAILED(hr))
                     {
                         success = false;
-                        printe("Failed getting raw file data from (HRESULT %08X):\n%ls\n", hr, szPath);
+                        printe("Failed getting raw file data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                     }
                     else
                     {

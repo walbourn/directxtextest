@@ -73,7 +73,7 @@ bool TEXTest::Test13()
     HRESULT hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, &metadata, imagealpha );
     if ( FAILED(hr) )
     {
-        printe( "Failed loading dds (HRESULT %08X):\n%ls\n", hr, szPath );
+        printe( "Failed loading dds (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         return false;
     }
     else if ( memcmp( &metadata, &checkai, sizeof(TexMetadata) ) != 0 )
@@ -88,7 +88,7 @@ bool TEXTest::Test13()
     hr = MD5Checksum( imagealpha, srcdigest1, 1 );
     if ( FAILED(hr) )
     {
-        printe( "Failed computing MD5 checksum (HRESULT %08X):\n%ls\n", hr, szPath );
+        printe( "Failed computing MD5 checksum (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         return false;
     }
 
@@ -96,7 +96,7 @@ bool TEXTest::Test13()
     hr = MD5Checksum( imagealpha, srcdigestall );
     if ( FAILED(hr) )
     {
-        printe( "Failed computing MD5 checksum (HRESULT %08X):\n%ls\n", hr, szPath );
+        printe( "Failed computing MD5 checksum (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         return false;
     }
 
@@ -108,7 +108,7 @@ bool TEXTest::Test13()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed computing premultiply alpha [single] (HRESULT %08X)\n", hr );
+            printe( "Failed computing premultiply alpha [single] (HRESULT %08X)\n", static_cast<unsigned int>(hr) );
         }
         else
         {
@@ -117,7 +117,7 @@ bool TEXTest::Test13()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed computing premultiply alpha [single] of image data (HRESULT %08X)\n", hr );
+                printe( "Failed computing premultiply alpha [single] of image data (HRESULT %08X)\n", static_cast<unsigned int>(hr) );
             }
             else if ( memcmp( digestDefault, srcdigest1, 16 ) == 0 )
             {
@@ -131,7 +131,7 @@ bool TEXTest::Test13()
                 if ( FAILED(hr) )
                 {
                     success = false;
-                    printe( "Failed comparing premultiply alpha [single] of image data (HRESULT %08X)\n", hr );
+                    printe( "Failed comparing premultiply alpha [single] of image data (HRESULT %08X)\n", static_cast<unsigned int>(hr) );
                 }
 
                 if ( !IsEqual( mse, 0.005031f ) )
@@ -152,7 +152,7 @@ bool TEXTest::Test13()
             if (FAILED(hr))
             {
                 success = false;
-                printe("Failed computing demul alpha [single] (HRESULT %08X)\n", hr);
+                printe("Failed computing demul alpha [single] (HRESULT %08X)\n", static_cast<unsigned int>(hr));
             }
             else
             {
@@ -161,7 +161,7 @@ bool TEXTest::Test13()
                 if (FAILED(hr))
                 {
                     success = false;
-                    printe("Failed comparing demul alpha [single] of image data (HRESULT %08X)\n", hr);
+                    printe("Failed comparing demul alpha [single] of image data (HRESULT %08X)\n", static_cast<unsigned int>(hr));
                 }
 
                 if (IsErrorTooLarge(mse, 0.0001f))
@@ -187,7 +187,7 @@ bool TEXTest::Test13()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed computing premultiply alpha [single sRGB] (HRESULT %08X)\n", hr );
+            printe( "Failed computing premultiply alpha [single sRGB] (HRESULT %08X)\n", static_cast<unsigned int>(hr) );
         }
         else
         {
@@ -197,7 +197,7 @@ bool TEXTest::Test13()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed computing premultiply alpha [single sRGB] of image data (HRESULT %08X)\n", hr );
+                printe( "Failed computing premultiply alpha [single sRGB] of image data (HRESULT %08X)\n", static_cast<unsigned int>(hr) );
             }
             else if ( memcmp( digest, srcdigest1, 16 ) == 0 )
             {
@@ -216,7 +216,7 @@ bool TEXTest::Test13()
                 if ( FAILED(hr) )
                 {
                     success = false;
-                    printe( "Failed comparing premultiply alpha [single sRGB] of image data (HRESULT %08X)\n", hr );
+                    printe( "Failed comparing premultiply alpha [single sRGB] of image data (HRESULT %08X)\n", static_cast<unsigned int>(hr) );
                 }
                 else if ( !IsEqual( mse, 0.002190f ) )
                 {
@@ -240,7 +240,7 @@ bool TEXTest::Test13()
             if (FAILED(hr))
             {
                 success = false;
-                printe("Failed computing demul alpha [single sRGB] (HRESULT %08X)\n", hr);
+                printe("Failed computing demul alpha [single sRGB] (HRESULT %08X)\n", static_cast<unsigned int>(hr));
             }
             else
             {
@@ -249,7 +249,7 @@ bool TEXTest::Test13()
                 if (FAILED(hr))
                 {
                     success = false;
-                    printe("Failed comparing demul alpha [single sRGB] of image data (HRESULT %08X)\n", hr);
+                    printe("Failed comparing demul alpha [single sRGB] of image data (HRESULT %08X)\n", static_cast<unsigned int>(hr));
                 }
 
                 if (IsErrorTooLarge(mse, 0.0001f))
@@ -275,7 +275,7 @@ bool TEXTest::Test13()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed computing premultiply alpha [single ignore sRGB] (HRESULT %08X)\n", hr );
+            printe( "Failed computing premultiply alpha [single ignore sRGB] (HRESULT %08X)\n", static_cast<unsigned int>(hr) );
         }
         else
         {
@@ -285,7 +285,7 @@ bool TEXTest::Test13()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed computing premultiply alpha [single ignore sRGB] of image data (HRESULT %08X)\n", hr );
+                printe( "Failed computing premultiply alpha [single ignore sRGB] of image data (HRESULT %08X)\n", static_cast<unsigned int>(hr) );
             }
             else if ( memcmp( digest, srcdigest1, 16 ) == 0 )
             {
@@ -304,7 +304,7 @@ bool TEXTest::Test13()
             if (FAILED(hr))
             {
                 success = false;
-                printe("Failed computing demul alpha [single sRGB] (HRESULT %08X)\n", hr);
+                printe("Failed computing demul alpha [single sRGB] (HRESULT %08X)\n", static_cast<unsigned int>(hr));
             }
             else
             {
@@ -313,7 +313,7 @@ bool TEXTest::Test13()
                 if (FAILED(hr))
                 {
                     success = false;
-                    printe("Failed comparing demul alpha [single sRGB] of image data (HRESULT %08X)\n", hr);
+                    printe("Failed comparing demul alpha [single sRGB] of image data (HRESULT %08X)\n", static_cast<unsigned int>(hr));
                 }
                 else if (IsErrorTooLarge(mse, 0.0001f))
                 {
@@ -331,7 +331,7 @@ bool TEXTest::Test13()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed computing premultiply alpha [complex] (HRESULT %08X)\n", hr );
+            printe( "Failed computing premultiply alpha [complex] (HRESULT %08X)\n", static_cast<unsigned int>(hr) );
         }
         else
         {
@@ -355,7 +355,7 @@ bool TEXTest::Test13()
                 if (FAILED(hr))
                 {
                     success = false;
-                    printe("Failed computing premultiply alpha [complex] of image data (HRESULT %08X)\n", hr);
+                    printe("Failed computing premultiply alpha [complex] of image data (HRESULT %08X)\n", static_cast<unsigned int>(hr));
                 }
                 else if (memcmp(digest, srcdigestall, 16) == 0)
                 {
@@ -372,7 +372,7 @@ bool TEXTest::Test13()
                         if (FAILED(hr))
                         {
                             success = false;
-                            printe("Failed comparing premultiply alpha [complex] of image data (HRESULT %08X, %zu)\n", hr, j);
+                            printe("Failed comparing premultiply alpha [complex] of image data (HRESULT %08X, %zu)\n", static_cast<unsigned int>(hr), j);
                         }
                         else if (!IsEqual(mse, result[j]))
                         {
@@ -397,7 +397,7 @@ bool TEXTest::Test13()
                 if (FAILED(hr))
                 {
                     success = false;
-                    printe("Failed computing delmul alpha [complex] (HRESULT %08X)\n", hr);
+                    printe("Failed computing delmul alpha [complex] (HRESULT %08X)\n", static_cast<unsigned int>(hr));
                 }
                 else
                 {
@@ -420,7 +420,7 @@ bool TEXTest::Test13()
                         if (FAILED(hr))
                         {
                             success = false;
-                            printe("Failed comparing demul alpha [complex] of image data (HRESULT %08X)\n", hr);
+                            printe("Failed comparing demul alpha [complex] of image data (HRESULT %08X)\n", static_cast<unsigned int>(hr));
                         }
                         else if (IsErrorTooLarge(mse, 0.0001f))
                         {

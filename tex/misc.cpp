@@ -70,7 +70,7 @@ bool TEXTest::Test09()
     HRESULT hr = LoadFromDDSFile( szPath, DDS_FLAGS_FORCE_RGB, &metadata, imageTest );
     if ( FAILED(hr) )
     {
-        printe( "Failed loading dds (HRESULT %08X):\n%ls\n", hr, szPath );
+        printe( "Failed loading dds (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         return false;
     }
     else if ( memcmp( &metadata, &checkTest, sizeof(TexMetadata) ) != 0 )
@@ -100,7 +100,7 @@ bool TEXTest::Test09()
     hr = LoadFromDDSFile( szPath, DDS_FLAGS_FORCE_RGB, &metadata, imageLogo );
     if ( FAILED(hr) )
     {
-        printe( "Failed loading dds (HRESULT %08X):\n%ls\n", hr, szPath );
+        printe( "Failed loading dds (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         return false;
     }
     else if ( memcmp( &metadata, &checkLogo, sizeof(TexMetadata) ) != 0 )
@@ -130,7 +130,7 @@ bool TEXTest::Test09()
     hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, &metadata, imageEarth );
     if ( FAILED(hr) )
     {
-        printe( "Failed loading dds (HRESULT %08X):\n%ls\n", hr, szPath );
+        printe( "Failed loading dds (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         return false;
     }
     else if ( memcmp( &metadata, &checkEarth, sizeof(TexMetadata) ) != 0 )
@@ -152,7 +152,7 @@ bool TEXTest::Test09()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed making copy of logo image (HRESULT %08X)\n", hr );
+                printe( "Failed making copy of logo image (HRESULT %08X)\n", static_cast<unsigned int>(hr) );
             }
             else
             {
@@ -161,7 +161,7 @@ bool TEXTest::Test09()
                 if (FAILED(hr))
                 {
                     success = false;
-                    printe( "Failed doing test->logo offset %d by %d (HRESULT %08X)\n", hr, x, y );
+                    printe( "Failed doing test->logo offset %d by %d (HRESULT %08X)\n", static_cast<unsigned int>(hr), x, y );
                 }
                 else
                 {
@@ -189,7 +189,7 @@ bool TEXTest::Test09()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed making copy of logo image (HRESULT %08X)\n", hr );
+                printe( "Failed making copy of logo image (HRESULT %08X)\n", static_cast<unsigned int>(hr) );
             }
             else
             {
@@ -199,7 +199,7 @@ bool TEXTest::Test09()
                 {
                     success = false;
                     printe( "Failed doing test->logo (%zu,%zu,%zu,%zu) offset %zu by %zu (HRESULT %08X)\n",
-                            rct.x, rct.y, rct.w, rct.h, x, y, hr );
+                            rct.x, rct.y, rct.w, rct.h, x, y, static_cast<unsigned int>(hr) );
                 }
                 else
                 {
@@ -228,7 +228,7 @@ bool TEXTest::Test09()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed making copy of earth image (HRESULT %08X)\n", hr );
+                printe( "Failed making copy of earth image (HRESULT %08X)\n", static_cast<unsigned int>(hr) );
             }
             else
             {
@@ -237,7 +237,7 @@ bool TEXTest::Test09()
                 if (FAILED(hr))
                 {
                     success = false;
-                    printe( "Failed doing logo->earth offset %zu by %zu (HRESULT %08X)\n", x, y, hr );
+                    printe( "Failed doing logo->earth offset %zu by %zu (HRESULT %08X)\n", x, y, static_cast<unsigned int>(hr) );
                 }
                 else
                 {
@@ -265,7 +265,7 @@ bool TEXTest::Test09()
             if ( FAILED(hr) )
             {
                 success = false;
-                printe( "Failed making copy of earth image (HRESULT %08X)\n", hr );
+                printe( "Failed making copy of earth image (HRESULT %08X)\n", static_cast<unsigned int>(hr) );
             }
             else
             {
@@ -275,7 +275,7 @@ bool TEXTest::Test09()
                 {
                     success = false;
                     printe( "Failed doing logo->earth (%zu,%zu,%zu,%zu) offset %zu by %zu (HRESULT %08X)\n",
-                            rct.x, rct.y, rct.w, rct.h, x, y, hr );
+                            rct.x, rct.y, rct.w, rct.h, x, y, static_cast<unsigned int>(hr) );
                 }
                 else
                 {
@@ -323,7 +323,7 @@ bool TEXTest::Test10()
     HRESULT hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, nullptr, imageLogo );
     if ( FAILED(hr) )
     {
-        printe( "Failed loading dds (HRESULT %08X):\n%ls\n", hr, szPath );
+        printe( "Failed loading dds (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         return false;
     }
 
@@ -344,7 +344,7 @@ bool TEXTest::Test10()
     hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, nullptr, imageWin95 );
     if ( FAILED(hr) )
     {
-        printe( "Failed loading dds (HRESULT %08X):\n%ls\n", hr, szPath );
+        printe( "Failed loading dds (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         return false;
     }
 
@@ -365,7 +365,7 @@ bool TEXTest::Test10()
     hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, nullptr, imageDX );
     if ( FAILED(hr) )
     {
-        printe( "Failed loading dds (HRESULT %08X):\n%ls\n", hr, szPath );
+        printe( "Failed loading dds (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         return false;
     }
 
@@ -386,7 +386,7 @@ bool TEXTest::Test10()
     hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, nullptr, imageAlpha );
     if ( FAILED(hr) )
     {
-        printe( "Failed loading dds (HRESULT %08X):\n%ls\n", hr, szPath );
+        printe( "Failed loading dds (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         return false;
     }
 
@@ -398,7 +398,7 @@ bool TEXTest::Test10()
     if ( FAILED(hr) )
     {
         success = false;
-        printe( "Failed computing first MSE (HRESULT %08X):\n", hr );
+        printe( "Failed computing first MSE (HRESULT %08X):\n", static_cast<unsigned int>(hr) );
     }
     else if ( !IsEqual( mse, 0.f ) )
     {
@@ -411,7 +411,7 @@ bool TEXTest::Test10()
     if ( FAILED(hr) )
     {
         success = false;
-        printe( "Failed computing second MSE (HRESULT %08X):\n", hr );
+        printe( "Failed computing second MSE (HRESULT %08X):\n", static_cast<unsigned int>(hr) );
     }
     else if ( !IsEqual( mse, 0.435924f ) )
     {
@@ -424,7 +424,7 @@ bool TEXTest::Test10()
     if ( FAILED(hr) )
     {
         success = false;
-        printe( "Failed computing third MSE (HRESULT %08X):\n", hr );
+        printe( "Failed computing third MSE (HRESULT %08X):\n", static_cast<unsigned int>(hr) );
     }
     else if ( !IsEqual( mse, 0.728756f ) )
     {
@@ -448,7 +448,7 @@ bool TEXTest::Test14()
         if (FAILED(hr))
         {
             success = false;
-            printe("Failed creating test image (HRESULT %08X)\n", hr);
+            printe("Failed creating test image (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         }
         else
         {
@@ -545,7 +545,7 @@ bool TEXTest::Test14()
         if ( FAILED(hr) )
         {
             success = false;
-            printe( "Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath );
+            printe( "Failed getting data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
         else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
         {
@@ -657,7 +657,7 @@ bool TEXTest::Test16()
         if (FAILED(hr))
         {
             success = false;
-            printe("Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath);
+            printe("Failed getting data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
         }
         else if (memcmp(&metadata, check, sizeof(TexMetadata)) != 0)
         {
@@ -696,7 +696,7 @@ bool TEXTest::Test16()
             {
                 success = false;
                 pass = false;
-                printe("ERROR: EvaluateImage failed (%08X)\n%ls\n", hr, szPath);
+                printe("ERROR: EvaluateImage failed (%08X)\n%ls\n", static_cast<unsigned int>(hr), szPath);
             }
             else
             {
@@ -740,7 +740,7 @@ bool TEXTest::Test16()
                 {
                     success = false;
                     pass = false;
-                    printe("ERROR: EvaluateImage [complex] failed (%08X)\n%ls\n", hr, szPath);
+                    printe("ERROR: EvaluateImage [complex] failed (%08X)\n%ls\n", static_cast<unsigned int>(hr), szPath);
                 }
                 else
                 {
@@ -885,7 +885,7 @@ bool TEXTest::Test17()
         if (FAILED(hr))
         {
             success = false;
-            printe("Failed getting data from (HRESULT %08X):\n%ls\n", hr, szPath);
+            printe("Failed getting data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
         }
         else if (memcmp(&metadata, check, sizeof(TexMetadata)) != 0)
         {
@@ -905,7 +905,7 @@ bool TEXTest::Test17()
             {
                 success = false;
                 pass = false;
-                printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
             }
             else if (memcmp(digest, s_TestMedia[index].copy_md5, 16) != 0)
             {
@@ -924,7 +924,7 @@ bool TEXTest::Test17()
                 {
                     success = false;
                     pass = false;
-                    printe("ERROR: TransformImage (copy) failed (%08X)\n%ls\n", hr, szPath);
+                    printe("ERROR: TransformImage (copy) failed (%08X)\n%ls\n", static_cast<unsigned int>(hr), szPath);
                 }
                 else
                 {
@@ -937,7 +937,7 @@ bool TEXTest::Test17()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else if (memcmp(digest, s_TestMedia[index].copy_md5, 16) != 0)
                         {
@@ -959,7 +959,7 @@ bool TEXTest::Test17()
                 {
                     success = false;
                     pass = false;
-                    printe("ERROR: TransformImage (inverse) failed (%08X)\n%ls\n", hr, szPath);
+                    printe("ERROR: TransformImage (inverse) failed (%08X)\n%ls\n", static_cast<unsigned int>(hr), szPath);
                 }
                 else
                 {
@@ -972,7 +972,7 @@ bool TEXTest::Test17()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else if (memcmp(digest, s_TestMedia[index].inverse_md5, 16) != 0)
                         {
@@ -1019,7 +1019,7 @@ bool TEXTest::Test17()
                 {
                     success = false;
                     pass = false;
-                    printe("ERROR: TransformImage (colorkey) failed (%08X)\n%ls\n", hr, szPath);
+                    printe("ERROR: TransformImage (colorkey) failed (%08X)\n%ls\n", static_cast<unsigned int>(hr), szPath);
                 }
                 else
                 {
@@ -1032,7 +1032,7 @@ bool TEXTest::Test17()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else if (memcmp(digest, s_TestMedia[index].chromakey_md5, 16) != 0)
                         {
@@ -1057,7 +1057,7 @@ bool TEXTest::Test17()
                     {
                         success = false;
                         pass = false;
-                        printe("ERROR: TransformImage (copy complex) failed (%08X)\n%ls\n", hr, szPath);
+                        printe("ERROR: TransformImage (copy complex) failed (%08X)\n%ls\n", static_cast<unsigned int>(hr), szPath);
                     }
                     else
                     {
@@ -1068,7 +1068,7 @@ bool TEXTest::Test17()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else if (memcmp(digest, s_TestMedia[index].copy_md5, 16) != 0)
                         {
@@ -1089,7 +1089,7 @@ bool TEXTest::Test17()
                     {
                         success = false;
                         pass = false;
-                        printe("ERROR: TransformImage (inverse complex) failed (%08X)\n%ls\n", hr, szPath);
+                        printe("ERROR: TransformImage (inverse complex) failed (%08X)\n%ls\n", static_cast<unsigned int>(hr), szPath);
                     }
                     else
                     {
@@ -1100,7 +1100,7 @@ bool TEXTest::Test17()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else if (memcmp(digest, s_TestMedia[index].inverse_md5, 16) != 0)
                         {
@@ -1147,7 +1147,7 @@ bool TEXTest::Test17()
                     {
                         success = false;
                         pass = false;
-                        printe("ERROR: TransformImage (colorkey complex) failed (%08X)\n%ls\n", hr, szPath);
+                        printe("ERROR: TransformImage (colorkey complex) failed (%08X)\n%ls\n", static_cast<unsigned int>(hr), szPath);
                     }
                     else
                     {
@@ -1158,7 +1158,7 @@ bool TEXTest::Test17()
                         {
                             success = false;
                             pass = false;
-                            printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", hr, szPath);
+                            printe("Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
                         else if (memcmp(digest, s_TestMedia[index].chromakey_md5, 16) != 0)
                         {

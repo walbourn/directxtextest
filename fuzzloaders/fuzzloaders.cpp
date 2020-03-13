@@ -36,13 +36,13 @@ namespace
 {
     struct handle_closer { void operator()(HANDLE h) { if (h) CloseHandle(h); } };
 
-    typedef std::unique_ptr<void, handle_closer> ScopedHandle;
+    using ScopedHandle = std::unique_ptr<void, handle_closer>;
 
     inline HANDLE safe_handle(HANDLE h) { return (h == INVALID_HANDLE_VALUE) ? nullptr : h; }
 
     struct find_closer { void operator()(HANDLE h) { assert(h != INVALID_HANDLE_VALUE); if (h) FindClose(h); } };
 
-    typedef std::unique_ptr<void, find_closer> ScopedFindHandle;
+    using ScopedFindHandle = std::unique_ptr<void, find_closer>;
 }
 
 
@@ -222,7 +222,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
     HRESULT hr = hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
     if (FAILED(hr))
     {
-        wprintf(L"Failed to initialize COM (%08X)\n", hr);
+        wprintf(L"Failed to initialize COM (%08X)\n", static_cast<unsigned int>(hr));
         return 1;
     }
 
@@ -347,7 +347,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
             {
 #ifdef _DEBUG
                 char buff[128] = {};
-                sprintf_s(buff, "DDSTexture failed with %08X\n", hr);
+                sprintf_s(buff, "DDSTexture failed with %08X\n", static_cast<unsigned int>(hr));
                 OutputDebugStringA(buff);
 #endif
                 wprintf(L"!");
@@ -369,7 +369,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
             {
 #ifdef _DEBUG
                 char buff[128] = {};
-                sprintf_s(buff, "HDRTexture failed with %08X\n", hr);
+                sprintf_s(buff, "HDRTexture failed with %08X\n", static_cast<unsigned int>(hr));
                 OutputDebugStringA(buff);
 #endif
                 wprintf(L"!");
@@ -391,7 +391,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
             {
 #ifdef _DEBUG
                 char buff[128] = {};
-                sprintf_s(buff, "TGATexture failed with %08X\n", hr);
+                sprintf_s(buff, "TGATexture failed with %08X\n", static_cast<unsigned int>(hr));
                 OutputDebugStringA(buff);
 #endif
                 wprintf(L"!");
@@ -413,7 +413,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
             {
 #ifdef _DEBUG
                 char buff[128] = {};
-                sprintf_s(buff, "WICTexture failed with %08X\n", hr);
+                sprintf_s(buff, "WICTexture failed with %08X\n", static_cast<unsigned int>(hr));
                 OutputDebugStringA(buff);
 #endif
                 wprintf(L"!");

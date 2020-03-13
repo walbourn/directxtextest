@@ -102,7 +102,7 @@ size_t DetermineFileSize( _In_z_ const wchar_t* szFile )
 
 struct bcrypthandle_closer { void operator()(BCRYPT_HASH_HANDLE h) { BCryptDestroyHash(h); } };
 
-typedef std::unique_ptr<void, bcrypthandle_closer> ScopedHashHandle;
+using ScopedHashHandle = std::unique_ptr<void, bcrypthandle_closer>;
 
 #define MD5_DIGEST_LENGTH 16
 
