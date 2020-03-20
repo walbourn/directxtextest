@@ -24,6 +24,12 @@ public:
     Game() noexcept(false);
     ~Game();
 
+    Game(Game&&) = default;
+    Game& operator= (Game&&) = default;
+
+    Game(Game const&) = delete;
+    Game& operator= (Game const&) = delete;
+
     // Initialization and management
 #if !defined(WINAPI_FAMILY) || (WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP) 
     void Initialize(HWND window, int width, int height, DXGI_MODE_ROTATION rotation);
@@ -36,8 +42,8 @@ public:
 
 #if !defined(_XBOX_ONE) || !defined(_TITLE)
     // IDeviceNotify
-    virtual void OnDeviceLost() override;
-    virtual void OnDeviceRestored() override;
+    void OnDeviceLost() override;
+    void OnDeviceRestored() override;
 #endif
 
     // Messages
@@ -54,7 +60,7 @@ public:
     void ValidateDevice();
 #endif
     // Properties
-    void GetDefaultSize( int& width, int& height ) const;
+    void GetDefaultSize( int& width, int& height ) const noexcept;
 
 private:
 

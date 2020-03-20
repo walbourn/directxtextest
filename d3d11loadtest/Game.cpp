@@ -5,6 +5,8 @@
 #include "pch.h"
 #include "Game.h"
 
+extern void ExitGame() noexcept;
+
 using namespace DirectX;
 
 using Microsoft::WRL::ComPtr;
@@ -145,7 +147,7 @@ void Game::Clear()
 
     // Clear the views.
     auto context = m_deviceResources->GetD3DDeviceContext();
-    auto renderTarget = m_deviceResources->GetBackBufferRenderTargetView();
+    auto renderTarget = m_deviceResources->GetRenderTargetView();
     auto depthStencil = m_deviceResources->GetDepthStencilView();
 
     // Use linear clear color for gamma-correct rendering.
@@ -183,6 +185,12 @@ void Game::OnResuming()
     m_timer.ResetElapsedTime();
 }
 
+void Game::OnWindowMoved()
+{
+    auto r = m_deviceResources->GetOutputSize();
+    m_deviceResources->WindowSizeChanged(r.right, r.bottom);
+}
+
 void Game::OnWindowSizeChanged(int width, int height)
 {
     if (!m_deviceResources->WindowSizeChanged(width, height))
@@ -192,7 +200,7 @@ void Game::OnWindowSizeChanged(int width, int height)
 }
 
 // Properties
-void Game::GetDefaultSize(int& width, int& height) const
+void Game::GetDefaultSize(int& width, int& height) const noexcept
 {
     width = 800;
     height = 600;

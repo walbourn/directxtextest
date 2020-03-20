@@ -15,34 +15,41 @@ class Game final : public DX::IDeviceNotify
 public:
 
     Game() noexcept(false);
+    ~Game() = default;
+
+    Game(Game&&) = default;
+    Game& operator= (Game&&) = default;
+
+    Game(Game const&) = delete;
+    Game& operator= (Game const&) = delete;
 
     // Initialization and management
     void Initialize(HWND window, int width, int height);
 
     // Basic game loop
     void Tick();
-    void Render();
-
-    // Rendering helpers
-    void Clear();
 
     // IDeviceNotify
-    virtual void OnDeviceLost() override;
-    virtual void OnDeviceRestored() override;
+    void OnDeviceLost() override;
+    void OnDeviceRestored() override;
 
     // Messages
     void OnActivated();
     void OnDeactivated();
     void OnSuspending();
     void OnResuming();
+    void OnWindowMoved();
     void OnWindowSizeChanged(int width, int height);
 
     // Properties
-    void GetDefaultSize( int& width, int& height ) const;
+    void GetDefaultSize( int& width, int& height ) const noexcept;
 
 private:
 
     void Update(DX::StepTimer const& timer);
+    void Render();
+
+    void Clear();
 
     void CreateDeviceDependentResources();
     void CreateWindowSizeDependentResources();

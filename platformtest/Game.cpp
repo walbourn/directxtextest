@@ -12,7 +12,7 @@
 #include "..\tex\tex.h"
 #include "..\wic\wic.h"
 
-extern void ExitGame();
+extern void ExitGame() noexcept;
 
 using namespace DirectX;
 
@@ -263,7 +263,7 @@ void Game::ValidateDevice()
 }
 #endif
 // Properties
-void Game::GetDefaultSize(int& width, int& height) const
+void Game::GetDefaultSize(int& width, int& height) const noexcept
 {
     width = 320;
     height = 200;

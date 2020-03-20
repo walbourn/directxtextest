@@ -5,6 +5,8 @@
 #include "pch.h"
 #include "Game.h"
 
+extern void ExitGame() noexcept;
+
 using namespace DirectX;
 
 using Microsoft::WRL::ComPtr;
@@ -211,6 +213,12 @@ void Game::OnResuming()
     m_timer.ResetElapsedTime();
 }
 
+void Game::OnWindowMoved()
+{
+    auto r = m_deviceResources->GetOutputSize();
+    m_deviceResources->WindowSizeChanged(r.right, r.bottom);
+}
+
 void Game::OnWindowSizeChanged(int width, int height)
 {
     if (!m_deviceResources->WindowSizeChanged(width, height))
@@ -220,7 +228,7 @@ void Game::OnWindowSizeChanged(int width, int height)
 }
 
 // Properties
-void Game::GetDefaultSize(int& width, int& height) const
+void Game::GetDefaultSize(int& width, int& height) const noexcept
 {
     width = 800;
     height = 600;
