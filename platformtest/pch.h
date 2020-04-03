@@ -41,6 +41,7 @@
 #include <wincodec.h>
 
 #include <wrl/client.h>
+#include <wrl/event.h>
 
 #include "DirectXTex.h"
 
