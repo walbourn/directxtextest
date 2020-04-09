@@ -73,4 +73,9 @@
   <ItemGroup>
     <AppxManifest Include="PackageUWP.appxmanifest" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="$(DirectXTexMedia)*">
+      <Filter>Assets</Filter>
+    </None>
+  </ItemGroup>
 </Project>
