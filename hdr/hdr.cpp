@@ -56,7 +56,7 @@ namespace
 
     inline bool IsErrorTooLarge(float f, float threshold)
     {
-        return (fabs(f) > threshold) != 0;
+        return (fabsf(f) > threshold) != 0;
     }
 }
 

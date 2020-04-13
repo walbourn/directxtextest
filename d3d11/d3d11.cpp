@@ -653,7 +653,7 @@ bool Test05()
                                     pass = false;
                                     printe("Failed comparing captured image (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                                 }
-                                else if (fabs(mse) > 0.000001f)
+                                else if (fabsf(mse) > 0.000001f)
                                 {
                                     success = false;
                                     pass = false;
@@ -737,7 +737,7 @@ bool Test05()
                                     pass = false;
                                     printe("Failed comparing captured image (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                                 }
-                                else if (fabs(mse) > 0.000001f)
+                                else if (fabsf(mse) > 0.000001f)
                                 {
                                     success = false;
                                     pass = false;

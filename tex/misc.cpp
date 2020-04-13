@@ -24,7 +24,7 @@ namespace
 {
     inline bool IsEqual(float f1, float f2)
     {
-        return (fabs(f1 - f2) < 0.000001) != 0;
+        return (fabsf(f1 - f2) < 0.000001f) != 0;
     }
 }
 
