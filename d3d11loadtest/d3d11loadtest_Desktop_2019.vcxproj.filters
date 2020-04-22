@@ -30,13 +30,13 @@
     <ClInclude Include="DeviceResources.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\DDSTextureLoader\DDSTextureLoader.h">
+    <ClInclude Include="..\..\DDSTextureLoader\DDSTextureLoader11.h">
       <Filter>DDS</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\WICTextureLoader\WICTextureLoader.h">
+    <ClInclude Include="..\..\WICTextureLoader\WICTextureLoader11.h">
       <Filter>WIC</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\ScreenGrab\ScreenGrab.h">
+    <ClInclude Include="..\..\ScreenGrab\ScreenGrab11.h">
       <Filter>ScreenGrab</Filter>
     </ClInclude>
     <ClInclude Include="ReadData.h">
@@ -50,13 +50,13 @@
     <ClCompile Include="DeviceResources.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\DDSTextureLoader\DDSTextureLoader.cpp">
+    <ClCompile Include="..\..\DDSTextureLoader\DDSTextureLoader11.cpp">
       <Filter>DDS</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\WICTextureLoader\WICTextureLoader.cpp">
+    <ClCompile Include="..\..\WICTextureLoader\WICTextureLoader11.cpp">
       <Filter>WIC</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ScreenGrab\ScreenGrab.cpp">
+    <ClCompile Include="..\..\ScreenGrab\ScreenGrab11.cpp">
       <Filter>ScreenGrab</Filter>
     </ClCompile>
   </ItemGroup>
