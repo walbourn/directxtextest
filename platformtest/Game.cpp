@@ -326,7 +326,7 @@ void Game::TestThreadProc()
             break;
     }
 
-    print("Ran %d tests, %d pass, %d fail\n", nPass + nFail, nPass, nFail);
+    print("*** %s: Ran %d tests, %d pass, %d fail ***\n", (nFail > 0) ? "FAILED" : "PASSED", nPass + nFail, nPass, nFail);
 
     SetWICFactory(nullptr);
 }
