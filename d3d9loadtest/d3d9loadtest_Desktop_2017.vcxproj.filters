@@ -14,6 +14,9 @@
     <Filter Include="WIC">
       <UniqueIdentifier>{876818a8-88a5-4340-acf7-9c541765f2b3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ScreenGrab">
+      <UniqueIdentifier>{42956744-beb4-4120-803c-20e70dc0c25f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -27,6 +30,9 @@
     <ClInclude Include="..\..\WICTextureLoader\WICTextureLoader9.h">
       <Filter>WIC</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\ScreenGrab\ScreenGrab9.h">
+      <Filter>ScreenGrab</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -37,6 +43,9 @@
     </ClCompile>
     <ClCompile Include="..\..\WICTextureLoader\WICTextureLoader9.cpp">
       <Filter>WIC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ScreenGrab\ScreenGrab9.cpp">
+      <Filter>ScreenGrab</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -4,7 +4,7 @@
 // This test ensures that all public headers fully include all their dependancies, as well compile cleanly at maximum warning level
 
 #include "DDSTextureLoader9.h"
-//#include "ScreenGrab9.h"
+#include "ScreenGrab9.h"
 #include "WICTextureLoader9.h"
 
 extern void test11();

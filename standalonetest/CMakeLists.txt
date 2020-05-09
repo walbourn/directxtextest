@@ -31,6 +31,8 @@ add_executable(${PROJECT_NAME} main.cpp test11.cpp test12.cpp
 ../../DDSTextureLoader/DDSTextureLoader11.cpp
 ../../DDSTextureLoader/DDSTextureLoader12.h
 ../../DDSTextureLoader/DDSTextureLoader12.cpp
+../../ScreenGrab/ScreenGrab9.h
+../../ScreenGrab/ScreenGrab9.cpp
 ../../ScreenGrab/ScreenGrab11.h
 ../../ScreenGrab/ScreenGrab11.cpp
 ../../ScreenGrab/ScreenGrab12.h
