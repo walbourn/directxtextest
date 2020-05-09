@@ -219,13 +219,10 @@ void Game::CreateDevice()
         CreateDDSTextureFromFile(m_d3dDevice.Get(), L"dx5_logo.dds", m_dx5logo.ReleaseAndGetAddressOf())
     );
 
-#if 0
     // Test WICTextureLoader
     DX::ThrowIfFailed(
-        CreateWICTextureFromFile(m_d3dDevice.Get(), L"cup_small.jpg", m_cup.ReleaseAndGetAddressOf(), 256,
-            WIC_LOADER_FORCE_RGBA32 | WIC_LOADER_FIT_POW2 | WIC_LOADER_MAKE_SQUARE)
+        CreateWICTextureFromFile(m_d3dDevice.Get(), L"cup_small.jpg", m_cup.ReleaseAndGetAddressOf())
     );
-#endif
 }
 
 void Game::CreateWindowSizeDependentResources()
