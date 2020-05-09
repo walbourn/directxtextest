@@ -60,6 +60,8 @@
 #include <dxgidebug.h>
 #endif
 
+#include <wincodec.h>
+
 namespace DX
 {
     // Helper class for COM exceptions

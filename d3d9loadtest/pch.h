@@ -43,6 +43,9 @@
 #include <memory>
 #include <stdexcept>
 
+#define _WIN7_PLATFORM_UPDATE
+#include <wincodec.h>
+
 namespace DX
 {
     inline void ThrowIfFailed(HRESULT hr)

@@ -14,6 +14,15 @@ using Microsoft::WRL::ComPtr;
 #include "DDSTextureLoader9.h"
 #include "WICTextureLoader9.h"
 
+namespace
+{
+    struct Vertex
+    {
+        XMFLOAT3 position;
+        XMFLOAT2 texcoord;
+    };
+}
+
 Game::Game() noexcept :
     m_window(nullptr),
     m_outputWidth(800),
@@ -29,6 +38,7 @@ void Game::Initialize(HWND window, int width, int height)
     m_outputHeight = std::max(height, 1);
 
     CreateDevice();
+    CreateWindowSizeDependentResources();
 }
 
 // Executes the basic game loop.
@@ -73,7 +83,49 @@ void Game::Render()
 
     m_d3dDevice->BeginScene();
 
-    // TODO: Add your rendering code here.
+    m_d3dDevice->SetFVF(D3DFVF_XYZ | D3DFVF_TEX1);
+
+    m_d3dDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+    m_d3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+    m_d3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+    m_d3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+    m_d3dDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+
+    static const Vertex s_vertexData[] =
+    {
+        { { -1.0f, -0.5f, 0.5f },{ 0.f, 1.f } },
+        { { 0.0f, -0.5f, 0.5f },{ 1.f, 1.f } },
+        { { 0.0f,  0.5f, 0.5f },{ 1.f, 0.f } },
+        { { -1.0f,  0.5f, 0.5f },{ 0.f, 0.f } },
+
+        { { 0.f, -0.5f, 0.5f },{ 0.f, 1.f } },
+        { { 1.0f, -0.5f, 0.5f },{ 1.f, 1.f } },
+        { { 1.0f,  0.5f, 0.5f },{ 1.f, 0.f } },
+        { { 0.f,  0.5f, 0.5f },{ 0.f, 0.f } },
+    };
+
+    static const uint16_t s_indexData[6] =
+    {
+        3,1,0,
+        2,1,3,
+    };
+
+    m_d3dDevice->DrawIndexedPrimitiveUP(D3DPT_TRIANGLELIST,
+        0, _countof(s_vertexData), 2,
+        s_indexData, D3DFMT_INDEX16, s_vertexData, sizeof(Vertex));
+
+    // Draw quad 1.
+    m_d3dDevice->SetTexture(0, m_dx5logo.Get());
+    m_d3dDevice->DrawIndexedPrimitiveUP(D3DPT_TRIANGLELIST,
+        0, _countof(s_vertexData), 2,
+        s_indexData, D3DFMT_INDEX16, s_vertexData, sizeof(Vertex));
+
+    // Draw quad 2.
+    m_d3dDevice->SetTexture(0, m_cup.Get());
+
+    m_d3dDevice->DrawIndexedPrimitiveUP(D3DPT_TRIANGLELIST,
+        4, _countof(s_vertexData), 2,
+        s_indexData, D3DFMT_INDEX16, s_vertexData, sizeof(Vertex));
 
     m_d3dDevice->EndScene();
 
@@ -125,7 +177,10 @@ void Game::OnWindowSizeChanged(int width, int height)
     params.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;
     params.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
 
-    m_d3dDevice->Reset(&params);
+    if (SUCCEEDED(m_d3dDevice->Reset(&params)))
+    {
+        CreateWindowSizeDependentResources();
+    }
 }
 
 // Properties
@@ -138,11 +193,9 @@ void Game::GetDefaultSize(int& width, int& height) const noexcept
 // These are the resources that depend on the device.
 void Game::CreateDevice()
 {
-    m_d3d = Direct3DCreate9(D3D_SDK_VERSION);
-    if (!m_d3d)
-    {
-        throw std::exception("Direct3DCreate9");
-    }
+    DX::ThrowIfFailed(
+        Direct3DCreate9Ex(D3D_SDK_VERSION, m_d3d.ReleaseAndGetAddressOf()
+        ));
 
     D3DPRESENT_PARAMETERS params = {};
     params.BackBufferCount = 1;
@@ -153,13 +206,32 @@ void Game::CreateDevice()
     params.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;
     params.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
 
-    HRESULT hr = m_d3d->CreateDevice(
+    HRESULT hr = m_d3d->CreateDeviceEx(
         D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL,
         m_window,
         D3DCREATE_SOFTWARE_VERTEXPROCESSING,
-        &params,
+        &params, nullptr,
         m_d3dDevice.ReleaseAndGetAddressOf());
     DX::ThrowIfFailed(hr);
+
+    // Test DDSTextureLoader
+    DX::ThrowIfFailed(
+        CreateDDSTextureFromFile(m_d3dDevice.Get(), L"dx5_logo.dds", m_dx5logo.ReleaseAndGetAddressOf())
+    );
+
+#if 0
+    // Test WICTextureLoader
+    DX::ThrowIfFailed(
+        CreateWICTextureFromFile(m_d3dDevice.Get(), L"cup_small.jpg", m_cup.ReleaseAndGetAddressOf(), 256,
+            WIC_LOADER_FORCE_RGBA32 | WIC_LOADER_FIT_POW2 | WIC_LOADER_MAKE_SQUARE)
+    );
+#endif
+}
+
+void Game::CreateWindowSizeDependentResources()
+{
+    D3DVIEWPORT9 vp = { 0u, 0u, DWORD(m_outputWidth), DWORD(m_outputHeight) };
+    m_d3dDevice->SetViewport(&vp);
 }
 
 void Game::OnDeviceLost()
@@ -173,5 +245,8 @@ void Game::OnDeviceLost()
     params.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;
     params.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
 
-    m_d3dDevice->Reset(&params);
+    if (SUCCEEDED(m_d3dDevice->Reset(&params)))
+    {
+        CreateWindowSizeDependentResources();
+    }
 }

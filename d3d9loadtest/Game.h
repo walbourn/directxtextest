@@ -47,6 +47,7 @@ private:
     void Present();
 
     void CreateDevice();
+    void CreateWindowSizeDependentResources();
 
     void OnDeviceLost();
 
@@ -55,8 +56,11 @@ private:
     int                                             m_outputWidth;
     int                                             m_outputHeight;
 
-    Microsoft::WRL::ComPtr<IDirect3D9>              m_d3d;
-    Microsoft::WRL::ComPtr<IDirect3DDevice9>        m_d3dDevice;
+    Microsoft::WRL::ComPtr<IDirect3D9Ex>            m_d3d;
+    Microsoft::WRL::ComPtr<IDirect3DDevice9Ex>      m_d3dDevice;
+
+    Microsoft::WRL::ComPtr<IDirect3DTexture9>       m_cup;
+    Microsoft::WRL::ComPtr<IDirect3DTexture9>       m_dx5logo;
 
     // Rendering loop timer.
     DX::StepTimer                                   m_timer;

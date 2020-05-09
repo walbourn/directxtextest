@@ -53,6 +53,9 @@
 #include <dxgidebug.h>
 #endif
 
+#define _WIN7_PLATFORM_UPDATE
+#include <wincodec.h>
+
 namespace DX
 {
     // Helper class for COM exceptions
