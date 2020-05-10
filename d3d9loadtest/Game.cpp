@@ -12,6 +12,7 @@ using namespace DirectX;
 using Microsoft::WRL::ComPtr;
 
 #include "DDSTextureLoader9.h"
+#include "ScreenGrab9.h"
 #include "WICTextureLoader9.h"
 
 namespace
@@ -26,7 +27,8 @@ namespace
 Game::Game() noexcept :
     m_window(nullptr),
     m_outputWidth(800),
-    m_outputHeight(600)
+    m_outputHeight(600),
+    m_frame(0)
 {
 }
 
@@ -60,6 +62,8 @@ void Game::Tick()
     });
 
     Render();
+
+    ++m_frame;
 }
 
 // Updates the world.
@@ -128,6 +132,43 @@ void Game::Render()
         s_indexData, D3DFMT_INDEX16, s_vertexData, sizeof(Vertex));
 
     m_d3dDevice->EndScene();
+
+    if (!(m_frame % 1000))
+    {
+        OutputDebugStringA("Saving screenshot...\n");
+
+        ComPtr<IDirect3DSurface9> backbuffer;
+        HRESULT hr = m_d3dDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, backbuffer.GetAddressOf());
+        if (SUCCEEDED(hr))
+        {
+            D3DSURFACE_DESC desc = {};
+            DX::ThrowIfFailed(backbuffer->GetDesc(&desc));
+
+            ComPtr<IDirect3DSurface9> staging;
+            DX::ThrowIfFailed(
+                m_d3dDevice->CreateOffscreenPlainSurface(desc.Width, desc.Height,
+                    desc.Format, D3DPOOL_SYSTEMMEM,
+                    staging.GetAddressOf(), nullptr));
+
+            hr = m_d3dDevice->GetRenderTargetData(backbuffer.Get(), staging.Get());
+            if (SUCCEEDED(hr))
+            {
+                DX::ThrowIfFailed(SaveDDSTextureToFile(staging.Get(), L"screenshot.dds"));
+
+                DX::ThrowIfFailed(SaveWICTextureToFile(staging.Get(), GUID_ContainerFormatPng, L"screenshot.png", nullptr, nullptr));
+
+                DX::ThrowIfFailed(SaveWICTextureToFile(staging.Get(), GUID_ContainerFormatJpeg, L"screenshot.jpg"));
+            }
+            else
+            {
+                OutputDebugStringA("ERROR: GetRenderTargetData failed\n");
+            }
+        }
+        else
+        {
+            OutputDebugStringA("ERROR: GetBackBuffer failed\n");
+        }
+    }
 
     Present();
 }
