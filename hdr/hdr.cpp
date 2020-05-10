@@ -375,67 +375,138 @@ bool Test04()
             }
 
             // DXGI_FORMAT_R32G32B32_FLOAT
-            ScratchImage image96bpp;
-            hr = Convert(*image.GetImage(0, 0, 0), DXGI_FORMAT_R32G32B32_FLOAT, TEX_FILTER_DEFAULT, TEX_THRESHOLD_DEFAULT, image96bpp);
-            if (FAILED(hr))
             {
-                success = false;
-                pass = false;
-                printe("ERROR: Failed to create 96bpp test data\n%ls\n", szPath);
-            }
-            else
-            {
-                assert(image96bpp.GetImage(0, 0, 0)->format == DXGI_FORMAT_R32G32B32_FLOAT);
-
-                Blob blob;
-                hr = SaveToHDRMemory(*image96bpp.GetImage(0, 0, 0), blob);
+                ScratchImage image96bpp;
+                hr = Convert(*image.GetImage(0, 0, 0), DXGI_FORMAT_R32G32B32_FLOAT, TEX_FILTER_DEFAULT, TEX_THRESHOLD_DEFAULT, image96bpp);
                 if (FAILED(hr))
                 {
                     success = false;
                     pass = false;
-                    printe("Failed writing hdr to memory 96bpp (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                    printe("ERROR: Failed to create 96bpp test data\n%ls\n", szPath);
                 }
                 else
                 {
-                    TexMetadata metadata2;
-                    ScratchImage image2;
-                    hr = LoadFromHDRMemory(blob.GetBufferPointer(), blob.GetBufferSize(), &metadata2, image2);
+                    assert(image96bpp.GetImage(0, 0, 0)->format == DXGI_FORMAT_R32G32B32_FLOAT);
+
+                    Blob blob;
+                    hr = SaveToHDRMemory(*image96bpp.GetImage(0, 0, 0), blob);
                     if (FAILED(hr))
                     {
                         success = false;
                         pass = false;
-                        printe("Failed reading back written hdr to memory 96bpp (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
-                    }
-                    else if (metadata.width != metadata2.width
-                        || metadata.height != metadata2.height
-                        || metadata.arraySize != metadata2.arraySize
-                        || metadata2.mipLevels != 1
-                        || metadata.dimension != metadata2.dimension
-                        || DXGI_FORMAT_R32G32B32A32_FLOAT != metadata2.format)
-                    {
-                        success = false;
-                        pass = false;
-                        printe("Metadata error in hdr memory readback 96bpp :\n%ls\n", szPath);
-                        printmeta(&metadata2);
-                        printmetachk(&metadata);
+                        printe("Failed writing hdr to memory 96bpp (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                     }
                     else
                     {
-                        // TESTTEST-SaveScratchImage( L"C:\\Temp\\XXX1.DDS", DDS_FLAGS_NONE, image2 );
-
-                        float mse, mseV[4];
-                        hr = ComputeMSE(*image96bpp.GetImage(0, 0, 0), *image2.GetImage(0, 0, 0), mse, mseV);
+                        TexMetadata metadata2;
+                        ScratchImage image2;
+                        hr = LoadFromHDRMemory(blob.GetBufferPointer(), blob.GetBufferSize(), &metadata2, image2);
                         if (FAILED(hr))
                         {
                             success = false;
                             pass = false;
-                            printe("Failed computing hdr memory readback MSE 96bpp (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                            printe("Failed reading back written hdr to memory 96bpp (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
                         }
-                        else if (IsErrorTooLarge(mse, 0.001f))
+                        else if (metadata.width != metadata2.width
+                            || metadata.height != metadata2.height
+                            || metadata.arraySize != metadata2.arraySize
+                            || metadata2.mipLevels != 1
+                            || metadata.dimension != metadata2.dimension
+                            || DXGI_FORMAT_R32G32B32A32_FLOAT != metadata2.format)
                         {
                             success = false;
                             pass = false;
-                            printe("96bpp MSE = %f (%f %f %f %f)... 0.f\n%ls\n", mse, mseV[0], mseV[1], mseV[2], mseV[3], szPath);
+                            printe("Metadata error in hdr memory readback 96bpp :\n%ls\n", szPath);
+                            printmeta(&metadata2);
+                            printmetachk(&metadata);
+                        }
+                        else
+                        {
+                            // TESTTEST-SaveScratchImage( L"C:\\Temp\\XXX1.DDS", DDS_FLAGS_NONE, image2 );
+
+                            float mse, mseV[4];
+                            hr = ComputeMSE(*image96bpp.GetImage(0, 0, 0), *image2.GetImage(0, 0, 0), mse, mseV);
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed computing hdr memory readback MSE 96bpp (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                            }
+                            else if (IsErrorTooLarge(mse, 0.001f))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("96bpp MSE = %f (%f %f %f %f)... 0.f\n%ls\n", mse, mseV[0], mseV[1], mseV[2], mseV[3], szPath);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // DXGI_FORMAT_R16G16B16A16_FLOAT
+            {
+                ScratchImage imagehalf;
+                hr = Convert(*image.GetImage(0, 0, 0), DXGI_FORMAT_R16G16B16A16_FLOAT, TEX_FILTER_DEFAULT, TEX_THRESHOLD_DEFAULT, imagehalf);
+                if (FAILED(hr))
+                {
+                    success = false;
+                    pass = false;
+                    printe("ERROR: Failed to create half16 test data\n%ls\n", szPath);
+                }
+                else
+                {
+                    assert(imagehalf.GetImage(0, 0, 0)->format == DXGI_FORMAT_R16G16B16A16_FLOAT);
+
+                    Blob blob;
+                    hr = SaveToHDRMemory(*imagehalf.GetImage(0, 0, 0), blob);
+                    if (FAILED(hr))
+                    {
+                        success = false;
+                        pass = false;
+                        printe("Failed writing hdr to memory half16 (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                    }
+                    else
+                    {
+                        TexMetadata metadata2;
+                        ScratchImage image2;
+                        hr = LoadFromHDRMemory(blob.GetBufferPointer(), blob.GetBufferSize(), &metadata2, image2);
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed reading back written hdr to memory half16 (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                        }
+                        else if (metadata.width != metadata2.width
+                            || metadata.height != metadata2.height
+                            || metadata.arraySize != metadata2.arraySize
+                            || metadata2.mipLevels != 1
+                            || metadata.dimension != metadata2.dimension
+                            || DXGI_FORMAT_R32G32B32A32_FLOAT != metadata2.format)
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Metadata error in hdr memory readback half16 :\n%ls\n", szPath);
+                            printmeta(&metadata2);
+                            printmetachk(&metadata);
+                        }
+                        else
+                        {
+                            // TESTTEST-SaveScratchImage( L"C:\\Temp\\XXX1.DDS", DDS_FLAGS_NONE, image2 );
+
+                            float mse, mseV[4];
+                            hr = ComputeMSE(*imagehalf.GetImage(0, 0, 0), *image2.GetImage(0, 0, 0), mse, mseV);
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed computing hdr memory readback MSE half16 (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                            }
+                            else if (IsErrorTooLarge(mse, 0.001f))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("half16 MSE = %f (%f %f %f %f)... 0.f\n%ls\n", mse, mseV[0], mseV[1], mseV[2], mseV[3], szPath);
+                            }
                         }
                     }
                 }
@@ -503,6 +574,12 @@ bool Test05()
         wchar_t szDestPath2[MAX_PATH] = {};
         _wmakepath_s(szDestPath2, MAX_PATH, nullptr, tempDir, fname2, L".hdr");
 
+        wcscpy_s(fname2, fname);
+        wcscat_s(fname2, L"_half16");
+
+        wchar_t szDestPath3[MAX_PATH] = {};
+        _wmakepath_s(szDestPath3, MAX_PATH, nullptr, tempDir, fname2, L".hdr");
+
         TexMetadata metadata;
         ScratchImage image;
         HRESULT hr = LoadFromHDRFile(szPath, &metadata, image);
@@ -564,7 +641,7 @@ bool Test05()
                     {
                         success = false;
                         pass = false;
-                        printe("Failed computing hdr realoaded readback MSE (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath);
+                        printe("Failed computing hdr reloaded readback MSE (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath);
                     }
                     else if (IsErrorTooLarge(mse, 0.001f))
                     {
@@ -576,66 +653,136 @@ bool Test05()
             }
 
             // DXGI_FORMAT_R32G32B32_FLOAT
-            ScratchImage image96bpp;
-            hr = Convert(*image.GetImage(0, 0, 0), DXGI_FORMAT_R32G32B32_FLOAT, TEX_FILTER_DEFAULT, TEX_THRESHOLD_DEFAULT, image96bpp);
-            if (FAILED(hr))
             {
-                success = false;
-                pass = false;
-                printe("ERROR: Failed to create 96bpp test data\n%ls\n", szPath);
-            }
-            else
-            {
-                assert(image96bpp.GetImage(0, 0, 0)->format == DXGI_FORMAT_R32G32B32_FLOAT);
-
-                hr = SaveToHDRFile(*image96bpp.GetImage(0, 0, 0), szDestPath2);
+                ScratchImage image96bpp;
+                hr = Convert(*image.GetImage(0, 0, 0), DXGI_FORMAT_R32G32B32_FLOAT, TEX_FILTER_DEFAULT, TEX_THRESHOLD_DEFAULT, image96bpp);
                 if (FAILED(hr))
                 {
                     success = false;
                     pass = false;
-                    printe("Failed writing hdr to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath2);
+                    printe("ERROR: Failed to create 96bpp test data\n%ls\n", szPath);
                 }
                 else
                 {
-                    TexMetadata metadata2;
-                    ScratchImage image2;
-                    hr = LoadFromHDRFile(szDestPath2, &metadata2, image2);
+                    assert(image96bpp.GetImage(0, 0, 0)->format == DXGI_FORMAT_R32G32B32_FLOAT);
+
+                    hr = SaveToHDRFile(*image96bpp.GetImage(0, 0, 0), szDestPath2);
                     if (FAILED(hr))
                     {
                         success = false;
                         pass = false;
-                        printe("Failed reading back written hdr to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath2);
-                    }
-                    else if (metadata.width != metadata2.width
-                        || metadata.height != metadata2.height
-                        || metadata.arraySize != metadata2.arraySize
-                        || metadata2.mipLevels != 1
-                        || metadata.dimension != metadata2.dimension
-                        || DXGI_FORMAT_R32G32B32A32_FLOAT != metadata2.format)
-                    {
-                        success = false;
-                        pass = false;
-                        printe("Metadata error in hdr readback:\n%ls\n", szDestPath2);
-                        printmeta(&metadata2);
-                        printmetachk(&metadata);
+                        printe("Failed writing hdr 96bpp to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath2);
                     }
                     else
                     {
-                        // TESTTEST-SaveScratchImage( L"C:\\Temp\\XXX2.DDS", DDS_FLAGS_NONE, image2 );
-
-                        float mse, mseV[4];
-                        hr = ComputeMSE(*image96bpp.GetImage(0, 0, 0), *image2.GetImage(0, 0, 0), mse, mseV);
+                        TexMetadata metadata2;
+                        ScratchImage image2;
+                        hr = LoadFromHDRFile(szDestPath2, &metadata2, image2);
                         if (FAILED(hr))
                         {
                             success = false;
                             pass = false;
-                            printe("Failed computing hdr realoaded readback MSE (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath2);
+                            printe("Failed reading back written hdr 96bpp to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath2);
                         }
-                        else if (IsErrorTooLarge(mse, 0.001f))
+                        else if (metadata.width != metadata2.width
+                            || metadata.height != metadata2.height
+                            || metadata.arraySize != metadata2.arraySize
+                            || metadata2.mipLevels != 1
+                            || metadata.dimension != metadata2.dimension
+                            || DXGI_FORMAT_R32G32B32A32_FLOAT != metadata2.format)
                         {
                             success = false;
                             pass = false;
-                            printe("MSE = %f (%f %f %f %f)... 0.f\n%ls\n", mse, mseV[0], mseV[1], mseV[2], mseV[3], szDestPath2);
+                            printe("Metadata error in hdr 96bpp readback:\n%ls\n", szDestPath2);
+                            printmeta(&metadata2);
+                            printmetachk(&metadata);
+                        }
+                        else
+                        {
+                            // TESTTEST-SaveScratchImage( L"C:\\Temp\\XXX2.DDS", DDS_FLAGS_NONE, image2 );
+
+                            float mse, mseV[4];
+                            hr = ComputeMSE(*image96bpp.GetImage(0, 0, 0), *image2.GetImage(0, 0, 0), mse, mseV);
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed computing hdr 96bpp reloaded readback MSE (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath2);
+                            }
+                            else if (IsErrorTooLarge(mse, 0.001f))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("96bpp MSE = %f (%f %f %f %f)... 0.f\n%ls\n", mse, mseV[0], mseV[1], mseV[2], mseV[3], szDestPath2);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // DXGI_FORMAT_R16G16B16A16_FLOAT
+            {
+                ScratchImage imagehalf;
+                hr = Convert(*image.GetImage(0, 0, 0), DXGI_FORMAT_R16G16B16A16_FLOAT, TEX_FILTER_DEFAULT, TEX_THRESHOLD_DEFAULT, imagehalf);
+                if (FAILED(hr))
+                {
+                    success = false;
+                    pass = false;
+                    printe("ERROR: Failed to create half16 test data\n%ls\n", szPath);
+                }
+                else
+                {
+                    assert(imagehalf.GetImage(0, 0, 0)->format == DXGI_FORMAT_R16G16B16A16_FLOAT);
+
+                    hr = SaveToHDRFile(*imagehalf.GetImage(0, 0, 0), szDestPath3);
+                    if (FAILED(hr))
+                    {
+                        success = false;
+                        pass = false;
+                        printe("Failed writing hdr half16 to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath2);
+                    }
+                    else
+                    {
+                        TexMetadata metadata2;
+                        ScratchImage image2;
+                        hr = LoadFromHDRFile(szDestPath3, &metadata2, image2);
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed reading back written hdr half16 to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath2);
+                        }
+                        else if (metadata.width != metadata2.width
+                            || metadata.height != metadata2.height
+                            || metadata.arraySize != metadata2.arraySize
+                            || metadata2.mipLevels != 1
+                            || metadata.dimension != metadata2.dimension
+                            || DXGI_FORMAT_R32G32B32A32_FLOAT != metadata2.format)
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Metadata error in hdr half16 readback:\n%ls\n", szDestPath2);
+                            printmeta(&metadata2);
+                            printmetachk(&metadata);
+                        }
+                        else
+                        {
+                            // TESTTEST-SaveScratchImage( L"C:\\Temp\\XXX2.DDS", DDS_FLAGS_NONE, image2 );
+
+                            float mse, mseV[4];
+                            hr = ComputeMSE(*imagehalf.GetImage(0, 0, 0), *image2.GetImage(0, 0, 0), mse, mseV);
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed computing hdr half16 reloaded readback MSE (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath2);
+                            }
+                            else if (IsErrorTooLarge(mse, 0.001f))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("half16 MSE = %f (%f %f %f %f)... 0.f\n%ls\n", mse, mseV[0], mseV[1], mseV[2], mseV[3], szDestPath2);
+                            }
                         }
                     }
                 }
