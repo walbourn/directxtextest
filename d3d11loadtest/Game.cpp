@@ -11,9 +11,9 @@ using namespace DirectX;
 
 using Microsoft::WRL::ComPtr;
 
-#include "DDSTextureLoader.h"
-#include "WICTextureLoader.h"
-#include "ScreenGrab.h"
+#include "DDSTextureLoader11.h"
+#include "WICTextureLoader11.h"
+#include "ScreenGrab11.h"
 #include "DirectXTex.h"
 #include "ReadData.h"
 
