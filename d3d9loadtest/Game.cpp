@@ -46,7 +46,7 @@ void Game::Initialize(HWND window, int width, int height)
 // Executes the basic game loop.
 void Game::Tick()
 {
-    HRESULT hr = m_d3dDevice->TestCooperativeLevel();
+    HRESULT hr = m_d3dDevice->CheckDeviceState(m_window);
     if (FAILED(hr))
     {
         if (hr == D3DERR_DEVICENOTRESET)
