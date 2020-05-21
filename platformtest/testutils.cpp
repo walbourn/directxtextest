@@ -379,7 +379,7 @@ HRESULT CopyViaLoadStoreScanline( const Image& srcImage, ScratchImage& image )
 
 
 //-------------------------------------------------------------------------------------
-#define ENUM_CASE(x) case x: return L#x;
+#define ENUM_CASE(x) case x: return L## #x;
 
 const wchar_t* GetName( DXGI_FORMAT fmt )
 {

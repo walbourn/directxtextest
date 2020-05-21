@@ -158,7 +158,7 @@ HRESULT CreateWideImage( _In_count_(nimages) const Image* images, size_t nimages
 
 
 //-------------------------------------------------------------------------------------
-#define ENUM_CASE(x) case x: return L#x;
+#define ENUM_CASE(x) case x: return L## #x;
 
 const wchar_t* GetName( DXGI_FORMAT fmt )
 {
