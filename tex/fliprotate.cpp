@@ -15,7 +15,7 @@ namespace
 {
     struct FlipRotateMedia
     {
-        DWORD flags;
+        TEX_FR_FLAGS flags;
         TexMetadata metadata;
         const wchar_t *fname;
     };
@@ -92,7 +92,7 @@ namespace
 
 //-------------------------------------------------------------------------------------
 
-extern HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags, _In_ const ScratchImage& image );
+extern HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DirectX::DDS_FLAGS flags, _In_ const ScratchImage& image );
 
 //-------------------------------------------------------------------------------------
 // FlipRotate
@@ -154,7 +154,7 @@ bool TEXTest::Test04()
         {
             bool pass = true;
             
-            DWORD dwFlags = g_FlipRotateMedia[index].flags;
+            TEX_FR_FLAGS dwFlags = g_FlipRotateMedia[index].flags;
 
             int rotateMode = static_cast<int>(dwFlags & (TEX_FR_ROTATE0 | TEX_FR_ROTATE90 | TEX_FR_ROTATE180 | TEX_FR_ROTATE270));
 

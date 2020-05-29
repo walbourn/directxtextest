@@ -50,7 +50,7 @@ HRESULT CreateDevice( ID3D11Device** pDev, ID3D11DeviceContext** pContext )
 }
 
 //-------------------------------------------------------------------------------------
-HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags, _In_ const ScratchImage& image )
+HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DirectX::DDS_FLAGS flags, _In_ const ScratchImage& image )
 {
     if ( szFile == nullptr || image.GetPixels() == nullptr || image.GetPixelsSize() == 0 )
         return E_INVALIDARG;

@@ -453,7 +453,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
 {
     // Parameters and defaults
     DXGI_FORMAT format = DXGI_FORMAT_BC3_UNORM;
-    DWORD dwCompress = TEX_COMPRESS_DEFAULT;
+    TEX_COMPRESS_FLAGS dwCompress = TEX_COMPRESS_DEFAULT;
     int adapter = -1;
 
     // Initialize COM (needed for WIC)
@@ -731,7 +731,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
             break;
         }
 
-        DWORD cflags = dwCompress;
+        TEX_COMPRESS_FLAGS cflags = dwCompress;
 #ifdef _OPENMP
         if (!(dwOptions & (DWORD64(1) << OPT_FORCE_SINGLEPROC)))
         {

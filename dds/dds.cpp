@@ -745,7 +745,7 @@ namespace
 
     struct SaveMedia
     {
-        DWORD ddsflags;
+        DDS_FLAGS ddsflags;
         const wchar_t *fname;
     };
 
@@ -806,7 +806,7 @@ namespace
 
 extern HRESULT LoadBlobFromFile( _In_z_ const wchar_t* szFile, Blob& blob );
 extern HRESULT MD5Checksum( _In_ const ScratchImage& image, _Out_bytecap_x_(16) uint8_t *digest );
-extern HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags, _In_ const ScratchImage& image );
+extern HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DirectX::DDS_FLAGS flags, _In_ const ScratchImage& image );
 extern HRESULT CreateWideImage( _In_count_(nimages) const Image* images, size_t nimages, _In_ const TexMetadata& metadata, _Out_ ScratchImage& result ); 
 extern HRESULT IsDDSHeaderPresent( _In_bytecount_(size) const void* pSource, size_t size );
 extern HRESULT IsDDSHeaderPresent( _In_z_ const wchar_t* szFile );
@@ -960,7 +960,7 @@ bool Test02()
         }
         else
         {
-            DWORD flags = DDS_FLAGS_NONE;
+            DDS_FLAGS flags = DDS_FLAGS_NONE;
             if ( g_TestMedia[index].options & FLAGS_DWORDA )
             {
                 flags |= DDS_FLAGS_LEGACY_DWORD;
@@ -1226,7 +1226,7 @@ bool Test03()
         OutputDebugStringA("\n");
 #endif
 
-        DWORD flags = DDS_FLAGS_NONE;
+        DDS_FLAGS flags = DDS_FLAGS_NONE;
         if ( g_TestMedia[index].options & FLAGS_DWORDA )
         {
             flags |= DDS_FLAGS_LEGACY_DWORD;
@@ -1753,7 +1753,7 @@ bool Test04()
                     }
                     else
                     {
-                        DWORD ddsflags = ( metadata.dimension == TEX_DIMENSION_TEXTURE1D ) ? DDS_FLAGS_FORCE_DX10_EXT : DDS_FLAGS_NONE;
+                        DDS_FLAGS ddsflags = ( metadata.dimension == TEX_DIMENSION_TEXTURE1D ) ? DDS_FLAGS_FORCE_DX10_EXT : DDS_FLAGS_NONE;
 
                         hr = SaveToDDSMemory( imageWide.GetImages(), imageWide.GetImageCount(), imageWide.GetMetadata(), ddsflags, blob2 );
                         if ( FAILED(hr) )
@@ -2139,7 +2139,7 @@ bool Test05()
                     }
                     else
                     {
-                        DWORD ddsflags = ( metadata.dimension == TEX_DIMENSION_TEXTURE1D ) ? DDS_FLAGS_FORCE_DX10_EXT : DDS_FLAGS_NONE;
+                        DDS_FLAGS ddsflags = ( metadata.dimension == TEX_DIMENSION_TEXTURE1D ) ? DDS_FLAGS_FORCE_DX10_EXT : DDS_FLAGS_NONE;
 
                         hr = SaveToDDSFile( imageWide.GetImages(), imageWide.GetImageCount(), imageWide.GetMetadata(), ddsflags, szDestPathWide );
                         if ( FAILED(hr) )

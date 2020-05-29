@@ -203,7 +203,7 @@ namespace
 
 extern HRESULT CreateDevice( ID3D11Device** pDev, ID3D11DeviceContext** pContext );
 extern HRESULT CreateWideImage( _In_count_(nimages) const Image* images, size_t nimages, _In_ const TexMetadata& metadata, _Out_ ScratchImage& result ); 
-extern HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DWORD flags, _In_ const ScratchImage& image );
+extern HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DirectX::DDS_FLAGS flags, _In_ const ScratchImage& image );
 extern const wchar_t* GetName( DXGI_FORMAT fmt );
 
 
@@ -604,7 +604,7 @@ bool Test02()
                 OutputDebugStringA("\n");
 #endif
 
-                DWORD flags = 0;
+                CMSE_FLAGS flags = CMSE_DEFAULT;
 
                 switch( cformat )
                 {
@@ -1151,7 +1151,7 @@ bool Test03()
                 if ( SkipCompressCases( check->format, cformat, g_CompressMedia[index].flags, true ) )
                     continue;
 
-                DWORD flags = ( cformat == DXGI_FORMAT_BC6H_UF16 || cformat == DXGI_FORMAT_BC6H_SF16 ) ? CMSE_IGNORE_ALPHA : 0;
+                CMSE_FLAGS flags = (cformat == DXGI_FORMAT_BC6H_UF16 || cformat == DXGI_FORMAT_BC6H_SF16) ? CMSE_IGNORE_ALPHA : CMSE_DEFAULT;
 
                 float mse, mseV[4];
 

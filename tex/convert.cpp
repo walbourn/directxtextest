@@ -699,7 +699,7 @@ namespace
 
 //-------------------------------------------------------------------------------------
 
-extern HRESULT SaveScratchImage(_In_z_ const wchar_t* szFile, _In_ DWORD flags, _In_ const ScratchImage& image);
+extern HRESULT SaveScratchImage(_In_z_ const wchar_t* szFile, _In_ DirectX::DDS_FLAGS flags, _In_ const ScratchImage& image);
 extern HRESULT CopyViaLoadStoreScanline(const Image& srcImage, ScratchImage& image);
 extern const wchar_t* GetName(DXGI_FORMAT fmt);
 
@@ -743,21 +743,21 @@ bool TEXTest::Test05()
         }
 
         // LoadScanlineLinear (non-SRGB cases)
-        if ( !_LoadScanlineLinear( &temp, 1, &p.bytes[0], p.pitch, p.format, 0 ) )
+        if (!_LoadScanlineLinear(&temp, 1, &p.bytes[0], p.pitch, p.format, TEX_FILTER_DEFAULT))
         {
             success = false;
-            printe( "Failed loading (2) pixel format %ls, index %zu\n", GetName( p.format ), index );
+            printe("Failed loading (2) pixel format %ls, index %zu\n", GetName(p.format), index);
         }
         else
         {
-            XMVECTOR chk = XMLoadFloat4( &p.vector );
+            XMVECTOR chk = XMLoadFloat4(&p.vector);
 
-            if ( !XMVector4NearEqual( chk, temp, g_PixelEpsilon ) )
+            if (!XMVector4NearEqual(chk, temp, g_PixelEpsilon))
             {
                 success = false;
-                printe( "Failed loading (2) pixel format %ls, index %zu: %f %f %f %f ... %f %f %f %f\n", GetName( p.format ), index,
-                        XMVectorGetX(temp), XMVectorGetY(temp), XMVectorGetZ(temp), XMVectorGetW(temp),
-                        p.vector.x, p.vector.y, p.vector.z, p.vector.w );
+                printe("Failed loading (2) pixel format %ls, index %zu: %f %f %f %f ... %f %f %f %f\n", GetName(p.format), index,
+                    XMVectorGetX(temp), XMVectorGetY(temp), XMVectorGetZ(temp), XMVectorGetW(temp),
+                    p.vector.x, p.vector.y, p.vector.z, p.vector.w);
             }
         }
     }
@@ -790,23 +790,23 @@ bool TEXTest::Test05()
 
         // StoreScanlineLinear (non-SRGB cases)
         temp = XMLoadFloat4( &p.vector );
-        if ( !_StoreScanlineLinear( buff, p.pitch, p.format, &temp, 1, 0, 0.25f ) )
+        if (!_StoreScanlineLinear(buff, p.pitch, p.format, &temp, 1, TEX_FILTER_DEFAULT, 0.25f))
         {
             success = false;
-            printe( "Failed storing (2) pixel format %ls, index %zu\n", GetName( p.format ), index );
+            printe("Failed storing (2) pixel format %ls, index %zu\n", GetName(p.format), index);
         }
         else
         {
-            if ( memcmp( buff, &p.bytes[0], p.pitch ) != 0 )
+            if (memcmp(buff, &p.bytes[0], p.pitch) != 0)
             {
                 success = false;
-                printe( "Failed storing (2) pixel format %ls, index %zu\n%f %f %f %f:\n",
-                        GetName( p.format ), index, p.vector.x, p.vector.y, p.vector.z, p.vector.w );
-                printe( "    %02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X\n... %02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X\n",
-                        buff[0], buff[1], buff[2], buff[3], buff[4], buff[5], buff[6], buff[7],
-                        buff[8], buff[9], buff[10], buff[11], buff[12], buff[13], buff[14], buff[15],
-                        p.bytes[0], p.bytes[1], p.bytes[2], p.bytes[3], p.bytes[4], p.bytes[5], p.bytes[6], p.bytes[7],
-                        p.bytes[8], p.bytes[9], p.bytes[10], p.bytes[11], p.bytes[12], p.bytes[13], p.bytes[14], p.bytes[15] );
+                printe("Failed storing (2) pixel format %ls, index %zu\n%f %f %f %f:\n",
+                    GetName(p.format), index, p.vector.x, p.vector.y, p.vector.z, p.vector.w);
+                printe("    %02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X\n... %02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X\n",
+                    buff[0], buff[1], buff[2], buff[3], buff[4], buff[5], buff[6], buff[7],
+                    buff[8], buff[9], buff[10], buff[11], buff[12], buff[13], buff[14], buff[15],
+                    p.bytes[0], p.bytes[1], p.bytes[2], p.bytes[3], p.bytes[4], p.bytes[5], p.bytes[6], p.bytes[7],
+                    p.bytes[8], p.bytes[9], p.bytes[10], p.bytes[11], p.bytes[12], p.bytes[13], p.bytes[14], p.bytes[15]);
             }
         }
     }
@@ -1063,7 +1063,7 @@ bool TEXTest::Test05C()
         }
         else
         {
-            _ConvertScanline( &temp, 1, srgb, p.format, 0 );
+            _ConvertScanline(&temp, 1, srgb, p.format, TEX_FILTER_DEFAULT);
 
             XMVECTORF32 chk = { EncodeSRGB( p.vector.x ),
                                 EncodeSRGB( p.vector.y ),
@@ -1086,7 +1086,7 @@ bool TEXTest::Test05C()
         }
         else
         {
-            _ConvertScanline( &temp, 1, p.format, srgb, 0 );
+            _ConvertScanline(&temp, 1, p.format, srgb, TEX_FILTER_DEFAULT);
 
             XMVECTORF32 chk = { DecodeSRGB( p.vector.x ),
                                 DecodeSRGB( p.vector.y ),
@@ -1124,10 +1124,10 @@ bool TEXTest::Test05C()
             }
         }
 
-        if ( !_LoadScanlineLinear( &temp, 1, &p.bytes[0], p.pitch, srgb, 0 ) )
+        if (!_LoadScanlineLinear(&temp, 1, &p.bytes[0], p.pitch, srgb, TEX_FILTER_DEFAULT))
         {
             success = false;
-            printe( "Failed linear loading (2) pixel format %ls, index %zu\n", GetName( p.format ), index );
+            printe("Failed linear loading (2) pixel format %ls, index %zu\n", GetName(p.format), index);
         }
         else
         {
@@ -1175,10 +1175,10 @@ bool TEXTest::Test05C()
         }
 
         temp = XMLoadFloat4( &p.vector );
-        if ( !_StoreScanlineLinear( &buff[0], 16, srgb, &temp, 1, 0 ) )
+        if (!_StoreScanlineLinear(&buff[0], 16, srgb, &temp, 1, TEX_FILTER_DEFAULT))
         {
             success = false;
-            printe( "Failed linear storing (2) pixel format %ls, index %zu\n", GetName( p.format ), index );
+            printe("Failed linear storing (2) pixel format %ls, index %zu\n", GetName(p.format), index);
         }
         else if ( !_LoadScanline( &temp, 1, &buff, 16, p.format ) )
         {
@@ -1224,7 +1224,7 @@ bool TEXTest::Test05D()
         DXGI_FORMAT sformat;
         DXGI_FORMAT dformat;
         XMFLOAT4    dvector;
-        DWORD       flags;
+        TEX_FILTER_FLAGS flags;
     };
 
     static const ConvertType s_TestConvert[] =
@@ -2759,7 +2759,7 @@ bool TEXTest::Test06()
                 OutputDebugStringA("\n");
 #endif
 
-                DWORD filter = TEX_FILTER_DEFAULT;
+                TEX_FILTER_FLAGS filter = TEX_FILTER_DEFAULT;
                 if ( g_TestMedia[index].options & FLAGS_SEPALPHA )
                     filter |= TEX_FILTER_SEPARATE_ALPHA;
 
@@ -2848,7 +2848,7 @@ bool TEXTest::Test06()
                             targMSE = 0.02f;
                         else if ( tformat == DXGI_FORMAT_B4G4R4A4_UNORM || tformat == XBOX_DXGI_FORMAT_R4G4_UNORM )
                             targMSE = 0.03f;
-                        DWORD flags = 0;
+                        CMSE_FLAGS flags = CMSE_DEFAULT;
                         switch( static_cast<int>(tformat) )
                         {
                         case DXGI_FORMAT_R10G10B10A2_UNORM:
@@ -2927,7 +2927,7 @@ bool TEXTest::Test06()
                             targMSE = 0.6f;
                         else if ( tformat == DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM )
                             targMSE = 0.4f;
-                        DWORD flags = 0;
+                        CMSE_FLAGS flags = CMSE_DEFAULT;
                         switch( static_cast<int>(tformat) )
                         {
                         case DXGI_FORMAT_R10G10B10A2_UNORM:
@@ -3007,7 +3007,7 @@ bool TEXTest::Test06()
                     }
                     else
                     {
-                        DWORD flags = 0;
+                        CMSE_FLAGS flags = CMSE_DEFAULT;
                         float targMSE = 0.01f;
 
                         switch ( metadata.format )
@@ -3104,7 +3104,7 @@ bool TEXTest::Test06()
                             targMSE = 3.f;
                         else if ( tformat == DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM )
                             targMSE = 0.02f;
-                        DWORD flags = 0;
+                        CMSE_FLAGS flags = CMSE_DEFAULT;
                         switch( static_cast<int>(tformat) )
                         {
                         case DXGI_FORMAT_R10G10B10A2_UNORM:
@@ -3184,7 +3184,7 @@ bool TEXTest::Test06()
                             targMSE = 0.6f;
                         else if ( tformat == DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM )
                             targMSE = 0.4f;
-                        DWORD flags = 0;
+                        CMSE_FLAGS flags = CMSE_DEFAULT;
                         switch( static_cast<int>(tformat) )
                         {
                         case DXGI_FORMAT_R10G10B10A2_UNORM:
@@ -3237,17 +3237,17 @@ bool TEXTest::Test06()
                 }
 
                 //--- SRGB convert ----------------------------------------------------
-                if ( IsSRGB( tformat ) || IsSRGB( metadata.format ) )
+                if (IsSRGB(tformat) || IsSRGB(metadata.format))
                 {
-                    DWORD flags = 0;
+                    CMSE_FLAGS flags = CMSE_DEFAULT;
                     float targMSE = 0.001f;
-                    
-                    if ( HasAlpha( metadata.format ) != HasAlpha( tformat ) )
+
+                    if (HasAlpha(metadata.format) != HasAlpha(tformat))
                     {
                         flags |= CMSE_IGNORE_ALPHA;
                     }
 
-                    switch( metadata.format )
+                    switch (metadata.format)
                     {
                     case DXGI_FORMAT_R1_UNORM:
                         targMSE = 0.01f;
@@ -3296,11 +3296,11 @@ bool TEXTest::Test06()
                     case DXGI_FORMAT_R8_SINT:
                     case DXGI_FORMAT_R32_FLOAT:
                         // These types are too different to really directly compare...
-                        flags = (DWORD)-1;
+                        flags = static_cast<CMSE_FLAGS>(-1);
                         break;
                     }
 
-                    switch( static_cast<int>(tformat) )
+                    switch (static_cast<int>(tformat))
                     {
                     case DXGI_FORMAT_R8_UNORM:
                     case DXGI_FORMAT_R16_UNORM:
@@ -3367,25 +3367,25 @@ bool TEXTest::Test06()
                     case DXGI_FORMAT_Y216:
                     case XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM:
                         // These types are too different to really directly compare...
-                        flags = (DWORD)-1;
+                        flags = static_cast<CMSE_FLAGS>(-1);
                         break;
                     }
 
-                    if ( flags != (DWORD)-1 )
+                    if (flags != static_cast<CMSE_FLAGS>(-1))
                     {
                         float mse, mseV[4];
-                        hr = ComputeMSE( *srcimage.GetImage(0,0,0), *image.GetImage(0,0,0), mse, mseV, flags );
-                        if ( FAILED(hr) )
+                        hr = ComputeMSE(*srcimage.GetImage(0, 0, 0), *image.GetImage(0, 0, 0), mse, mseV, flags);
+                        if (FAILED(hr))
                         {
                             success = false;
-                            printe( "Failed comparing sRGB vs. RGB image data (HRESULT %08X)\n", static_cast<unsigned int>(hr) );
+                            printe("Failed comparing sRGB vs. RGB image data (HRESULT %08X)\n", static_cast<unsigned int>(hr));
                         }
 
-                        if ( IsErrorTooLarge( mse, targMSE ) )
+                        if (IsErrorTooLarge(mse, targMSE))
                         {
                             success = false;
-                            printe( "Failed comparing sRGB vs. RGB image data (%f [%f %f %f %f])\nformat %ls -> %ls:\n%ls\n",
-                                    mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName( metadata.format ), GetName( tformat ), szPath );
+                            printe("Failed comparing sRGB vs. RGB image data (%f [%f %f %f %f])\nformat %ls -> %ls:\n%ls\n",
+                                mse, mseV[0], mseV[1], mseV[2], mseV[3], GetName(metadata.format), GetName(tformat), szPath);
                         }
                     }
                 }
