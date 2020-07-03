@@ -170,6 +170,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Texconv\PortablePixMap.cpp" />
     <ClCompile Include="fuzzloaders.cpp" />
   </ItemGroup>
   <ItemGroup>

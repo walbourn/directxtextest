@@ -43,59 +43,59 @@ namespace
     struct find_closer { void operator()(HANDLE h) noexcept { assert(h != INVALID_HANDLE_VALUE); if (h) FindClose(h); } };
 
     using ScopedFindHandle = std::unique_ptr<void, find_closer>;
-}
 
+    //////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+    enum OPTIONS
+    {
+        OPT_RECURSIVE = 1,
+        OPT_DDS,
+        OPT_HDR,
+        OPT_PFM,
+        OPT_PPM,
+        OPT_TGA,
+        OPT_WIC,
+        OPT_MAX
+    };
 
-enum OPTIONS
-{
-    OPT_RECURSIVE = 1,
-    OPT_DDS,
-    OPT_HDR,
-    OPT_TGA,
-    OPT_WIC,
-    OPT_MAX
-};
+    static_assert(OPT_MAX <= 32, "dwOptions is a DWORD bitfield");
 
-static_assert(OPT_MAX <= 32, "dwOptions is a DWORD bitfield");
+    struct SConversion
+    {
+        wchar_t szSrc[MAX_PATH] = {};
+    };
 
-struct SConversion
-{
-    wchar_t szSrc[MAX_PATH] = {};
-};
+    struct SValue
+    {
+        LPCWSTR pName;
+        DWORD dwValue;
+    };
 
-struct SValue
-{
-    LPCWSTR pName;
-    DWORD dwValue;
-};
+    //////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+    const SValue g_pOptions[] =
+    {
+        { L"r",         OPT_RECURSIVE },
+        { L"dds",       OPT_DDS },
+        { L"hdr",       OPT_HDR },
+        { L"pfm",       OPT_PFM },
+        { L"ppm",       OPT_PPM },
+        { L"tga",       OPT_TGA },
+        { L"wic",       OPT_WIC },
+        { nullptr,      0 }
+    };
 
-const SValue g_pOptions [] =
-{
-    { L"r",         OPT_RECURSIVE },
-    { L"dds",       OPT_DDS },
-    { L"hdr",       OPT_HDR },
-    { L"tga",       OPT_TGA },
-    { L"wic",       OPT_WIC },
-    { nullptr,      0 }
-};
+    //////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-
-namespace
-{
 #pragma prefast(disable : 26018, "Only used with static internal arrays")
 
-    DWORD LookupByName(const wchar_t *pName, const SValue *pArray)
+    DWORD LookupByName(const wchar_t* pName, const SValue* pArray)
     {
         while (pArray->pName)
         {
@@ -108,7 +108,7 @@ namespace
         return 0;
     }
 
-    const wchar_t* LookupByValue(DWORD pValue, const SValue *pArray)
+    const wchar_t* LookupByValue(DWORD pValue, const SValue* pArray)
     {
         while (pArray->pName)
         {
@@ -148,7 +148,7 @@ namespace
                     break;
             }
         }
-            
+
         // Process directories
         if (recursive)
         {
@@ -202,10 +202,26 @@ namespace
         wprintf(L"   -r                  wildcard filename search is recursive\n");
         wprintf(L"   -dds                force use of DDS loader\n");
         wprintf(L"   -hdr                force use of HDR loader\n");
+        wprintf(L"   -pfm                force use of PFM loader\n");
+        wprintf(L"   -ppm                force use of PPM loader\n");
         wprintf(L"   -tga                force use of TGA loader\n");
         wprintf(L"   -wic                force use of WIC loader\n");
     }
 }
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+HRESULT __cdecl LoadFromPortablePixMap(
+    _In_z_ const wchar_t* szFile,
+    _Out_opt_ DirectX::TexMetadata* metadata,
+    _Out_ DirectX::ScratchImage& image) noexcept;
+
+HRESULT __cdecl LoadFromPortablePixMapHDR(
+    _In_z_ const wchar_t* szFile,
+    _Out_opt_ DirectX::TexMetadata* metadata,
+    _Out_ DirectX::ScratchImage& image) noexcept;
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
@@ -258,14 +274,21 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
             {
             case OPT_DDS:
             case OPT_HDR:
+            case OPT_PFM:
+            case OPT_PPM:
             case OPT_TGA:
             case OPT_WIC:
                 {
-                    DWORD mask = (1 << OPT_DDS) | (1 << OPT_HDR) | (1 << OPT_TGA) | (1 << OPT_WIC);
+                    DWORD mask = (1 << OPT_DDS)
+                        | (1 << OPT_HDR)
+                        | (1 << OPT_PFM)
+                        | (1 << OPT_PPM)
+                        | (1 << OPT_TGA)
+                        | (1 << OPT_WIC);
                     mask &= ~(1 << dwOption);
                     if (dwOptions & mask)
                     {
-                        wprintf(L"-dds, -hdr, -tga, and -wic are mutually exclusive options\n");
+                        wprintf(L"-dds, -hdr, -pfm, -ppm, -tga, and -wic are mutually exclusive options\n");
                         return 1;
                     }
                 }
@@ -304,10 +327,14 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
         _wsplitpath_s(pConv->szSrc, nullptr, 0, nullptr, 0, nullptr, 0, ext, _MAX_EXT);
         bool isdds = (_wcsicmp(ext, L".dds") == 0);
         bool ishdr = (_wcsicmp(ext, L".hdr") == 0);
+        bool ispfm = (_wcsicmp(ext, L".pfm") == 0);
+        bool isppm = (_wcsicmp(ext, L".ppm") == 0);
         bool istga = (_wcsicmp(ext, L".tga") == 0);
 
         bool usedds = false;
         bool usehdr = false;
+        bool usepfm = false;
+        bool useppm = false;
         bool usetga = false;
         if (dwOptions & (1 << OPT_DDS))
         {
@@ -321,10 +348,20 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
         {
             usehdr = true;
         }
+        else if (dwOptions & (1 << OPT_PFM))
+        {
+            usepfm = true;
+        }
+        else if (dwOptions & (1 << OPT_PPM))
+        {
+            useppm = true;
+        }
         else if (!(dwOptions & (1 << OPT_WIC)))
         {
             usedds = isdds;
             usehdr = ishdr;
+            usepfm = ispfm;
+            useppm = isppm;
             usetga = istga;
         }
 
@@ -370,6 +407,50 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
 #ifdef _DEBUG
                 char buff[128] = {};
                 sprintf_s(buff, "HDRTexture failed with %08X\n", static_cast<unsigned int>(hr));
+                OutputDebugStringA(buff);
+#endif
+                wprintf(L"!");
+            }
+            else
+            {
+                wprintf(SUCCEEDED(hr) ? L"*" : L".");
+            }
+        }
+        else if (usepfm)
+        {
+            hr = LoadFromPortablePixMapHDR(pConv->szSrc, nullptr, result);
+            if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
+            {
+                wprintf(L"ERROR: PFMTexture file not not found:\n%ls\n", pConv->szSrc);
+                return 1;
+            }
+            else if (FAILED(hr) && hr != E_INVALIDARG && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != E_OUTOFMEMORY && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF) && (hr != E_FAIL || (hr == E_FAIL && ispfm)))
+            {
+#ifdef _DEBUG
+                char buff[128] = {};
+                sprintf_s(buff, "PFMTexture failed with %08X\n", static_cast<unsigned int>(hr));
+                OutputDebugStringA(buff);
+#endif
+                wprintf(L"!");
+            }
+            else
+            {
+                wprintf(SUCCEEDED(hr) ? L"*" : L".");
+            }
+        }
+        else if (useppm)
+        {
+            hr = LoadFromPortablePixMap(pConv->szSrc, nullptr, result);
+            if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
+            {
+                wprintf(L"ERROR: PPMTexture file not not found:\n%ls\n", pConv->szSrc);
+                return 1;
+            }
+            else if (FAILED(hr) && hr != E_INVALIDARG && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != E_OUTOFMEMORY && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF) && (hr != E_FAIL || (hr == E_FAIL && isppm)))
+            {
+#ifdef _DEBUG
+                char buff[128] = {};
+                sprintf_s(buff, "PPMTexture failed with %08X\n", static_cast<unsigned int>(hr));
                 OutputDebugStringA(buff);
 #endif
                 wprintf(L"!");
