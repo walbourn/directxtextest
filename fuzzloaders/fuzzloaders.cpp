@@ -197,6 +197,7 @@ namespace
 
     void PrintUsage()
     {
+        wprintf(L"DirectXTex\n\n");
         wprintf(L"Usage: fuzzloaders <options> <files>\n");
         wprintf(L"\n");
         wprintf(L"   -r                  wildcard filename search is recursive\n");
@@ -507,7 +508,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
         fflush(stdout);
     }
 
-    wprintf(L"\n");
+    wprintf(L"\n*** FUZZING COMPLETE ***\n");
 
     return 0;
 }
