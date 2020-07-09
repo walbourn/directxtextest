@@ -375,7 +375,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
         DirectX::ScratchImage result;
         if (usedds)
         {
-            hr = DirectX::LoadFromDDSFile(pConv->szSrc, DirectX::DDS_FLAGS_NONE, nullptr, result);
+            hr = DirectX::LoadFromDDSFile(pConv->szSrc, DirectX::DDS_FLAGS_ALLOW_LARGE_FILES, nullptr, result);
             if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
             {
                 wprintf(L"ERROR: DDSTexture file not not found:\n%ls\n", pConv->szSrc);

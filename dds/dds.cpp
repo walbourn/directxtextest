@@ -2282,10 +2282,12 @@ bool Test06()
                     {
                         TexMetadata metadata;
                         ScratchImage image;
-                        hr = LoadFromDDSMemory(blob.GetBufferPointer(), blob.GetBufferSize(), DDS_FLAGS_NONE, &metadata, image);
+                        hr = LoadFromDDSMemory(blob.GetBufferPointer(), blob.GetBufferSize(),
+                            DDS_FLAGS_ALLOW_LARGE_FILES, &metadata, image);
                         if (hr == HRESULT_FROM_WIN32(ERROR_HANDLE_EOF))
                         {
-                            hr = LoadFromDDSMemory(blob.GetBufferPointer(), blob.GetBufferSize(), DDS_FLAGS_BAD_DXTN_TAILS, &metadata, image);
+                            hr = LoadFromDDSMemory(blob.GetBufferPointer(), blob.GetBufferSize(),
+                                DDS_FLAGS_ALLOW_LARGE_FILES | DDS_FLAGS_BAD_DXTN_TAILS, &metadata, image);
                         }
 
                         if (FAILED(hr) && isdds)
@@ -2313,10 +2315,10 @@ bool Test06()
             {
                 TexMetadata metadata;
                 ScratchImage image;
-                HRESULT hr = LoadFromDDSFile(szPath, DDS_FLAGS_NONE, &metadata, image);
+                HRESULT hr = LoadFromDDSFile(szPath, DDS_FLAGS_ALLOW_LARGE_FILES, &metadata, image);
                 if (hr == HRESULT_FROM_WIN32( ERROR_HANDLE_EOF ))
                 {
-                    hr = LoadFromDDSFile(szPath, DDS_FLAGS_BAD_DXTN_TAILS, &metadata, image);
+                    hr = LoadFromDDSFile(szPath, DDS_FLAGS_ALLOW_LARGE_FILES | DDS_FLAGS_BAD_DXTN_TAILS, &metadata, image);
                 }
 
                 if (FAILED(hr) && isdds)
