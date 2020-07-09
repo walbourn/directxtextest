@@ -2,8 +2,8 @@
 
 setlocal
 
-set TARGETEXE=..\..\..\Texassemble\Bin\Desktop_2015\Win32\Debug\texassemble.exe
-REM set TARGETEXE=..\..\..\Texassemble\Bin\Desktop_2015\Win32\Release\texassemble.exe
+set TARGETEXE=..\..\..\Texassemble\Bin\Desktop_2019\Win32\Debug\texassemble.exe
+REM set TARGETEXE=..\..\..\Texassemble\Bin\Desktop_2019\Win32\Release\texassemble.exe
 set SPEC=*
 
 call onetime.cmd

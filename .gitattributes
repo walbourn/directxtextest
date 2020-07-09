@@ -16,5 +16,14 @@
 
 # Explicitly declare resource files as binary
 *.pdb binary
+*.bmp binary
 *.dds binary
+*.gif binary
+*.hdr binary
+*.hdp binary
 *.jpg binary
+*.pfm binary
+*.png binary
+*.ppm binary
+*.tiff binary
+*.wdp binary

@@ -10,6 +10,10 @@ echo.
 echo -nologo -ft HDR -f R32G32B32_FLOAT -o %OUTTESTDIR% %REFDIR%\1234-%1.%1
 "%RUN%" -nologo -ft HDR -f R32G32B32_FLOAT -o %OUTTESTDIR% %REFDIR%\1234-%1.%1
 if %ERRORLEVEL% NEQ 0 ( call failure.cmd "Failed" )
+echo.
+echo -nologo -ft PFM -f R32G32B32_FLOAT -o %OUTTESTDIR% %REFDIR%\1234-%1.%1
+"%RUN%" -nologo -ft PFM -f R32G32B32_FLOAT -o %OUTTESTDIR% %REFDIR%\1234-%1.%1
+if %ERRORLEVEL% NEQ 0 ( call failure.cmd "Failed" )
 goto :EOF
 
 :writefiletype

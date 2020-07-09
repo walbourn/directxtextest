@@ -17,22 +17,22 @@ goto :EOF
 
 :writeuniform
 echo.
-echo -nologo -f %1 -ft dds -bcuniform -px bcu -sx %1 -o %OUTTESTDIR% %REFDIR%\1234-dds.dds
-"%RUN%" -nologo -f %1 -ft dds -bcuniform -px bcu -sx %1 -o %OUTTESTDIR% %REFDIR%\1234-dds.dds
+echo -nologo -f %1 -ft dds -bc u -px bcu -sx %1 -o %OUTTESTDIR% %REFDIR%\1234-dds.dds
+"%RUN%" -nologo -f %1 -ft dds -bc u -px bcu -sx %1 -o %OUTTESTDIR% %REFDIR%\1234-dds.dds
 if %ERRORLEVEL% NEQ 0 ( call failure.cmd "Failed" )
 goto :EOF
 
 :writedither
 echo.
-echo -nologo -f %1 -ft dds -bcdither -px bcd -sx %1 -o %OUTTESTDIR% %REFDIR%\1234-dds.dds
-"%RUN%" -nologo -f %1 -ft dds -bcdither -px bcd -sx %1 -o %OUTTESTDIR% %REFDIR%\1234-dds.dds
+echo -nologo -f %1 -ft dds -bc d -px bcd -sx %1 -o %OUTTESTDIR% %REFDIR%\1234-dds.dds
+"%RUN%" -nologo -f %1 -ft dds -bc d -px bcd -sx %1 -o %OUTTESTDIR% %REFDIR%\1234-dds.dds
 if %ERRORLEVEL% NEQ 0 ( call failure.cmd "Failed" )
 goto :EOF
 
 :writemax
 echo.
-echo -nologo -f %1 -ft dds -bcmax -px bcm -sx %1 -o %OUTTESTDIR% %REFDIR%\1234-dds.dds
-"%RUN%" -nologo -f %1 -ft dds -bcmax -px bcm -sx %1 -o %OUTTESTDIR% %REFDIR%\1234-dds.dds
+echo -nologo -f %1 -ft dds -bc x -px bcm -sx %1 -o %OUTTESTDIR% %REFDIR%\1234-dds.dds
+"%RUN%" -nologo -f %1 -ft dds -bc x -px bcm -sx %1 -o %OUTTESTDIR% %REFDIR%\1234-dds.dds
 if %ERRORLEVEL% NEQ 0 ( call failure.cmd "Failed" )
 goto :EOF
 

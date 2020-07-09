@@ -8,3 +8,5 @@ HDR
 GIF
 WDP
 HDP
+PPM
+PFM

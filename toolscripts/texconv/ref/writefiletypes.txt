@@ -5,3 +5,4 @@ DDS
 TIFF
 TGA
 WDP
+PPM
