@@ -50,6 +50,7 @@ static_assert(std::is_nothrow_move_assignable<Blob>::value, "Move Assign.");
 // IsTypeless
 // BitsPerPixel
 // BitsPerColor
+// FormatDataType
 bool TEXTest::Test01()
 {
     static const DXGI_FORMAT bcFmts[] =
@@ -134,97 +135,181 @@ bool TEXTest::Test01()
         DXGI_FORMAT_D16_UNORM,
         XBOX_DXGI_FORMAT_D16_UNORM_S8_UINT, XBOX_DXGI_FORMAT_R16_UNORM_X8_TYPELESS, XBOX_DXGI_FORMAT_X16_TYPELESS_G8_UINT,
     };
+
+    static const DXGI_FORMAT floatType[] =
+    {
+        DXGI_FORMAT_R32G32B32A32_FLOAT, DXGI_FORMAT_R32G32B32_FLOAT,
+        DXGI_FORMAT_R16G16B16A16_FLOAT,
+        DXGI_FORMAT_R32G32_FLOAT,
+        DXGI_FORMAT_D32_FLOAT_S8X24_UINT,
+        DXGI_FORMAT_R11G11B10_FLOAT,
+        DXGI_FORMAT_R16G16_FLOAT,
+        DXGI_FORMAT_D32_FLOAT, DXGI_FORMAT_R32_FLOAT, DXGI_FORMAT_R16_FLOAT,
+        DXGI_FORMAT_R9G9B9E5_SHAREDEXP,
+        DXGI_FORMAT_BC6H_UF16, DXGI_FORMAT_BC6H_SF16,
+        XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT,XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT,
+    };
+    static const DXGI_FORMAT unormType[] =
+    {
+        DXGI_FORMAT_R16G16B16A16_UNORM,
+        DXGI_FORMAT_R10G10B10A2_UNORM,
+        DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
+        DXGI_FORMAT_R16G16_UNORM,
+        DXGI_FORMAT_D24_UNORM_S8_UINT,
+        DXGI_FORMAT_R8G8_UNORM,
+        DXGI_FORMAT_D16_UNORM, DXGI_FORMAT_R16_UNORM,
+        DXGI_FORMAT_R8_UNORM, DXGI_FORMAT_A8_UNORM,
+        DXGI_FORMAT_R1_UNORM,
+        DXGI_FORMAT_R8G8_B8G8_UNORM, DXGI_FORMAT_G8R8_G8B8_UNORM,
+        DXGI_FORMAT_BC1_UNORM, DXGI_FORMAT_BC1_UNORM_SRGB,
+        DXGI_FORMAT_BC2_UNORM, DXGI_FORMAT_BC2_UNORM_SRGB,
+        DXGI_FORMAT_BC3_UNORM, DXGI_FORMAT_BC3_UNORM_SRGB,
+        DXGI_FORMAT_BC4_UNORM, DXGI_FORMAT_BC5_UNORM,
+        DXGI_FORMAT_B5G6R5_UNORM, DXGI_FORMAT_B5G5R5A1_UNORM,
+        DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_B8G8R8X8_UNORM,
+        DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM,
+        DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, DXGI_FORMAT_B8G8R8X8_UNORM_SRGB,
+        DXGI_FORMAT_BC7_UNORM, DXGI_FORMAT_BC7_UNORM_SRGB,
+        DXGI_FORMAT_B4G4R4A4_UNORM,
+        DXGI_FORMAT_AYUV, DXGI_FORMAT_Y410, DXGI_FORMAT_Y416, DXGI_FORMAT_YUY2, DXGI_FORMAT_Y210, DXGI_FORMAT_Y216,
+        XBOX_DXGI_FORMAT_R4G4_UNORM,
+    };
+    static const DXGI_FORMAT uintType[] =
+    {
+        DXGI_FORMAT_R32G32B32A32_UINT, DXGI_FORMAT_R32G32B32_UINT,
+        DXGI_FORMAT_R16G16B16A16_UINT,
+        DXGI_FORMAT_R32G32_UINT,
+        DXGI_FORMAT_R10G10B10A2_UINT,
+        DXGI_FORMAT_R8G8B8A8_UINT,
+        DXGI_FORMAT_R16G16_UINT,
+        DXGI_FORMAT_R32_UINT,
+        DXGI_FORMAT_R8G8_UINT,
+        DXGI_FORMAT_R16_UINT,
+        DXGI_FORMAT_R8_UINT,
+    };
+    static const DXGI_FORMAT snormType[] =
+    {
+        DXGI_FORMAT_R16G16B16A16_SNORM,
+        DXGI_FORMAT_R8G8B8A8_SNORM,
+        DXGI_FORMAT_R16G16_SNORM,
+        DXGI_FORMAT_R8G8_SNORM,
+        DXGI_FORMAT_R16_SNORM,
+        DXGI_FORMAT_R8_SNORM,
+        DXGI_FORMAT_BC4_SNORM, DXGI_FORMAT_BC5_SNORM,
+        XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM,
+    };
+    static const DXGI_FORMAT sintType[] =
+    {
+        DXGI_FORMAT_R32G32B32A32_SINT, DXGI_FORMAT_R32G32B32_SINT,
+        DXGI_FORMAT_R16G16B16A16_SINT,
+        DXGI_FORMAT_R32G32_SINT,
+        DXGI_FORMAT_R8G8B8A8_SINT,
+        DXGI_FORMAT_R16G16_SINT,
+        DXGI_FORMAT_R32_SINT,
+        DXGI_FORMAT_R8G8_SINT,
+        DXGI_FORMAT_R16_SINT,
+        DXGI_FORMAT_R8_SINT,
+    };
     bool success = true;
 
     for (UINT f = DXGI_START; f <= DXGI_END; ++f )
     {
-        bool isCompressed = std::find( std::begin(bcFmts), std::end(bcFmts), f ) != std::end(bcFmts);
+        bool isCompressed = std::find(std::begin(bcFmts), std::end(bcFmts), f) != std::end(bcFmts);
 
-        bool isPAK = std::find( std::begin(packedFmts), std::end(packedFmts), f ) != std::end(packedFmts);
+        bool isPAK = std::find(std::begin(packedFmts), std::end(packedFmts), f) != std::end(packedFmts);
 
-        bool isSRGB = std::find( std::begin(srgb), std::end(srgb), f ) != std::end(srgb);
+        bool isSRGB = std::find(std::begin(srgb), std::end(srgb), f) != std::end(srgb);
 
-        bool isTypeless = std::find( std::begin(typeless), std::end(typeless), f ) != std::end(typeless);
+        bool isTypeless = std::find(std::begin(typeless), std::end(typeless), f) != std::end(typeless);
         bool isPartialTypeless = false;
-        if ( isTypeless )
+        if (isTypeless)
         {
-            isPartialTypeless = std::find( std::begin(partialTypeless), std::end(partialTypeless), f ) == std::end(partialTypeless);
+            isPartialTypeless = std::find(std::begin(partialTypeless), std::end(partialTypeless), f) == std::end(partialTypeless);
         }
 
-        bool hasAlpha = std::find( std::begin(alpha), std::end(alpha), f ) != std::end(alpha);
+        bool hasAlpha = std::find(std::begin(alpha), std::end(alpha), f) != std::end(alpha);
 
-        bool isVideo = std::find( std::begin(video), std::end(video), f ) != std::end(video);
+        bool isVideo = std::find(std::begin(video), std::end(video), f) != std::end(video);
 
-        bool isPlanar = std::find( std::begin(planar), std::end(planar), f ) != std::end(planar);
+        bool isPlanar = std::find(std::begin(planar), std::end(planar), f) != std::end(planar);
 
-        bool isPal = std::find( std::begin(pal), std::end(pal), f ) != std::end(pal);
+        bool isPal = std::find(std::begin(pal), std::end(pal), f) != std::end(pal);
 
-        bool isDepthStencil = std::find( std::begin(depthStencil), std::end(depthStencil), f ) != std::end(depthStencil);
+        bool isDepthStencil = std::find(std::begin(depthStencil), std::end(depthStencil), f) != std::end(depthStencil);
 
-        if ( !IsValid( (DXGI_FORMAT)f ) )
+        bool isFloatType = std::find(std::begin(floatType), std::end(floatType), f) != std::end(floatType);
+        bool isUnormType = std::find(std::begin(unormType), std::end(unormType), f) != std::end(unormType);
+        bool isSnormType = std::find(std::begin(snormType), std::end(snormType), f) != std::end(snormType);
+        bool isUIntType = std::find(std::begin(uintType), std::end(uintType), f) != std::end(uintType);
+        bool isSIntType = std::find(std::begin(sintType), std::end(sintType), f) != std::end(sintType);
+
+        // Format should only appear in at most one of these data type lists
+        assert(static_cast<int>(isFloatType) + static_cast<int>(isUnormType) + static_cast<int>(isSnormType) + static_cast<int>(isUIntType) + static_cast<int>(isSIntType) <= 1);
+
+        if (!IsValid(static_cast<DXGI_FORMAT>(f)))
         {
-            printe( "ERROR: Isvalid failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) ) );
+            printe("ERROR: Isvalid failed on DXGI Format %u (%ls)\n", f, GetName(DXGI_FORMAT(f)));
             success = false;
         }
 
-        if ( IsCompressed( (DXGI_FORMAT)f ) != isCompressed )
+        if (IsCompressed(static_cast<DXGI_FORMAT>(f)) != isCompressed)
         {
-            printe( "ERROR: IsCompressed failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
+            printe("ERROR: IsCompressed failed on DXGI Format %u (%ls)\n", f, GetName(DXGI_FORMAT(f)));
             success = false;
         }
 
-        if ( IsPacked( (DXGI_FORMAT)f ) != isPAK )
+        if (IsPacked(static_cast<DXGI_FORMAT>(f)) != isPAK)
         {
-            printe( "ERROR: IsPacked failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
+            printe("ERROR: IsPacked failed on DXGI Format %u (%ls)\n", f, GetName(DXGI_FORMAT(f)));
             success = false;
         }
 
-        if ( IsSRGB( (DXGI_FORMAT)f ) != isSRGB )
+        if (IsSRGB(static_cast<DXGI_FORMAT>(f)) != isSRGB)
         {
-            printe( "ERROR: IsSRGB failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
+            printe("ERROR: IsSRGB failed on DXGI Format %u (%ls)\n", f, GetName(DXGI_FORMAT(f)));
             success = false;
         }
 
-        if ( (IsTypeless( (DXGI_FORMAT)f ) != isTypeless)
-             || (IsTypeless( (DXGI_FORMAT)f, true ) != isTypeless) )
+        if ((IsTypeless(static_cast<DXGI_FORMAT>(f)) != isTypeless)
+            || (IsTypeless(static_cast<DXGI_FORMAT>(f), true) != isTypeless))
         {
-            printe( "ERROR: IsTypeless failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
+            printe("ERROR: IsTypeless failed on DXGI Format %u (%ls)\n", f, GetName(DXGI_FORMAT(f)));
             success = false;
         }
 
-        if ( IsTypeless( (DXGI_FORMAT)f, false ) != isPartialTypeless )
+        if (IsTypeless(static_cast<DXGI_FORMAT>(f), false) != isPartialTypeless)
         {
-            printe( "ERROR: IsTypeless(false) failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
+            printe("ERROR: IsTypeless(false) failed on DXGI Format %u (%ls)\n", f, GetName(DXGI_FORMAT(f)));
             success = false;
         }
 
-        if ( HasAlpha( (DXGI_FORMAT)f ) != hasAlpha )
+        if (HasAlpha(static_cast<DXGI_FORMAT>(f)) != hasAlpha)
         {
-            printe( "ERROR: HasAlpha failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
+            printe("ERROR: HasAlpha failed on DXGI Format %u (%ls)\n", f, GetName(DXGI_FORMAT(f)));
             success = false;
         }
 
-        if ( IsVideo( (DXGI_FORMAT)f) != isVideo )
+        if (IsVideo(static_cast<DXGI_FORMAT>(f)) != isVideo)
         {
-            printe( "ERROR: IsVideo failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
+            printe("ERROR: IsVideo failed on DXGI Format %u (%ls)\n", f, GetName(DXGI_FORMAT(f)));
             success = false;
         }
 
-        if ( IsPlanar( (DXGI_FORMAT)f ) != isPlanar )
+        if (IsPlanar(static_cast<DXGI_FORMAT>(f)) != isPlanar)
         {
-            printe( "ERROR: IsPlanar failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
+            printe("ERROR: IsPlanar failed on DXGI Format %u (%ls)\n", f, GetName(DXGI_FORMAT(f)));
             success = false;
         }
 
-        if ( IsPalettized( (DXGI_FORMAT)f ) != isPal )
+        if (IsPalettized(static_cast<DXGI_FORMAT>(f)) != isPal)
         {
-            printe( "ERROR: IsPalettized failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
+            printe("ERROR: IsPalettized failed on DXGI Format %u (%ls)\n", f, GetName(DXGI_FORMAT(f)));
             success = false;
         }
 
-        if ( IsDepthStencil( (DXGI_FORMAT)f ) != isDepthStencil )
+        if (IsDepthStencil(static_cast<DXGI_FORMAT>(f)) != isDepthStencil)
         {
-            printe( "ERROR: IsDepthStencil failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
+            printe("ERROR: IsDepthStencil failed on DXGI Format %u (%ls)\n", f, GetName(DXGI_FORMAT(f)));
             success = false;
         }
 
@@ -240,27 +325,78 @@ bool TEXTest::Test01()
             continue;
         }
 
-        if ( BitsPerPixel( (DXGI_FORMAT)f ) == 0 )
+        if (BitsPerPixel(static_cast<DXGI_FORMAT>(f)) == 0)
         {
-            printe( "ERROR: BitsPerPixel failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
+            printe("ERROR: BitsPerPixel failed on DXGI Format %u (%ls)\n", f, GetName(DXGI_FORMAT(f)));
             success = false;
         }
 
-        if ( isPal )
+        if (isPal)
         {
-            if ( BitsPerColor( (DXGI_FORMAT)f ) != 0 )
+            if (BitsPerColor(static_cast<DXGI_FORMAT>(f)) != 0)
             {
-                printe( "ERROR: BitsPerColor succeeded on DXGI Format %u when it should have returned 0 (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
+                printe("ERROR: BitsPerColor succeeded on DXGI Format %u when it should have returned 0 (%ls)\n", f, GetName(DXGI_FORMAT(f)));
                 success = false;
             }
         }
         else
         {
-            if ( BitsPerColor( (DXGI_FORMAT)f ) == 0 )
+            if (BitsPerColor(static_cast<DXGI_FORMAT>(f)) == 0)
             {
-                printe( "ERROR: BitsPerColor failed on DXGI Format %u (%ls)\n", f, GetName( DXGI_FORMAT(f) )  );
+                printe("ERROR: BitsPerColor failed on DXGI Format %u (%ls)\n", f, GetName(DXGI_FORMAT(f)));
                 success = false;
             }
+        }
+
+        switch (FormatDataType(static_cast<DXGI_FORMAT>(f)))
+        {
+        case FORMAT_TYPE_FLOAT:
+            if (!isFloatType)
+            {
+                printe("ERROR: FormatDataType failed on DXGI Format %u (%ls) ... float\n", f, GetName(DXGI_FORMAT(f)));
+                success = false;
+            }
+            break;
+
+        case FORMAT_TYPE_UNORM:
+            if (!isUnormType)
+            {
+                printe("ERROR: FormatDataType failed on DXGI Format %u (%ls) ... unorm\n", f, GetName(DXGI_FORMAT(f)));
+                success = false;
+            }
+            break;
+
+        case FORMAT_TYPE_SNORM:
+            if (!isSnormType)
+            {
+                printe("ERROR: FormatDataType failed on DXGI Format %u (%ls) ... snorm\n", f, GetName(DXGI_FORMAT(f)));
+                success = false;
+            }
+            break;
+
+        case FORMAT_TYPE_UINT:
+            if (!isUIntType)
+            {
+                printe("ERROR: FormatDataType failed on DXGI Format %u (%ls) ... uint\n", f, GetName(DXGI_FORMAT(f)));
+                success = false;
+            }
+            break;
+
+        case FORMAT_TYPE_SINT:
+            if (!isSIntType)
+            {
+                printe("ERROR: FormatDataType failed on DXGI Format %u (%ls) ... sint\n", f, GetName(DXGI_FORMAT(f)));
+                success = false;
+            }
+            break;
+
+        default:
+            if (isFloatType || isUnormType || isSnormType || isUIntType || isSIntType)
+            {
+                printe("ERROR: FormatDataType failed on DXGI Format %u (%ls) ... typeless\n", f, GetName(DXGI_FORMAT(f)));
+                success = false;
+            }
+            break;
         }
     }
 
@@ -1063,14 +1199,14 @@ bool TEXTest::Test12()
         size_t i = 0;
         for( ; i < _countof(hasSRGB); ++i )
         {
-            if ( hasSRGB[i] == (DXGI_FORMAT)f )
+            if ( hasSRGB[i] == static_cast<DXGI_FORMAT>(f) )
                 break;
         }
 
         if ( i < _countof(hasSRGB) )
             continue;
 
-        if ( MakeSRGB( (DXGI_FORMAT)f ) != (DXGI_FORMAT)f )
+        if ( MakeSRGB( static_cast<DXGI_FORMAT>(f) ) != static_cast<DXGI_FORMAT>(f) )
         {
             printe( "ERROR: MakeSRGB failed on DXGI Format %u\n", f );
             success = false;
@@ -1117,14 +1253,14 @@ bool TEXTest::Test12()
         size_t i = 0;
         for( ; i < _countof(hasTypeless); ++i )
         {
-            if ( hasTypeless[i] == (DXGI_FORMAT)f )
+            if ( hasTypeless[i] == static_cast<DXGI_FORMAT>(f) )
                 break;
         }
 
         if ( i < _countof(hasTypeless) )
             continue;
 
-        if ( MakeTypeless( (DXGI_FORMAT)f ) != (DXGI_FORMAT)f )
+        if ( MakeTypeless( static_cast<DXGI_FORMAT>(f) ) != static_cast<DXGI_FORMAT>(f) )
         {
             printe( "ERROR: MakeTypeless failed on DXGI Format %u\n", f );
             success = false;
@@ -1133,13 +1269,12 @@ bool TEXTest::Test12()
 
     //--- MakeTypelessUNORM
     //--- MakeTypelessFLOAT
-    static const DXGI_FORMAT typeless[] = 
+    static const DXGI_FORMAT typeless[] =
     {
         DXGI_FORMAT_R32G32B32A32_TYPELESS, DXGI_FORMAT_R32G32B32_TYPELESS, DXGI_FORMAT_R16G16B16A16_TYPELESS, DXGI_FORMAT_R32G32_TYPELESS,
         DXGI_FORMAT_R32G8X24_TYPELESS, DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS, DXGI_FORMAT_X32_TYPELESS_G8X24_UINT, DXGI_FORMAT_R10G10B10A2_TYPELESS,
-        DXGI_FORMAT_R8G8B8A8_TYPELESS, DXGI_FORMAT_R16G16_TYPELESS, DXGI_FORMAT_R32_TYPELESS, DXGI_FORMAT_R24G8_TYPELESS, DXGI_FORMAT_R24_UNORM_X8_TYPELESS,
-        DXGI_FORMAT_X24_TYPELESS_G8_UINT, DXGI_FORMAT_R8G8_TYPELESS, DXGI_FORMAT_R16_TYPELESS, DXGI_FORMAT_R8_TYPELESS,
-        DXGI_FORMAT_BC1_TYPELESS, DXGI_FORMAT_BC2_TYPELESS, DXGI_FORMAT_BC3_TYPELESS, DXGI_FORMAT_BC4_TYPELESS, DXGI_FORMAT_BC5_TYPELESS, 
+        DXGI_FORMAT_R8G8B8A8_TYPELESS, DXGI_FORMAT_R16G16_TYPELESS, DXGI_FORMAT_R32_TYPELESS, DXGI_FORMAT_R24G8_TYPELESS,         DXGI_FORMAT_X24_TYPELESS_G8_UINT, DXGI_FORMAT_R8G8_TYPELESS, DXGI_FORMAT_R16_TYPELESS, DXGI_FORMAT_R8_TYPELESS,
+        DXGI_FORMAT_BC1_TYPELESS, DXGI_FORMAT_BC2_TYPELESS, DXGI_FORMAT_BC3_TYPELESS, DXGI_FORMAT_BC4_TYPELESS, DXGI_FORMAT_BC5_TYPELESS,
         DXGI_FORMAT_B8G8R8A8_TYPELESS, DXGI_FORMAT_B8G8R8X8_TYPELESS, DXGI_FORMAT_BC6H_TYPELESS, DXGI_FORMAT_BC7_TYPELESS
     };
 
