@@ -1,4 +1,4 @@
-﻿//
+//
 // DeviceResources.cpp - A wrapper for the Direct3D 11 device and swapchain
 //                       (requires DirectX 11.X Xbox One Monolithic Runtime)
 //
@@ -324,4 +324,21 @@ void DeviceResources::Present(UINT decompressFlags)
     }
 
     // Xbox One apps do not need to handle DXGI_ERROR_DEVICE_REMOVED or DXGI_ERROR_DEVICE_RESET.
+}
+
+// Handle GPU suspend/resume
+void DeviceResources::Suspend() noexcept
+{
+    if (m_d3dContext)
+    {
+        (void)m_d3dContext->Suspend(0);
+    }
+}
+
+void DeviceResources::Resume() noexcept
+{
+    if (m_d3dContext)
+    {
+        (void)m_d3dContext->Resume();
+    }
 }

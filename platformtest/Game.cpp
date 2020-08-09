@@ -219,20 +219,12 @@ void Game::OnSuspending()
     ResetEvent(m_resumeSignal.Get());
     m_suspendThread = true;
 
-#if defined(_XBOX_ONE) && defined(_TITLE)
-    auto context = m_deviceResources->GetD3DDeviceContext();
-    context->Suspend(0);
-#else
-    m_deviceResources->Trim();
-#endif
+    m_deviceResources->Suspend();
 }
 
 void Game::OnResuming()
 {
-#if defined(_XBOX_ONE) && defined(_TITLE)
-    auto context = m_deviceResources->GetD3DDeviceContext();
-    context->Resume();
-#endif
+    m_deviceResources->Resume();
 
     m_timer.ResetElapsedTime();
 
