@@ -463,24 +463,27 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
         }
         else if (usetga)
         {
-            hr = DirectX::LoadFromTGAFile(pConv->szSrc, nullptr, result);
-            if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
+            for (int j = 0; j < 2; ++j)
             {
-                wprintf(L"ERROR: TGATexture file not not found:\n%ls\n", pConv->szSrc);
-                return 1;
-            }
-            else if (FAILED(hr) && hr != E_INVALIDARG && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != E_OUTOFMEMORY && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF) && (hr != E_FAIL || (hr == E_FAIL && istga)))
-            {
+                hr = DirectX::LoadFromTGAFile(pConv->szSrc, !j ? DirectX::TGA_FLAGS_NONE : DirectX::TGA_FLAGS_BGR, nullptr, result);
+                if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
+                {
+                    wprintf(L"ERROR: TGATexture file not not found:\n%ls\n", pConv->szSrc);
+                    return 1;
+                }
+                else if (FAILED(hr) && hr != E_INVALIDARG && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != E_OUTOFMEMORY && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF) && (hr != E_FAIL || (hr == E_FAIL && istga)))
+                {
 #ifdef _DEBUG
-                char buff[128] = {};
-                sprintf_s(buff, "TGATexture failed with %08X\n", static_cast<unsigned int>(hr));
-                OutputDebugStringA(buff);
+                    char buff[128] = {};
+                    sprintf_s(buff, "TGATexture case %d failed with %08X\n", j, static_cast<unsigned int>(hr));
+                    OutputDebugStringA(buff);
 #endif
-                wprintf(L"!");
-            }
-            else
-            {
-                wprintf(SUCCEEDED(hr) ? L"*" : L".");
+                    wprintf(L"!");
+                }
+                else
+                {
+                    wprintf(SUCCEEDED(hr) ? L"*" : L".");
+                }
             }
         }
         else
