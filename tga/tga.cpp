@@ -301,11 +301,13 @@ bool Test01()
         }
         else
         {
+            bool pass = true;
+
             TexMetadata metadata2;
             hr = GetMetadataFromTGAFile(szPath, TGA_FLAGS_BGR, metadata2);
             if (FAILED(hr))
             {
-                success = false;
+                success = pass = false;
                 printe("Failed getting BGR data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
             }
             else if (metadata2.width != check->width
@@ -316,7 +318,7 @@ bool Test01()
                 || metadata2.miscFlags != check->miscFlags /* ignore miscFlags2, ignore format */
                 || metadata2.dimension != check->dimension)
             {
-                success = false;
+                success = pass = false;
                 printe("Metadata error BGR in:\n%ls\n", szPath);
                 printmeta(&metadata2);
                 printmetachk(check);
@@ -325,7 +327,7 @@ bool Test01()
             {
                 if (metadata2.format != DXGI_FORMAT_B8G8R8X8_UNORM)
                 {
-                    success = false;
+                    success = pass = false;
                     printe("Metadata error expected BGRX in:\n%ls\n", szPath);
                     printmeta(&metadata2);
                 }
@@ -334,20 +336,21 @@ bool Test01()
             {
                 if (metadata2.format != DXGI_FORMAT_B8G8R8A8_UNORM)
                 {
-                    success = false;
+                    success = pass = false;
                     printe("Metadata error expected BGRA in:\n%ls\n", szPath);
                     printmeta(&metadata2);
                 }
             }
             else if (metadata2.format != check->format)
             {
-                success = false;
+                success = pass = false;
                 printe("Metadata error BGR format in:\n%ls\n", szPath);
                 printmeta(&metadata2);
                 printmetachk(check);
             }
 
-            ++npass;
+            if (pass)
+                ++npass;
         }
 
         ++ncount;
