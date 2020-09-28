@@ -774,7 +774,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
                 timeDelta = qpcEnd.QuadPart - qpcStart.QuadPart;
             }
 
-            auto cinfo = cimage->GetMetadata();
+            auto& cinfo = cimage->GetMetadata();
             if (cinfo.width != info.width
                 || cinfo.height != info.height)
             {
@@ -795,7 +795,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
                 return 1;
             }
 
-            auto info2 = image2->GetMetadata();
+            auto& info2 = image2->GetMetadata();
             if (info2.width != info.width
                 || info2.height != info.height)
             {
