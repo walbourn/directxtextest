@@ -62,6 +62,9 @@ private:
     Microsoft::WRL::ComPtr<IDirect3DTexture9>       m_cup;
     Microsoft::WRL::ComPtr<IDirect3DTexture9>       m_dx5logo;
 
+    Microsoft::WRL::ComPtr<IDirect3DTexture9>       m_cupSM;
+    Microsoft::WRL::ComPtr<IDirect3DTexture9>       m_dx5logoSM;
+
     // Rendering loop timer.
     DX::StepTimer                                   m_timer;
     uint64_t                                        m_frame;

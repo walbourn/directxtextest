@@ -260,9 +260,17 @@ void Game::CreateDevice()
         CreateDDSTextureFromFile(m_d3dDevice.Get(), L"dx5_logo.dds", m_dx5logo.ReleaseAndGetAddressOf())
     );
 
+    DX::ThrowIfFailed( /* D3DPOOL_SYSTEMMEM, D3DPOOL_SCRATCH, and D3DPOOL_MANAGED use the same loader codepaths */
+        CreateDDSTextureFromFileEx(m_d3dDevice.Get(), L"dx5_logo.dds", 0, D3DPOOL_SYSTEMMEM, false, m_dx5logoSM.ReleaseAndGetAddressOf())
+    );
+
     // Test WICTextureLoader
     DX::ThrowIfFailed(
         CreateWICTextureFromFile(m_d3dDevice.Get(), L"cup_small.jpg", m_cup.ReleaseAndGetAddressOf())
+    );
+
+    DX::ThrowIfFailed( /* D3DPOOL_SYSTEMMEM, D3DPOOL_SCRATCH, and D3DPOOL_MANAGED use the same loader codepaths */
+        CreateWICTextureFromFileEx(m_d3dDevice.Get(), L"cup_small.jpg", 0, 0, D3DPOOL_SYSTEMMEM, WIC_LOADER_DEFAULT, m_cupSM.ReleaseAndGetAddressOf())
     );
 }
 
