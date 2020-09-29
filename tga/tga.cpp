@@ -42,6 +42,7 @@ namespace
         { FLAGS_ZALPHA, { 200, 150, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_B5G5R5A1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test555.tga", { 0x00,0x5c,0x5d,0x42,0x6c,0xed,0x64,0xc4,0xfd,0x2d,0xc5,0x67,0x89,0x2f,0x34,0x8c } },
         { FLAGS_NONE, { 320, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testunc.tga", { 0x0a,0x27,0xfb,0x35,0x57,0x6a,0x07,0x10,0x4a,0xf0,0x11,0x79,0xec,0x64,0x13,0x2e } },
         { FLAGS_NONE, { 128, 128, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"tex.tga", { 0x15,0xf3,0xd1,0x76,0x0c,0xb0,0x39,0x8d,0xd3,0x0f,0x8c,0x03,0x4f,0xd1,0x09,0x95 } },
+        { FLAGS_NONE, { 128, 128, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth_srgb.tga", { 0xee,0xf4,0x13,0xe6,0x68,0xbf,0x48,0xfd,0xfb,0x89,0xda,0xf2,0x91,0x14,0xea,0x13 } },
 
         // TGA 2.0 conformance suite
         { FLAGS_NONE, { 128, 128, 1, 1, 1, 0, 0, DXGI_FORMAT_R8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"CBW8.TGA", { 0x57,0x38,0x4e,0xb8,0x4c,0x01,0xb8,0x1a,0x08,0x91,0xe1,0xc1,0x11,0x76,0x93,0xfd } },
@@ -251,12 +252,10 @@ extern HRESULT MD5Checksum( _In_ const ScratchImage& image, _Out_bytecap_x_(16) 
 extern HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DirectX::DDS_FLAGS flags, _In_ const ScratchImage& image );
 
 //-------------------------------------------------------------------------------------
-// GetMetadataFromTGAMemory/File
-bool Test01()
+// GetMetadataFromTGAMemory
+bool Test00()
 {
     bool success = true;
-
-    // GetMetadataFromTGAMemory is used internally to the File version, so we only need to explicitly test the File version
 
     size_t ncount = 0;
     size_t npass = 0;
@@ -276,28 +275,172 @@ bool Test01()
         OutputDebugStringA("\n");
 #endif
 
+        Blob blob;
+        HRESULT hr = LoadBlobFromFile(szPath, blob);
+        if (FAILED(hr))
+        {
+            success = false;
+            printe("Failed getting raw file data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+        }
+        else
+        {
+            TexMetadata metadata;
+            HRESULT hr = GetMetadataFromTGAMemory(blob.GetBufferPointer(), blob.GetBufferSize(), metadata);
+
+            const TexMetadata* check = &g_TestMedia[index].metadata;
+            if (FAILED(hr))
+            {
+                success = false;
+                printe("Failed getting data from memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+            }
+            else if (metadata.width != check->width
+                || metadata.height != check->height
+                || metadata.depth != check->depth
+                || metadata.arraySize != check->arraySize
+                || metadata.mipLevels != check->mipLevels
+                || metadata.miscFlags != check->miscFlags /* ignore miscFlags2 */
+                || metadata.format != check->format
+                || metadata.dimension != check->dimension)
+            {
+                success = false;
+                printe("Metadata error in memory:\n%ls\n", szPath);
+                printmeta(&metadata);
+                printmetachk(check);
+            }
+            else
+            {
+                bool pass = true;
+
+                TexMetadata metadata2;
+                hr = GetMetadataFromTGAFile(szPath, TGA_FLAGS_BGR, metadata2);
+                if (FAILED(hr))
+                {
+                    success = pass = false;
+                    printe("Failed getting BGR data from memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                }
+                else if (metadata2.width != check->width
+                    || metadata2.height != check->height
+                    || metadata2.depth != check->depth
+                    || metadata2.arraySize != check->arraySize
+                    || metadata2.mipLevels != check->mipLevels
+                    || metadata2.miscFlags != check->miscFlags /* ignore miscFlags2, ignore format */
+                    || metadata2.dimension != check->dimension)
+                {
+                    success = pass = false;
+                    printe("Metadata error BGR in memory:\n%ls\n", szPath);
+                    printmeta(&metadata2);
+                    printmetachk(check);
+                }
+                else if (g_TestMedia[index].options & FLAGS_24BPP)
+                {
+                    if (metadata2.format != DXGI_FORMAT_B8G8R8X8_UNORM)
+                    {
+                        success = pass = false;
+                        printe("Metadata error expected BGRX in memory:\n%ls\n", szPath);
+                        printmeta(&metadata2);
+                    }
+                }
+                else if (check->format == DXGI_FORMAT_R8G8B8A8_UNORM || check->format == DXGI_FORMAT_R8G8B8A8_UNORM_SRGB)
+                {
+                    if (metadata2.format != DXGI_FORMAT_B8G8R8A8_UNORM && metadata2.format != DXGI_FORMAT_B8G8R8A8_UNORM_SRGB)
+                    {
+                        success = pass = false;
+                        printe("Metadata error expected BGRA in memory:\n%ls\n", szPath);
+                        printmeta(&metadata2);
+                    }
+                }
+                else if (metadata2.format != check->format)
+                {
+                    success = pass = false;
+                    printe("Metadata error BGR format in memory:\n%ls\n", szPath);
+                    printmeta(&metadata2);
+                    printmetachk(check);
+                }
+
+                if (IsSRGB(metadata.format))
+                {
+                    hr = GetMetadataFromTGAFile(szPath, TGA_FLAGS_IGNORE_SRGB, metadata2);
+                    if (FAILED(hr))
+                    {
+                        success = pass = false;
+                        printe("Failed getting ignore srgb data from memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                    }
+                    else if (metadata2.width != check->width
+                        || metadata2.height != check->height
+                        || metadata2.depth != check->depth
+                        || metadata2.arraySize != check->arraySize
+                        || metadata2.mipLevels != check->mipLevels
+                        || metadata2.miscFlags != check->miscFlags /* ignore miscFlags2 */
+                        || IsSRGB(metadata2.format)
+                        || metadata2.dimension != check->dimension)
+                    {
+                        success = pass = false;
+                        printe("Metadata error ignore srgb in memory:\n%ls\n", szPath);
+                        printmeta(&metadata2);
+                        printmetachk(check);
+                    }
+                }
+
+                if (pass)
+                    ++npass;
+            }
+        }
+
+        ++ncount;
+    }
+
+    print("%zu images tested, %zu images passed ", ncount, npass );
+
+    return success;
+}
+
+
+//-------------------------------------------------------------------------------------
+// GetMetadataFromTGAFile
+bool Test01()
+{
+    bool success = true;
+
+    size_t ncount = 0;
+    size_t npass = 0;
+
+    for (size_t index = 0; index < _countof(g_TestMedia); ++index)
+    {
+        wchar_t szPath[MAX_PATH] = {};
+        DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
+        if (!ret || ret > MAX_PATH)
+        {
+            printe("ERROR: ExpandEnvironmentStrings FAILED\n");
+            return false;
+        }
+
+#ifdef _DEBUG
+        OutputDebugString(szPath);
+        OutputDebugStringA("\n");
+#endif
+
         TexMetadata metadata;
-        HRESULT hr = GetMetadataFromTGAFile( szPath, metadata );
+        HRESULT hr = GetMetadataFromTGAFile(szPath, metadata);
 
         const TexMetadata* check = &g_TestMedia[index].metadata;
-        if ( FAILED(hr) )
+        if (FAILED(hr))
         {
             success = false;
-            printe( "Failed getting data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
+            printe("Failed getting data from file (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
         }
         else if (metadata.width != check->width
-                 || metadata.height != check->height
-                 || metadata.depth != check->depth
-                 || metadata.arraySize != check->arraySize
-                 || metadata.mipLevels != check->mipLevels
-                 || metadata.miscFlags != check->miscFlags /* ignore miscFlags2 */
-                 || metadata.format != check->format
-                 || metadata.dimension != check->dimension)
+            || metadata.height != check->height
+            || metadata.depth != check->depth
+            || metadata.arraySize != check->arraySize
+            || metadata.mipLevels != check->mipLevels
+            || metadata.miscFlags != check->miscFlags /* ignore miscFlags2 */
+            || metadata.format != check->format
+            || metadata.dimension != check->dimension)
         {
             success = false;
-            printe( "Metadata error in:\n%ls\n", szPath );
-            printmeta( &metadata );
-            printmetachk( check );
+            printe("Metadata error in file:\n%ls\n", szPath);
+            printmeta(&metadata);
+            printmetachk(check);
         }
         else
         {
@@ -308,7 +451,7 @@ bool Test01()
             if (FAILED(hr))
             {
                 success = pass = false;
-                printe("Failed getting BGR data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                printe("Failed getting BGR data from file (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
             }
             else if (metadata2.width != check->width
                 || metadata2.height != check->height
@@ -319,7 +462,7 @@ bool Test01()
                 || metadata2.dimension != check->dimension)
             {
                 success = pass = false;
-                printe("Metadata error BGR in:\n%ls\n", szPath);
+                printe("Metadata error BGR in file:\n%ls\n", szPath);
                 printmeta(&metadata2);
                 printmetachk(check);
             }
@@ -328,25 +471,49 @@ bool Test01()
                 if (metadata2.format != DXGI_FORMAT_B8G8R8X8_UNORM)
                 {
                     success = pass = false;
-                    printe("Metadata error expected BGRX in:\n%ls\n", szPath);
+                    printe("Metadata error expected BGRX in file:\n%ls\n", szPath);
                     printmeta(&metadata2);
                 }
             }
-            else if (check->format == DXGI_FORMAT_R8G8B8A8_UNORM)
+            else if (check->format == DXGI_FORMAT_R8G8B8A8_UNORM || check->format == DXGI_FORMAT_R8G8B8A8_UNORM_SRGB)
             {
-                if (metadata2.format != DXGI_FORMAT_B8G8R8A8_UNORM)
+                if (metadata2.format != DXGI_FORMAT_B8G8R8A8_UNORM && metadata2.format != DXGI_FORMAT_B8G8R8A8_UNORM_SRGB)
                 {
                     success = pass = false;
-                    printe("Metadata error expected BGRA in:\n%ls\n", szPath);
+                    printe("Metadata error expected BGRA in file:\n%ls\n", szPath);
                     printmeta(&metadata2);
                 }
             }
             else if (metadata2.format != check->format)
             {
                 success = pass = false;
-                printe("Metadata error BGR format in:\n%ls\n", szPath);
+                printe("Metadata error BGR format in file:\n%ls\n", szPath);
                 printmeta(&metadata2);
                 printmetachk(check);
+            }
+
+            if (IsSRGB(metadata.format))
+            {
+                hr = GetMetadataFromTGAFile(szPath, TGA_FLAGS_IGNORE_SRGB, metadata2);
+                if (FAILED(hr))
+                {
+                    success = pass = false;
+                    printe("Failed getting ignore srgb data from file (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                }
+                else if (metadata2.width != check->width
+                    || metadata2.height != check->height
+                    || metadata2.depth != check->depth
+                    || metadata2.arraySize != check->arraySize
+                    || metadata2.mipLevels != check->mipLevels
+                    || metadata2.miscFlags != check->miscFlags /* ignore miscFlags2 */
+                    || IsSRGB(metadata2.format)
+                    || metadata2.dimension != check->dimension)
+                {
+                    success = pass = false;
+                    printe("Metadata error ignore srgb in file:\n%ls\n", szPath);
+                    printmeta(&metadata2);
+                    printmetachk(check);
+                }
             }
 
             if (pass)
@@ -356,7 +523,7 @@ bool Test01()
         ++ncount;
     }
 
-    print("%zu images tested, %zu images passed ", ncount, npass );
+    print("%zu images tested, %zu images passed ", ncount, npass);
 
     return success;
 }
@@ -848,6 +1015,45 @@ bool Test04()
                     }
                 }
 
+                // BGR
+                switch (metadata.format)
+                {
+                case DXGI_FORMAT_R8G8B8A8_UNORM:
+                case DXGI_FORMAT_B8G8R8A8_UNORM:
+                case DXGI_FORMAT_B8G8R8X8_UNORM:
+                    hr = SaveToTGAMemory(*image.GetImage(0, 0, 0), TGA_FLAGS_NONE, blob);
+                    if (FAILED(hr))
+                    {
+                        success = false;
+                        pass = false;
+                        printe("Failed writing tga to memory [bgr] (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                    }
+                    else
+                    {
+                        TexMetadata metadata2;
+                        ScratchImage image2;
+                        hr = LoadFromTGAMemory(blob.GetBufferPointer(), blob.GetBufferSize(), TGA_FLAGS_BGR, &metadata2, image2);
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed reading back written tga to memory [bgr] (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                        }
+                        else if (metadata.width != metadata2.width
+                            || metadata.height != metadata2.height
+                            || metadata.arraySize != metadata2.arraySize
+                            || metadata2.mipLevels != 1
+                            || metadata.dimension != metadata2.dimension
+                            || metadata2.format != metadata.format)
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Metadata error in tga memory readback [bgr]:\n%ls\n", szPath);
+                            printmeta(&metadata2);
+                        }
+                    }
+                }
+
                 // TGA 2.0 tests
                 if (g_SaveMedia[index].save_alpha != TEX_ALPHA_MODE_OPAQUE)
                 {
@@ -856,7 +1062,7 @@ bool Test04()
                         TexMetadata alphamdata = metadata;
                         alphamdata.SetAlphaMode(g_AlphaModes[j]);
 
-                        hr = SaveToTGAMemory(*image.GetImage(0, 0, 0), blob, &alphamdata);
+                        hr = SaveToTGAMemory(*image.GetImage(0, 0, 0), TGA_FLAGS_NONE, blob, &alphamdata);
                         if (FAILED(hr))
                         {
                             success = false;
@@ -867,7 +1073,7 @@ bool Test04()
                         {
                             TexMetadata metadata2;
                             ScratchImage image2;
-                            hr = LoadFromTGAMemory(blob.GetBufferPointer(), blob.GetBufferSize(), &metadata2, image2);
+                            hr = LoadFromTGAMemory(blob.GetBufferPointer(), blob.GetBufferSize(), TGA_FLAGS_NONE, &metadata2, image2);
                             if (FAILED(hr))
                             {
                                 success = false;
@@ -913,6 +1119,149 @@ bool Test04()
                             }
                         }
                     }
+                }
+
+                // FORCE_SRGB / FORCE_LINEAR
+                switch (metadata.format)
+                {
+                case DXGI_FORMAT_R8G8B8A8_UNORM:
+                case DXGI_FORMAT_B8G8R8A8_UNORM:
+                case DXGI_FORMAT_B8G8R8X8_UNORM:
+                    hr = SaveToTGAMemory(*image.GetImage(0, 0, 0), TGA_FLAGS_FORCE_SRGB, blob, &metadata);
+                    if (FAILED(hr))
+                    {
+                        success = false;
+                        pass = false;
+                        printe("Failed writing tga to memory [tga20 srgb] (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                    }
+                    else
+                    {
+                        TexMetadata metadata2;
+                        ScratchImage image2;
+                        hr = LoadFromTGAMemory(blob.GetBufferPointer(), blob.GetBufferSize(), TGA_FLAGS_NONE, &metadata2, image2);
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed reading back written tga to memory [tga20 srgb] (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                        }
+                        else if (metadata.width != metadata2.width
+                            || metadata.height != metadata2.height
+                            || metadata.arraySize != metadata2.arraySize
+                            || metadata2.mipLevels != 1
+                            || metadata.dimension != metadata2.dimension
+                            || metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM_SRGB)
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Metadata error in tga memory readback [tga20 srgb]:\n%ls\n", szPath);
+                            printmeta(&metadata2);
+                        }
+                        else
+                        {
+                            const uint8_t* expected = digest;
+                            if (g_SaveMedia[index].options & FLAGS_ALTMD5_MASK)
+                            {
+                                expected = g_AltMD5[((g_SaveMedia[index].options & 0xf0) >> 4) - 1].md5;
+                            }
+
+                            uint8_t digest2[16];
+                            hr = MD5Checksum(image2, digest2);
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed computing MD5 checksum of reloaded image  [tga20 srgb] (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                            }
+                            else if (memcmp(expected, digest2, 16) != 0)
+                            {
+                                success = false;
+                                pass = false;
+                                printe("MD5 checksum of reloaded data doesn't match original [tga20 srgb]:\n%ls\n", szPath);
+                            }
+
+                            // IGNORE_SRGB
+                            hr = LoadFromTGAMemory(blob.GetBufferPointer(), blob.GetBufferSize(), TGA_FLAGS_IGNORE_SRGB, &metadata2, image2);
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed reading back written tga to memory [tga20 srgb ignore] (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                            }
+                            else if (metadata.width != metadata2.width
+                                || metadata.height != metadata2.height
+                                || metadata.arraySize != metadata2.arraySize
+                                || metadata2.mipLevels != 1
+                                || metadata.dimension != metadata2.dimension
+                                || metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM)
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Metadata error in tga memory readback [tga20 srgb ignore]:\n%ls\n", szPath);
+                                printmeta(&metadata2);
+                            }
+                        }
+                    }
+                    break;
+
+                case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
+                case DXGI_FORMAT_B8G8R8A8_UNORM_SRGB:
+                case DXGI_FORMAT_B8G8R8X8_UNORM_SRGB:
+                    hr = SaveToTGAMemory(*image.GetImage(0, 0, 0), TGA_FLAGS_FORCE_LINEAR, blob, &metadata);
+                    if (FAILED(hr))
+                    {
+                        success = false;
+                        pass = false;
+                        printe("Failed writing tga to memory [tga20 linear] (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                    }
+                    else
+                    {
+                        TexMetadata metadata2;
+                        ScratchImage image2;
+                        hr = LoadFromTGAMemory(blob.GetBufferPointer(), blob.GetBufferSize(), TGA_FLAGS_NONE, &metadata2, image2);
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed reading back written tga to memory [tga20 linear] (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                        }
+                        else if (metadata.width != metadata2.width
+                            || metadata.height != metadata2.height
+                            || metadata.arraySize != metadata2.arraySize
+                            || metadata2.mipLevels != 1
+                            || metadata.dimension != metadata2.dimension
+                            || metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM)
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Metadata error in tga memory readback [tga20 linear]:\n%ls\n", szPath);
+                            printmeta(&metadata2);
+                        }
+                        else
+                        {
+                            const uint8_t* expected = digest;
+                            if (g_SaveMedia[index].options & FLAGS_ALTMD5_MASK)
+                            {
+                                expected = g_AltMD5[((g_SaveMedia[index].options & 0xf0) >> 4) - 1].md5;
+                            }
+
+                            uint8_t digest2[16];
+                            hr = MD5Checksum(image2, digest2);
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed computing MD5 checksum of reloaded image [tga20 linear] (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                            }
+                            else if (memcmp(expected, digest2, 16) != 0)
+                            {
+                                success = false;
+                                pass = false;
+                                printe("MD5 checksum of reloaded data doesn't match original [tga20 linear]:\n%ls\n", szPath);
+                            }
+                        }
+                    }
+                    break;
                 }
 
                 if (pass)
@@ -976,6 +1325,16 @@ bool Test05()
         wcscpy_s(tname, fname);
         wcscat_s(tname, L"_tga20");
         _wmakepath_s(szDestPath2, MAX_PATH, nullptr, tempDir, tname, L".tga");
+
+        wchar_t szDestPath3[MAX_PATH] = {};
+        wcscpy_s(tname, fname);
+        wcscat_s(tname, L"_bgr");
+        _wmakepath_s(szDestPath3, MAX_PATH, nullptr, tempDir, tname, L".tga");
+
+        wchar_t szDestPath4[MAX_PATH] = {};
+        wcscpy_s(tname, fname);
+        wcscat_s(tname, L"_force");
+        _wmakepath_s(szDestPath4, MAX_PATH, nullptr, tempDir, tname, L".tga");
 
         TexMetadata metadata;
         ScratchImage image;
@@ -1064,6 +1423,45 @@ bool Test05()
                     }
                 }
 
+                // BGR
+                switch (metadata.format)
+                {
+                case DXGI_FORMAT_R8G8B8A8_UNORM:
+                case DXGI_FORMAT_B8G8R8A8_UNORM:
+                case DXGI_FORMAT_B8G8R8X8_UNORM:
+                    hr = SaveToTGAFile(*image.GetImage(0, 0, 0), TGA_FLAGS_NONE, szDestPath3);
+                    if (FAILED(hr))
+                    {
+                        success = false;
+                        pass = false;
+                        printe("Failed writing tga to file [bgr] (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                    }
+                    else
+                    {
+                        TexMetadata metadata2;
+                        ScratchImage image2;
+                        hr = LoadFromTGAFile(szDestPath3, TGA_FLAGS_BGR, &metadata2, image2);
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed reading back written tga to file [bgr] (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                        }
+                        else if (metadata.width != metadata2.width
+                            || metadata.height != metadata2.height
+                            || metadata.arraySize != metadata2.arraySize
+                            || metadata2.mipLevels != 1
+                            || metadata.dimension != metadata2.dimension
+                            || metadata2.format != metadata.format)
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Metadata error in tga file readback [bgr]:\n%ls\n", szPath);
+                            printmeta(&metadata2);
+                        }
+                    }
+                }
+
                 // TGA 2.0 tests
                 if (g_SaveMedia[index].save_alpha != TEX_ALPHA_MODE_OPAQUE)
                 {
@@ -1072,7 +1470,7 @@ bool Test05()
                         TexMetadata alphamdata = metadata;
                         alphamdata.SetAlphaMode(g_AlphaModes[j]);
 
-                        hr = SaveToTGAFile(*image.GetImage(0, 0, 0), szDestPath2, &alphamdata);
+                        hr = SaveToTGAFile(*image.GetImage(0, 0, 0), TGA_FLAGS_NONE, szDestPath2, &alphamdata);
                         if (FAILED(hr))
                         {
                             success = false;
@@ -1083,7 +1481,7 @@ bool Test05()
                         {
                             TexMetadata metadata2;
                             ScratchImage image2;
-                            hr = LoadFromTGAFile(szDestPath2, &metadata2, image2);
+                            hr = LoadFromTGAFile(szDestPath2, TGA_FLAGS_NONE, &metadata2, image2);
                             if (FAILED(hr))
                             {
                                 success = false;
@@ -1129,6 +1527,149 @@ bool Test05()
                             }
                         }
                     }
+                }
+
+                // FORCE_SRGB / FORCE_LINEAR
+                switch (metadata.format)
+                {
+                case DXGI_FORMAT_R8G8B8A8_UNORM:
+                case DXGI_FORMAT_B8G8R8A8_UNORM:
+                case DXGI_FORMAT_B8G8R8X8_UNORM:
+                    hr = SaveToTGAFile(*image.GetImage(0, 0, 0), TGA_FLAGS_FORCE_SRGB, szDestPath4, &metadata);
+                    if (FAILED(hr))
+                    {
+                        success = false;
+                        pass = false;
+                        printe("Failed writing tga to file [tga20 srgb] (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                    }
+                    else
+                    {
+                        TexMetadata metadata2;
+                        ScratchImage image2;
+                        hr = LoadFromTGAFile(szDestPath4, TGA_FLAGS_NONE, &metadata2, image2);
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed reading back written tga to file [tga20 srgb] (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                        }
+                        else if (metadata.width != metadata2.width
+                            || metadata.height != metadata2.height
+                            || metadata.arraySize != metadata2.arraySize
+                            || metadata2.mipLevels != 1
+                            || metadata.dimension != metadata2.dimension
+                            || metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM_SRGB)
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Metadata error in tga file readback [tga20 srgb]:\n%ls\n", szPath);
+                            printmeta(&metadata2);
+                        }
+                        else
+                        {
+                            const uint8_t* expected = digest;
+                            if (g_SaveMedia[index].options & FLAGS_ALTMD5_MASK)
+                            {
+                                expected = g_AltMD5[((g_SaveMedia[index].options & 0xf0) >> 4) - 1].md5;
+                            }
+
+                            uint8_t digest2[16];
+                            hr = MD5Checksum(image2, digest2);
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed computing MD5 checksum of reloaded image  [tga20 srgb] (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                            }
+                            else if (memcmp(expected, digest2, 16) != 0)
+                            {
+                                success = false;
+                                pass = false;
+                                printe("MD5 checksum of reloaded data doesn't match original [tga20 srgb]:\n%ls\n", szPath);
+                            }
+
+                            // IGNORE_SRGB
+                            hr = LoadFromTGAFile(szDestPath4, TGA_FLAGS_IGNORE_SRGB, &metadata2, image2);
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed reading back written tga to file [tga20 srgb ignore] (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                            }
+                            else if (metadata.width != metadata2.width
+                                || metadata.height != metadata2.height
+                                || metadata.arraySize != metadata2.arraySize
+                                || metadata2.mipLevels != 1
+                                || metadata.dimension != metadata2.dimension
+                                || metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM)
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Metadata error in tga file readback [tga20 srgb ignore]:\n%ls\n", szPath);
+                                printmeta(&metadata2);
+                            }
+                        }
+                    }
+                    break;
+
+                case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
+                case DXGI_FORMAT_B8G8R8A8_UNORM_SRGB:
+                case DXGI_FORMAT_B8G8R8X8_UNORM_SRGB:
+                    hr = SaveToTGAFile(*image.GetImage(0, 0, 0), TGA_FLAGS_FORCE_LINEAR, szDestPath4, &metadata);
+                    if (FAILED(hr))
+                    {
+                        success = false;
+                        pass = false;
+                        printe("Failed writing tga to file [tga20 linear] (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                    }
+                    else
+                    {
+                        TexMetadata metadata2;
+                        ScratchImage image2;
+                        hr = LoadFromTGAFile(szDestPath4, TGA_FLAGS_NONE, &metadata2, image2);
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed reading back written tga to file [tga20 linear] (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                        }
+                        else if (metadata.width != metadata2.width
+                            || metadata.height != metadata2.height
+                            || metadata.arraySize != metadata2.arraySize
+                            || metadata2.mipLevels != 1
+                            || metadata.dimension != metadata2.dimension
+                            || metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM_SRGB)
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Metadata error in tga file readback [tga20 linear]:\n%ls\n", szPath);
+                            printmeta(&metadata2);
+                        }
+                        else
+                        {
+                            const uint8_t* expected = digest;
+                            if (g_SaveMedia[index].options & FLAGS_ALTMD5_MASK)
+                            {
+                                expected = g_AltMD5[((g_SaveMedia[index].options & 0xf0) >> 4) - 1].md5;
+                            }
+
+                            uint8_t digest2[16];
+                            hr = MD5Checksum(image2, digest2);
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed computing MD5 checksum of reloaded image  [tga20 linear] (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                            }
+                            else if (memcmp(expected, digest2, 16) != 0)
+                            {
+                                success = false;
+                                pass = false;
+                                printe("MD5 checksum of reloaded data doesn't match original [tga20 linear]:\n%ls\n", szPath);
+                            }
+                        }
+                    }
+                    break;
                 }
 
                 if (pass)

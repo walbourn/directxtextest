@@ -21,6 +21,7 @@ struct TestInfo
     TestFN func;
 };
 
+extern bool Test00();
 extern bool Test01();
 extern bool Test02();
 extern bool Test03();
@@ -30,7 +31,8 @@ extern bool Test06();
 
 TestInfo g_Tests[] =
 {
-    { "GetMetadataFromTGAMemory/File", Test01 },
+    { "GetMetadataFromTGAMemory", Test00 },
+    { "GetMetadataFromTGAFile", Test01 },
     { "LoadFromTGAMemory", Test02 },
     { "LoadFromTGAFile", Test03 },
     { "SaveTGAToMemory", Test04 },
