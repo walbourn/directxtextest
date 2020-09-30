@@ -493,12 +493,12 @@ namespace
         { DXGI_FORMAT_R16_UINT, XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f), 2, 0x01,0x00 },
         // DXGI_FORMAT_R16_SNORM
         { DXGI_FORMAT_R16_SNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f), 2, 0x00,0x00 },
-        { DXGI_FORMAT_R16_SNORM, XMFLOAT4(0.5f, 0.0f, 0.0f, 1.0f), 2, 0xFF,0x3F },
+        { DXGI_FORMAT_R16_SNORM, XMFLOAT4(0.5f, 0.0f, 0.0f, 1.0f), 2, 0x00,0x40 },
         { DXGI_FORMAT_R16_SNORM, XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f), 2, 0xFF,0x7F },
-        { DXGI_FORMAT_R16_SNORM, XMFLOAT4(0.25f, 0.0f, 0.0f, 1.0f), 2, 0xFF,0x1F },
-        { DXGI_FORMAT_R16_SNORM, XMFLOAT4(-0.5f, 0.0f, 0.0f, 1.0f), 2, 0x01,0xC0 },
+        { DXGI_FORMAT_R16_SNORM, XMFLOAT4(0.25f, 0.0f, 0.0f, 1.0f), 2, 0x00,0x20 },
+        { DXGI_FORMAT_R16_SNORM, XMFLOAT4(-0.5f, 0.0f, 0.0f, 1.0f), 2, 0x00,0xC0 },
         { DXGI_FORMAT_R16_SNORM, XMFLOAT4(-1.0f, 0.0f, 0.0f, 1.0f), 2, 0x01,0x80 },
-        { DXGI_FORMAT_R16_SNORM, XMFLOAT4(-0.25f, 0.0f, 0.0f, 1.0f), 2, 0x01,0xE0 },
+        { DXGI_FORMAT_R16_SNORM, XMFLOAT4(-0.25f, 0.0f, 0.0f, 1.0f), 2, 0x00,0xE0 },
         // DXGI_FORMAT_R16_SINT
         { DXGI_FORMAT_R16_SINT, XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f), 2, 0x00,0x00 },
         { DXGI_FORMAT_R16_SINT, XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f), 2, 0x01,0x00 },
@@ -514,12 +514,12 @@ namespace
         { DXGI_FORMAT_R8_UINT, XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f), 1, 0x01 },
         // DXGI_FORMAT_R8_SNORM
         { DXGI_FORMAT_R8_SNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f), 1, 0x0 },
-        { DXGI_FORMAT_R8_SNORM, XMFLOAT4(0.5f, 0.0f, 0.0f, 1.0f), 1, 0x3F },
+        { DXGI_FORMAT_R8_SNORM, XMFLOAT4(0.5f, 0.0f, 0.0f, 1.0f), 1, 0x40 },
         { DXGI_FORMAT_R8_SNORM, XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f), 1, 0x7F },
-        { DXGI_FORMAT_R8_SNORM, XMFLOAT4(0.25f, 0.0f, 0.0f, 1.0f), 1, 0x1F },
-        { DXGI_FORMAT_R8_SNORM, XMFLOAT4(-0.5f, 0.0f, 0.0f, 1.0f), 1, 0xC1 },
+        { DXGI_FORMAT_R8_SNORM, XMFLOAT4(0.25f, 0.0f, 0.0f, 1.0f), 1, 0x20 },
+        { DXGI_FORMAT_R8_SNORM, XMFLOAT4(-0.5f, 0.0f, 0.0f, 1.0f), 1, 0xC0 },
         { DXGI_FORMAT_R8_SNORM, XMFLOAT4(-1.0f, 0.0f, 0.0f, 1.0f), 1, 0x81 },
-        { DXGI_FORMAT_R8_SNORM, XMFLOAT4(-0.25f, 0.0f, 0.0f, 1.0f), 1, 0xE1 },
+        { DXGI_FORMAT_R8_SNORM, XMFLOAT4(-0.25f, 0.0f, 0.0f, 1.0f), 1, 0xE0 },
         // DXGI_FORMAT_R8_SINT
         { DXGI_FORMAT_R8_SINT, XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f), 1, 0x0 },
         { DXGI_FORMAT_R8_SINT, XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f), 1, 0x01 },
