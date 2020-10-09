@@ -4,7 +4,9 @@
 
 #pragma once
 
-#if defined(_XBOX_ONE) && defined(_TITLE)
+#ifdef _GAMING_XBOX
+#include "DeviceResourcesGXDK.h"
+#elif defined(_XBOX_ONE) && defined(_TITLE)
 #include "DeviceResourcesXDK.h"
 #else
 #include "DeviceResourcesUWP.h"
@@ -15,7 +17,7 @@
 // A basic game implementation that creates a D3D11 device and
 // provides a game loop.
 class Game
-#if !defined(_XBOX_ONE) || !defined(_TITLE)
+#if !(defined(_XBOX_ONE) && defined(_TITLE)) && !defined(_GAMING_XBOX)
     final : public DX::IDeviceNotify
 #endif
 {
@@ -31,7 +33,7 @@ public:
     Game& operator= (Game const&) = delete;
 
     // Initialization and management
-#if !defined(WINAPI_FAMILY) || (WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP) 
+#if !defined(WINAPI_FAMILY) || (WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP) || (WINAPI_FAMILY == WINAPI_FAMILY_GAMES)
     void Initialize(HWND window, int width, int height, DXGI_MODE_ROTATION rotation);
 #else
     void Initialize(IUnknown* window, int width, int height, DXGI_MODE_ROTATION rotation);
@@ -40,7 +42,7 @@ public:
     // Basic game loop
     void Tick();
 
-#if !defined(_XBOX_ONE) || !defined(_TITLE)
+#if !(defined(_XBOX_ONE) && defined(_TITLE)) && !defined(_GAMING_XBOX)
     // IDeviceNotify
     void OnDeviceLost() override;
     void OnDeviceRestored() override;
@@ -52,13 +54,14 @@ public:
     void OnSuspending();
     void OnResuming();
 
-#if !defined(_XBOX_ONE) || !defined(_TITLE)
+#if !(defined(_XBOX_ONE) && defined(_TITLE)) && !defined(_GAMING_XBOX)
     void OnWindowSizeChanged(int width, int height, DXGI_MODE_ROTATION rotation);
 #endif
 
 #if defined(WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_APP)
     void ValidateDevice();
 #endif
+
     // Properties
     void GetDefaultSize( int& width, int& height ) const noexcept;
 

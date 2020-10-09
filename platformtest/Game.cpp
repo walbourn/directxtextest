@@ -60,7 +60,7 @@ Game::Game() noexcept(false) :
 {
     m_deviceResources = std::make_unique<DX::DeviceResources>(DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_UNKNOWN);
 
-#if !defined(_XBOX_ONE) || !defined(_TITLE)
+#if !(defined(_XBOX_ONE) && defined(_TITLE)) && !defined(_GAMING_XBOX)
     m_deviceResources->RegisterDeviceNotify(this);
 #endif
 }
@@ -77,14 +77,19 @@ Game::~Game()
 
 // Initialize the Direct3D resources required to run.
 void Game::Initialize(
-#if !defined(WINAPI_FAMILY) || (WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP) 
+#if !defined(WINAPI_FAMILY) || (WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP) || (WINAPI_FAMILY == WINAPI_FAMILY_GAMES)
     HWND window,
 #else
     IUnknown* window,
 #endif
     int width, int height, DXGI_MODE_ROTATION rotation)
 {
-#if defined(_XBOX_ONE) && defined(_TITLE)
+#ifdef _GAMING_XBOX
+    UNREFERENCED_PARAMETER(rotation);
+    UNREFERENCED_PARAMETER(width);
+    UNREFERENCED_PARAMETER(height);
+    m_deviceResources->SetWindow(window);
+#elif defined(_XBOX_ONE) && defined(_TITLE)
     UNREFERENCED_PARAMETER(rotation);
     UNREFERENCED_PARAMETER(width);
     UNREFERENCED_PARAMETER(height);
@@ -105,7 +110,7 @@ void Game::Initialize(
 
     m_testThread = new std::thread(&Game::TestThreadProc, this);
 
-#if defined(_XBOX_ONE) && defined(_TITLE)
+#if (defined(_XBOX_ONE) && defined(_TITLE)) || defined(_GAMING_XBOX)
     SetThreadAffinityMask(m_testThread->native_handle(), 0x2);
 #endif
 }
@@ -167,28 +172,35 @@ void Game::Render()
         return;
     }
 
-#if defined(_XBOX_ONE) && defined(_TITLE)
+#if defined(_XBOX_ONE) && defined(_TITLE) || defined(_GAMING_XBOX)
     m_deviceResources->Prepare();
 #endif
 
     Clear();
 
-    auto context = m_deviceResources->GetD3DDeviceContext();
-    PIXBeginEvent(context, PIX_COLOR_DEFAULT, L"Render");
-
-    PIXEndEvent(context);
-
     // Show the new frame.
-    PIXBeginEvent(PIX_COLOR_DEFAULT, L"Present");
     m_deviceResources->Present();
-    PIXEndEvent();
 }
 
 // Helper method to clear the back buffers.
 void Game::Clear()
 {
+#ifdef _GAMING_XBOX
+    auto commandList = m_deviceResources->GetCommandList();
+
+    // Clear the views.
+    auto rtvDescriptor = m_deviceResources->GetRenderTargetView();
+
+    commandList->OMSetRenderTargets(1, &rtvDescriptor, FALSE, nullptr);
+    commandList->ClearRenderTargetView(rtvDescriptor, m_clearColor, 0, nullptr);
+
+    // Set the viewport and scissor rect.
+    auto viewport = m_deviceResources->GetScreenViewport();
+    auto scissorRect = m_deviceResources->GetScissorRect();
+    commandList->RSSetViewports(1, &viewport);
+    commandList->RSSetScissorRects(1, &scissorRect);
+#else
     auto context = m_deviceResources->GetD3DDeviceContext();
-    PIXBeginEvent(context, PIX_COLOR_DEFAULT, L"Clear");
 
     // Clear the views.
     auto renderTarget = m_deviceResources->GetRenderTargetView();
@@ -199,8 +211,7 @@ void Game::Clear()
     // Set the viewport.
     auto viewport = m_deviceResources->GetScreenViewport();
     context->RSSetViewports(1, &viewport);
-
-    PIXEndEvent(context);
+#endif
  }
 #pragma endregion
 
@@ -232,7 +243,7 @@ void Game::OnResuming()
     SetEvent(m_resumeSignal.Get());
 }
 
-#if !defined(_XBOX_ONE) || !defined(_TITLE)
+#if !(defined(_XBOX_ONE) && defined(_TITLE)) && !defined(_GAMING_XBOX)
 void Game::OnWindowSizeChanged(int width, int height, DXGI_MODE_ROTATION rotation)
 {
 #if defined(WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_APP)
@@ -273,7 +284,7 @@ void Game::CreateWindowSizeDependentResources()
 {
 }
 
-#if !defined(_XBOX_ONE) || !defined(_TITLE)
+#if !(defined(_XBOX_ONE) && defined(_TITLE)) && !defined(_GAMING_XBOX)
 void Game::OnDeviceLost()
 {
 }

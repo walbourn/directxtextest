@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Common">
+      <UniqueIdentifier>f686d7ef-16bb-400a-a8eb-6fa79d32e9ef</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets">
+      <UniqueIdentifier>6c6fc17f-9297-466f-be7c-cc4d45a33261</UniqueIdentifier>
+      <Extensions>bmp;dds;fbx;gif;jpg;jpeg;tga;tiff;tif;png;hdr;pfm;jxr;wdp</Extensions>
+    </Filter>
+    <Filter Include="xtfilter">
+      <UniqueIdentifier>{2d593f20-dfee-40e1-a2d5-d35767cb40e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="xtwic">
+      <UniqueIdentifier>{6f8c3a93-9ee8-490c-8363-b18dbaa88a94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="xttex">
+      <UniqueIdentifier>{4dba0798-a870-4c35-8255-1b33ff1c9f83}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="StepTimer.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="DeviceResourcesGXDK.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\directxtest.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="DeviceResourcesGXDK.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="mipmaps.cpp">
+      <Filter>xtfilter</Filter>
+    </ClCompile>
+    <ClCompile Include="resize.cpp">
+      <Filter>xtfilter</Filter>
+    </ClCompile>
+    <ClCompile Include="convert.cpp">
+      <Filter>xttex</Filter>
+    </ClCompile>
+    <ClCompile Include="fliprotate.cpp">
+      <Filter>xttex</Filter>
+    </ClCompile>
+    <ClCompile Include="wic.cpp">
+      <Filter>xtwic</Filter>
+    </ClCompile>
+    <ClCompile Include="testutils.cpp" />
+    <ClCompile Include="MainGXDK.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="MicrosoftGame.Config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\Logo.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\SmallLogo.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\SplashScreen.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\StoreLogo.png">
+      <Filter>Assets</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

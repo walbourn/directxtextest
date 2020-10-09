@@ -12,6 +12,35 @@
 
 #if defined(_XBOX_ONE) && defined(_TITLE)
 #include <xdk.h>
+#elif !defined(WINAPI_FAMILY) || (WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP) || (WINAPI_FAMILY == WINAPI_FAMILY_GAMES)
+#include <WinSDKVer.h>
+#define _WIN32_WINNT 0x0A00
+#include <SDKDDKVer.h>
+
+#pragma warning(push)
+#pragma warning(disable : 4005)
+#define NOMINMAX
+#define NODRAWTEXT
+#define NOGDI
+#define NOBITMAP
+#define NOMCX
+#define NOSERVICE
+#define NOHELP
+#define WIN32_LEAN_AND_MEAN
+#pragma warning(pop)
+
+#include <Windows.h>
+#endif
+
+#include <wrl/client.h>
+
+#ifdef _GAMING_XBOX_SCARLETT
+#include <d3d12_xs.h>
+#include <d3dx12_xs.h>
+#elif defined(_GAMING_XBOX)
+#include <d3d12_x.h>
+#include <d3dx12_x.h>
+#elif (defined(_XBOX_ONE) && defined(_TITLE))
 #include <d3d11_x.h>
 #else
 #include <d3d11_3.h>
