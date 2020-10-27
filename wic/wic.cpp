@@ -9,9 +9,15 @@
 #include "directxtest.h"
 #include "wic.h"
 
-#include "directxtexp.h"
+#include "DirectXTexP.h"
 
 #include <wrl/client.h>
+
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wcovered-switch-default"
+#pragma clang diagnostic ignored "-Wswitch-enum"
+#pragma clang diagnostic ignored "-Wswitch"
+#endif
 
 using namespace DirectX;
 using Microsoft::WRL::ComPtr;
@@ -1289,7 +1295,7 @@ bool WICTest::Test05()
                     hr = SaveToWICMemory( *image.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( g_SaveMedia[index].tcodec ), blob, nullptr,
                                             [&](IPropertyBag2* props)
                                             {
-                                                PROPBAG2 options[2] = { 0, 0 };
+                                                PROPBAG2 options[2] = {};
                                                 options[0].pstrName = const_cast<LPOLESTR>(L"CompressionQuality");
                                                 options[1].pstrName = const_cast<LPOLESTR>(L"TiffCompressionMethod");
 
@@ -1646,7 +1652,7 @@ bool WICTest::Test06()
                 hr = SaveToWICFile( *image.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( g_SaveMedia[index].tcodec ), szDestPath3, nullptr,
                                         [&](IPropertyBag2* props)
                                         {
-                                            PROPBAG2 options[2] = { 0, 0 };
+                                            PROPBAG2 options[2] = {};
                                             options[0].pstrName = const_cast<LPOLESTR>(L"CompressionQuality");
                                             options[1].pstrName = const_cast<LPOLESTR>(L"TiffCompressionMethod");
 

@@ -19,6 +19,12 @@
 
 #pragma warning(push)
 #pragma warning(disable : 4005)
+
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmacro-redefined"
+#endif
+
 #define NOMINMAX
 #define NODRAWTEXT
 #define NOGDI
@@ -27,6 +33,10 @@
 #define NOSERVICE
 #define NOHELP
 #define WIN32_LEAN_AND_MEAN
+
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
 #pragma warning(pop)
 
 #include <Windows.h>
