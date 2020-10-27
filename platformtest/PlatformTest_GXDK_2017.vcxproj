@@ -34,6 +34,7 @@
     <!-- - - - -->
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
     <TargetRuntime>Native</TargetRuntime>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
     <DirectXTexMedia>$(MSBuildThisFileDirectory)..\..\..\directxtexmedia\</DirectXTexMedia>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
