@@ -12,9 +12,15 @@
 
 #include <wrl/client.h>
 
-#include "directxtex.h"
+#include "DirectXTex.h"
 
 #include <exception>
+
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wcovered-switch-default"
+#pragma clang diagnostic ignored "-Wswitch-enum"
+#pragma clang diagnostic ignored "-Wswitch"
+#endif
 
 using namespace DirectX;
 using Microsoft::WRL::ComPtr;
@@ -298,13 +304,10 @@ HRESULT SetupRenderTest(ID3D11Device** pDev, ID3D11DeviceContext** pContext)
     g_pImmediateContext->OMSetRenderTargets(1, &g_pRenderTargetView, g_pDepthStencilView);
 
     // Setup the viewport
-    D3D11_VIEWPORT vp;
+    D3D11_VIEWPORT vp = {};
     vp.Width = (FLOAT)RENDER_WIDTH;
     vp.Height = (FLOAT)RENDER_HEIGHT;
-    vp.MinDepth = 0.0f;
     vp.MaxDepth = 1.0f;
-    vp.TopLeftX = 0;
-    vp.TopLeftY = 0;
     g_pImmediateContext->RSSetViewports(1, &vp);
 
     //--- Setup render cube -----------------------------------------------------------

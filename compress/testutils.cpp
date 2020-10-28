@@ -7,9 +7,9 @@
 #include "directxtest.h"
 
 #include "scoped.h"
-#include "directxtexp.h"
+#include "DirectXTexP.h"
 
-#include "dds.h"
+#include "DDS.h"
 
 using namespace DirectX;
 
@@ -354,7 +354,7 @@ int __cdecl DescribeException(PEXCEPTION_POINTERS pData)
 #error Unknown processor
 #endif
 
-    printf("ERROR: Crash with exception %x (%s) at %p!n",
+    printf("ERROR: Crash with exception %lx (%s) at %p!n",
         exceptionCode, pDescription, pIP);
 
     if (pErrorOffset)

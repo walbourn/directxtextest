@@ -8,7 +8,7 @@
 
 #include <d3d12.h>
 
-#include "directxtex.h"
+#include "DirectXTex.h"
 
 #include "d3dx12.h"
 
@@ -567,11 +567,15 @@ bool Test05()
                     // Manual upload
                     const UINT64 uploadBufferSize = GetRequiredIntermediateSize(pResource.Get(), 0, static_cast<unsigned int>(subresources.size()));
 
+                    CD3DX12_HEAP_PROPERTIES uploadHeap(D3D12_HEAP_TYPE_UPLOAD);
+
+                    auto desc = CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize);
+
                     ComPtr<ID3D12Resource> textureUploadHeap;
                     hr = device->CreateCommittedResource(
-                        &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+                        &uploadHeap,
                         D3D12_HEAP_FLAG_NONE,
-                        &CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize),
+                        &desc,
                         D3D12_RESOURCE_STATE_GENERIC_READ,
                         nullptr,
                         IID_PPV_ARGS(textureUploadHeap.GetAddressOf()));
@@ -738,13 +742,17 @@ bool Test06()
                 else
                 {
                     // Manual upload
+                    CD3DX12_HEAP_PROPERTIES uploadHeap(D3D12_HEAP_TYPE_UPLOAD);
+
                     const UINT64 uploadBufferSize = GetRequiredIntermediateSize(pResource.Get(), 0, static_cast<unsigned int>(subresources.size()));
+
+                    auto desc = CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize);
 
                     ComPtr<ID3D12Resource> textureUploadHeap;
                     hr = device->CreateCommittedResource(
-                        &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+                        &uploadHeap,
                         D3D12_HEAP_FLAG_NONE,
-                        &CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize),
+                        &desc,
                         D3D12_RESOURCE_STATE_GENERIC_READ,
                         nullptr,
                         IID_PPV_ARGS(textureUploadHeap.GetAddressOf()));

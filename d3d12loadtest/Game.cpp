@@ -330,6 +330,8 @@ void Game::CreateDeviceDependentResources()
         device->CreateGraphicsPipelineState(&psoDesc,
             IID_PPV_ARGS(m_pipelineState.ReleaseAndGetAddressOf())));
 
+    CD3DX12_HEAP_PROPERTIES uploadHeap(D3D12_HEAP_TYPE_UPLOAD);
+
     // Create vertex buffer.
     {
         static const Vertex s_vertexData[] =
@@ -349,10 +351,12 @@ void Game::CreateDeviceDependentResources()
         // recommended. Every time the GPU needs it, the upload heap will be marshalled 
         // over. Please read up on Default Heap usage. An upload heap is used here for 
         // code simplicity and because there are very few verts to actually transfer.
+        auto desc = CD3DX12_RESOURCE_DESC::Buffer(sizeof(s_vertexData));
+
         DX::ThrowIfFailed(
-            device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+            device->CreateCommittedResource(&uploadHeap,
                 D3D12_HEAP_FLAG_NONE,
-                &CD3DX12_RESOURCE_DESC::Buffer(sizeof(s_vertexData)),
+                &desc,
                 D3D12_RESOURCE_STATE_GENERIC_READ,
                 nullptr,
                 IID_PPV_ARGS(m_vertexBuffer.ReleaseAndGetAddressOf())));
@@ -380,10 +384,12 @@ void Game::CreateDeviceDependentResources()
         };
 
         // See note above
+        auto desc = CD3DX12_RESOURCE_DESC::Buffer(sizeof(s_indexData));
+
         DX::ThrowIfFailed(
-            device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+            device->CreateCommittedResource(&uploadHeap,
                 D3D12_HEAP_FLAG_NONE,
-                &CD3DX12_RESOURCE_DESC::Buffer(sizeof(s_indexData)),
+                &desc,
                 D3D12_RESOURCE_STATE_GENERIC_READ,
                 nullptr,
                 IID_PPV_ARGS(m_indexBuffer.ReleaseAndGetAddressOf())));
@@ -419,19 +425,23 @@ void Game::CreateDeviceDependentResources()
 
             const UINT64 uploadBufferSize = GetRequiredIntermediateSize(m_dx5logo.Get(), 0, static_cast<UINT>(subresources.size()));
 
+            auto bdesc = CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize);
+
             // Create the GPU upload buffer.
             DX::ThrowIfFailed(
                 device->CreateCommittedResource(
-                    &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+                    &uploadHeap,
                     D3D12_HEAP_FLAG_NONE,
-                    &CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize),
+                    &bdesc,
                     D3D12_RESOURCE_STATE_GENERIC_READ,
                     nullptr,
                     IID_PPV_ARGS(ddsUploadHeap.GetAddressOf())));
 
             UpdateSubresources(commandList, m_dx5logo.Get(), ddsUploadHeap.Get(), 0, 0, static_cast<UINT>(subresources.size()), subresources.data());
-            commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_dx5logo.Get(),
-                D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
+
+            auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_dx5logo.Get(),
+                D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+            commandList->ResourceBarrier(1, &barrier);
 
             auto desc = m_dx5logo->GetDesc();
 
@@ -453,19 +463,22 @@ void Game::CreateDeviceDependentResources()
 
             const UINT64 uploadBufferSize = GetRequiredIntermediateSize(m_test1.Get(), 0, static_cast<UINT>(subresources.size()));
 
+            auto desc = CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize);
+
             // Create the GPU upload buffer.
             DX::ThrowIfFailed(
                 device->CreateCommittedResource(
-                    &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+                    &uploadHeap,
                     D3D12_HEAP_FLAG_NONE,
-                    &CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize),
+                    &desc,
                     D3D12_RESOURCE_STATE_GENERIC_READ,
                     nullptr,
                     IID_PPV_ARGS(ddsUploadHeap2.GetAddressOf())));
 
             UpdateSubresources(commandList, m_test1.Get(), ddsUploadHeap2.Get(), 0, 0, static_cast<UINT>(subresources.size()), subresources.data());
-            commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_test1.Get(),
-                D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
+            auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_test1.Get(),
+                D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+            commandList->ResourceBarrier(1, &barrier);
         }
 
         // Test WICTextureLoader
@@ -480,19 +493,22 @@ void Game::CreateDeviceDependentResources()
 
             const UINT64 uploadBufferSize = GetRequiredIntermediateSize(m_cup.Get(), 0, 1);
 
+            auto bdesc = CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize);
+
             // Create the GPU upload buffer.
             DX::ThrowIfFailed(
                 device->CreateCommittedResource(
-                    &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+                    &uploadHeap,
                     D3D12_HEAP_FLAG_NONE,
-                    &CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize),
+                    &bdesc,
                     D3D12_RESOURCE_STATE_GENERIC_READ,
                     nullptr,
                     IID_PPV_ARGS(wicUploadHeap.GetAddressOf())));
 
             UpdateSubresources(commandList, m_cup.Get(), wicUploadHeap.Get(), 0, 0, 1, &subresource);
-            commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_cup.Get(),
-                D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
+            auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_cup.Get(),
+                D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+            commandList->ResourceBarrier(1, &barrier);
 
             auto desc = m_cup->GetDesc();
 
@@ -515,19 +531,22 @@ void Game::CreateDeviceDependentResources()
 
             const UINT64 uploadBufferSize = GetRequiredIntermediateSize(m_test2.Get(), 0, 1);
 
+            auto desc = CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize);
+
             // Create the GPU upload buffer.
             DX::ThrowIfFailed(
                 device->CreateCommittedResource(
-                    &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+                    &uploadHeap,
                     D3D12_HEAP_FLAG_NONE,
-                    &CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize),
+                    &desc,
                     D3D12_RESOURCE_STATE_GENERIC_READ,
                     nullptr,
                     IID_PPV_ARGS(wicUploadHeap2.GetAddressOf())));
 
             UpdateSubresources(commandList, m_test2.Get(), wicUploadHeap2.Get(), 0, 0, 1, &subresource);
-            commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_test2.Get(),
-                D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
+            auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_test2.Get(),
+                D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+            commandList->ResourceBarrier(1, &barrier);
         }
 
         DX::ThrowIfFailed(commandList->Close());

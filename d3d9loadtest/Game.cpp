@@ -67,11 +67,8 @@ void Game::Tick()
 }
 
 // Updates the world.
-void Game::Update(DX::StepTimer const& timer)
+void Game::Update(DX::StepTimer const&)
 {
-    float elapsedTime = float(timer.GetElapsedSeconds());
-
-    elapsedTime;
 }
 
 // Draws the scene.
@@ -276,7 +273,9 @@ void Game::CreateDevice()
 
 void Game::CreateWindowSizeDependentResources()
 {
-    D3DVIEWPORT9 vp = { 0u, 0u, DWORD(m_outputWidth), DWORD(m_outputHeight) };
+    D3DVIEWPORT9 vp = {};
+    vp.Width = DWORD(m_outputWidth);
+    vp.Height = DWORD(m_outputHeight);
     m_d3dDevice->SetViewport(&vp);
 }
 

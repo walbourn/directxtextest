@@ -1004,7 +1004,7 @@ bool TEXTest::Test05B()
             {
                 success = false;
                 printe( "Failed internal scanline load/store (HRESULT %08X) %ls:\n%ls\n",
-                        hr, GetName( srcimage.GetMetadata().format ), szPath );
+                        static_cast<unsigned int>(hr), GetName( srcimage.GetMetadata().format ), szPath );
             }
             else
             {
@@ -2635,7 +2635,7 @@ bool TEXTest::Test05D()
             if ( !XMVector4NearEqual( chk, temp, g_PixelEpsilon ) )
             {
                 success = false;
-                printe( "Failed converting format\n%ls (%08X), -> %ls, index %zu:\n%f %f %f %f = %f %f %f %f\n\t\t\t\t... %f %f %f %f\n", GetName( p.sformat ), p.flags, GetName( p.dformat ), index,
+                printe( "Failed converting format\n%ls (%08lX), -> %ls, index %zu:\n%f %f %f %f = %f %f %f %f\n\t\t\t\t... %f %f %f %f\n", GetName( p.sformat ), p.flags, GetName( p.dformat ), index,
                         p.svector.x, p.svector.y, p.svector.z, p.svector.w,
                         XMVectorGetX(temp), XMVectorGetY(temp), XMVectorGetZ(temp), XMVectorGetW(temp),
                         p.dvector.x, p.dvector.y, p.dvector.z, p.dvector.w );

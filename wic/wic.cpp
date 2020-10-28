@@ -1900,7 +1900,7 @@ bool WICTest::Test07()
         FIND_FIRST_EX_LARGE_FETCH)));
     if (!hFile)
     {
-        printe("ERROR: FindFirstFileEx FAILED (%u)\n", GetLastError());
+        printe("ERROR: FindFirstFileEx FAILED (%lu)\n", GetLastError());
         return false;
     }
 
@@ -2070,7 +2070,7 @@ bool WICTest::Test08()
         FIND_FIRST_EX_LARGE_FETCH)));
     if (!hFile)
     {
-        printe("ERROR: FindFirstFileEx FAILED (%u)\n", GetLastError());
+        printe("ERROR: FindFirstFileEx FAILED (%lu)\n", GetLastError());
         return false;
     }
 

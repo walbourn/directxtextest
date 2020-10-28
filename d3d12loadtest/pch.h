@@ -40,6 +40,7 @@
 #include <dxgi1_5.h>
 #endif
 
+#define _XM_NO_XMVECTOR_OVERLOADS_
 #include <DirectXMath.h>
 #include <DirectXColors.h>
 
