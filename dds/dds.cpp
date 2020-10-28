@@ -1786,7 +1786,7 @@ bool Test04()
                                       || metadata.mipLevels != metadata2.mipLevels
                                       || metadata.dimension != metadata2.dimension
                                       || metadata.miscFlags != metadata2.miscFlags
-                                      || metadata.miscFlags2 != metadata2.miscFlags2 )
+                                      /* Ignore metadata.miscFlags2 */ )
                             {
                                 success = false;
                                 pass = false;
@@ -2172,7 +2172,7 @@ bool Test05()
                                       || metadata.mipLevels != metadata2.mipLevels
                                       || metadata.dimension != metadata2.dimension
                                       || metadata.miscFlags != metadata2.miscFlags
-                                      || metadata.miscFlags2 != metadata2.miscFlags2 )
+                                      /* Ignore metadata.miscFlags2 */ )
                             {
                                 success = false;
                                 pass = false;
