@@ -21,14 +21,15 @@
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
 
-#include <windows.h>
+#include <Windows.h>
 #endif
 
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <directxmath.h>
-#include <directxpackedvector.h>
+#define _XM_NO_XMVECTOR_OVERLOADS_
+#include <DirectXMath.h>
+#include <DirectXPackedVector.h>
 
 #define _DIRECTX_TEST_NAME_ "DirectXTex"
 
