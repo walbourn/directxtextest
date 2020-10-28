@@ -9,7 +9,7 @@
 #include "directxtest.h"
 #include "tex.h"
 
-#include "directxtex.h"
+#include "DirectXTex.h"
 
 using namespace DirectX;
 
@@ -680,8 +680,8 @@ bool TEXTest::Test16()
 
                 for (size_t j = 0; j < width; ++j)
                 {
-                    static const XMVECTORF32 s_luminance = { 0.3f, 0.59f, 0.11f, 0.f };
-                    static const XMVECTORF32 s_nitsNormalize = { 100.f, 100.f, 100.f, 1.f };
+                    static const XMVECTORF32 s_luminance = { { { 0.3f, 0.59f, 0.11f, 0.f } } };
+                    static const XMVECTORF32 s_nitsNormalize = { { { 100.f, 100.f, 100.f, 1.f } } };
 
                     XMVECTOR v = *pixels++;
 
@@ -724,8 +724,8 @@ bool TEXTest::Test16()
 
                     for (size_t j = 0; j < width; ++j)
                     {
-                        static const XMVECTORF32 s_luminance = { 0.3f, 0.59f, 0.11f, 0.f };
-                        static const XMVECTORF32 s_nitsNormalize = { 100.f, 100.f, 100.f, 1.f };
+                        static const XMVECTORF32 s_luminance = { { { 0.3f, 0.59f, 0.11f, 0.f } } };
+                        static const XMVECTORF32 s_nitsNormalize = { { { 100.f, 100.f, 100.f, 1.f } } };
 
                         XMVECTOR v = *pixels++;
 
@@ -991,8 +991,8 @@ bool TEXTest::Test17()
                 ScratchImage image;
                 hr = TransformImage(*srcimage.GetImage(0, 0, 0), [&](XMVECTOR* outPixels, const XMVECTOR* inPixels, size_t width, size_t y)
                 {
-                    static const XMVECTORF32 s_chromaKey = { 0.f, 1.f, 0.f, 0.f };
-                    static const XMVECTORF32 s_tolerance = { 0.2f, 0.2f, 0.2f, 0.f };
+                    static const XMVECTORF32 s_chromaKey = { { { 0.f, 1.f, 0.f, 0.f } } };
+                    static const XMVECTORF32 s_tolerance = { { { 0.2f, 0.2f, 0.2f, 0.f } } };
                     
                     UNREFERENCED_PARAMETER(y);
 
@@ -1119,8 +1119,8 @@ bool TEXTest::Test17()
                     hr = TransformImage(srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(),
                         [&](XMVECTOR* outPixels, const XMVECTOR* inPixels, size_t width, size_t y)
                     {
-                        static const XMVECTORF32 s_chromaKey = { 0.f, 1.f, 0.f, 0.f };
-                        static const XMVECTORF32 s_tolerance = { 0.2f, 0.2f, 0.2f, 0.f };
+                        static const XMVECTORF32 s_chromaKey = { { { 0.f, 1.f, 0.f, 0.f } } };
+                        static const XMVECTORF32 s_tolerance = { { { 0.2f, 0.2f, 0.2f, 0.f } } };
 
                         UNREFERENCED_PARAMETER(y);
 

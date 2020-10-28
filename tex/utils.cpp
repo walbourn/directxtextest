@@ -7,7 +7,7 @@
 #include "directxtest.h"
 #include "tex.h"
 
-#include "directxtexp.h"
+#include "DirectXTexP.h"
 
 #include <wrl/client.h>
 

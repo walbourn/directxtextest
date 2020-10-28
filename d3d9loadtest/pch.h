@@ -34,6 +34,7 @@
 
 #include <d3d9.h>
 
+#define _XM_NO_XMVECTOR_OVERLOADS_
 #include <DirectXMath.h>
 #include <DirectXColors.h>
 #include <DirectXPackedVector.h>

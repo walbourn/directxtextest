@@ -7,7 +7,7 @@
 #include "directxtest.h"
 #include "wic.h"
 
-#include "directxtex.h"
+#include "DirectXTex.h"
 
 using namespace DirectX;
 

@@ -9,9 +9,9 @@
 #include "directxtest.h"
 
 #include "scoped.h"
-#include "directxtexp.h"
+#include "DirectXTexP.h"
 
-#include "dds.h"
+#include "DDS.h"
 
 using namespace DirectX;
 

@@ -9,7 +9,7 @@
 #include "directxtest.h"
 #include "filter.h"
 
-#include "directxtex.h"
+#include "DirectXTex.h"
 
 using namespace DirectX;
 

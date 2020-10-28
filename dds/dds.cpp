@@ -6,11 +6,17 @@
 
 #include "directxtest.h"
 
-#include "directxtexp.h"
+#include "DirectXTexP.h"
 
 using namespace DirectX;
 
 #define ALTMD5(n) (n << 8)
+
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wcovered-switch-default"
+#pragma clang diagnostic ignored "-Wswitch-enum"
+#pragma clang diagnostic ignored "-Wswitch"
+#endif
 
 namespace
 {
@@ -1691,7 +1697,7 @@ bool Test04()
                               || metadata.mipLevels != metadata2.mipLevels
                               || metadata.dimension != metadata2.dimension
                               || metadata.miscFlags != metadata2.miscFlags
-                              || metadata.miscFlags2 != metadata.miscFlags2 )
+                              || metadata.miscFlags2 != metadata2.miscFlags2 )
                     {
                         success = false;
                         pass = false;
@@ -1780,7 +1786,7 @@ bool Test04()
                                       || metadata.mipLevels != metadata2.mipLevels
                                       || metadata.dimension != metadata2.dimension
                                       || metadata.miscFlags != metadata2.miscFlags
-                                      || metadata.miscFlags2 != metadata.miscFlags2 )
+                                      || metadata.miscFlags2 != metadata2.miscFlags2 )
                             {
                                 success = false;
                                 pass = false;
@@ -2166,7 +2172,7 @@ bool Test05()
                                       || metadata.mipLevels != metadata2.mipLevels
                                       || metadata.dimension != metadata2.dimension
                                       || metadata.miscFlags != metadata2.miscFlags
-                                      || metadata.miscFlags2 != metadata.miscFlags2 )
+                                      || metadata.miscFlags2 != metadata2.miscFlags2 )
                             {
                                 success = false;
                                 pass = false;
@@ -2236,7 +2242,7 @@ bool Test06()
             FIND_FIRST_EX_LARGE_FETCH)));
     if (!hFile)
     {
-        printe("ERROR: FindFirstFileEx FAILED (%u)\n", GetLastError());
+        printe("ERROR: FindFirstFileEx FAILED (%lu)\n", GetLastError());
         return false;
     }
 

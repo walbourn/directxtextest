@@ -6,7 +6,7 @@
 
 #include "directxtest.h"
 
-#include "directxtex.h"
+#include "DirectXTex.h"
 
 #include <wrl.h>
 
@@ -14,6 +14,12 @@
 
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
+
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wcovered-switch-default"
+#pragma clang diagnostic ignored "-Wswitch-enum"
+#pragma clang diagnostic ignored "-Wswitch"
+#endif
 
 namespace
 {

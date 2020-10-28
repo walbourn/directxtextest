@@ -14,9 +14,15 @@
 #include <d3d12.h>
 #include <dxgi1_4.h>
 
-#include "directxtex.h"
+#include "DirectXTex.h"
 
 #include "d3dx12.h"
+
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wcovered-switch-default"
+#pragma clang diagnostic ignored "-Wswitch-enum"
+#pragma clang diagnostic ignored "-Wswitch"
+#endif
 
 using namespace DirectX;
 using Microsoft::WRL::ComPtr;
@@ -497,9 +503,9 @@ HRESULT SetupRenderTest(ID3D12Device** pDev, ID3D12CommandQueue** pCommandQ, ID3
         };
 
         static const D3D12_BLEND_DESC s_blend = { FALSE, FALSE,
-                                                  { FALSE, FALSE, D3D12_BLEND_ONE, D3D12_BLEND_ZERO, D3D12_BLEND_OP_ADD,
-                                                                  D3D12_BLEND_ONE, D3D12_BLEND_ZERO, D3D12_BLEND_OP_ADD,
-                                                                  D3D12_LOGIC_OP_NOOP, D3D12_COLOR_WRITE_ENABLE_ALL } };
+                                                  { { FALSE, FALSE, D3D12_BLEND_ONE, D3D12_BLEND_ZERO, D3D12_BLEND_OP_ADD,
+                                                      D3D12_BLEND_ONE, D3D12_BLEND_ZERO, D3D12_BLEND_OP_ADD,
+                                                      D3D12_LOGIC_OP_NOOP, D3D12_COLOR_WRITE_ENABLE_ALL } } };
 
         static const D3D12_RASTERIZER_DESC s_raster = { D3D12_FILL_MODE_SOLID, D3D12_CULL_MODE_NONE,
                                                          FALSE,

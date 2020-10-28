@@ -6,13 +6,19 @@
 
 #include "directxtest.h"
 
-#include "directxtex.h"
+#include "DirectXTex.h"
 
 #include "scoped.h"
 
 using namespace DirectX;
 
 #define ALTMD5(n) (n << 4)
+
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wcovered-switch-default"
+#pragma clang diagnostic ignored "-Wswitch-enum"
+#pragma clang diagnostic ignored "-Wswitch"
+#endif
 
 namespace
 {
@@ -1711,7 +1717,7 @@ bool Test06()
         FIND_FIRST_EX_LARGE_FETCH)));
     if (!hFile)
     {
-        printe("ERROR: FindFirstFileEx FAILED (%u)\n", GetLastError());
+        printe("ERROR: FindFirstFileEx FAILED (%lu)\n", GetLastError());
         return false;
     }
 

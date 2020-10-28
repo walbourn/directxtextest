@@ -26,8 +26,8 @@ public:
     Game() noexcept(false);
     ~Game();
 
-    Game(Game&&) = default;
-    Game& operator= (Game&&) = default;
+    Game(Game&&) = delete;
+    Game& operator= (Game&&) = delete;
 
     Game(Game const&) = delete;
     Game& operator= (Game const&) = delete;

@@ -6,7 +6,7 @@
 
 #include "directxtest.h"
 
-#include "directxtex.h"
+#include "DirectXTex.h"
 
 using namespace DirectX;
 
