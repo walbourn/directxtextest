@@ -70,6 +70,9 @@ inline void DebugPrint(_In_z_ _Printf_format_string_ const char* format, ...) no
 #elif (WINAPI_FAMILY == WINAPI_FAMILY_APP)
 #define MEDIA_PATH L"Assets\\"
 #define TEMP_PATH L"%TEMP%\\"
+#elif defined(_GAMING_XBOX)
+#define MEDIA_PATH L"Assets\\"
+#define TEMP_PATH L"S:\\dxtmp"
 #else
 #define MEDIA_PATH L"Assets\\"
 #define TEMP_PATH L"T:\\"
