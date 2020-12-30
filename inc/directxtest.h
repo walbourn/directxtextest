@@ -24,8 +24,9 @@
 #include <Windows.h>
 #endif
 
-#include <stdlib.h>
-#include <stdio.h>
+#include <algorithm>
+#include <cstdlib>
+#include <cstdio>
 
 #define _XM_NO_XMVECTOR_OVERLOADS_
 #include <DirectXMath.h>
