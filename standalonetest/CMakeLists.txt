@@ -24,7 +24,8 @@ if(MSVC)
     string(REPLACE "/W3 " "/Wall " CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
 endif()
 
-add_executable(${PROJECT_NAME} main.cpp test11.cpp test12.cpp 
+add_executable(${PROJECT_NAME} main.cpp
+test9.cpp test11.cpp test12.cpp
 ../../DDSTextureLoader/DDSTextureLoader9.h
 ../../DDSTextureLoader/DDSTextureLoader9.cpp
 ../../DDSTextureLoader/DDSTextureLoader11.h

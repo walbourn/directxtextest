@@ -3,15 +3,11 @@
 
 // This test ensures that all public headers fully include all their dependancies, as well compile cleanly at maximum warning level
 
-extern void test9();
-extern void test11();
-extern void test12();
+#include "DDSTextureLoader9.h"
+#include "ScreenGrab9.h"
+#include "WICTextureLoader9.h"
 
-int main()
+void test9()
 {
-    test9();
-    test11();
-    test12();
-
-    return 0;
+    return;
 }
