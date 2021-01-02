@@ -48,7 +48,7 @@ bool TEXTest::Test11()
     size_t ncount = 0;
     size_t npass = 0;
 
-    for (size_t index = 0; index < _countof(g_TestMedia); ++index)
+    for (size_t index = 0; index < std::size(g_TestMedia); ++index)
     {
         wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
@@ -102,7 +102,7 @@ bool TEXTest::Test11()
 
             static const DXGI_FORMAT s_formats[] = { DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_R16G16B16A16_FLOAT };
 
-            for (size_t f = 0; f < _countof(s_formats); ++f)
+            for (size_t f = 0; f < std::size(s_formats); ++f)
             {
                 DXGI_FORMAT fmt = s_formats[f];
 

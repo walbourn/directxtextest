@@ -21,7 +21,7 @@ HRESULT CreateDevice( ID3D11Device** pDev, ID3D11DeviceContext** pContext )
         D3D_DRIVER_TYPE_HARDWARE,
         D3D_DRIVER_TYPE_WARP,
     };
-    const UINT numDriverTypes = ARRAYSIZE( driverTypes );
+    constexpr UINT numDriverTypes = static_cast<UINT>(std::size(driverTypes));
 
     D3D_FEATURE_LEVEL featureLevels[] =
     {
@@ -29,7 +29,7 @@ HRESULT CreateDevice( ID3D11Device** pDev, ID3D11DeviceContext** pContext )
         D3D_FEATURE_LEVEL_10_1,
         D3D_FEATURE_LEVEL_10_0,
     };
-    const UINT numFeatureLevels = ARRAYSIZE( featureLevels );
+    constexpr UINT numFeatureLevels = static_cast<UINT>(std::size(featureLevels));
 
     HRESULT hr = E_FAIL;
 

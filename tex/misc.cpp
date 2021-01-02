@@ -522,7 +522,7 @@ bool TEXTest::Test14()
     size_t ncount = 0;
     size_t npass = 0;
 
-    for( size_t index=0; index < _countof(s_TestMedia); ++index )
+    for( size_t index=0; index < std::size(s_TestMedia); ++index )
     {
         wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(s_TestMedia[index].fname, szPath, MAX_PATH);
@@ -634,7 +634,7 @@ bool TEXTest::Test16()
     size_t ncount = 0;
     size_t npass = 0;
 
-    for (size_t index = 0; index < _countof(s_TestMedia); ++index)
+    for (size_t index = 0; index < std::size(s_TestMedia); ++index)
     {
         wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(s_TestMedia[index].fname, szPath, MAX_PATH);
@@ -862,7 +862,7 @@ bool TEXTest::Test17()
     size_t ncount = 0;
     size_t npass = 0;
 
-    for (size_t index = 0; index < _countof(s_TestMedia); ++index)
+    for (size_t index = 0; index < std::size(s_TestMedia); ++index)
     {
         wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(s_TestMedia[index].fname, szPath, MAX_PATH);

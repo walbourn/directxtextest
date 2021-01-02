@@ -67,7 +67,7 @@ void DeviceResources::CreateDeviceResources()
             D3D11_MESSAGE_ID_SETPRIVATEDATA_CHANGINGPARAMS,
         };
         D3D11_INFO_QUEUE_FILTER filter = {};
-        filter.DenyList.NumIDs = _countof(hide);
+        filter.DenyList.NumIDs = std::size(hide);
         filter.DenyList.pIDList = hide;
         d3dInfoQueue->AddStorageFilterEntries(&filter);
     }
@@ -111,7 +111,7 @@ void DeviceResources::CreateWindowSizeDependentResources()
 
     // Clear the previous window size specific context.
     ID3D11RenderTargetView* nullViews[] = {nullptr};
-    m_d3dContext->OMSetRenderTargets(_countof(nullViews), nullViews, nullptr);
+    m_d3dContext->OMSetRenderTargets(std::size(nullViews), nullViews, nullptr);
     m_d3dRenderTargetView.Reset();
     m_d3dDepthStencilView.Reset();
     m_renderTarget.Reset();

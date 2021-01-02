@@ -964,7 +964,7 @@ bool TEXTest::Test02()
                 D3D11_MESSAGE_ID_CREATETEXTURE2D_OUTOFMEMORY_RETURN
             };
             D3D11_INFO_QUEUE_FILTER filter = {};
-            filter.DenyList.NumIDs = _countof(hide);
+            filter.DenyList.NumIDs = std::size(hide);
             filter.DenyList.pIDList = hide;
             infoQ->AddStorageFilterEntries( &filter );
         }
@@ -1015,9 +1015,9 @@ bool TEXTest::Test02()
 
         static const UINT vals[] = { 1, 2, 3, 4, 5, 6, 7, 8, 12, 16, 32, 64, 100, 128, 131, 132, 200, 256, 768, 1024, 2048, 4096, 8192, 16384 };
 
-        for(UINT i = 0; i < _countof(vals); ++i )
+        for(UINT i = 0; i < std::size(vals); ++i )
         {
-            for(UINT j = 0; j < _countof(vals); ++j )
+            for(UINT j = 0; j < std::size(vals); ++j )
             {
                 if ( IsCompressed( DXGI_FORMAT(f) )
                      && ( ( vals[i] % 4 ) != 0 || ( vals[j] % 4 ) != 0 ) )
@@ -1183,7 +1183,7 @@ bool TEXTest::Test12()
         DXGI_FORMAT_BC1_UNORM, DXGI_FORMAT_BC2_UNORM, DXGI_FORMAT_BC3_UNORM, DXGI_FORMAT_BC7_UNORM, 
     };
 
-    for( size_t i = 0; i < _countof(hasSRGB); ++i )
+    for( size_t i = 0; i < std::size(hasSRGB); ++i )
     {
         DXGI_FORMAT f = MakeSRGB( hasSRGB[i] );
         
@@ -1197,13 +1197,13 @@ bool TEXTest::Test12()
     for (UINT f = DXGI_START; f <= DXGI_END; ++f )
     {
         size_t i = 0;
-        for( ; i < _countof(hasSRGB); ++i )
+        for( ; i < std::size(hasSRGB); ++i )
         {
             if ( hasSRGB[i] == static_cast<DXGI_FORMAT>(f) )
                 break;
         }
 
-        if ( i < _countof(hasSRGB) )
+        if ( i < std::size(hasSRGB) )
             continue;
 
         if ( MakeSRGB( static_cast<DXGI_FORMAT>(f) ) != static_cast<DXGI_FORMAT>(f) )
@@ -1237,7 +1237,7 @@ bool TEXTest::Test12()
         XBOX_DXGI_FORMAT_R4G4_UNORM,
     };
 
-    for( size_t i = 0; i < _countof(hasTypeless); ++i )
+    for( size_t i = 0; i < std::size(hasTypeless); ++i )
     {
         DXGI_FORMAT f = MakeTypeless( hasTypeless[i] );
         
@@ -1251,13 +1251,13 @@ bool TEXTest::Test12()
     for (UINT f = DXGI_START; f <= DXGI_END; ++f )
     {
         size_t i = 0;
-        for( ; i < _countof(hasTypeless); ++i )
+        for( ; i < std::size(hasTypeless); ++i )
         {
             if ( hasTypeless[i] == static_cast<DXGI_FORMAT>(f) )
                 break;
         }
 
-        if ( i < _countof(hasTypeless) )
+        if ( i < std::size(hasTypeless) )
             continue;
 
         if ( MakeTypeless( static_cast<DXGI_FORMAT>(f) ) != static_cast<DXGI_FORMAT>(f) )
@@ -1278,7 +1278,7 @@ bool TEXTest::Test12()
         DXGI_FORMAT_B8G8R8A8_TYPELESS, DXGI_FORMAT_B8G8R8X8_TYPELESS, DXGI_FORMAT_BC6H_TYPELESS, DXGI_FORMAT_BC7_TYPELESS
     };
 
-    for( UINT t = 0; t < _countof(typeless); ++t )
+    for( UINT t = 0; t < std::size(typeless); ++t )
     {
         DXGI_FORMAT fu = MakeTypelessUNORM( typeless[t] );
         if ( IsTypeless(fu) )

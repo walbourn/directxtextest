@@ -337,7 +337,7 @@ bool Test01()
     size_t ncount = 0;
     size_t npass = 0;
 
-    for( size_t index=0; index < _countof(g_BCMedia); ++index )
+    for( size_t index=0; index < std::size(g_BCMedia); ++index )
     {
         wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_BCMedia[index].fname, szPath, MAX_PATH);
@@ -535,7 +535,7 @@ bool Test02()
     size_t ncount = 0;
     size_t npass = 0;
 
-    for( size_t index=0; index < _countof(g_CompressMedia); ++index )
+    for( size_t index=0; index < std::size(g_CompressMedia); ++index )
     {
         wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_CompressMedia[index].fname, szPath, MAX_PATH);
@@ -597,7 +597,7 @@ bool Test02()
 
             print(".");
 
-            for( UINT cindex = 0; cindex < _countof(s_BC); ++cindex )
+            for( UINT cindex = 0; cindex < std::size(s_BC); ++cindex )
             {
                 DXGI_FORMAT cformat = s_BC[cindex];
 
@@ -1063,7 +1063,7 @@ bool Test02()
         }
     }
 
-    print("\n%zu images tested, %zu images passed (%zu source images) ", ncount, npass, _countof(g_CompressMedia) );
+    print("\n%zu images tested, %zu images passed (%zu source images) ", ncount, npass, std::size(g_CompressMedia) );
 
     return success;
  }
@@ -1090,7 +1090,7 @@ bool Test03()
     size_t ncount = 0;
     size_t npass = 0;
 
-    for( size_t index=0; index < _countof(g_CompressMedia); ++index )
+    for( size_t index=0; index < std::size(g_CompressMedia); ++index )
     {
         wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_CompressMedia[index].fname, szPath, MAX_PATH);
@@ -1152,7 +1152,7 @@ bool Test03()
 
             print(".");
 
-            for( UINT cindex = 0; cindex < _countof(s_BC); ++cindex )
+            for( UINT cindex = 0; cindex < std::size(s_BC); ++cindex )
             {
                 DXGI_FORMAT cformat = s_BC[cindex];
 
@@ -1464,7 +1464,7 @@ bool Test03()
         }
     }
 
-    print("\n%zu images tested, %zu images passed (%zu source images) ", ncount, npass, _countof(g_CompressMedia) );
+    print("\n%zu images tested, %zu images passed (%zu source images) ", ncount, npass, std::size(g_CompressMedia) );
 
     return success;
 }

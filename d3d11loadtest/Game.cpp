@@ -234,7 +234,7 @@ void Game::CreateDeviceDependentResources()
     };
 
     DX::ThrowIfFailed(
-        device->CreateInputLayout(s_inputElementDesc, _countof(s_inputElementDesc),
+        device->CreateInputLayout(s_inputElementDesc, static_cast<UINT>(std::size(s_inputElementDesc)),
             vertexShaderBlob.data(), vertexShaderBlob.size(),
             m_spInputLayout.ReleaseAndGetAddressOf()));
 

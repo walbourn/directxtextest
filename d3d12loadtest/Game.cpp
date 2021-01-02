@@ -313,7 +313,7 @@ void Game::CreateDeviceDependentResources()
 
     // Describe and create the graphics pipeline state object (PSO).
     D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
-    psoDesc.InputLayout = { s_inputElementDesc, _countof(s_inputElementDesc) };
+    psoDesc.InputLayout = { s_inputElementDesc, static_cast<UINT>(std::size(s_inputElementDesc)) };
     psoDesc.pRootSignature = m_rootSignature.Get();
     psoDesc.VS = CD3DX12_SHADER_BYTECODE(vertexShaderBlob.data(), vertexShaderBlob.size());
     psoDesc.PS = CD3DX12_SHADER_BYTECODE(pixelShaderBlob.data(), pixelShaderBlob.size());

@@ -241,7 +241,7 @@ HRESULT CreateDevice( ID3D12Device** pDev )
             D3D12_MESSAGE_ID_UNMAP_INVALID_NULLRANGE
         };
         D3D12_INFO_QUEUE_FILTER filter = {};
-        filter.DenyList.NumIDs = _countof(hide);
+        filter.DenyList.NumIDs = static_cast<UINT>(std::size(hide));
         filter.DenyList.pIDList = hide;
         d3dInfoQueue->AddStorageFilterEntries(&filter);
     }
@@ -480,7 +480,7 @@ HRESULT SetupRenderTest(ID3D12Device** pDev, ID3D12CommandQueue** pCommandQ, ID3
             rootParameters[RootParameterIndex::CBEveryFrame].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);
 
             CD3DX12_ROOT_SIGNATURE_DESC rsigDesc;
-            rsigDesc.Init(_countof(rootParameters), rootParameters, 1, &sampler, rootSignatureFlags);
+            rsigDesc.Init(static_cast<UINT>(std::size(rootParameters)), rootParameters, 1, &sampler, rootSignatureFlags);
 
             ComPtr<ID3DBlob> pSignature;
             ComPtr<ID3DBlob> pError;
@@ -518,7 +518,7 @@ HRESULT SetupRenderTest(ID3D12Device** pDev, ID3D12CommandQueue** pCommandQ, ID3
 
         D3D12_GRAPHICS_PIPELINE_STATE_DESC desc = {};
         desc.pRootSignature = g_rootSig;
-        desc.InputLayout.NumElements = _countof(s_layout);
+        desc.InputLayout.NumElements = static_cast<UINT>(std::size(s_layout));
         desc.InputLayout.pInputElementDescs = s_layout;
         desc.BlendState = s_blend;
         desc.DepthStencilState = s_depth;
@@ -534,31 +534,31 @@ HRESULT SetupRenderTest(ID3D12Device** pDev, ID3D12CommandQueue** pCommandQ, ID3
         desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 
         desc.VS.pShaderBytecode = g_VS2D;
-        desc.VS.BytecodeLength = _countof(g_VS2D);
+        desc.VS.BytecodeLength = static_cast<UINT>(std::size(g_VS2D));
         desc.PS.pShaderBytecode = g_PS1D;
-        desc.PS.BytecodeLength = _countof(g_PS1D);
+        desc.PS.BytecodeLength = static_cast<UINT>(std::size(g_PS1D));
         hr = g_pd3dDevice->CreateGraphicsPipelineState(&desc, IID_PPV_ARGS(&g_p1DPSO));
         if (FAILED(hr))
             return hr;
 
         desc.PS.pShaderBytecode = g_PS2D;
-        desc.PS.BytecodeLength = _countof(g_PS2D);
+        desc.PS.BytecodeLength = static_cast<UINT>(std::size(g_PS2D));
         hr = g_pd3dDevice->CreateGraphicsPipelineState(&desc, IID_PPV_ARGS(&g_p2DPSO));
         if (FAILED(hr))
             return hr;
 
         desc.VS.pShaderBytecode = g_VSCube;
-        desc.VS.BytecodeLength = _countof(g_VSCube);
+        desc.VS.BytecodeLength = static_cast<UINT>(std::size(g_VSCube));
         desc.PS.pShaderBytecode = g_PSCube;
-        desc.PS.BytecodeLength = _countof(g_PSCube);
+        desc.PS.BytecodeLength = static_cast<UINT>(std::size(g_PSCube));
         hr = g_pd3dDevice->CreateGraphicsPipelineState(&desc, IID_PPV_ARGS(&g_pCubePSO));
         if (FAILED(hr))
             return hr;
 
         desc.VS.pShaderBytecode = g_VS3D;
-        desc.VS.BytecodeLength = _countof(g_VS3D);
+        desc.VS.BytecodeLength = static_cast<UINT>(std::size(g_VS3D));
         desc.PS.pShaderBytecode = g_PS3D;
-        desc.PS.BytecodeLength = _countof(g_PS3D);
+        desc.PS.BytecodeLength = static_cast<UINT>(std::size(g_PS3D));
         hr = g_pd3dDevice->CreateGraphicsPipelineState(&desc, IID_PPV_ARGS(&g_p3DPSO));
         if (FAILED(hr))
             return hr;
@@ -847,7 +847,7 @@ namespace
 
         ThrowIfFailed(g_pd3dCommandList->Close());
         ID3D12CommandList* ppCommandLists[] = { g_pd3dCommandList };
-        g_pd3dCommandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
+        g_pd3dCommandQueue->ExecuteCommandLists(static_cast<UINT>(std::size(ppCommandLists)), ppCommandLists);
 
         HRESULT hr = g_pSwapChain->Present(1, 0);
         if (hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
@@ -893,7 +893,7 @@ void UploadTest()
     // Wait for resource upload
     ThrowIfFailed(g_pd3dCommandList->Close());
     ID3D12CommandList* ppCommandLists[] = { g_pd3dCommandList };
-    g_pd3dCommandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
+    g_pd3dCommandQueue->ExecuteCommandLists(static_cast<UINT>(std::size(ppCommandLists)), ppCommandLists);
 
     WaitForGpu();
 
@@ -906,7 +906,7 @@ void RenderTest(const TexMetadata& metadata, ID3D12Resource* pResource)
     // Wait for resource upload
     ThrowIfFailed(g_pd3dCommandList->Close());
     ID3D12CommandList* ppCommandLists[] = { g_pd3dCommandList };
-    g_pd3dCommandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
+    g_pd3dCommandQueue->ExecuteCommandLists(static_cast<UINT>(std::size(ppCommandLists)), ppCommandLists);
 
     {
         D3D12_RESOURCE_DESC desc = pResource->GetDesc();

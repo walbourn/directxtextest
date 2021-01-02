@@ -843,7 +843,7 @@ bool Test01()
     size_t ncount = 0;
     size_t npass = 0;
 
-    for( size_t index=0; index < _countof(g_TestMedia); ++index )
+    for( size_t index=0; index < std::size(g_TestMedia); ++index )
     {
         wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
@@ -957,7 +957,7 @@ bool Test02()
     size_t ncount = 0;
     size_t npass = 0;
 
-    for( size_t index=0; index < _countof(g_TestMedia); ++index )
+    for( size_t index=0; index < std::size(g_TestMedia); ++index )
     {
         wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
@@ -1232,7 +1232,7 @@ bool Test03()
     size_t ncount = 0;
     size_t npass = 0;
 
-    for( size_t index=0; index < _countof(g_TestMedia); ++index )
+    for( size_t index=0; index < std::size(g_TestMedia); ++index )
     {
         wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
@@ -1497,7 +1497,7 @@ bool Test04()
     size_t ncount = 0;
     size_t npass = 0;
 
-    for( size_t index=0; index < _countof(g_SaveMedia); ++index )
+    for( size_t index=0; index < std::size(g_SaveMedia); ++index )
     {
         wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_SaveMedia[index].fname, szPath, MAX_PATH);
@@ -1854,7 +1854,7 @@ bool Test05()
     size_t ncount = 0;
     size_t npass = 0;
     
-    for( size_t index=0; index < _countof(g_SaveMedia); ++index )
+    for( size_t index=0; index < std::size(g_SaveMedia); ++index )
     {
         wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_SaveMedia[index].fname, szPath, MAX_PATH);

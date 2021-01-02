@@ -584,7 +584,7 @@ bool WICTest::Test01()
     bool iswic2;
     (void)GetWICFactory(iswic2);
 
-    for( size_t index=0; index < _countof(g_TestMedia); ++index )
+    for( size_t index=0; index < std::size(g_TestMedia); ++index )
     {
         if ( (g_TestMedia[index].options & FLAGS_WIC2) && !iswic2 )
             continue;
@@ -784,7 +784,7 @@ bool WICTest::Test02()
     bool iswic2;
     (void)GetWICFactory(iswic2);
 
-    for( size_t index=0; index < _countof(g_TestMedia); ++index )
+    for( size_t index=0; index < std::size(g_TestMedia); ++index )
     {
         if ( (g_TestMedia[index].options & FLAGS_WIC2) && !iswic2 )
             continue;
@@ -974,7 +974,7 @@ bool WICTest::Test03()
     bool iswic2;
     (void)GetWICFactory(iswic2);
 
-    for( size_t index=0; index < _countof(g_TestMedia); ++index )
+    for( size_t index=0; index < std::size(g_TestMedia); ++index )
     {
         if ( (g_TestMedia[index].options & FLAGS_WIC2) && !iswic2 )
             continue;
@@ -1085,7 +1085,7 @@ bool WICTest::Test04()
     bool iswic2;
     (void)GetWICFactory(iswic2);
 
-    for( size_t index=0; index < _countof(g_TestMedia); ++index )
+    for( size_t index=0; index < std::size(g_TestMedia); ++index )
     {
         if ( (g_TestMedia[index].options & FLAGS_WIC2) && !iswic2 )
             continue;
@@ -1183,7 +1183,7 @@ bool WICTest::Test05()
     size_t ncount = 0;
     size_t npass = 0;
 
-    for( size_t index=0; index < _countof(g_SaveMedia); ++index )
+    for( size_t index=0; index < std::size(g_SaveMedia); ++index )
     {
         wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_SaveMedia[index].source, szPath, MAX_PATH);
@@ -1502,7 +1502,7 @@ bool WICTest::Test06()
     size_t ncount = 0;
     size_t npass = 0;
 
-    for( size_t index=0; index < _countof(g_SaveMedia); ++index )
+    for( size_t index=0; index < std::size(g_SaveMedia); ++index )
     {
         wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_SaveMedia[index].source, szPath, MAX_PATH);
@@ -2012,7 +2012,7 @@ bool WICTest::Test07()
             {
                 bool pass = true;
 
-                for (int j = 0; j < _countof(s_encoders); j++)
+                for (size_t j = 0; j < std::size(s_encoders); ++j)
                 {
                     Blob blob;
                     hr = SaveToWICMemory(image.GetImages(), image.GetImageCount(), WIC_FLAGS_NONE, s_encoders[j], blob);
@@ -2020,7 +2020,7 @@ bool WICTest::Test07()
                     {
                         success = false;
                         pass = false;
-                        printe("Failed writing with encoder #%d (HRESULT %08X):\n%ls\n", j, static_cast<unsigned int>(hr), szPath);
+                        printe("Failed writing with encoder #%zu (HRESULT %08X):\n%ls\n", j, static_cast<unsigned int>(hr), szPath);
                     }
                 }
 

@@ -352,7 +352,7 @@ bool FilterTest::Test02()
     size_t ncount = 0;
     size_t npass = 0;
 
-    for( size_t index=0; index < _countof(g_MipMapMedia); ++index )
+    for( size_t index=0; index < std::size(g_MipMapMedia); ++index )
     {
         ++ncount;
 
@@ -1593,7 +1593,7 @@ bool FilterTest::Test03()
     size_t ncount = 0;
     size_t npass = 0;
 
-    for( size_t index=0; index < _countof(g_MipMapMedia3D); ++index )
+    for( size_t index=0; index < std::size(g_MipMapMedia3D); ++index )
     {
         wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_MipMapMedia3D[index].fname, szPath, MAX_PATH);

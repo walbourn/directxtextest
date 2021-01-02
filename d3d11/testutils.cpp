@@ -148,10 +148,10 @@ HRESULT CreateDevice(ID3D11Device** pDev, ID3D11DeviceContext** pContext)
     createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
-    for (UINT driverTypeIndex = 0; driverTypeIndex < _countof(g_driverTypes); driverTypeIndex++)
+    for (UINT driverTypeIndex = 0; driverTypeIndex < std::size(g_driverTypes); driverTypeIndex++)
     {
         hr = D3D11CreateDevice(nullptr, g_driverTypes[driverTypeIndex], nullptr, createDeviceFlags,
-            g_featureLevels, _countof(g_featureLevels),
+            g_featureLevels, static_cast<UINT>(std::size(g_featureLevels)),
             D3D11_SDK_VERSION, pDev, nullptr, pContext);
         if (SUCCEEDED(hr))
             break;
@@ -203,10 +203,10 @@ HRESULT SetupRenderTest(ID3D11Device** pDev, ID3D11DeviceContext** pContext)
 
     ComPtr<ID3D11Device> device;
     ComPtr<ID3D11DeviceContext> context;
-    for (UINT driverTypeIndex = 0; driverTypeIndex < _countof(g_driverTypes); driverTypeIndex++)
+    for (UINT driverTypeIndex = 0; driverTypeIndex < std::size(g_driverTypes); driverTypeIndex++)
     {
         hr = D3D11CreateDevice(nullptr, g_driverTypes[driverTypeIndex], nullptr, createDeviceFlags,
-            g_featureLevels, _countof(g_featureLevels),
+            g_featureLevels, static_cast<UINT>(std::size(g_featureLevels)),
             D3D11_SDK_VERSION, device.GetAddressOf(), nullptr, context.GetAddressOf());
         if (SUCCEEDED(hr))
             break;
@@ -334,7 +334,7 @@ HRESULT SetupRenderTest(ID3D11Device** pDev, ID3D11DeviceContext** pContext)
     };
 
     // Create the input layout (assumes all shaders share the same layout)
-    hr = g_pd3dDevice->CreateInputLayout(layout, _countof(layout), g_VS2D, sizeof(g_VS2D), &g_pVertexLayout);
+    hr = g_pd3dDevice->CreateInputLayout(layout, static_cast<UINT>(std::size(layout)), g_VS2D, sizeof(g_VS2D), &g_pVertexLayout);
     if (FAILED(hr))
         return hr;
 

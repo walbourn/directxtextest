@@ -112,20 +112,20 @@ void Game::Render()
     };
 
     m_d3dDevice->DrawIndexedPrimitiveUP(D3DPT_TRIANGLELIST,
-        0, _countof(s_vertexData), 2,
+        0, static_cast<UINT>(std::size(s_vertexData)), 2,
         s_indexData, D3DFMT_INDEX16, s_vertexData, sizeof(Vertex));
 
     // Draw quad 1.
     m_d3dDevice->SetTexture(0, m_dx5logo.Get());
     m_d3dDevice->DrawIndexedPrimitiveUP(D3DPT_TRIANGLELIST,
-        0, _countof(s_vertexData), 2,
+        0, static_cast<UINT>(std::size(s_vertexData)), 2,
         s_indexData, D3DFMT_INDEX16, s_vertexData, sizeof(Vertex));
 
     // Draw quad 2.
     m_d3dDevice->SetTexture(0, m_cup.Get());
 
     m_d3dDevice->DrawIndexedPrimitiveUP(D3DPT_TRIANGLELIST,
-        4, _countof(s_vertexData), 2,
+        4, static_cast<UINT>(std::size(s_vertexData)), 2,
         s_indexData, D3DFMT_INDEX16, s_vertexData, sizeof(Vertex));
 
     m_d3dDevice->EndScene();

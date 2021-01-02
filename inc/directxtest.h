@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <cstdio>
+#include <iterator>
 
 #define _XM_NO_XMVECTOR_OVERLOADS_
 #include <DirectXMath.h>

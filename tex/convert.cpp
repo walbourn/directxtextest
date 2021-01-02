@@ -725,7 +725,7 @@ bool TEXTest::Test05()
     __declspec(align(16)) XMVECTOR temp;
     uint8_t buff[16];
 
-    for( size_t index=0; index < _countof(g_TestPixels); ++index )
+    for( size_t index=0; index < std::size(g_TestPixels); ++index )
     {
         auto& p = g_TestPixels[index];
 
@@ -769,7 +769,7 @@ bool TEXTest::Test05()
         }
     }
 
-    for( size_t index=0; index < _countof(g_TestPixels); ++index )
+    for( size_t index=0; index < std::size(g_TestPixels); ++index )
     {
         auto& p = g_TestPixels[index];
 
@@ -903,7 +903,7 @@ static const TestPixels s_TestPartialTypeless[] =
     { DXGI_FORMAT_X24_TYPELESS_G8_UINT, XMFLOAT4( 0.0f, 1.0f, 0.0f, 1.0f), 4, { 0x00, 0x00, 0x00, 0x01 } },
     { DXGI_FORMAT_X24_TYPELESS_G8_UINT, XMFLOAT4( 0.0f, 255.0f, 0.0f, 1.0f), 4, { 0x00, 0x00, 0x00, 0xFF } },
 };
-        for( size_t index=0; index < _countof(s_TestPartialTypeless); ++index )
+        for( size_t index=0; index < std::size(s_TestPartialTypeless); ++index )
         {
             auto& p = s_TestPartialTypeless[index];
 
@@ -946,7 +946,7 @@ bool TEXTest::Test05B()
     size_t ncount = 0;
     size_t npass = 0;
 
-    for( size_t index=0; index < _countof(g_TestMedia); ++index )
+    for( size_t index=0; index < std::size(g_TestMedia); ++index )
     {
         wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
@@ -1054,7 +1054,7 @@ bool TEXTest::Test05C()
     bool success = true;
     __declspec(align(16)) XMVECTOR temp;
 
-    for( size_t index=0; index < _countof(g_TestPixels); ++index )
+    for( size_t index=0; index < std::size(g_TestPixels); ++index )
     {
         auto& p = g_TestPixels[index];
 
@@ -2609,7 +2609,7 @@ bool TEXTest::Test05D()
         { XMFLOAT4(0.25f, 0.5f, 0.75f, 1.0f),                   DXGI_FORMAT_Y416, DXGI_FORMAT_Y410, XMFLOAT4(0.25f, 0.5f, 0.75f, 1.0f) },
     };
 
-    for( size_t index=0; index < _countof(s_TestConvert); ++index )
+    for( size_t index=0; index < std::size(s_TestConvert); ++index )
     {
         auto& p = s_TestConvert[index];
 
@@ -2647,7 +2647,7 @@ bool TEXTest::Test05D()
         }
     }
 
-    print("%zu combos tested, %zu combos passed ", _countof(s_TestConvert), npass );
+    print("%zu combos tested, %zu combos passed ", std::size(s_TestConvert), npass );
 
     return success;
 }
@@ -2662,7 +2662,7 @@ bool TEXTest::Test06()
     size_t ncount = 0;
     size_t npass = 0;
 
-    for( size_t index=0; index < _countof(g_TestMedia); ++index )
+    for( size_t index=0; index < std::size(g_TestMedia); ++index )
     {
         wchar_t szPath[MAX_PATH] = {};
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
@@ -2713,7 +2713,7 @@ bool TEXTest::Test06()
         {
             print(".");
 
-            for( UINT findex = 0; findex < _countof(g_TargetFormats); ++findex )
+            for( UINT findex = 0; findex < std::size(g_TargetFormats); ++findex )
             {
                 DXGI_FORMAT tformat = g_TargetFormats[findex].format;
                 if ( tformat == metadata.format )
@@ -3506,7 +3506,7 @@ bool TEXTest::Test06()
         }
     }
 
-    print("\n%zu images tested, %zu images passed (%zu images by %zu formats) ", ncount, npass, _countof(g_TestMedia), _countof(g_TargetFormats) );
+    print("\n%zu images tested, %zu images passed (%zu images by %zu formats) ", ncount, npass, std::size(g_TestMedia), std::size(g_TargetFormats) );
 
     return success;
 }
