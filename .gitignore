@@ -17,7 +17,7 @@
 *.ilk
 *.VC.db
 .vs
-Bin
+[Bb]in
 out
 /ipch
 /AppPackages
@@ -32,3 +32,8 @@ x64
 screenshot*.*
 toolscripts/texassemble/out
 toolscripts/texconv/out
+CMakeCache.txt
+CMakeFiles
+Makefile
+cmake
+cmake_install.cmake
