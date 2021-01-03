@@ -722,7 +722,7 @@ bool TEXTest::Test05()
 
     // Test Load/Store of pixels
     bool success = true;
-    __declspec(align(16)) XMVECTOR temp;
+    XM_ALIGNED_DATA(16) XMVECTOR temp;
     uint8_t buff[16];
 
     for( size_t index=0; index < std::size(g_TestPixels); ++index )
@@ -1052,7 +1052,7 @@ bool TEXTest::Test05C()
 {
     // Test SRGB conversions of pixels
     bool success = true;
-    __declspec(align(16)) XMVECTOR temp;
+    XM_ALIGNED_DATA(16) XMVECTOR temp;
 
     for( size_t index=0; index < std::size(g_TestPixels); ++index )
     {
@@ -1222,7 +1222,7 @@ bool TEXTest::Test05D()
 
     // Test pixel type conversions
     bool success = true;
-    __declspec(align(16)) XMVECTOR temp;
+    XM_ALIGNED_DATA(16) XMVECTOR temp;
     uint8_t buff[16];
 
     struct ConvertType
