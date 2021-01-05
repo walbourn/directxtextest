@@ -66,7 +66,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 if (WIN32)
     target_link_libraries(${PROJECT_NAME} PRIVATE dxguid.lib)
 else()
-set(THREADS_PREFER_PTHREAD_FLAG ON)
+    set(THREADS_PREFER_PTHREAD_FLAG ON)
     find_package(Threads REQUIRED)
     target_link_libraries(${PROJECT_NAME} PRIVATE Threads::Threads)
 
