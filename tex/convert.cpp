@@ -846,7 +846,7 @@ bool TEXTest::Test05()
         }
         else
         {
-            ScopedAlignedArrayXMVECTOR scanline( reinterpret_cast<XMVECTOR*>( _aligned_malloc( (sizeof(XMVECTOR)*8), 16 ) ) );
+            auto scanline = make_AlignedArrayXMVECTOR(8);
             if ( !scanline )
             {
                 success = false;
