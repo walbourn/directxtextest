@@ -27,6 +27,7 @@
 
 #include <Windows.h>
 
+#include <cwchar>
 #include <memory>
 #include <list>
 

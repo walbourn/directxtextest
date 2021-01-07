@@ -68,6 +68,10 @@
 
 #include <algorithm>
 #include <atomic>
+#include <cmath>
+#include <cstdint>
+#include <cstdio>
+#include <cwchar>
 #include <exception>
 #include <functional>
 #include <iterator>
@@ -76,7 +80,6 @@
 #include <thread>
 #include <vector>
 
-#include <stdio.h>
 #include <pix.h>
 
 #include <wincodec.h>

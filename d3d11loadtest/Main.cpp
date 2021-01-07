@@ -195,7 +195,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             if (!s_in_suspend && game)
                 game->OnSuspending();
             s_in_suspend = true;
-            return true;
+            return TRUE;
 
         case PBT_APMRESUMESUSPEND:
             if (!s_minimized)
@@ -204,7 +204,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                     game->OnResuming();
                 s_in_suspend = false;
             }
-            return true;
+            return TRUE;
         }
         break;
 
