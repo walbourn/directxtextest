@@ -28,8 +28,9 @@
 #include <Windows.h>
 
 #include <cwchar>
-#include <memory>
 #include <list>
+#include <memory>
+#include <new>
 
 #include <wrl\client.h>
 
