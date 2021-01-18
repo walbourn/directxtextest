@@ -122,7 +122,7 @@ HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DirectX::DDS_FLAGS 
         return hr;
 
     // Create file and write header
-    ScopedHandle hFile( safe_handle( CreateFile( szFile, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, 0, nullptr ) ) );
+    ScopedHandle hFile(safe_handle(CreateFile(szFile, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr)));
     if ( !hFile )
     {
         return HRESULT_FROM_WIN32( GetLastError() );
