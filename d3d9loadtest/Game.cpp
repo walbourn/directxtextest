@@ -86,6 +86,7 @@ void Game::Render()
 
     m_d3dDevice->SetFVF(D3DFVF_XYZ | D3DFVF_TEX1);
 
+    m_d3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
     m_d3dDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
     m_d3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
     m_d3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
@@ -111,6 +112,12 @@ void Game::Render()
         2,1,3,
     };
 
+    static const uint16_t s_indexData2[6] =
+    {
+        7,5,4,
+        6,5,7,
+    };
+
     m_d3dDevice->DrawIndexedPrimitiveUP(D3DPT_TRIANGLELIST,
         0, static_cast<UINT>(std::size(s_vertexData)), 2,
         s_indexData, D3DFMT_INDEX16, s_vertexData, sizeof(Vertex));
@@ -125,8 +132,8 @@ void Game::Render()
     m_d3dDevice->SetTexture(0, m_cup.Get());
 
     m_d3dDevice->DrawIndexedPrimitiveUP(D3DPT_TRIANGLELIST,
-        4, static_cast<UINT>(std::size(s_vertexData)), 2,
-        s_indexData, D3DFMT_INDEX16, s_vertexData, sizeof(Vertex));
+        0, static_cast<UINT>(std::size(s_vertexData)), 2,
+        s_indexData2, D3DFMT_INDEX16, s_vertexData, sizeof(Vertex));
 
     m_d3dDevice->EndScene();
 
@@ -237,17 +244,16 @@ void Game::CreateDevice()
 
     D3DPRESENT_PARAMETERS params = {};
     params.BackBufferCount = 1;
-    params.MultiSampleType = D3DMULTISAMPLE_NONE;
     params.hDeviceWindow = m_window;
     params.SwapEffect = D3DSWAPEFFECT_DISCARD;
     params.Windowed = TRUE;
-    params.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;
-    params.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
+
+    // Use of D3DCREATE_SOFTWARE_VERTEXPROCESSING or D3DCREATE_MIXED_VERTEXPROCESSING is strongly discouraged for Windows 10
 
     HRESULT hr = m_d3d->CreateDeviceEx(
         D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL,
         m_window,
-        D3DCREATE_SOFTWARE_VERTEXPROCESSING,
+        D3DCREATE_HARDWARE_VERTEXPROCESSING,
         &params, nullptr,
         m_d3dDevice.ReleaseAndGetAddressOf());
     DX::ThrowIfFailed(hr);
@@ -283,12 +289,9 @@ void Game::OnDeviceLost()
 {
     D3DPRESENT_PARAMETERS params = {};
     params.BackBufferCount = 1;
-    params.MultiSampleType = D3DMULTISAMPLE_NONE;
     params.hDeviceWindow = m_window;
     params.SwapEffect = D3DSWAPEFFECT_DISCARD;
     params.Windowed = TRUE;
-    params.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;
-    params.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
 
     if (SUCCEEDED(m_d3dDevice->Reset(&params)))
     {
