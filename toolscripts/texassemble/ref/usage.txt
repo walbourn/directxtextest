@@ -1,5 +1,5 @@
 Microsoft (R) DirectX Texture Assembler (DirectXTex version)
-Copyright (C) Microsoft Corp. All rights reserved.
+Copyright (C) Microsoft Corp.
 *** Debug build ***
 
 Usage: texassemble <command> <options> <files>

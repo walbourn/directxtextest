@@ -3,7 +3,8 @@
 //
 // Simple vertex shader for rendering a textured quad
 //
-// Copyright (C) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 //--------------------------------------------------------------------------------------
 
 struct Vertex
