@@ -54,20 +54,23 @@
     <ClCompile Include="MainGXDK.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="MicrosoftGame.Config" />
+    <CopyFileToFolders Include="Assets\Logo.scale-100.png">
+      <Filter>Assets</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Assets\SmallLogo.scale-100.png">
+      <Filter>Assets</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Assets\SplashScreen.scale-100.png">
+      <Filter>Assets</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Assets\StoreLogo.scale-100.png">
+      <Filter>Assets</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Assets\LargeLogo.png">
+      <Filter>Assets</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Assets\Logo.scale-200.png">
-      <Filter>Assets</Filter>
-    </Image>
-    <Image Include="Assets\SmallLogo.scale-200.png">
-      <Filter>Assets</Filter>
-    </Image>
-    <Image Include="Assets\SplashScreen.scale-200.png">
-      <Filter>Assets</Filter>
-    </Image>
-    <Image Include="Assets\StoreLogo.png">
-      <Filter>Assets</Filter>
-    </Image>
+    <MGCCompile Include="MicrosoftGame.Config" />
   </ItemGroup>
 </Project>

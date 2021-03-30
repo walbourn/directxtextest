@@ -322,11 +322,11 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Assets\Logo.scale-200.png" />
-    <Image Include="Assets\SmallLogo.scale-200.png" />
-    <Image Include="Assets\SplashScreen.scale-200.png" />
-    <Image Include="Assets\StoreLogo.png" />
-    <Image Include="Assets\WideLogo.scale-200.png" />
+    <Image Include="Assets\Logo.scale-100.png" />
+    <Image Include="Assets\SmallLogo.scale-100.png" />
+    <Image Include="Assets\SplashScreen.scale-100.png" />
+    <Image Include="Assets\StoreLogo.scale-100.png" />
+    <Image Include="Assets\WideLogo.scale-100.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(DirectXTexMedia)*" Exclude="$(DirectXTexMedia).git*;$(DirectXTexMedia)*.db">
