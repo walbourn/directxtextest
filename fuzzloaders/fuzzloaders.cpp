@@ -27,6 +27,7 @@
 
 #include <Windows.h>
 
+#include <cassert>
 #include <cwchar>
 #include <memory>
 #include <list>
@@ -183,6 +184,61 @@ namespace
                     break;
             }
         }
+    }
+
+    //-------------------------------------------------------------------------------------
+    HRESULT LoadBlobFromFile(_In_z_ const wchar_t* szFile, DirectX::Blob& blob)
+    {
+        if (szFile == nullptr)
+            return E_INVALIDARG;
+
+        ScopedHandle hFile(safe_handle(CreateFile(szFile, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING,
+            FILE_FLAG_SEQUENTIAL_SCAN, nullptr)));
+        if (!hFile)
+        {
+            return HRESULT_FROM_WIN32(GetLastError());
+        }
+
+        // Get the file size
+        LARGE_INTEGER fileSize = {};
+        if (!GetFileSizeEx(hFile.get(), &fileSize))
+        {
+            return HRESULT_FROM_WIN32(GetLastError());
+        }
+
+        // File is too big for 32-bit allocation, so reject read (4 GB should be plenty large enough for our test images)
+        if (fileSize.HighPart > 0)
+        {
+            return HRESULT_FROM_WIN32(ERROR_FILE_TOO_LARGE);
+        }
+
+        // Need at least 1 byte of data
+        if (!fileSize.LowPart)
+        {
+            return E_FAIL;
+        }
+
+        // Create blob memory
+        HRESULT hr = blob.Initialize(fileSize.LowPart);
+        if (FAILED(hr))
+            return hr;
+
+        // Load entire file into blob memory
+        DWORD bytesRead = 0;
+        if (!ReadFile(hFile.get(), blob.GetBufferPointer(), static_cast<DWORD>(blob.GetBufferSize()), &bytesRead, nullptr))
+        {
+            blob.Release();
+            return HRESULT_FROM_WIN32(GetLastError());
+        }
+
+        // Verify we got the whole blob loaded
+        if (bytesRead != blob.GetBufferSize())
+        {
+            blob.Release();
+            return E_FAIL;
+        }
+
+        return S_OK;
     }
 
     void PrintUsage()
@@ -367,7 +423,10 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
         DirectX::ScratchImage result;
         if (usedds)
         {
-            hr = DirectX::LoadFromDDSFile(pConv->szSrc, DirectX::DDS_FLAGS_ALLOW_LARGE_FILES, nullptr, result);
+            constexpr DirectX::DDS_FLAGS ddsFlags = DirectX::DDS_FLAGS_ALLOW_LARGE_FILES;
+            bool pass = false;
+
+            hr = DirectX::LoadFromDDSFile(pConv->szSrc, ddsFlags, nullptr, result);
             if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
             {
                 wprintf(L"ERROR: DDSTexture file not not found:\n%ls\n", pConv->szSrc);
@@ -377,19 +436,56 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
             {
 #ifdef _DEBUG
                 char buff[128] = {};
-                sprintf_s(buff, "DDSTexture failed with %08X\n", static_cast<unsigned int>(hr));
+                sprintf_s(buff, "DDSTextureFromFile failed with %08X\n", static_cast<unsigned int>(hr));
                 OutputDebugStringA(buff);
 #endif
                 wprintf(L"!");
             }
             else
             {
-                wprintf(SUCCEEDED(hr) ? L"*" : L".");
+                pass = true;
+            }
+
+            // Validate memory version
+            {
+                DirectX::Blob blob;
+                hr = LoadBlobFromFile(pConv->szSrc, blob);
+                if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
+                {
+                    wprintf(L"ERROR: DDSTexture file not not found:\n%ls\n", pConv->szSrc);
+                    return 1;
+                }
+                if (FAILED(hr) && hr != E_OUTOFMEMORY)
+                {
+#ifdef _DEBUG
+                    char buff[128] = {};
+                    sprintf_s(buff, "LoadBlobFromFile failed with %08X\n", static_cast<unsigned int>(hr));
+                    OutputDebugStringA(buff);
+#endif
+                    wprintf(L"!");
+                }
+                else
+                {
+                    hr = DirectX::LoadFromDDSMemory(blob.GetBufferPointer(), blob.GetBufferSize(), ddsFlags, nullptr, result);
+                    if (FAILED(hr) && hr != E_INVALIDARG && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != E_OUTOFMEMORY && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF) && (hr != E_FAIL || (hr == E_FAIL && isdds)))
+                    {
+#ifdef _DEBUG
+                        char buff[128] = {};
+                        sprintf_s(buff, "DDSTextureFromMemory failed with %08X\n", static_cast<unsigned int>(hr));
+                        OutputDebugStringA(buff);
+#endif
+                        wprintf(L"!");
+                    }
+                    else if (pass)
+                    {
+                        wprintf(SUCCEEDED(hr) ? L"*" : L".");
+                    }
+                }
             }
         }
         else if (usehdr)
         {
-            hr = DirectX::LoadFromHDRFile(pConv->szSrc, nullptr, result);
+            hr = DirectX::LoadFromHDRFile(pConv->szSrc, nullptr, result); // LoadFromHDRFile exercises LoadFromHDRMemory
             if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
             {
                 wprintf(L"ERROR: HDRTexture file not not found:\n%ls\n", pConv->szSrc);
@@ -457,7 +553,10 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
         {
             for (int j = 0; j < 2; ++j)
             {
-                hr = DirectX::LoadFromTGAFile(pConv->szSrc, !j ? DirectX::TGA_FLAGS_NONE : DirectX::TGA_FLAGS_BGR, nullptr, result);
+                DirectX::TGA_FLAGS tgaFlags = !j ? DirectX::TGA_FLAGS_NONE : DirectX::TGA_FLAGS_BGR;
+                bool pass = false;
+
+                hr = DirectX::LoadFromTGAFile(pConv->szSrc, tgaFlags, nullptr, result);
                 if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
                 {
                     wprintf(L"ERROR: TGATexture file not not found:\n%ls\n", pConv->szSrc);
@@ -467,14 +566,51 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
                 {
 #ifdef _DEBUG
                     char buff[128] = {};
-                    sprintf_s(buff, "TGATexture case %d failed with %08X\n", j, static_cast<unsigned int>(hr));
+                    sprintf_s(buff, "TGATextureFromFile case %d failed with %08X\n", j, static_cast<unsigned int>(hr));
                     OutputDebugStringA(buff);
 #endif
                     wprintf(L"!");
                 }
                 else
                 {
-                    wprintf(SUCCEEDED(hr) ? L"*" : L".");
+                    pass = true;
+                }
+
+                // Validate memory version
+                {
+                    DirectX::Blob blob;
+                    hr = LoadBlobFromFile(pConv->szSrc, blob);
+                    if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
+                    {
+                        wprintf(L"ERROR: TGATexture file not not found:\n%ls\n", pConv->szSrc);
+                        return 1;
+                    }
+                    if (FAILED(hr) && hr != E_OUTOFMEMORY)
+                    {
+#ifdef _DEBUG
+                        char buff[128] = {};
+                        sprintf_s(buff, "LoadBlobFromFile failed with %08X\n", static_cast<unsigned int>(hr));
+                        OutputDebugStringA(buff);
+#endif
+                        wprintf(L"!");
+                    }
+                    else
+                    {
+                        hr = DirectX::LoadFromTGAMemory(blob.GetBufferPointer(), blob.GetBufferSize(), tgaFlags, nullptr, result);
+                        if (FAILED(hr) && hr != E_INVALIDARG && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != E_OUTOFMEMORY && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF) && (hr != E_FAIL || (hr == E_FAIL && istga)))
+                        {
+#ifdef _DEBUG
+                            char buff[128] = {};
+                            sprintf_s(buff, "TGATextureFromMemory failed with %08X\n", static_cast<unsigned int>(hr));
+                            OutputDebugStringA(buff);
+#endif
+                            wprintf(L"!");
+                        }
+                        else if (pass)
+                        {
+                            wprintf(SUCCEEDED(hr) ? L"*" : L".");
+                        }
+                    }
                 }
             }
         }
