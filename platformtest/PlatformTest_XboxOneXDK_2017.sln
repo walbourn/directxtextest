@@ -7,6 +7,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PlatformTest_XboxOneXDK_201
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXTex_XboxOneXDK_2017", "..\..\DirectXTex\DirectXTex_XboxOneXDK_2017.vcxproj", "{879B5023-53B7-4108-AEAE-F019C2E9410D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A9BD324A-FFA6-47CC-A33E-0B53214E7D59}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\.editorconfig = ..\..\.editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Durango = Debug|Durango
