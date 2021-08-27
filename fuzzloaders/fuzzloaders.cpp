@@ -370,10 +370,10 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
         return 0;
     }
 
-    for (auto pConv = conversion.begin(); pConv != conversion.end(); ++pConv)
+    for (auto& pConv : conversion)
     {
         wchar_t ext[_MAX_EXT];
-        _wsplitpath_s(pConv->szSrc, nullptr, 0, nullptr, 0, nullptr, 0, ext, _MAX_EXT);
+        _wsplitpath_s(pConv.szSrc, nullptr, 0, nullptr, 0, nullptr, 0, ext, _MAX_EXT);
         bool isdds = (_wcsicmp(ext, L".dds") == 0);
         bool ishdr = (_wcsicmp(ext, L".hdr") == 0);
         bool ispfm = (_wcsicmp(ext, L".pfm") == 0);
@@ -416,7 +416,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
 
         // Load source image
 #ifdef _DEBUG
-        OutputDebugStringW(pConv->szSrc);
+        OutputDebugStringW(pConv.szSrc);
         OutputDebugStringA("\n");
 #endif
 
@@ -426,10 +426,10 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
             constexpr DirectX::DDS_FLAGS ddsFlags = DirectX::DDS_FLAGS_ALLOW_LARGE_FILES;
             bool pass = false;
 
-            hr = DirectX::LoadFromDDSFile(pConv->szSrc, ddsFlags, nullptr, result);
+            hr = DirectX::LoadFromDDSFile(pConv.szSrc, ddsFlags, nullptr, result);
             if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
             {
-                wprintf(L"ERROR: DDSTexture file not not found:\n%ls\n", pConv->szSrc);
+                wprintf(L"ERROR: DDSTexture file not not found:\n%ls\n", pConv.szSrc);
                 return 1;
             }
             else if (FAILED(hr) && hr != E_INVALIDARG && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != E_OUTOFMEMORY && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF) && (hr != E_FAIL || (hr == E_FAIL && isdds)))
@@ -449,10 +449,10 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
             // Validate memory version
             {
                 DirectX::Blob blob;
-                hr = LoadBlobFromFile(pConv->szSrc, blob);
+                hr = LoadBlobFromFile(pConv.szSrc, blob);
                 if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
                 {
-                    wprintf(L"ERROR: DDSTexture file not not found:\n%ls\n", pConv->szSrc);
+                    wprintf(L"ERROR: DDSTexture file not not found:\n%ls\n", pConv.szSrc);
                     return 1;
                 }
                 if (FAILED(hr) && hr != E_OUTOFMEMORY)
@@ -485,10 +485,10 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
         }
         else if (usehdr)
         {
-            hr = DirectX::LoadFromHDRFile(pConv->szSrc, nullptr, result); // LoadFromHDRFile exercises LoadFromHDRMemory
+            hr = DirectX::LoadFromHDRFile(pConv.szSrc, nullptr, result); // LoadFromHDRFile exercises LoadFromHDRMemory
             if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
             {
-                wprintf(L"ERROR: HDRTexture file not not found:\n%ls\n", pConv->szSrc);
+                wprintf(L"ERROR: HDRTexture file not not found:\n%ls\n", pConv.szSrc);
                 return 1;
             }
             else if (FAILED(hr) && hr != E_INVALIDARG && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != E_OUTOFMEMORY && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF) && (hr != E_FAIL || (hr == E_FAIL && ishdr)))
@@ -507,10 +507,10 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
         }
         else if (usepfm)
         {
-            hr = LoadFromPortablePixMapHDR(pConv->szSrc, nullptr, result);
+            hr = LoadFromPortablePixMapHDR(pConv.szSrc, nullptr, result);
             if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
             {
-                wprintf(L"ERROR: PFMTexture file not not found:\n%ls\n", pConv->szSrc);
+                wprintf(L"ERROR: PFMTexture file not not found:\n%ls\n", pConv.szSrc);
                 return 1;
             }
             else if (FAILED(hr) && hr != E_INVALIDARG && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != E_OUTOFMEMORY && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF) && (hr != E_FAIL || (hr == E_FAIL && ispfm)))
@@ -529,10 +529,10 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
         }
         else if (useppm)
         {
-            hr = LoadFromPortablePixMap(pConv->szSrc, nullptr, result);
+            hr = LoadFromPortablePixMap(pConv.szSrc, nullptr, result);
             if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
             {
-                wprintf(L"ERROR: PPMTexture file not not found:\n%ls\n", pConv->szSrc);
+                wprintf(L"ERROR: PPMTexture file not not found:\n%ls\n", pConv.szSrc);
                 return 1;
             }
             else if (FAILED(hr) && hr != E_INVALIDARG && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != E_OUTOFMEMORY && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF) && (hr != E_FAIL || (hr == E_FAIL && isppm)))
@@ -556,10 +556,10 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
                 DirectX::TGA_FLAGS tgaFlags = !j ? DirectX::TGA_FLAGS_NONE : DirectX::TGA_FLAGS_BGR;
                 bool pass = false;
 
-                hr = DirectX::LoadFromTGAFile(pConv->szSrc, tgaFlags, nullptr, result);
+                hr = DirectX::LoadFromTGAFile(pConv.szSrc, tgaFlags, nullptr, result);
                 if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
                 {
-                    wprintf(L"ERROR: TGATexture file not not found:\n%ls\n", pConv->szSrc);
+                    wprintf(L"ERROR: TGATexture file not not found:\n%ls\n", pConv.szSrc);
                     return 1;
                 }
                 else if (FAILED(hr) && hr != E_INVALIDARG && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != E_OUTOFMEMORY && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF) && (hr != E_FAIL || (hr == E_FAIL && istga)))
@@ -579,10 +579,10 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
                 // Validate memory version
                 {
                     DirectX::Blob blob;
-                    hr = LoadBlobFromFile(pConv->szSrc, blob);
+                    hr = LoadBlobFromFile(pConv.szSrc, blob);
                     if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
                     {
-                        wprintf(L"ERROR: TGATexture file not not found:\n%ls\n", pConv->szSrc);
+                        wprintf(L"ERROR: TGATexture file not not found:\n%ls\n", pConv.szSrc);
                         return 1;
                     }
                     if (FAILED(hr) && hr != E_OUTOFMEMORY)
@@ -616,10 +616,10 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
         }
         else
         {
-            hr = DirectX::LoadFromWICFile(pConv->szSrc, DirectX::WIC_FLAGS_NONE, nullptr, result);
+            hr = DirectX::LoadFromWICFile(pConv.szSrc, DirectX::WIC_FLAGS_NONE, nullptr, result);
             if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
             {
-                wprintf(L"ERROR: WICTexture file not found:\n%ls\n", pConv->szSrc);
+                wprintf(L"ERROR: WICTexture file not found:\n%ls\n", pConv.szSrc);
                 return 1;
             }
             else if (FAILED(hr) && hr != E_INVALIDARG && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != WINCODEC_ERR_COMPONENTNOTFOUND && hr != E_OUTOFMEMORY && hr != WINCODEC_ERR_BADHEADER)

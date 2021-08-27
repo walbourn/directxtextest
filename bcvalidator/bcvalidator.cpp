@@ -609,15 +609,15 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
 
     ComPtr<ID3D11Device> pDevice;
 
-    for (auto pConv = conversion.begin(); pConv != conversion.end(); ++pConv)
+    for (auto& pConv : conversion)
     {
         wchar_t ext[_MAX_EXT];
         wchar_t fname[_MAX_FNAME];
-        _wsplitpath_s(pConv->szSrc, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT);
+        _wsplitpath_s(pConv.szSrc, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT);
 
         // Load source image
 #ifdef _DEBUG
-        OutputDebugStringW(pConv->szSrc);
+        OutputDebugStringW(pConv.szSrc);
         OutputDebugStringA("\n");
 #endif
 
@@ -632,7 +632,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
 
         if (_wcsicmp(ext, L".dds") == 0)
         {
-            hr = LoadFromDDSFile(pConv->szSrc, DDS_FLAGS_NONE, &info, *image);
+            hr = LoadFromDDSFile(pConv.szSrc, DDS_FLAGS_NONE, &info, *image);
             if (FAILED(hr))
             {
                 wprintf(L" FAILED (%x)\n", static_cast<unsigned int>(hr));
@@ -647,7 +647,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
         }
         else if (_wcsicmp(ext, L".tga") == 0)
         {
-            hr = LoadFromTGAFile(pConv->szSrc, &info, *image);
+            hr = LoadFromTGAFile(pConv.szSrc, &info, *image);
             if (FAILED(hr))
             {
                 wprintf(L" FAILED (%x)\n", static_cast<unsigned int>(hr));
@@ -656,7 +656,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
         }
         else if (_wcsicmp(ext, L".hdr") == 0)
         {
-            hr = LoadFromHDRFile(pConv->szSrc, &info, *image);
+            hr = LoadFromHDRFile(pConv.szSrc, &info, *image);
             if (FAILED(hr))
             {
                 wprintf(L" FAILED (%x)\n", static_cast<unsigned int>(hr));
@@ -665,7 +665,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
         }
         else
         {
-            hr = LoadFromWICFile(pConv->szSrc, WIC_FLAGS_NONE, &info, *image);
+            hr = LoadFromWICFile(pConv.szSrc, WIC_FLAGS_NONE, &info, *image);
             if (FAILED(hr))
             {
                 wprintf(L" FAILED (%x)\n", static_cast<unsigned int>(hr));
