@@ -22,7 +22,7 @@
     <ProjectGuid>{3F2E8E24-F969-47F5-BA94-79CA8450DA74}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>xtfilter</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

@@ -22,7 +22,7 @@
     <ProjectGuid>{7EF1459A-D590-4C0F-B88E-B70B4D30ED85}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>xtcompress</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
