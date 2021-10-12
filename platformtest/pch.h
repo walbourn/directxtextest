@@ -68,15 +68,20 @@
 
 #include <algorithm>
 #include <atomic>
+#include <cassert>
 #include <cmath>
+#include <cstddef>
 #include <cstdint>
 #include <cstdio>
+#include <cstring>
 #include <cwchar>
 #include <exception>
 #include <functional>
 #include <iterator>
 #include <memory>
 #include <stdexcept>
+#include <string>
+#include <system_error>
 #include <thread>
 #include <vector>
 

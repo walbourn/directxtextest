@@ -19,6 +19,8 @@ using namespace Windows::Foundation;
 using namespace Windows::Graphics::Display;
 using namespace DirectX;
 
+void ExitGame() noexcept;
+
 ref class ViewProvider sealed : public IFrameworkView
 {
 public:
@@ -59,7 +61,6 @@ public:
         window->SizeChanged +=
             ref new TypedEventHandler<CoreWindow^, WindowSizeChangedEventArgs^>(this, &ViewProvider::OnWindowSizeChanged);
 
-#if defined(NTDDI_WIN10_RS2) && (NTDDI_VERSION >= NTDDI_WIN10_RS2)
         try
         {
             window->ResizeStarted +=
@@ -72,7 +73,6 @@ public:
         {
             // Requires Windows 10 Creators Update (10.0.15063) or later
         }
-#endif
 
         window->VisibilityChanged +=
             ref new TypedEventHandler<CoreWindow^, VisibilityChangedEventArgs^>(this, &ViewProvider::OnVisibilityChanged);
@@ -213,7 +213,6 @@ protected:
         HandleWindowSizeChanged();
     }
 
-#if defined(NTDDI_WIN10_RS2) && (NTDDI_VERSION >= NTDDI_WIN10_RS2)
     void OnResizeStarted(CoreWindow^ sender, Platform::Object^ args)
     {
         m_in_sizemove = true;
@@ -225,7 +224,6 @@ protected:
 
         HandleWindowSizeChanged();
     }
-#endif
 
     void OnVisibilityChanged(CoreWindow^ sender, VisibilityChangedEventArgs^ args)
     {
@@ -397,7 +395,7 @@ int __cdecl main(Platform::Array<Platform::String^>^ /*argv*/)
 {
     if (!XMVerifyCPUSupport())
     {
-        throw std::exception("XMVerifyCPUSupport");
+        throw std::runtime_error("XMVerifyCPUSupport");
     }
 
     auto viewProviderFactory = ref new ViewProviderFactory();

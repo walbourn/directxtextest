@@ -1,4 +1,4 @@
-﻿//
+//
 // DeviceResources.cpp - A wrapper for the Direct3D 12.X device and swapchain
 //
 
@@ -7,6 +7,13 @@
 
 using namespace DirectX;
 using namespace DX;
+
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wcovered-switch-default"
+#pragma clang diagnostic ignored "-Wswitch-enum"
+#endif
+
+#pragma warning(disable : 4061)
 
 using Microsoft::WRL::ComPtr;
 
@@ -76,9 +83,9 @@ void DeviceResources::CreateDeviceResources()
     if (hr == D3D12_ERROR_DRIVER_VERSION_MISMATCH)
     {
 #ifdef _GAMING_XBOX_SCARLETT
-        OutputDebugStringA("ERROR: Running a d3d12_xs.lib (Scarlett) linked binary on an Xbox One is not supported\n");
+        OutputDebugStringA("ERROR: Running a d3d12_xs.lib (Xbox Series X|S) linked binary on an Xbox One is not supported\n");
 #else
-        OutputDebugStringA("ERROR: Running a d3d12_x.lib (Xbox One) linked binary on a Scarlett device is not supported\n");
+        OutputDebugStringA("ERROR: Running a d3d12_x.lib (Xbox One) linked binary on a Xbox Series X|S in 'Scarlett' mode is not supported\n");
 #endif
     }
 #endif
@@ -142,7 +149,7 @@ void DeviceResources::CreateDeviceResources()
     m_fenceEvent.Attach(CreateEventEx(nullptr, nullptr, 0, EVENT_MODIFY_STATE | SYNCHRONIZE));
     if (!m_fenceEvent.IsValid())
     {
-        throw std::exception("CreateEvent");
+        throw std::system_error(std::error_code(static_cast<int>(GetLastError()), std::system_category()), "CreateEventEx");
     }
 
     RegisterFrameEvents();
@@ -153,7 +160,7 @@ void DeviceResources::CreateWindowSizeDependentResources()
 {
     if (!m_window)
     {
-        throw std::exception("Call SetWindow with a valid window handle");
+        throw std::logic_error("Call SetWindow with a valid Win32 window handle");
     }
 
     // Wait until all previous GPU work is complete.

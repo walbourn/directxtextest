@@ -20,7 +20,7 @@ using Microsoft::WRL::ComPtr;
 
 namespace
 {
-    float c_ColorDelay = 0.25f;
+    constexpr float c_ColorDelay = 0.25f;
 
     typedef bool(*TestFN)();
 

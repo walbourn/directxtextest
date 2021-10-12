@@ -1,5 +1,7 @@
 //
-// Main.cpp
+// MainGXDK.cpp
+//
+// Entry point for Microsoft GDK with Xbox extensions
 //
 
 #include "pch.h"
@@ -10,6 +12,13 @@
 
 using namespace DirectX;
 
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wcovered-switch-default"
+#pragma clang diagnostic ignored "-Wswitch-enum"
+#endif
+
+#pragma warning(disable : 4061)
+
 namespace
 {
     std::unique_ptr<Game> g_game;
@@ -18,6 +27,7 @@ namespace
 };
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+void ExitGame() noexcept;
 
 // Entry point
 int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
@@ -52,6 +62,8 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE, _In_ LPWSTR lp
 
     // Register class and create window
     PAPPSTATE_REGISTRATION hPLM = {};
+    PAPPCONSTRAIN_REGISTRATION hPLM2 = {};
+
     {
         // Register class
         WNDCLASSEXA wcex = {};
@@ -101,6 +113,13 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE, _In_ LPWSTR lp
             }
         }, hwnd, &hPLM))
             return 1;
+
+        if (RegisterAppConstrainedChangeNotification([](BOOLEAN constrained, PVOID context)
+        {
+            // To ensure we use the main UI thread to process the notification, we self-post a message
+            SendMessage(reinterpret_cast<HWND>(context), WM_USER + 1, (constrained) ? 1u : 0u, 0);
+        }, hwnd, &hPLM2))
+            return 1;
     }
 
     // Main message loop
@@ -121,6 +140,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE, _In_ LPWSTR lp
     g_game.reset();
 
     UnregisterAppStateChangeNotification(hPLM);
+    UnregisterAppConstrainedChangeNotification(hPLM2);
 
     CloseHandle(g_plmSuspendComplete);
     CloseHandle(g_plmSignalResume);
@@ -150,6 +170,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             (void)WaitForSingleObject(g_plmSignalResume, INFINITE);
 
             game->OnResuming();
+        }
+        break;
+
+    case WM_USER + 1:
+        if (game)
+        {
+            if (wParam)
+            {
+                game->OnConstrained();
+            }
+            else
+            {
+                game->OnUnConstrained();
+            }
         }
         break;
     }
