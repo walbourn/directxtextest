@@ -28,7 +28,7 @@ namespace DX
         if (!inFile)
         {
             wchar_t moduleName[_MAX_PATH];
-            (void)GetModuleFileNameW(nullptr, moduleName, _MAX_PATH);
+            std::ignore = GetModuleFileNameW(nullptr, moduleName, _MAX_PATH);
 
             wchar_t drive[_MAX_DRIVE];
             wchar_t path[_MAX_PATH];

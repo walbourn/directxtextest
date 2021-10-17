@@ -309,7 +309,7 @@ void Game::TestThreadProc()
     {
         if (m_suspendThread)
         {
-            (void)WaitForSingleObject(m_resumeSignal.Get(), INFINITE);
+            std::ignore = WaitForSingleObject(m_resumeSignal.Get(), INFINITE);
         }
 
         print("\n--- %s ---\n", g_Tests[i].name);

@@ -29,6 +29,7 @@
 #include <cstdio>
 #include <cwchar>
 #include <iterator>
+#include <tuple>
 
 #define _XM_NO_XMVECTOR_OVERLOADS_
 #include <DirectXMath.h>

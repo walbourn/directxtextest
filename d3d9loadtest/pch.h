@@ -43,6 +43,7 @@
 #include <exception>
 #include <memory>
 #include <stdexcept>
+#include <tuple>
 
 #define _WIN7_PLATFORM_UPDATE
 #include <wincodec.h>

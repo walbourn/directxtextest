@@ -52,6 +52,7 @@
 #include <iterator>
 #include <memory>
 #include <stdexcept>
+#include <tuple>
 
 #ifdef _DEBUG
 #include <dxgidebug.h>

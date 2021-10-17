@@ -582,7 +582,7 @@ bool WICTest::Test01()
     size_t npass = 0;
 
     bool iswic2;
-    (void)GetWICFactory(iswic2);
+    std::ignore = GetWICFactory(iswic2);
 
     for( size_t index=0; index < std::size(g_TestMedia); ++index )
     {
@@ -782,7 +782,7 @@ bool WICTest::Test02()
     size_t npass = 0;
 
     bool iswic2;
-    (void)GetWICFactory(iswic2);
+    std::ignore = GetWICFactory(iswic2);
 
     for( size_t index=0; index < std::size(g_TestMedia); ++index )
     {
@@ -972,7 +972,7 @@ bool WICTest::Test03()
     size_t npass = 0;
 
     bool iswic2;
-    (void)GetWICFactory(iswic2);
+    std::ignore = GetWICFactory(iswic2);
 
     for( size_t index=0; index < std::size(g_TestMedia); ++index )
     {
@@ -1083,7 +1083,7 @@ bool WICTest::Test04()
     size_t npass = 0;
 
     bool iswic2;
-    (void)GetWICFactory(iswic2);
+    std::ignore = GetWICFactory(iswic2);
 
     for( size_t index=0; index < std::size(g_TestMedia); ++index )
     {
@@ -1306,7 +1306,7 @@ bool WICTest::Test05()
                                                 varValues[1].vt = VT_UI1;
                                                 varValues[1].bVal = WICTiffCompressionNone;
 
-                                                (void)props->Write( 2, options, varValues ); 
+                                                std::ignore = props->Write( 2, options, varValues );
                                             });
                     if ( FAILED(hr) )
                     {
@@ -1663,7 +1663,7 @@ bool WICTest::Test06()
                                             varValues[1].vt = VT_UI1;
                                             varValues[1].bVal = WICTiffCompressionNone;
 
-                                            (void)props->Write( 2, options, varValues ); 
+                                            std::ignore = props->Write( 2, options, varValues );
                                         });
                 if ( FAILED(hr) )
                 {
@@ -2110,7 +2110,7 @@ bool WICTest::Test08()
                     {
                         TexMetadata metadata;
                         ScratchImage image;
-                        (void)LoadFromWICMemory(blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_NONE, &metadata, image);
+                        std::ignore = LoadFromWICMemory(blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_NONE, &metadata, image);
                     }
                 }
             }
@@ -2119,7 +2119,7 @@ bool WICTest::Test08()
             {
                 TexMetadata metadata;
                 ScratchImage image;
-                (void)LoadFromWICFile(szPath, WIC_FLAGS_NONE, &metadata, image);
+                std::ignore = LoadFromWICFile(szPath, WIC_FLAGS_NONE, &metadata, image);
             }
         }
 

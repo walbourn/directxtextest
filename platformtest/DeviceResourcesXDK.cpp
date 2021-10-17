@@ -259,7 +259,7 @@ void DeviceResources::Suspend() noexcept
 {
     if (m_d3dContext)
     {
-        (void)m_d3dContext->Suspend(0);
+        std::ignore = m_d3dContext->Suspend(0);
     }
 }
 
@@ -267,6 +267,6 @@ void DeviceResources::Resume() noexcept
 {
     if (m_d3dContext)
     {
-        (void)m_d3dContext->Resume();
+        std::ignore = m_d3dContext->Resume();
     }
 }

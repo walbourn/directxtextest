@@ -83,6 +83,7 @@
 #include <string>
 #include <system_error>
 #include <thread>
+#include <tuple>
 #include <vector>
 
 #include <pix.h>
