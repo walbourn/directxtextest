@@ -1,4 +1,4 @@
-﻿//
+//
 // DeviceResources.h - A wrapper for the Direct3D 12.X device and swapchain
 //
 
@@ -68,7 +68,7 @@ namespace DX
         void MoveToNextFrame();
         void RegisterFrameEvents();
 
-        static const size_t MAX_BACK_BUFFER_COUNT = 3;
+        static constexpr     size_t MAX_BACK_BUFFER_COUNT = 3;
 
         UINT                                                m_backBufferIndex;
 

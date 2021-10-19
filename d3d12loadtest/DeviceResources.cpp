@@ -618,7 +618,6 @@ void DeviceResources::GetAdapter(IDXGIAdapter1** ppAdapter)
 
     ComPtr<IDXGIAdapter1> adapter;
 
-#if defined(__dxgi1_6_h__) && defined(NTDDI_WIN10_RS4)
     ComPtr<IDXGIFactory6> factory6;
     HRESULT hr = m_dxgiFactory.As(&factory6);
     if (SUCCEEDED(hr))
@@ -651,7 +650,7 @@ void DeviceResources::GetAdapter(IDXGIAdapter1** ppAdapter)
             }
         }
     }
-#endif
+
     if (!adapter)
     {
         for (UINT adapterIndex = 0;
@@ -710,7 +709,6 @@ void DeviceResources::UpdateColorSpace()
 
     bool isDisplayHDR10 = false;
 
-#if defined(NTDDI_WIN10_RS2)
     if (m_swapChain)
     {
         ComPtr<IDXGIOutput> output;
@@ -730,7 +728,6 @@ void DeviceResources::UpdateColorSpace()
             }
         }
     }
-#endif
 
     if ((m_options & c_EnableHDR) && isDisplayHDR10)
     {

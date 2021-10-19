@@ -33,12 +33,7 @@
 #include <wrl/event.h>
 
 #include <d3d12.h>
-
-#if defined(NTDDI_WIN10_RS2)
 #include <dxgi1_6.h>
-#else
-#include <dxgi1_5.h>
-#endif
 
 #define _XM_NO_XMVECTOR_OVERLOADS_
 #include <DirectXMath.h>
@@ -57,6 +52,7 @@
 #include <iterator>
 #include <memory>
 #include <stdexcept>
+#include <system_error>
 #include <tuple>
 
 // To use graphics and CPU markup events with the latest version of PIX, change this to include <pix3.h>
