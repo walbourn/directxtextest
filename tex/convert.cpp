@@ -714,6 +714,8 @@ extern const wchar_t* GetName(DXGI_FORMAT fmt);
 // Convert (internalA)
 bool TEXTest::Test05()
 {
+    using namespace DirectX::Internal;
+
     // Can't catch _EM_INVALID as conversion cases can generate and handle these cases
     unsigned int fpcw = 0;
     _controlfp_s(&fpcw, _MCW_EM, _MCW_EM);
@@ -731,7 +733,7 @@ bool TEXTest::Test05()
 
         assert( p.format == DXGI_FORMAT_R1_UNORM || (BitsPerPixel(p.format) == p.pitch*8) );
 
-        if ( !_LoadScanline( &temp, 1, &p.bytes[0], p.pitch, p.format ) )
+        if ( !LoadScanline( &temp, 1, &p.bytes[0], p.pitch, p.format ) )
         {
             success = false;
             printe( "Failed loading pixel format %ls, index %zu\n", GetName( p.format ), index );
@@ -750,7 +752,7 @@ bool TEXTest::Test05()
         }
 
         // LoadScanlineLinear (non-SRGB cases)
-        if (!_LoadScanlineLinear(&temp, 1, &p.bytes[0], p.pitch, p.format, TEX_FILTER_DEFAULT))
+        if (!LoadScanlineLinear(&temp, 1, &p.bytes[0], p.pitch, p.format, TEX_FILTER_DEFAULT))
         {
             success = false;
             printe("Failed loading (2) pixel format %ls, index %zu\n", GetName(p.format), index);
@@ -775,7 +777,7 @@ bool TEXTest::Test05()
 
         memset( buff, 0, sizeof(buff) );
         temp = XMLoadFloat4( &p.vector );
-        if ( !_StoreScanline( buff, p.pitch, p.format, &temp, 1, 0.25f ) )
+        if ( !StoreScanline( buff, p.pitch, p.format, &temp, 1, 0.25f ) )
         {
             success = false;
             printe( "Failed storing pixel format %ls, index %zu\n", GetName( p.format ), index );
@@ -797,7 +799,7 @@ bool TEXTest::Test05()
 
         // StoreScanlineLinear (non-SRGB cases)
         temp = XMLoadFloat4( &p.vector );
-        if (!_StoreScanlineLinear(buff, p.pitch, p.format, &temp, 1, TEX_FILTER_DEFAULT, 0.25f))
+        if (!StoreScanlineLinear(buff, p.pitch, p.format, &temp, 1, TEX_FILTER_DEFAULT, 0.25f))
         {
             success = false;
             printe("Failed storing (2) pixel format %ls, index %zu\n", GetName(p.format), index);
@@ -834,7 +836,7 @@ bool TEXTest::Test05()
 
         uint8_t c = 0;
 
-        if ( !_StoreScanline( &c, 1, DXGI_FORMAT_R1_UNORM, &chk[0].v, 8 ) )
+        if ( !StoreScanline( &c, 1, DXGI_FORMAT_R1_UNORM, &chk[0].v, 8 ) )
         {
             success = false;
             printe( "Failed storing monochrome pixel data\n" );
@@ -854,7 +856,7 @@ bool TEXTest::Test05()
             }
             else
             {
-                if ( !_LoadScanline( scanline.get(), 8, &c, 1, DXGI_FORMAT_R1_UNORM ) )
+                if ( !LoadScanline( scanline.get(), 8, &c, 1, DXGI_FORMAT_R1_UNORM ) )
                 {
                     success = false;
                     printe( "Failed loading monochrome pixel data\n" );
@@ -909,7 +911,7 @@ static const TestPixels s_TestPartialTypeless[] =
 
             assert( BitsPerPixel(p.format) == p.pitch*8 );
 
-            if ( !_LoadScanline( &temp, 1, &p.bytes[0], p.pitch, p.format ) )
+            if ( !LoadScanline( &temp, 1, &p.bytes[0], p.pitch, p.format ) )
             {
                 success = false;
                 printe( "Failed loading partial typeless pixel format %ls, index %zu\n", GetName( p.format ), index );
@@ -940,6 +942,8 @@ static const TestPixels s_TestPartialTypeless[] =
 // Convert (internalB)
 bool TEXTest::Test05B()
 {
+    using namespace DirectX::Internal;
+
     // Test Load/Store of images
     bool success = true;
 
@@ -1012,7 +1016,7 @@ bool TEXTest::Test05B()
                 SaveScratchImage( szDestPath, DDS_FLAGS_NONE, image );
 
                 float targMSE = 0.001f;
-                DWORD cvtflags = _GetConvertFlags( metadata.format );
+                DWORD cvtflags = GetConvertFlags( metadata.format );
                 if (cvtflags & (CONVF_SNORM|CONVF_SINT))
                 {
                     // Math routines for storing signed integers clamps out the most negative value (i.e. -128, -32768)
@@ -1050,6 +1054,8 @@ bool TEXTest::Test05B()
 // Convert (internalC)
 bool TEXTest::Test05C()
 {
+    using namespace DirectX::Internal;
+
     // Test SRGB conversions of pixels
     bool success = true;
     XM_ALIGNED_DATA(16) XMVECTOR temp;
@@ -1063,14 +1069,14 @@ bool TEXTest::Test05C()
         if ( srgb == p.format )
             continue;
 
-        if ( !_LoadScanline( &temp, 1, &p.bytes[0], p.pitch, p.format ) )
+        if ( !LoadScanline( &temp, 1, &p.bytes[0], p.pitch, p.format ) )
         {
             success = false;
             printe( "Failed loading pixel format %ls, index %zu\n", GetName( p.format ), index );
         }
         else
         {
-            _ConvertScanline(&temp, 1, srgb, p.format, TEX_FILTER_DEFAULT);
+            ConvertScanline(&temp, 1, srgb, p.format, TEX_FILTER_DEFAULT);
 
             XMVECTORF32 chk = { { { EncodeSRGB(p.vector.x),
                                     EncodeSRGB(p.vector.y),
@@ -1086,14 +1092,14 @@ bool TEXTest::Test05C()
             }
         }
 
-        if ( !_LoadScanline( &temp, 1, &p.bytes[0], p.pitch, srgb ) )
+        if ( !LoadScanline( &temp, 1, &p.bytes[0], p.pitch, srgb ) )
         {
             success = false;
             printe( "Failed loading pixel format %ls, index %zu\n", GetName( p.format ), index );
         }
         else
         {
-            _ConvertScanline(&temp, 1, p.format, srgb, TEX_FILTER_DEFAULT);
+            ConvertScanline(&temp, 1, p.format, srgb, TEX_FILTER_DEFAULT);
 
             XMVECTORF32 chk = { { { DecodeSRGB(p.vector.x),
                                     DecodeSRGB(p.vector.y),
@@ -1110,7 +1116,7 @@ bool TEXTest::Test05C()
         }
 
         // LoadScanlineLinear
-        if ( !_LoadScanlineLinear( &temp, 1, &p.bytes[0], p.pitch, p.format, TEX_FILTER_SRGB ) )
+        if ( !LoadScanlineLinear( &temp, 1, &p.bytes[0], p.pitch, p.format, TEX_FILTER_SRGB ) )
         {
             success = false;
             printe( "Failed linear loading (1) pixel format %ls, index %zu\n", GetName( p.format ), index );
@@ -1131,7 +1137,7 @@ bool TEXTest::Test05C()
             }
         }
 
-        if (!_LoadScanlineLinear(&temp, 1, &p.bytes[0], p.pitch, srgb, TEX_FILTER_DEFAULT))
+        if (!LoadScanlineLinear(&temp, 1, &p.bytes[0], p.pitch, srgb, TEX_FILTER_DEFAULT))
         {
             success = false;
             printe("Failed linear loading (2) pixel format %ls, index %zu\n", GetName(p.format), index);
@@ -1155,12 +1161,12 @@ bool TEXTest::Test05C()
         // StoreScanlineLinear
         uint8_t buff[16];
         temp = XMLoadFloat4( &p.vector );
-        if ( !_StoreScanlineLinear( &buff[0], 16, p.format, &temp, 1, TEX_FILTER_SRGB ) )
+        if ( !StoreScanlineLinear( &buff[0], 16, p.format, &temp, 1, TEX_FILTER_SRGB ) )
         {
             success = false;
             printe( "Failed linear storing (1) pixel format %ls, index %zu\n", GetName( p.format ), index );
         }
-        else if ( !_LoadScanline( &temp, 1, &buff, 16, p.format ) )
+        else if ( !LoadScanline( &temp, 1, &buff, 16, p.format ) )
         {
             success = false;
             printe( "Failed reloading linear stored (1) pixel format %ls, index %zu\n", GetName( p.format ), index );
@@ -1182,12 +1188,12 @@ bool TEXTest::Test05C()
         }
 
         temp = XMLoadFloat4( &p.vector );
-        if (!_StoreScanlineLinear(&buff[0], 16, srgb, &temp, 1, TEX_FILTER_DEFAULT))
+        if (!StoreScanlineLinear(&buff[0], 16, srgb, &temp, 1, TEX_FILTER_DEFAULT))
         {
             success = false;
             printe("Failed linear storing (2) pixel format %ls, index %zu\n", GetName(p.format), index);
         }
-        else if ( !_LoadScanline( &temp, 1, &buff, 16, p.format ) )
+        else if ( !LoadScanline( &temp, 1, &buff, 16, p.format ) )
         {
             success = false;
             printe( "Failed reloading linear stored (2) pixel format %ls, index %zu\n", GetName( p.format ), index );
@@ -1218,6 +1224,8 @@ bool TEXTest::Test05C()
 // Convert (internalD)
 bool TEXTest::Test05D()
 {
+    using namespace DirectX::Internal;
+
     size_t npass = 0;
 
     // Test pixel type conversions
@@ -2615,15 +2623,15 @@ bool TEXTest::Test05D()
 
         temp = XMLoadFloat4( &p.svector );
 
-        _ConvertScanline( &temp, 1, p.dformat, p.sformat, p.flags );
+        ConvertScanline( &temp, 1, p.dformat, p.sformat, p.flags );
 
         memset( buff, 0, sizeof(buff) );
-        if ( !_StoreScanline( buff, sizeof(buff), p.dformat, &temp, 1, 0.25f ) )
+        if ( !StoreScanline( buff, sizeof(buff), p.dformat, &temp, 1, 0.25f ) )
         {
             success = false;
             printe( "Failed storing pixel format %ls, index %zu\n", GetName( p.dformat ), index );
         }
-        else if ( !_LoadScanline( &temp, 1, buff, sizeof(buff), p.dformat ) )
+        else if ( !LoadScanline( &temp, 1, buff, sizeof(buff), p.dformat ) )
         {
             success = false;
             printe( "Failed loading pixel format %ls, index %zu\n", GetName( p.dformat ), index );
@@ -2990,7 +2998,8 @@ bool TEXTest::Test06()
 
                 //--- WIC vs. non-WIC convert -----------------------------------------
                 WICPixelFormatGUID pfGUID, targetGUID;
-                if ( _DXGIToWIC( metadata.format, pfGUID ) && _DXGIToWIC( tformat, targetGUID ) )
+                if ( Internal::DXGIToWIC( metadata.format, pfGUID )
+                    && Internal::DXGIToWIC( tformat, targetGUID ) )
                 {
                     ScratchImage nwimage;
 
