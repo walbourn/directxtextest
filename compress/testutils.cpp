@@ -59,7 +59,7 @@ HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DirectX::DDS_FLAGS 
     const size_t MAX_HEADER_SIZE = sizeof(DWORD) + sizeof(DDS_HEADER) + sizeof(DDS_HEADER_DXT10);
     BYTE header[MAX_HEADER_SIZE];
     size_t required;
-    HRESULT hr = _EncodeDDSHeader( image.GetMetadata(), flags, header, MAX_HEADER_SIZE, required );
+    HRESULT hr = EncodeDDSHeader( image.GetMetadata(), flags, header, MAX_HEADER_SIZE, required );
     if ( FAILED(hr) )
         return hr;
 

@@ -117,7 +117,7 @@ HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DirectX::DDS_FLAGS 
     const size_t MAX_HEADER_SIZE = sizeof(DWORD) + sizeof(DDS_HEADER) + sizeof(DDS_HEADER_DXT10);
     BYTE header[MAX_HEADER_SIZE];
     size_t required;
-    HRESULT hr = _EncodeDDSHeader( image.GetMetadata(), flags, header, MAX_HEADER_SIZE, required );
+    HRESULT hr = EncodeDDSHeader( image.GetMetadata(), flags, header, MAX_HEADER_SIZE, required );
     if ( FAILED(hr) )
         return hr;
 
@@ -160,6 +160,8 @@ HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DirectX::DDS_FLAGS 
 //-------------------------------------------------------------------------------------
 HRESULT CopyViaLoadStoreScanline( const Image& srcImage, ScratchImage& image )
 {
+    using namespace DirectX::Internal;
+
     if ( srcImage.pixels == nullptr )
         return E_INVALIDARG;
 
@@ -198,13 +200,13 @@ HRESULT CopyViaLoadStoreScanline( const Image& srcImage, ScratchImage& image )
     const BYTE *pSrc = srcImage.pixels;
     for( UINT h = 0; h < srcImage.height; ++h )
     {
-        if ( !_LoadScanline( tscanline, srcImage.width, pSrc, srcImage.rowPitch, srcImage.format ) )
+        if ( !LoadScanline( tscanline, srcImage.width, pSrc, srcImage.rowPitch, srcImage.format ) )
         {
             image.Release();
             return E_FAIL;
         }
 
-        if ( !_StoreScanline( pDest, img->rowPitch, srcImage.format, tscanline, srcImage.width ) )
+        if ( !StoreScanline( pDest, img->rowPitch, srcImage.format, tscanline, srcImage.width ) )
         {
             image.Release();
             return E_FAIL;
