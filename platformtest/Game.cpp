@@ -189,14 +189,14 @@ void Game::Clear()
     auto commandList = m_deviceResources->GetCommandList();
 
     // Clear the views.
-    auto rtvDescriptor = m_deviceResources->GetRenderTargetView();
+    auto const rtvDescriptor = m_deviceResources->GetRenderTargetView();
 
     commandList->OMSetRenderTargets(1, &rtvDescriptor, FALSE, nullptr);
     commandList->ClearRenderTargetView(rtvDescriptor, m_clearColor, 0, nullptr);
 
     // Set the viewport and scissor rect.
-    auto viewport = m_deviceResources->GetScreenViewport();
-    auto scissorRect = m_deviceResources->GetScissorRect();
+    auto const viewport = m_deviceResources->GetScreenViewport();
+    auto const scissorRect = m_deviceResources->GetScissorRect();
     commandList->RSSetViewports(1, &viewport);
     commandList->RSSetScissorRects(1, &scissorRect);
 #else
@@ -244,6 +244,11 @@ void Game::OnResuming()
 }
 
 #if !(defined(_XBOX_ONE) && defined(_TITLE)) && !defined(_GAMING_XBOX)
+void Game::OnDisplayChange()
+{
+    m_deviceResources->UpdateColorSpace();
+}
+
 void Game::OnWindowSizeChanged(int width, int height, DXGI_MODE_ROTATION rotation)
 {
 #if defined(WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_APP)
@@ -300,12 +305,13 @@ void Game::OnDeviceRestored()
 
 void Game::TestThreadProc()
 {
+    SetThreadDescription(GetCurrentThread(), L"Test Thread");
     DX::ThrowIfFailed(CoInitializeEx(nullptr, COINIT_MULTITHREADED));
 
     UINT nPass = 0;
     UINT nFail = 0;
 
-    for (UINT i = 0; i < (sizeof(g_Tests) / sizeof(TestInfo)); ++i)
+    for (UINT i = 0; i < std::size(g_Tests); ++i)
     {
         if (m_suspendThread)
         {

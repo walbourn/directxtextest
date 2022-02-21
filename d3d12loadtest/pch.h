@@ -6,7 +6,9 @@
 #pragma once
 
 #include <winsdkver.h>
+#ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0A00
+#endif
 #include <sdkddkver.h>
 
 // Use the C++ standard templated min/max
@@ -32,7 +34,13 @@
 #include <wrl/client.h>
 #include <wrl/event.h>
 
+#ifdef USING_DIRECTX_HEADERS
+#include <directx/dxgiformat.h>
+#include <directx/d3d12.h>
+#else
 #include <d3d12.h>
+#endif
+
 #include <dxgi1_6.h>
 
 #define _XM_NO_XMVECTOR_OVERLOADS_

@@ -149,7 +149,7 @@ HRESULT MD5Checksum( _In_ const ScratchImage& image, _Out_bytecap_x_(16) uint8_t
     {
         const Image& img = images[ index ];
 
-        size_t pitch = img.rowPitch;
+        const size_t pitch = img.rowPitch;
         const uint8_t *pix = img.pixels;
         if ( !pix )
             return E_POINTER;
@@ -231,7 +231,7 @@ HRESULT MD5Checksum(_In_ const ScratchImage& image, _Out_bytecap_x_(16) uint8_t 
     {
         const Image& img = images[index];
 
-        size_t pitch = img.rowPitch;
+        const size_t pitch = img.rowPitch;
         const uint8_t *pix = img.pixels;
         if (!pix)
             return E_POINTER;
@@ -274,7 +274,7 @@ HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DirectX::DDS_FLAGS 
         return E_INVALIDARG;
 
     // Create DDS Header
-    const size_t MAX_HEADER_SIZE = sizeof(DWORD) + sizeof(DDS_HEADER) + sizeof(DDS_HEADER_DXT10);
+    constexpr size_t MAX_HEADER_SIZE = sizeof(DWORD) + sizeof(DDS_HEADER) + sizeof(DDS_HEADER_DXT10);
     BYTE header[MAX_HEADER_SIZE];
     size_t required;
     HRESULT hr = EncodeDDSHeader( image.GetMetadata(), flags, header, MAX_HEADER_SIZE, required );

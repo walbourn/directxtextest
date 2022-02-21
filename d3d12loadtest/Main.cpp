@@ -14,6 +14,15 @@ using namespace DirectX;
 
 #pragma warning(disable : 4061)
 
+#ifdef USING_D3D12_AGILITY_SDK
+extern "C"
+{
+    // Used to enable the "Agility SDK" components
+    __declspec(dllexport) extern const UINT D3D12SDKVersion = D3D12_SDK_VERSION;
+    __declspec(dllexport) extern const char* D3D12SDKPath = u8".\\D3D12\\";
+}
+#endif
+
 namespace
 {
     std::unique_ptr<Game> g_game;
@@ -124,6 +133,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             PAINTSTRUCT ps;
             std::ignore = BeginPaint(hWnd, &ps);
             EndPaint(hWnd, &ps);
+        }
+        break;
+
+    case WM_DISPLAYCHANGE:
+        if (game)
+        {
+            game->OnDisplayChange();
         }
         break;
 
