@@ -68,7 +68,7 @@ namespace DX
         void MoveToNextFrame();
         void RegisterFrameEvents();
 
-        static constexpr     size_t MAX_BACK_BUFFER_COUNT = 3;
+        static constexpr size_t MAX_BACK_BUFFER_COUNT = 3;
 
         UINT                                                m_backBufferIndex;
 

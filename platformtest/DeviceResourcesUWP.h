@@ -47,6 +47,7 @@ namespace DX
         void Present();
         void Suspend() noexcept;
         void Resume() noexcept;
+        void UpdateColorSpace();
 
         // Device Accessors.
         RECT GetOutputSize() const noexcept             { return m_outputSize; }
@@ -72,7 +73,6 @@ namespace DX
 
     private:
         void GetHardwareAdapter(IDXGIAdapter1** ppAdapter);
-        void UpdateColorSpace();
 
         // Direct3D objects.
         Microsoft::WRL::ComPtr<IDXGIFactory2>           m_dxgiFactory;

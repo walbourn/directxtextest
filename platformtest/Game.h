@@ -57,6 +57,7 @@ public:
     void OnUnConstrained() {}
 
 #if !(defined(_XBOX_ONE) && defined(_TITLE)) && !defined(_GAMING_XBOX)
+    void OnDisplayChange();
     void OnWindowSizeChanged(int width, int height, DXGI_MODE_ROTATION rotation);
 #endif
 
