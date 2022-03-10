@@ -1907,6 +1907,8 @@ bool WICTest::Test07()
     size_t ncount = 0;
     size_t npass = 0;
 
+    bool notemissingopt = false;
+
     for (;;)
     {
         if (!(findData.dwFileAttributes & (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM)))
@@ -1983,9 +1985,15 @@ bool WICTest::Test07()
                 hr = LoadFromWICFile(szPath, WIC_FLAGS_NONE, &metadata, image);
             }
 
+            if (hr == static_cast<HRESULT>(0xc00d5212) /* MF_E_TOPO_CODEC_NOT_FOUND */)
+            {
+                notemissingopt = true;
+            }
+
             if (hr == HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED)
                 || hr == E_NOTIMPL
                 || hr == WINCODEC_ERR_COMPONENTNOTFOUND
+                || hr == static_cast<HRESULT>(0xc00d5212) /* MF_E_TOPO_CODEC_NOT_FOUND */
                 || hr == E_OUTOFMEMORY
                 || hr == E_UNEXPECTED
                 || metadata.width >= 8192)
@@ -2037,6 +2045,13 @@ bool WICTest::Test07()
     {
         printe("ERROR: expected to find test images\n");
         return false;
+    }
+
+    if (notemissingopt)
+    {
+        print("WARNING: Skipped HIEF/WEBP testing. Install required codecs to get this coverage\n");
+        print("\tHEIF Image Extensions - https://aka.ms/heif\n");
+        print("\tWEBP Image Extensions - https://www.microsoft.com/p/webp-image-extensions/9pg2dk419drg\n");
     }
 
     print(" %zu images tested, %zu images passed ", ncount, npass);
