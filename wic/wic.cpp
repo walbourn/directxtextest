@@ -1994,6 +1994,7 @@ bool WICTest::Test07()
                 || hr == E_NOTIMPL
                 || hr == WINCODEC_ERR_COMPONENTNOTFOUND
                 || hr == static_cast<HRESULT>(0xc00d5212) /* MF_E_TOPO_CODEC_NOT_FOUND */
+                || hr == static_cast<HRESULT>(0xc00d36be) /* MF_E_INVALID_FILE_FORMAT */
                 || hr == E_OUTOFMEMORY
                 || hr == E_UNEXPECTED
                 || metadata.width >= 8192)
