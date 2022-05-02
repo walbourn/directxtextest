@@ -1,13 +1,12 @@
-﻿# DirectXTex Standalone Module Test
-#
-# Copyright (c) Microsoft Corporation.
+﻿# Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
-#
-# http://go.microsoft.com/fwlink/?LinkId=248926
 
 cmake_minimum_required (VERSION 3.11)
 
-project (standalonetest LANGUAGES CXX)
+project (standalonetest
+  DESCRIPTION "DirectXTex Standalone Module Test"
+  HOMEPAGE_URL "http://go.microsoft.com/fwlink/?LinkId=248926"
+  LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -98,9 +97,7 @@ if(NOT ${DIRECTX_ARCH} MATCHES "^arm")
         set(ARCH_SSE2 $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-msse2>)
     endif()
 
-    foreach(t IN LISTS TOOL_EXES ITEMS ${PROJECT_NAME})
-      target_compile_options(${t} PRIVATE ${ARCH_SSE2})
-    endforeach()
+    target_compile_options(${PROJECT_NAME} PRIVATE ${ARCH_SSE2})
 endif()
 
 if ( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
