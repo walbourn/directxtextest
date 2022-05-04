@@ -166,7 +166,7 @@ HRESULT CreateDevice( ID3D12Device** pDev )
 {
     HRESULT hr = E_FAIL;
 
-#if defined(D3D_DEBUG)
+#ifdef D3D_DEBUG
     // Enable the debug layer (only available if the Graphics Tools feature-on-demand is enabled).
     {
         ComPtr<ID3D12Debug> debugController;

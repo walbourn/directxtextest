@@ -408,7 +408,7 @@ int __cdecl DescribeException(PEXCEPTION_POINTERS pData)
     }
 
     void* pErrorOffset = 0;
-#if defined(_M_IX86)
+#ifdef _M_IX86
     void* pIP = (void*)pData->ContextRecord->Eip;
     pErrorOffset = (void*)pData->ContextRecord->FloatSave.ErrorOffset;
 #elif defined(_M_X64)
