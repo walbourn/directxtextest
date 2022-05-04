@@ -948,7 +948,7 @@ bool TEXTest::Test02()
         return false;
     }
 
-#if defined(D3D_DEBUG)
+#ifdef D3D_DEBUG
     //
     // Also want to ignore some common debug messages we don't care about...
     //
