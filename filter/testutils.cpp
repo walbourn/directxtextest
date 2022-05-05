@@ -407,12 +407,14 @@ int __cdecl DescribeException(PEXCEPTION_POINTERS pData)
             break;
     }
 
-    void* pErrorOffset = 0;
-#ifdef _M_IX86
-    void* pIP = (void*)pData->ContextRecord->Eip;
-    pErrorOffset = (void*)pData->ContextRecord->FloatSave.ErrorOffset;
+    void* pErrorOffset = nullptr;
+#if defined(_M_IX86)
+    void* pIP = reinterpret_cast<void*>(pData->ContextRecord->Eip);
+    pErrorOffset = reinterpret_cast<void*>(pData->ContextRecord->FloatSave.ErrorOffset);
 #elif defined(_M_X64)
-    void* pIP = (void*)pData->ContextRecord->Rip;
+    void* pIP = reinterpret_cast<void*>(pData->ContextRecord->Rip);
+#elif defined(_M_ARM64)
+    void* pIP = reinterpret_cast<void*>(pData->ContextRecord->Pc);
 #else
 #error Unknown processor
 #endif

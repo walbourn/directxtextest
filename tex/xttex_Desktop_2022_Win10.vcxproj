@@ -27,9 +27,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{1B283FC1-7914-4B61-A618-0A83DAC6770A}</ProjectGuid>
+    <ProjectGuid>{8395A22A-016B-4F36-9EDE-9D274980DFE9}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>xtd3d11</RootNamespace>
+    <RootNamespace>xttex</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -241,24 +241,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="d3d11.cpp" />
-    <ClCompile Include="directxtest.cpp" />
-    <ClCompile Include="testutils.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\inc\directxtest.h" />
-    <ClInclude Include="shaders\ps1D.h" />
-    <ClInclude Include="shaders\ps2D.h" />
-    <ClInclude Include="shaders\ps3D.h" />
-    <ClInclude Include="shaders\psCube.h" />
-    <ClInclude Include="shaders\vs2D.h" />
-    <ClInclude Include="shaders\vs3D.h" />
-    <ClInclude Include="shaders\vsCube.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
       <Project>{371b9fa9-4c90-4ac6-a123-aced756d6c77}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="convert.cpp" />
+    <ClCompile Include="directxtest.cpp" />
+    <ClCompile Include="fliprotate.cpp" />
+    <ClCompile Include="misc.cpp" />
+    <ClCompile Include="normalmaps.cpp" />
+    <ClCompile Include="planar.cpp" />
+    <ClCompile Include="premulalpha.cpp" />
+    <ClCompile Include="testutils.cpp" />
+    <ClCompile Include="utils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\inc\directxtest.h" />
+    <ClInclude Include="tex.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
