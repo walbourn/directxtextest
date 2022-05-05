@@ -1,13 +1,12 @@
-﻿# DirectXTex Header Inclusion Test
-#
-# Copyright (c) Microsoft Corporation.
+﻿# Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
-#
-# http://go.microsoft.com/fwlink/?LinkId=248926
 
 cmake_minimum_required (VERSION 3.11)
 
-project (headertest LANGUAGES CXX)
+project (headertest
+  DESCRIPTION "DirectXTex Header Inclusion Test"
+  HOMEPAGE_URL "http://go.microsoft.com/fwlink/?LinkId=248926"
+  LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -39,7 +38,7 @@ if ( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     target_compile_options(${PROJECT_NAME} PRIVATE ${WarningsEXE})
 endif()
 if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
-    target_compile_options(${PROJECT_NAME} PRIVATE /permissive- /Zc:__cplusplus)
+    target_compile_options(${PROJECT_NAME} PRIVATE /sdl /permissive- /Zc:__cplusplus)
 
     set(WarningsEXE "/wd4061" "/wd4365" "/wd4668" "/wd4820" "/wd5031" "/wd5032" "/wd5039" "/wd5219" )
     target_compile_options(${PROJECT_NAME} PRIVATE ${WarningsEXE})

@@ -6,7 +6,7 @@
 #include "DDSTextureLoader12.h"
 #include "ScreenGrab12.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include "WICTextureLoader12.h"
 #endif
 
