@@ -47,6 +47,7 @@ static_assert(std::is_nothrow_move_assignable<Blob>::value, "Move Assign.");
 // IsPalettized
 // IsDepthStencil
 // IsSRGB
+// IsBGR
 // IsTypeless
 // BitsPerPixel
 // BitsPerColor
@@ -72,6 +73,12 @@ bool TEXTest::Test01()
     {
         DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, DXGI_FORMAT_B8G8R8X8_UNORM_SRGB,
         DXGI_FORMAT_BC1_UNORM_SRGB, DXGI_FORMAT_BC2_UNORM_SRGB, DXGI_FORMAT_BC3_UNORM_SRGB, DXGI_FORMAT_BC7_UNORM_SRGB
+    };
+    static const DXGI_FORMAT bgr[]
+    {
+        DXGI_FORMAT_B5G6R5_UNORM, DXGI_FORMAT_B5G5R5A1_UNORM, DXGI_FORMAT_B4G4R4A4_UNORM,
+        DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_B8G8R8A8_TYPELESS, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB,
+        DXGI_FORMAT_B8G8R8X8_UNORM, DXGI_FORMAT_B8G8R8X8_TYPELESS, DXGI_FORMAT_B8G8R8X8_UNORM_SRGB,
     };
     static const DXGI_FORMAT typeless[] = 
     {
@@ -220,6 +227,8 @@ bool TEXTest::Test01()
 
         bool isSRGB = std::find(std::begin(srgb), std::end(srgb), f) != std::end(srgb);
 
+        bool isBGR = std::find(std::begin(bgr), std::end(bgr), f) != std::end(bgr);
+
         bool isTypeless = std::find(std::begin(typeless), std::end(typeless), f) != std::end(typeless);
         bool isPartialTypeless = false;
         if (isTypeless)
@@ -267,6 +276,12 @@ bool TEXTest::Test01()
         if (IsSRGB(static_cast<DXGI_FORMAT>(f)) != isSRGB)
         {
             printe("ERROR: IsSRGB failed on DXGI Format %u (%ls)\n", f, GetName(DXGI_FORMAT(f)));
+            success = false;
+        }
+
+        if (IsBGR(static_cast<DXGI_FORMAT>(f)) != isBGR)
+        {
+            printe("ERROR: IsBGR failed on DXGI Format %u (%ls)\n", f, GetName(DXGI_FORMAT(f)));
             success = false;
         }
 
