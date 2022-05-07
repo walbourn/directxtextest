@@ -213,6 +213,10 @@ namespace
 
         // Minimal sized valid TGA file
         { FLAGS_24BPP, { 1, 1, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"glow.tga",{ 0xa5,0x4f,0x00,0x41,0xa9,0xe1,0x5b,0x05,0x0f,0x25,0xc4,0x63,0xf1,0xdb,0x74,0x49 } },
+
+        // Substance painter can produce 24bpp color-mapped TGA files
+        { FLAGS_24BPP, { 256, 256, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"1234-indexed.tga", { 0xd6,0xbd,0x58,0x1a,0x6c,0x5e,0xb7,0x33,0xc4,0x02,0x6b,0xa7,0x77,0x41,0xc7,0x5d } },
+        { FLAGS_24BPP, { 512, 256, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth-indexed.tga", { 0xcc,0xfa,0x5a,0x36,0x62,0x85,0x02,0x58,0xd4,0x3c,0xfa,0xaa,0x13,0x13,0x81,0x1b } },
     };
 
     //-------------------------------------------------------------------------------------
