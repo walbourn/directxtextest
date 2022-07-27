@@ -1184,6 +1184,7 @@ bool TEXTest::Test02()
 
 //-------------------------------------------------------------------------------------
 // MakeSRGB
+// MakeLinear
 // MakeTypeless
 // MakeTypelessUNORM
 // MakeTypelessFLOAT
@@ -1224,6 +1225,43 @@ bool TEXTest::Test12()
         if ( MakeSRGB( static_cast<DXGI_FORMAT>(f) ) != static_cast<DXGI_FORMAT>(f) )
         {
             printe( "ERROR: MakeSRGB failed on DXGI Format %u\n", f );
+            success = false;
+        }
+    }
+
+    //--- MakeLinear
+    static const DXGI_FORMAT isSRGB[] =
+    {
+        DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, DXGI_FORMAT_B8G8R8X8_UNORM_SRGB,
+        DXGI_FORMAT_BC1_UNORM_SRGB, DXGI_FORMAT_BC2_UNORM_SRGB, DXGI_FORMAT_BC3_UNORM_SRGB, DXGI_FORMAT_BC7_UNORM_SRGB,
+    };
+
+    for (size_t i = 0; i < std::size(isSRGB); ++i)
+    {
+        DXGI_FORMAT f = MakeLinear(isSRGB[i]);
+
+        if (IsSRGB(f))
+        {
+            printe("ERROR: MakeLinear failed on DXGI Format %u\n", isSRGB[i]);
+            success = false;
+        }
+    }
+
+    for (UINT f = DXGI_START; f <= DXGI_END; ++f)
+    {
+        size_t i = 0;
+        for (; i < std::size(isSRGB); ++i)
+        {
+            if (isSRGB[i] == static_cast<DXGI_FORMAT>(f))
+                break;
+        }
+
+        if (i < std::size(isSRGB))
+            continue;
+
+        if (MakeLinear(static_cast<DXGI_FORMAT>(f)) != static_cast<DXGI_FORMAT>(f))
+        {
+            printe("ERROR: MakeLinear failed on DXGI Format %u\n", f);
             success = false;
         }
     }
