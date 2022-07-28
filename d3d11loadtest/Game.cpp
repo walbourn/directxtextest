@@ -304,7 +304,7 @@ void Game::CreateDeviceDependentResources()
     // Test DDSTextureLoader
     DX::ThrowIfFailed(
         CreateDDSTextureFromFileEx(device, L"dx5_logo.dds",
-            0, D3D11_USAGE_IMMUTABLE, D3D11_BIND_SHADER_RESOURCE, 0, 0, true,
+            0, D3D11_USAGE_IMMUTABLE, D3D11_BIND_SHADER_RESOURCE, 0, 0, DDS_LOADER_FORCE_SRGB,
             nullptr, m_dx5logo.ReleaseAndGetAddressOf()));
 
     {
@@ -313,7 +313,7 @@ void Game::CreateDeviceDependentResources()
         ComPtr<ID3D11ShaderResourceView> srv;
         DX::ThrowIfFailed(
             CreateDDSTextureFromMemoryEx(device, blob.data(), blob.size(),
-                0, D3D11_USAGE_IMMUTABLE, D3D11_BIND_SHADER_RESOURCE, 0, 0, true,
+                0, D3D11_USAGE_IMMUTABLE, D3D11_BIND_SHADER_RESOURCE, 0, 0, DDS_LOADER_FORCE_SRGB,
                 nullptr, srv.ReleaseAndGetAddressOf()));
     }
 
