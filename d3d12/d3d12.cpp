@@ -349,7 +349,7 @@ bool Test03()
             else
             {
                 hr = CreateTextureEx(device.Get(), metadata, D3D12_RESOURCE_FLAG_NONE,
-                                     true, pResource.ReleaseAndGetAddressOf());
+                                     CREATETEX_FORCE_SRGB, pResource.ReleaseAndGetAddressOf());
 
                 if (FAILED(hr))
                 {

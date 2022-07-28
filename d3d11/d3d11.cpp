@@ -276,7 +276,7 @@ bool Test02()
             {
                 hr = CreateTextureEx(device.Get(), image.GetImages(), image.GetImageCount(), metadata,
                     D3D11_USAGE_IMMUTABLE, D3D11_BIND_SHADER_RESOURCE, 0, 0,
-                    true, pResource.ReleaseAndGetAddressOf());
+                    CREATETEX_FORCE_SRGB, pResource.ReleaseAndGetAddressOf());
                 if (FAILED(hr))
                 {
                     success = false;
@@ -375,7 +375,7 @@ bool Test03()
             else
             {
                 hr = CreateShaderResourceViewEx(device.Get(), image.GetImages(), image.GetImageCount(), metadata,
-                    D3D11_USAGE_IMMUTABLE, D3D11_BIND_SHADER_RESOURCE, 0, 0, true, pSRV.ReleaseAndGetAddressOf());
+                    D3D11_USAGE_IMMUTABLE, D3D11_BIND_SHADER_RESOURCE, 0, 0, CREATETEX_FORCE_SRGB, pSRV.ReleaseAndGetAddressOf());
                 if (FAILED(hr))
                 {
                     success = false;
@@ -670,7 +670,7 @@ bool Test05()
             {
                 ComPtr<ID3D11Resource> pStaging;
                 hr = CreateTextureEx(device.Get(), image.GetImages(), image.GetImageCount(), metadata,
-                    D3D11_USAGE_STAGING, 0, D3D11_CPU_ACCESS_READ, 0, false, pStaging.GetAddressOf());
+                    D3D11_USAGE_STAGING, 0, D3D11_CPU_ACCESS_READ, 0, CREATETEX_DEFAULT, pStaging.GetAddressOf());
                 if (FAILED(hr))
                 {
                     success = false;
