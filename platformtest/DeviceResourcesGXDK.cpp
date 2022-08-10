@@ -21,8 +21,7 @@ using Microsoft::WRL::ComPtr;
 DeviceResources::DeviceResources(
     DXGI_FORMAT backBufferFormat,
     DXGI_FORMAT depthBufferFormat,
-    UINT backBufferCount,
-    unsigned int flags) noexcept(false) :
+    UINT backBufferCount) noexcept(false) :
         m_backBufferIndex(0),
         m_fenceValues{},
         m_framePipelineToken{},
@@ -34,8 +33,7 @@ DeviceResources::DeviceResources(
         m_backBufferCount(backBufferCount),
         m_window(nullptr),
         m_d3dFeatureLevel(D3D_FEATURE_LEVEL_12_0),
-        m_outputSize{0, 0, 1920, 1080},
-        m_options(flags)
+        m_outputSize{0, 0, 1920, 1080}
 {
     if (backBufferCount < 2 || backBufferCount > MAX_BACK_BUFFER_COUNT)
     {
@@ -276,10 +274,6 @@ void DeviceResources::CreateWindowSizeDependentResources()
 // Prepare the command list and render target for rendering.
 void DeviceResources::Prepare(D3D12_RESOURCE_STATES beforeState, D3D12_RESOURCE_STATES afterState)
 {
-    // Wait until frame start is signaled
-    m_framePipelineToken = D3D12XBOX_FRAME_PIPELINE_TOKEN_NULL;
-    ThrowIfFailed(m_d3dDevice->WaitFrameEventX(D3D12XBOX_FRAME_EVENT_ORIGIN, INFINITE, nullptr, D3D12XBOX_WAIT_FRAME_EVENT_FLAG_NONE, &m_framePipelineToken));
-
     // Reset command list and allocator.
     ThrowIfFailed(m_commandAllocators[m_backBufferIndex]->Reset());
     ThrowIfFailed(m_commandList->Reset(m_commandAllocators[m_backBufferIndex].Get(), nullptr));
@@ -320,9 +314,10 @@ void DeviceResources::Present(D3D12_RESOURCE_STATES beforeState, _In_opt_ const 
         m_commandQueue->PresentX(1, &planeParameters, params)
     );
 
-    // Xbox One apps do not need to handle DXGI_ERROR_DEVICE_REMOVED or DXGI_ERROR_DEVICE_RESET.
+    // Xbox apps do not need to handle DXGI_ERROR_DEVICE_REMOVED or DXGI_ERROR_DEVICE_RESET.
 
-    MoveToNextFrame();
+    // Update the back buffer index.
+    m_backBufferIndex = (m_backBufferIndex + 1) % m_backBufferCount;
 }
 
 // Handle GPU suspend/resume
@@ -359,25 +354,17 @@ void DeviceResources::WaitForGpu() noexcept
     }
 }
 
-// Prepare to render the next frame.
-void DeviceResources::MoveToNextFrame()
+// For PresentX rendering, we should wait for the origin event just before processing input.
+void DeviceResources::WaitForOrigin()
 {
-    // Schedule a Signal command in the queue.
-    const UINT64 currentFenceValue = m_fenceValues[m_backBufferIndex];
-    ThrowIfFailed(m_commandQueue->Signal(m_fence.Get(), currentFenceValue));
-
-    // Update the back buffer index.
-    m_backBufferIndex = (m_backBufferIndex + 1) % m_backBufferCount;
-
-    // If the next frame is not ready to be rendered yet, wait until it is ready.
-    if (m_fence->GetCompletedValue() < m_fenceValues[m_backBufferIndex])
-    {
-        ThrowIfFailed(m_fence->SetEventOnCompletion(m_fenceValues[m_backBufferIndex], m_fenceEvent.Get()));
-        std::ignore = WaitForSingleObjectEx(m_fenceEvent.Get(), INFINITE, FALSE);
-    }
-
-    // Set the fence value for the next frame.
-    m_fenceValues[m_backBufferIndex] = currentFenceValue + 1;
+    // Wait until frame start is signaled
+    m_framePipelineToken = D3D12XBOX_FRAME_PIPELINE_TOKEN_NULL;
+    ThrowIfFailed(m_d3dDevice->WaitFrameEventX(
+        D3D12XBOX_FRAME_EVENT_ORIGIN,
+        INFINITE,
+        nullptr,
+        D3D12XBOX_WAIT_FRAME_EVENT_FLAG_NONE,
+        &m_framePipelineToken));
 }
 
 // Set frame interval and register for frame events

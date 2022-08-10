@@ -12,8 +12,7 @@ namespace DX
     public:
         DeviceResources(DXGI_FORMAT backBufferFormat = DXGI_FORMAT_B8G8R8A8_UNORM,
                         DXGI_FORMAT depthBufferFormat = DXGI_FORMAT_D32_FLOAT,
-                        UINT backBufferCount = 2,
-                        unsigned int flags = 0) noexcept(false);
+                        UINT backBufferCount = 2) noexcept(false);
         ~DeviceResources();
 
         DeviceResources(DeviceResources&&) = default;
@@ -32,6 +31,7 @@ namespace DX
         void Suspend();
         void Resume();
         void WaitForGpu() noexcept;
+        void WaitForOrigin();
 
         // Device Accessors.
         RECT GetOutputSize() const noexcept { return m_outputSize; }
@@ -51,7 +51,6 @@ namespace DX
         D3D12_RECT                  GetScissorRect() const noexcept        { return m_scissorRect; }
         UINT                        GetCurrentFrameIndex() const noexcept  { return m_backBufferIndex; }
         UINT                        GetBackBufferCount() const noexcept    { return m_backBufferCount; }
-        unsigned int                GetDeviceOptions() const noexcept      { return m_options; }
 
         CD3DX12_CPU_DESCRIPTOR_HANDLE GetRenderTargetView() const noexcept
         {
@@ -65,7 +64,6 @@ namespace DX
         }
 
     private:
-        void MoveToNextFrame();
         void RegisterFrameEvents();
 
         static constexpr size_t MAX_BACK_BUFFER_COUNT = 3;
@@ -104,8 +102,5 @@ namespace DX
         HWND                                                m_window;
         D3D_FEATURE_LEVEL                                   m_d3dFeatureLevel;
         RECT                                                m_outputSize;
-
-        // DeviceResources options (see flags above)
-        unsigned int                                        m_options;
     };
 }
