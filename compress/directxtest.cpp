@@ -29,7 +29,9 @@ TestInfo g_Tests[] =
 {
     { "Decompress", Test01 },
     { "Compress (CPU)", Test02 },
+#ifndef _M_ARM64
     { "Compress (GPU)", Test03 },
+#endif
 };
 
 extern int __cdecl DescribeException(PEXCEPTION_POINTERS pData);

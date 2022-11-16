@@ -455,7 +455,6 @@ bool Test04()
         TexMetadata metadata;
         ScratchImage image;
 
-        HRESULT hr;
         if (_wcsicmp(ext, L".dds") == 0)
         {
             hr = LoadFromDDSFile(szPath, DDS_FLAGS_NONE, &metadata, image);
@@ -563,7 +562,6 @@ bool Test05()
         TexMetadata metadata;
         ScratchImage image;
 
-        HRESULT hr;
         if (_wcsicmp(ext, L".dds") == 0)
         {
             hr = LoadFromDDSFile(szPath, DDS_FLAGS_NONE, &metadata, image);
@@ -728,7 +726,6 @@ bool Test06()
         TexMetadata metadata;
         ScratchImage image;
 
-        HRESULT hr;
         if (_wcsicmp(ext, L".dds") == 0)
         {
             hr = LoadFromDDSFile(szPath, DDS_FLAGS_NONE, &metadata, image);

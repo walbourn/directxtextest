@@ -284,12 +284,19 @@ namespace
         { DXGI_FORMAT_R16G16B16A16_UINT, XMFLOAT4(1.0f, 2.0f, 3.0f, 4.0f), 8, { 0x01,0x00,0x02,0x00,0x03,0x00,0x04,0x00 } },
         // DXGI_FORMAT_R16G16B16A16_SNORM
         { DXGI_FORMAT_R16G16B16A16_SNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 8, { 0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0 } },
-        { DXGI_FORMAT_R16G16B16A16_SNORM, XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 8, { 0x00,0x40,0x00,0x40,0x00,0x40,0x00,0x40 } },
         { DXGI_FORMAT_R16G16B16A16_SNORM, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 8, { 0xFF,0x7F,0xFF,0x7F,0xFF,0x7F,0xFF,0x7F } },
+        { DXGI_FORMAT_R16G16B16A16_SNORM, XMFLOAT4(-1.0f, -1.0f, -1.0f, -1.0f), 8, { 0x01,0x80,0x01,0x80,0x01,0x80,0x01,0x80 } },
+        #ifdef _M_ARM64
+        { DXGI_FORMAT_R16G16B16A16_SNORM, XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 8, { 0xFF,0x3F,0xFF,0x3F,0xFF,0x3F,0xFF,0x3F } },
+        { DXGI_FORMAT_R16G16B16A16_SNORM, XMFLOAT4(0.25f, 0.5f, 0.75f, 1.0f), 8, { 0xFF,0x1F,0xFF,0x3F,0xFF,0x5F,0xFF,0x7F } },
+        { DXGI_FORMAT_R16G16B16A16_SNORM, XMFLOAT4(-0.5f, -0.5f, -0.5f, -0.5f), 8, {0x01,0xC0,0x01,0xC0,0x01,0xC0,0x01,0xC0 } },
+        { DXGI_FORMAT_R16G16B16A16_SNORM, XMFLOAT4(-0.25f, -0.5f, -0.75f, -1.0f), 8, { 0x01,0xE0,0x01,0xC0,0x01,0xA0,0x01,0x80 } },
+        #else
+        { DXGI_FORMAT_R16G16B16A16_SNORM, XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 8, { 0x00,0x40,0x00,0x40,0x00,0x40,0x00,0x40 } },
         { DXGI_FORMAT_R16G16B16A16_SNORM, XMFLOAT4(0.25f, 0.5f, 0.75f, 1.0f), 8, { 0x00,0x20,0x00,0x40,0xFF,0x5F,0xFF,0x7F } },
         { DXGI_FORMAT_R16G16B16A16_SNORM, XMFLOAT4(-0.5f, -0.5f, -0.5f, -0.5f), 8, { 0x00,0xC0,0x00,0xC0,0x00,0xC0,0x00,0xC0 } },
-        { DXGI_FORMAT_R16G16B16A16_SNORM, XMFLOAT4(-1.0f, -1.0f, -1.0f, -1.0f), 8, { 0x01,0x80,0x01,0x80,0x01,0x80,0x01,0x80 } },
         { DXGI_FORMAT_R16G16B16A16_SNORM, XMFLOAT4(-0.25f, -0.5f, -0.75f, -1.0f), 8, { 0x00,0xE0,0x00,0xC0,0x01,0xA0,0x01,0x80 } },
+        #endif
         // DXGI_FORMAT_R16G16B16A16_SINT
         { DXGI_FORMAT_R16G16B16A16_SINT, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 8, { 0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0 } },
         { DXGI_FORMAT_R16G16B16A16_SINT, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 8, { 0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00 } },
@@ -365,9 +372,14 @@ namespace
         { DXGI_FORMAT_R8G8B8A8_SNORM, XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 4, { 0x3F,0x3F,0x3F,0x3F } },
         { DXGI_FORMAT_R8G8B8A8_SNORM, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 4, { 0x7F,0x7F,0x7F,0x7F } },
         { DXGI_FORMAT_R8G8B8A8_SNORM, XMFLOAT4(0.25f, 0.5f, 0.75f, 1.0f), 4, { 0x1F,0x3F,0x5F,0x7F} },
-        { DXGI_FORMAT_R8G8B8A8_SNORM, XMFLOAT4(-0.5f, -0.5f, -0.5f, -0.5f), 4, { 0xC1,0xC0,0xC0,0xC0 } },
         { DXGI_FORMAT_R8G8B8A8_SNORM, XMFLOAT4(-1.0f, -1.0f, -1.0f, -1.0f), 4, { 0x81,0x81,0x81,0x81 } },
+#ifdef _M_ARM64
+        { DXGI_FORMAT_R8G8B8A8_SNORM, XMFLOAT4(-0.5f, -0.5f, -0.5f, -0.5f), 4, { 0xC1,0xC1,0xC1,0xC1 } },
+        { DXGI_FORMAT_R8G8B8A8_SNORM, XMFLOAT4(-0.25f, -0.5f, -0.75f, -1.0f), 4, { 0xE1,0xC1,0xA1,0x81 } },
+#else
+        { DXGI_FORMAT_R8G8B8A8_SNORM, XMFLOAT4(-0.5f, -0.5f, -0.5f, -0.5f), 4, { 0xC1,0xC0,0xC0,0xC0 } },
         { DXGI_FORMAT_R8G8B8A8_SNORM, XMFLOAT4(-0.25f, -0.5f, -0.75f, -1.0f), 4, { 0xE1,0xC0,0xA0,0x81 } },
+#endif
         // DXGI_FORMAT_R8G8B8A8_SINT
         { DXGI_FORMAT_R8G8B8A8_SINT, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 4, { 0x0, 0x0, 0x0, 0x0 } },
         { DXGI_FORMAT_R8G8B8A8_SINT, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 4, { 0x01,0x01,0x01,0x01 } },
@@ -399,12 +411,19 @@ namespace
         { DXGI_FORMAT_R16G16_UINT, XMFLOAT4(1.0f, 2.0f, 0.0f, 1.0f), 4, { 0x01,0x00,0x02,0x00 } },
         // DXGI_FORMAT_R16G16_SNORM
         { DXGI_FORMAT_R16G16_SNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f), 4, { 0x00,0x00,0x00,0x00 } },
-        { DXGI_FORMAT_R16G16_SNORM, XMFLOAT4(0.5f, 0.5f, 0.0f, 1.0f), 4, { 0x00,0x40,0x00,0x40 } },
-        { DXGI_FORMAT_R16G16_SNORM, XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f), 4, { 0xFF,0x7F,0xFF,0x7F } },
-        { DXGI_FORMAT_R16G16_SNORM, XMFLOAT4(0.25f, 0.5f, 0.0f, 1.0f), 4, { 0x00,0x20,0x00,0x40 } },
-        { DXGI_FORMAT_R16G16_SNORM, XMFLOAT4(-0.5f, -0.5f, 0.0f, 1.0f), 4, { 0x00,0xC0,0x00,0xC0 } },
-        { DXGI_FORMAT_R16G16_SNORM, XMFLOAT4(-1.0f, -1.0f, 0.0f, 1.0f), 4, { 0x01,0x80,0x01,0x80 } },
-        { DXGI_FORMAT_R16G16_SNORM, XMFLOAT4(-0.25f, -0.5f, 0.0f, 1.0f), 4, { 0x00,0xE0,0x00,0xC0 } },
+        { DXGI_FORMAT_R16G16_SNORM, XMFLOAT4(1.0f, 1.0f, 0.0f, 1.f), 4, { 0xFF,0x7F,0xFF,0x7F } },
+        { DXGI_FORMAT_R16G16_SNORM, XMFLOAT4(-1.0f, -1.0f, 0.0f, 1.f), 4, { 0x01,0x80,0x01,0x80 } },
+#ifdef _M_ARM64
+        { DXGI_FORMAT_R16G16_SNORM, XMFLOAT4(0.5f, 0.5f, 0.0f, 1.f), 4, { 0xFF,0x3F,0xFF,0x3F } },
+        { DXGI_FORMAT_R16G16_SNORM, XMFLOAT4(0.25f, 0.5f, 0.0f, 1.f), 4, { 0xFF,0x1F,0xFF,0x3F } },
+        { DXGI_FORMAT_R16G16_SNORM, XMFLOAT4(-0.5f, -0.5f, 0.0f, 1.f), 4, { 0x01,0xC0,0x01,0xC0 } },
+        { DXGI_FORMAT_R16G16_SNORM, XMFLOAT4(-0.25f, -0.5f, 0.0f, 1.f), 4, { 0x01,0xE0,0x01,0xC0 } },
+#else
+        { DXGI_FORMAT_R16G16_SNORM, XMFLOAT4(0.5f, 0.5f, 0.0f, 1.f), 4, { 0x00,0x40,0x00,0x40 } },
+        { DXGI_FORMAT_R16G16_SNORM, XMFLOAT4(0.25f, 0.5f, 0.0f, 1.f), 4, { 0x00,0x20,0x00,0x40 } },
+        { DXGI_FORMAT_R16G16_SNORM, XMFLOAT4(-0.5f, -0.5f, 0.0f, 1.f), 4, { 0x00,0xC0,0x00,0xC0 } },
+        { DXGI_FORMAT_R16G16_SNORM, XMFLOAT4(-0.25f, -0.5f, 0.0f, 1.f), 4, { 0x00,0xE0,0x00,0xC0 } },
+#endif
         // DXGI_FORMAT_R16G16_SINT
         { DXGI_FORMAT_R16G16_SINT, XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f), 4, { 0x00,0x00,0x00,0x00 } },
         { DXGI_FORMAT_R16G16_SINT, XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f), 4, { 0x01,0x00,0x01,0x00 } },
@@ -458,12 +477,19 @@ namespace
         { DXGI_FORMAT_R8G8_UINT, XMFLOAT4(1.0f, 2.0f, 0.0f, 1.0f), 2, { 0x01,0x02 } },
         // DXGI_FORMAT_R8G8_SNORM
         { DXGI_FORMAT_R8G8_SNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f), 2, { 0x00,0x00 } },
-        { DXGI_FORMAT_R8G8_SNORM, XMFLOAT4(0.5f, 0.5f, 0.0f, 1.0f), 2, { 0x40,0x40 } },
-        { DXGI_FORMAT_R8G8_SNORM, XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f), 2, { 0x7F,0x7F } },
-        { DXGI_FORMAT_R8G8_SNORM, XMFLOAT4(0.25f, 0.5f, 0.0f, 1.0f), 2, { 0x20,0x40 } },
-        { DXGI_FORMAT_R8G8_SNORM, XMFLOAT4(-0.5f, -0.5f, 0.0f, 1.0f), 2, { 0xC0,0xC0 } },
-        { DXGI_FORMAT_R8G8_SNORM, XMFLOAT4(-1.0f, -1.0f, 0.0f, 1.0f), 2, { 0x81,0x81 } },
-        { DXGI_FORMAT_R8G8_SNORM, XMFLOAT4(-0.25f, -0.5f, 0.0f, 1.0f), 2, { 0xE0,0xC0 } },
+        { DXGI_FORMAT_R8G8_SNORM, XMFLOAT4(1.0f, 1.0f, 0.0f, 1.f), 2, { 0x7F,0x7F } },
+        { DXGI_FORMAT_R8G8_SNORM, XMFLOAT4(-1.0f, -1.0f, 0.0f, 1.f), 2, { 0x81,0x81 } },
+#ifdef _M_ARM64
+        { DXGI_FORMAT_R8G8_SNORM, XMFLOAT4(0.5f, 0.5f, 0.0f, 1.f), 2, { 0x3F,0x3F } },
+        { DXGI_FORMAT_R8G8_SNORM, XMFLOAT4(0.25f, 0.5f, 0.0f, 1.f), 2, { 0x1F,0x3F } },
+        { DXGI_FORMAT_R8G8_SNORM, XMFLOAT4(-0.5f, -0.5f, 0.0f, 1.f), 2, { 0xC1,0xC1 } },
+        { DXGI_FORMAT_R8G8_SNORM, XMFLOAT4(-0.25f, -0.5f, 0.0f, 1.f), 2, { 0xE1,0xC1 } },
+#else
+        { DXGI_FORMAT_R8G8_SNORM, XMFLOAT4(0.5f, 0.5f, 0.0f, 1.f), 2, { 0x40,0x40 } },
+        { DXGI_FORMAT_R8G8_SNORM, XMFLOAT4(0.25f, 0.5f, 0.0f, 1.f), 2, { 0x20,0x40 } },
+        { DXGI_FORMAT_R8G8_SNORM, XMFLOAT4(-0.5f, -0.5f, 0.0f, 1.f), 2, { 0xC0,0xC0 } },
+        { DXGI_FORMAT_R8G8_SNORM, XMFLOAT4(-0.25f, -0.5f, 0.0f, 1.f), 2, { 0xE0,0xC0 } },
+#endif
         // DXGI_FORMAT_R8G8_SINT
         { DXGI_FORMAT_R8G8_SINT, XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f), 2, { 0x00,0x00 } },
         { DXGI_FORMAT_R8G8_SINT, XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f), 2, { 0x01,0x01 } },
@@ -564,14 +590,22 @@ namespace
         // DXGI_FORMAT_B5G6R5_UNORM
         { DXGI_FORMAT_B5G6R5_UNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f), 2, { 0x0, 0x0 } },
         { DXGI_FORMAT_B5G6R5_UNORM, XMFLOAT4(0.516129f, 0.507937f, 0.516129f, 1.f), 2, { 0x10, 0x84 } },
-        { DXGI_FORMAT_B5G6R5_UNORM, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 2, { 0xFF, 0xFF } },
-        { DXGI_FORMAT_B5G6R5_UNORM, XMFLOAT4(0.25f, 0.507937f, 0.75f, 1.0f), 2, { 0x17, 0x44 } },
+        { DXGI_FORMAT_B5G6R5_UNORM, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.f), 2, { 0xFF, 0xFF } },
+#ifdef _M_ARM64
+        { DXGI_FORMAT_B5G6R5_UNORM, XMFLOAT4(0.225806f, 0.507937f, 0.74193f, 1.f), 2, { 0x17, 0x3C } },
+#else
+        { DXGI_FORMAT_B5G6R5_UNORM, XMFLOAT4(0.25f, 0.507937f, 0.75f, 1.f), 2, { 0x17, 0x44 } },
+#endif
         // DXGI_FORMAT_B5G5R5A1_UNORM
         { DXGI_FORMAT_B5G5R5A1_UNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 2, { 0x0, 0x0 } },
-        { DXGI_FORMAT_B5G5R5A1_UNORM, XMFLOAT4(0.548387f, 0.548387f, 0.548387f, 1.f), 2, { 0x31, 0xC6 } },
         { DXGI_FORMAT_B5G5R5A1_UNORM, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 2, { 0xFF, 0xFF } },
+#ifdef _M_ARM64
+        { DXGI_FORMAT_B5G5R5A1_UNORM, XMFLOAT4(0.516129f, 0.516129f, 0.516129f, 1.f), 2, { 0x10, 0xC2 } },
+        { DXGI_FORMAT_B5G5R5A1_UNORM, XMFLOAT4(0.258065f, 0.516129f, 0.709667f, 1.0f), 2, { 0x16, 0xA2 } },
+#else
+        { DXGI_FORMAT_B5G5R5A1_UNORM, XMFLOAT4(0.548387f, 0.548387f, 0.548387f, 1.f), 2, { 0x31, 0xC6 } },
         { DXGI_FORMAT_B5G5R5A1_UNORM, XMFLOAT4(0.266667f, 0.548387f, 0.733333f, 1.0f), 2, { 0x37, 0xA2 } },
-        { DXGI_FORMAT_B5G5R5A1_UNORM, XMFLOAT4(0.266667f, 0.548387f, 0.733333f, 0.0f), 2, { 0x37, 0x22 } },
+#endif
         // DXGI_FORMAT_B8G8R8A8_UNORM
         { DXGI_FORMAT_B8G8R8A8_UNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 4, { 0x0, 0x0, 0x0, 0x0 } },
         { DXGI_FORMAT_B8G8R8A8_UNORM, XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 4, { 0x80, 0x80, 0x80, 0x80 } },
@@ -591,9 +625,14 @@ namespace
         { DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM, XMFLOAT4(0.25f, 0.5f, 0.75f, 0.0f), 4, { 0xFF, 0xFD, 0xE9, 0x2F } },
         // DXGI_FORMAT_B4G4R4A4_UNORM
         { DXGI_FORMAT_B4G4R4A4_UNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 2, { 0x0, 0x0 } },
-        { DXGI_FORMAT_B4G4R4A4_UNORM, XMFLOAT4(0.533333f, 0.533333f, 0.533333f, 0.533333f), 2, { 0x88, 0x88 } },
         { DXGI_FORMAT_B4G4R4A4_UNORM, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 2, { 0xFF, 0xFF } },
+#ifdef _M_ARM64
+        { DXGI_FORMAT_B4G4R4A4_UNORM, XMFLOAT4(0.466667f, 0.466667f, 0.466667f, 0.466667f), 2, { 0x77, 0x77 } },
+        { DXGI_FORMAT_B4G4R4A4_UNORM, XMFLOAT4(0.266667f, 0.466667f, 0.666667f, 1.0f), 2, { 0x7A, 0xF4 } },
+#else
+        { DXGI_FORMAT_B4G4R4A4_UNORM, XMFLOAT4(0.533333f, 0.533333f, 0.533333f, 0.533333f), 2, { 0x88, 0x88 } },
         { DXGI_FORMAT_B4G4R4A4_UNORM, XMFLOAT4(0.266667f, 0.533333f, 0.733333f, 1.0f), 2, { 0x8B, 0xF4 } },
+#endif
         // DXGI_FORMAT_AYUV
         { DXGI_FORMAT_AYUV, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 4, { 0x80, 0x80, 0x10, 0x00 } },
         { DXGI_FORMAT_AYUV, XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 4, { 0x80, 0x80, 0x7D, 0x7F } },
@@ -643,6 +682,20 @@ namespace
         { XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT, XMFLOAT4(0.25f, 0.5f, 0.75f, 1.0f), 4, { 0x40, 0x01, 0x06, 0xDA } },
         { XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT, XMFLOAT4(508.f, 508.f, 508.f, 1.0f), 4, { 0xFF, 0xFF, 0xFF, 0xFF } },
         // DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM [Xbox]
+        { XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 4, { 0x0, 0x0, 0x0, 0x0 } },
+        { XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 4, { 0xFF, 0xFD, 0xF7, 0xDF } },
+        { XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, XMFLOAT4(-1.0f, -1.0f, -1.0f, 1.0f), 4, { 0x01, 0x06, 0x18, 0xE0 } },
+#ifdef _M_ARM64
+        { XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, XMFLOAT4(0.5f, 0.5f, 0.5f, 0.666667f), 4, { 0xFF, 0xFC, 0xF3, 0x8F } },
+        { XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, XMFLOAT4(0.25f, 0.5f, 0.75f, 0.0f), 4, { 0x7F, 0xFC, 0xF3, 0x17 } },
+        { XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, XMFLOAT4(-0.500978f, -0.500978f, -0.500978f, 0.666667f), 4, { 0x01, 0x03, 0x0C, 0xB0 } },
+        { XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, XMFLOAT4(-0.25f, -0.5f, -0.75f, 0.0f), 4, { 0x81, 0x03, 0x0C, 0x28 } },
+#else
+        { XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, XMFLOAT4(0.5f, 0.5f, 0.5f, 0.666667f), 4, { 0x00, 0xFD, 0xF3, 0x8F } },
+        { XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, XMFLOAT4(0.25f, 0.5f, 0.75f, 0.0f), 4, { 0x80, 0xFC, 0xF3, 0x17 } },
+        { XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, XMFLOAT4(-0.500978f, -0.500978f, -0.500978f, 0.666667f), 4, { 0x00, 0x03, 0x0C, 0xB0 } },
+        { XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, XMFLOAT4(-0.25f, -0.5f, -0.75f, 0.0f), 4, { 0x80, 0x03, 0x0C, 0x28 } },
+#endif
         { XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, XMFLOAT4(0.5f, 0.5f, 0.5f, 0.666667f), 4, { 0x00, 0xFD, 0xF3, 0x8F } },
         { XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 4, { 0xFF, 0xFD, 0xF7, 0xDF } },
         { XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM, XMFLOAT4(0.25f, 0.5f, 0.75f, 0.0f), 4, { 0x80, 0xFC, 0xF3, 0x17 } },
@@ -3407,21 +3460,21 @@ bool TEXTest::Test06()
                 }
 
                 {
-                    ScratchImage image;
-                    hr = Convert(*srcimage.GetImage(0, 0, 0), tformat, TEX_FILTER_FLOAT_X2BIAS, TEX_THRESHOLD_DEFAULT, image);
+                    ScratchImage image2;
+                    hr = Convert(*srcimage.GetImage(0, 0, 0), tformat, TEX_FILTER_FLOAT_X2BIAS, TEX_THRESHOLD_DEFAULT, image2);
                     if (FAILED(hr))
                     {
                         success = false;
                         pass = false;
                         printe("Failed conversion x2 bias (HRESULT %08X) to %ls:\n%ls\n", static_cast<unsigned int>(hr), GetName(tformat), szPath);
                     }
-                    else if (image.GetMetadata().format != tformat
-                        || image.GetMetadata().width != srcimage.GetMetadata().width || image.GetMetadata().height != srcimage.GetMetadata().height)
+                    else if (image2.GetMetadata().format != tformat
+                        || image2.GetMetadata().width != srcimage.GetMetadata().width || image2.GetMetadata().height != srcimage.GetMetadata().height)
                     {
                         success = false;
                         pass = false;
                         printe("Failed conversion result x2 bias is %zu x %zu (format %ls):\n",
-                            image.GetMetadata().width, image.GetMetadata().height, GetName(image.GetMetadata().format));
+                            image2.GetMetadata().width, image2.GetMetadata().height, GetName(image2.GetMetadata().format));
                         printe("\n...(check) %zu x %zu (format %ls):\n%ls\n",
                             srcimage.GetMetadata().width, srcimage.GetMetadata().height, GetName(tformat), szPath);
                     }
@@ -3438,7 +3491,7 @@ bool TEXTest::Test06()
                         wchar_t szDestPath[MAX_PATH] = {};
                         _wmakepath_s(szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds");
 
-                        SaveScratchImage(szDestPath, DDS_FLAGS_NONE, image);
+                        SaveScratchImage(szDestPath, DDS_FLAGS_NONE, image2);
                     }
                 }
 

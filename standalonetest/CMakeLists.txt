@@ -1,7 +1,7 @@
 ﻿# Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
-cmake_minimum_required (VERSION 3.11)
+cmake_minimum_required (VERSION 3.20)
 
 project (standalonetest
   DESCRIPTION "DirectXTex Standalone Module Test"
@@ -26,13 +26,6 @@ elseif(CMAKE_GENERATOR_PLATFORM MATCHES "^[Aa][Rr][Mm]$")
     set(DIRECTX_ARCH arm)
 elseif(CMAKE_GENERATOR_PLATFORM MATCHES "^[Aa][Rr][Mm]64$")
     set(DIRECTX_ARCH arm64)
-endif()
-
-if(MSVC)
-    # Use max Warning Level
-    string(REPLACE "/W3 " "/Wall " CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
-    string(REPLACE "/W3 " "/Wall " CMAKE_CXX_FLAGS_DEBUG ${CMAKE_CXX_FLAGS_DEBUG})
-    string(REPLACE "/W3 " "/Wall " CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
 endif()
 
 set(TEST_SOURCES
@@ -90,6 +83,11 @@ else()
     target_link_libraries(${PROJECT_NAME} PRIVATE Microsoft::DirectX-Guids)
 endif()
 
+if(MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE /Wall /GR- /fp:fast "$<$<NOT:$<CONFIG:DEBUG>>:/guard:cf>")
+    target_link_options(${PROJECT_NAME} PRIVATE /DYNAMICBASE /NXCOMPAT)
+endif()
+
 if(NOT ${DIRECTX_ARCH} MATCHES "^arm")
     if (${CMAKE_SIZEOF_VOID_P} EQUAL "4")
         set(ARCH_SSE2 $<$<CXX_COMPILER_ID:MSVC>:/arch:SSE2> $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-msse2>)
@@ -110,7 +108,7 @@ endif()
 if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
     target_compile_options(${PROJECT_NAME} PRIVATE /permissive- /Zc:__cplusplus)
 
-    set(WarningsEXE "/wd4061" "/wd4365" "/wd4668" "/wd4820" "/wd5031" "/wd5032" "/wd5039" "/wd5045" )
+    set(WarningsEXE "/wd4061" "/wd4365" "/wd4668" "/wd4710" "/wd4820" "/wd5031" "/wd5032" "/wd5039" "/wd5045" )
     target_compile_options(${PROJECT_NAME} PRIVATE ${WarningsEXE})
 endif()
 

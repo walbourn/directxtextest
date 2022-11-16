@@ -303,7 +303,7 @@ bool Test00()
         else
         {
             TexMetadata metadata;
-            HRESULT hr = GetMetadataFromTGAMemory(blob.GetBufferPointer(), blob.GetBufferSize(), metadata);
+            hr = GetMetadataFromTGAMemory(blob.GetBufferPointer(), blob.GetBufferSize(), metadata);
 
             const TexMetadata* check = &g_TestMedia[index].metadata;
             if (FAILED(hr))

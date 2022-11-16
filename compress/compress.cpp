@@ -1122,7 +1122,6 @@ bool Test03()
 
         TexMetadata metadata;
         ScratchImage srcimage;
-        HRESULT hr;
 
         if ( _wcsicmp( ext, L".dds" ) == 0 )
         {

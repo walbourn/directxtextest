@@ -130,13 +130,13 @@ namespace
 
     //---------------------------------------------------------------------------------
 
-    #include "shaders\vs2D.h"
-    #include "shaders\ps1D.h"
-    #include "shaders\ps2D.h"
-    #include "shaders\vsCube.h"
-    #include "shaders\psCube.h"
-    #include "shaders\vs3D.h"
-    #include "shaders\ps3D.h"
+    #include "vs2D.h"
+    #include "ps1D.h"
+    #include "ps2D.h"
+    #include "vsCube.h"
+    #include "psCube.h"
+    #include "vs3D.h"
+    #include "ps3D.h"
 
     //---------------------------------------------------------------------------------
 

@@ -389,8 +389,8 @@ bool Test04()
                 {
                     assert(image96bpp.GetImage(0, 0, 0)->format == DXGI_FORMAT_R32G32B32_FLOAT);
 
-                    Blob blob;
-                    hr = SaveToHDRMemory(*image96bpp.GetImage(0, 0, 0), blob);
+                    Blob blob2;
+                    hr = SaveToHDRMemory(*image96bpp.GetImage(0, 0, 0), blob2);
                     if (FAILED(hr))
                     {
                         success = false;
@@ -401,7 +401,7 @@ bool Test04()
                     {
                         TexMetadata metadata2;
                         ScratchImage image2;
-                        hr = LoadFromHDRMemory(blob.GetBufferPointer(), blob.GetBufferSize(), &metadata2, image2);
+                        hr = LoadFromHDRMemory(blob2.GetBufferPointer(), blob2.GetBufferSize(), &metadata2, image2);
                         if (FAILED(hr))
                         {
                             success = false;
@@ -458,8 +458,8 @@ bool Test04()
                 {
                     assert(imagehalf.GetImage(0, 0, 0)->format == DXGI_FORMAT_R16G16B16A16_FLOAT);
 
-                    Blob blob;
-                    hr = SaveToHDRMemory(*imagehalf.GetImage(0, 0, 0), blob);
+                    Blob blob2;
+                    hr = SaveToHDRMemory(*imagehalf.GetImage(0, 0, 0), blob2);
                     if (FAILED(hr))
                     {
                         success = false;
@@ -470,7 +470,7 @@ bool Test04()
                     {
                         TexMetadata metadata2;
                         ScratchImage image2;
-                        hr = LoadFromHDRMemory(blob.GetBufferPointer(), blob.GetBufferSize(), &metadata2, image2);
+                        hr = LoadFromHDRMemory(blob2.GetBufferPointer(), blob2.GetBufferSize(), &metadata2, image2);
                         if (FAILED(hr))
                         {
                             success = false;
