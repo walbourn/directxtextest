@@ -221,6 +221,7 @@ bool TEXTest::Test01()
 
     for (UINT f = DXGI_START; f <= DXGI_END; ++f )
     {
+#pragma warning(suppress : 4389)
         bool isCompressed = std::find(std::begin(bcFmts), std::end(bcFmts), f) != std::end(bcFmts);
 
         bool isPAK = std::find(std::begin(packedFmts), std::end(packedFmts), f) != std::end(packedFmts);
