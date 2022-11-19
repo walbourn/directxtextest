@@ -53,7 +53,7 @@ list(APPEND TEST_EXES xtppm)
 add_executable(xtppm ppm/ppm.cpp ppm/directxtest.cpp ppm/testutils.cpp ../Texconv/PortablePixMap.cpp)
 target_include_directories(xtppm PRIVATE ./inc)
 add_test(NAME "ppm" COMMAND xtppm)
-set_tests_properties(ppm PROPERTIES TIMEOUT 60)
+set_tests_properties(ppm PROPERTIES TIMEOUT 120)
 
 # TGA
 list(APPEND TEST_EXES xttga)
@@ -94,7 +94,7 @@ add_executable(xtfilter
     filter/filter.h filter/directxtest.cpp filter/testutils.cpp)
 target_include_directories(xtfilter PRIVATE ./inc)
 add_test(NAME "filter" COMMAND xtfilter)
-set_tests_properties(filter PROPERTIES TIMEOUT 60)
+set_tests_properties(filter PROPERTIES TIMEOUT 240)
 
 # compress
 list(APPEND TEST_EXES xtcompress)
