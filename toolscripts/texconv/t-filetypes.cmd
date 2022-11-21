@@ -21,4 +21,9 @@ echo.
 echo -nologo -ft %2 -f R8G8B8A8_UNORM -o %OUTTESTDIR% %REFDIR%\1234-%1.%1
 "%RUN%" -nologo -ft %2 -f R8G8B8A8_UNORM -o %OUTTESTDIR% %REFDIR%\1234-%1.%1
 if %ERRORLEVEL% NEQ 0 ( call failure.cmd "Failed" )
+
+if %2.==TGA. (echo.
+echo -nologo -tga20 -ft TGA -f R8G8B8A8_UNORM -px TGA20_ -o %OUTTESTDIR% %REFDIR%\1234-%1.%1
+"%RUN%" -nologo -tga20 -ft TGA -f R8G8B8A8_UNORM -px TGA20_ -o %OUTTESTDIR% %REFDIR%\1234-%1.%1
+if %ERRORLEVEL% NEQ 0 ( call failure.cmd "Failed" ))
 goto :EOF

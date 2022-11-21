@@ -1,7 +1,7 @@
 @echo off
 call startup.cmd %0
 
-for /F "eol=#" %%w in (%REFDIR%\bc11.txt) do call :writeformat %%w
+for /F "eol=#" %%w in (%REFDIR%\bc.txt) do call :writeformat %%w
 for /F "eol=#" %%w in (%REFDIR%\bcuniform.txt) do call :writeuniform %%w
 for /F "eol=#" %%w in (%REFDIR%\bcdither.txt) do call :writedither %%w
 for /F "eol=#" %%w in (%REFDIR%\bcmax.txt) do call :writemax %%w
