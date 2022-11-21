@@ -196,6 +196,11 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
       endforeach()
     endif()
 
+    if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 19.34)
+      foreach(t IN LISTS TEST_EXES)
+        target_compile_options(${t} PRIVATE /wd5262 /wd5264)
+      endforeach()
+    endif()
 endif()
 
 if(WIN32)
