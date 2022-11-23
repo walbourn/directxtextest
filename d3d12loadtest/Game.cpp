@@ -306,9 +306,9 @@ void Game::CreateDeviceDependentResources()
     }
 
     // Create the pipeline state, which includes loading shaders.
-    auto vertexShaderBlob = DX::ReadData(L"VertexShader.cso");
+    auto vertexShaderBlob = DX::ReadData(L"VertexShader12.cso");
 
-    auto pixelShaderBlob = DX::ReadData(L"PixelShader.cso");
+    auto pixelShaderBlob = DX::ReadData(L"PixelShader12.cso");
 
     static const D3D12_INPUT_ELEMENT_DESC s_inputElementDesc[2] =
     {

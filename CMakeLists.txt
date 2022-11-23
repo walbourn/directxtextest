@@ -21,10 +21,22 @@ add_executable(headertest headertest/main.cpp)
 
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/standalonetest)
 
+# d3d9/11/12loadtest
+list(APPEND TEST_EXES d3d9loadtest d3d11loadtest d3d12loadtest)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/d3d9loadtest)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/d3d11loadtest)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/d3d12loadtest)
+
+add_test(NAME "d3d9loadtest" COMMAND d3d9loadtest -ctest WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+set_tests_properties(d3d9loadtest PROPERTIES TIMEOUT 30)
+
+add_test(NAME "d3d11loadtest" COMMAND d3d11loadtest -ctest WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+set_tests_properties(d3d11loadtest PROPERTIES TIMEOUT 30)
+
+add_test(NAME "d3d12loadtest" COMMAND d3d12loadtest -ctest WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+set_tests_properties(d3d12loadtest PROPERTIES TIMEOUT 30)
+
 #TODO: platformtest
-#TODO: d3d11loadtest
-#TODO: d3d12loadtest
-#TODO: d3d9loadtest
 
 # bcvalidator
 list(APPEND TEST_EXES bcvalidator)
@@ -94,16 +106,15 @@ add_executable(xtfilter
     filter/filter.h filter/directxtest.cpp filter/testutils.cpp)
 target_include_directories(xtfilter PRIVATE ./inc)
 add_test(NAME "filter" COMMAND xtfilter)
-set_tests_properties(filter PROPERTIES TIMEOUT 240)
+#set_tests_properties(filter PROPERTIES TIMEOUT 240)
 
 # compress
 list(APPEND TEST_EXES xtcompress)
 add_executable(xtcompress compress/compress.cpp compress/directxtest.cpp compress/testutils.cpp)
 target_include_directories(xtcompress PRIVATE ./inc)
 target_link_libraries(xtcompress PRIVATE d3d11.lib)
-# Slow test on ARM64
-# add_test(NAME "compress" COMMAND xtcompress)
-# set_tests_properties(compress PROPERTIES TIMEOUT 2060)
+add_test(NAME "compress" COMMAND xtcompress)
+#set_tests_properties(compress PROPERTIES TIMEOUT 2060)
 
 # d3d11
 list(APPEND TEST_EXES xtd3d11)

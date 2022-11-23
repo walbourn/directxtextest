@@ -5,6 +5,11 @@
 #include "pch.h"
 #include "Game.h"
 
+#pragma warning(push)
+#pragma warning(disable : 4265)
+#include <shellapi.h>
+#pragma warning(pop)
+
 using namespace DirectX;
 
 #ifdef __clang__
@@ -17,9 +22,12 @@ using namespace DirectX;
 namespace
 {
     std::unique_ptr<Game> g_game;
+    bool g_testTimer = false;
 };
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+void ExitGame() noexcept;
+void ParseCommandLine(_In_ LPWSTR lpCmdLine);
 
 // Indicates to hybrid graphics systems to prefer the discrete part by default
 extern "C"
@@ -32,7 +40,6 @@ extern "C"
 int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
     UNREFERENCED_PARAMETER(hPrevInstance);
-    UNREFERENCED_PARAMETER(lpCmdLine);
 
     if (!XMVerifyCPUSupport())
         return 1;
@@ -40,6 +47,8 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     HRESULT hr = CoInitializeEx(nullptr, COINITBASE_MULTITHREADED);
     if (FAILED(hr))
         return 1;
+
+    ParseCommandLine(lpCmdLine);
 
     g_game = std::make_unique<Game>();
 
@@ -84,6 +93,11 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
         GetClientRect(hwnd, &rc);
 
         g_game->Initialize(hwnd, rc.right - rc.left, rc.bottom - rc.top);
+
+        if (g_testTimer)
+        {
+            SetTimer(hwnd, 1, 5000, nullptr);
+        }
     }
 
     // Main message loop
@@ -256,11 +270,45 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         // A menu is active and the user presses a key that does not correspond
         // to any mnemonic or accelerator key. Ignore so we don't produce an error beep.
         return MAKELRESULT(0, MNC_CLOSE);
+
+    case WM_TIMER:
+        if (g_testTimer)
+        {
+            ExitGame();
+        }
     }
 
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
+void ParseCommandLine(_In_ LPWSTR lpCmdLine)
+{
+    int argc = 0;
+    wchar_t** argv = CommandLineToArgvW(lpCmdLine, &argc);
+
+    for (int iArg = 0; iArg < argc; iArg++)
+    {
+        wchar_t* pArg = argv[iArg];
+
+        if (('-' == pArg[0]) || ('/' == pArg[0]))
+        {
+            pArg++;
+            wchar_t* pValue;
+
+            for (pValue = pArg; *pValue && (':' != *pValue); pValue++);
+
+            if (*pValue)
+                *pValue++ = 0;
+
+            if (!_wcsicmp(pArg, L"ctest"))
+            {
+                g_testTimer = true;
+            }
+        }
+    }
+
+    LocalFree(argv);
+}
 
 // Exit helper
 void ExitGame() noexcept

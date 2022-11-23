@@ -77,10 +77,10 @@
     </Manifest>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="PixelShader.hlsl">
+    <FxCompile Include="PixelShader12.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="VertexShader.hlsl">
+    <FxCompile Include="VertexShader12.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>
