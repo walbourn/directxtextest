@@ -233,24 +233,24 @@ namespace
         #endif
 
         #ifdef _M_X64
-            // Very large images
-            { FLAGS_NAMECONFLICT | FLAGS_SKIP_EXHAUSTIVE, 16384, 8192, { 21600, 10800, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthdiffuse.png",
-                {0xca,0x0f,0xb6,0x59,0x97,0xe5,0xe3,0x9d,0xea,0xe9,0x6e,0x7b,0xaa,0x4f,0xaa,0x4d},{0},{0},
-                {0},{0},{0},
-                {0} },
-            { FLAGS_SKIP_EXHAUSTIVE, 16384, 8192, { 8192, 4096, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"callisto.png",
-                {0x29,0x4b,0xed,0x4e,0x0e,0xdf,0x10,0xe2,0x8d,0x78,0x32,0x45,0x77,0xe9,0xff,0x85},{0},{0},
-                {0},{0},{0},
-                {0} },
-            { FLAGS_SKIP_EXHAUSTIVE, 8192, 8192, { 16384, 16384, 1, 1, 15, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth16kby16k.dds",
-                {0xf1,0xcb,0xce,0x07,0x80,0x4c,0x7f,0x82,0x24,0x62,0x70,0xbe,0x63,0x36,0xef,0x37},{ 0 },{ 0 },
-                {0},{0},{0},
-                {0} },
-            { FLAGS_SKIP_EXHAUSTIVE, 8192, 8192, { 16384, 16384, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_SNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth16kby16k_snorm.dds",
-                {0xc6,0xff,0x3a,0x67,0x01,0x3c,0x2c,0x07,0x07,0xfa,0xec,0xb1,0x19,0xba,0xd0,0x0e}, { 0 }, { 0 },
-                {0},{0},{0},
-                {0} },
-            #endif
+        // Very large images
+        { FLAGS_NAMECONFLICT | FLAGS_SKIP_EXHAUSTIVE, 16384, 8192, { 21600, 10800, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthdiffuse.png",
+            {0xca,0x0f,0xb6,0x59,0x97,0xe5,0xe3,0x9d,0xea,0xe9,0x6e,0x7b,0xaa,0x4f,0xaa,0x4d},{0},{0},
+            {0},{0},{0},
+            {0},{0} },
+        { FLAGS_SKIP_EXHAUSTIVE, 16384, 8192, { 8192, 4096, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"callisto.png",
+            {0x29,0x4b,0xed,0x4e,0x0e,0xdf,0x10,0xe2,0x8d,0x78,0x32,0x45,0x77,0xe9,0xff,0x85},{0},{0},
+            {0},{0},{0},
+            {0},{0} },
+        { FLAGS_SKIP_EXHAUSTIVE, 8192, 8192, { 16384, 16384, 1, 1, 15, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth16kby16k.dds",
+            {0xf1,0xcb,0xce,0x07,0x80,0x4c,0x7f,0x82,0x24,0x62,0x70,0xbe,0x63,0x36,0xef,0x37},{ 0 },{ 0 },
+            {0},{0},{0},
+            {0},{0} },
+        { FLAGS_SKIP_EXHAUSTIVE, 8192, 8192, { 16384, 16384, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_SNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth16kby16k_snorm.dds",
+            {0xc6,0xff,0x3a,0x67,0x01,0x3c,0x2c,0x07,0x07,0xfa,0xec,0xb1,0x19,0xba,0xd0,0x0e}, { 0 }, { 0 },
+            {0},{0},{0},
+            {0},{0} },
+        #endif
     };
 
     //-------------------------------------------------------------------------------------

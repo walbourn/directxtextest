@@ -19,7 +19,7 @@
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wc++98-compat"
 #pragma clang diagnostic ignored "-Wc++98-compat-pedantic"
-#pragma clang diagnostic ignored "-Wno-language-extension-token"
+#pragma clang diagnostic ignored "-Wlanguage-extension-token"
 #endif
 
 #include "DirectXTex.h"

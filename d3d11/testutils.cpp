@@ -105,12 +105,11 @@ namespace
     LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         PAINTSTRUCT ps;
-        HDC hdc;
 
         switch (message)
         {
         case WM_PAINT:
-            hdc = BeginPaint(hWnd, &ps);
+            std::ignore = BeginPaint(hWnd, &ps);
             EndPaint(hWnd, &ps);
             break;
 
