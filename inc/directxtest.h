@@ -10,7 +10,7 @@
 #pragma warning(push)
 #pragma warning(disable : 4005)
 #define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
+#define NOMINMAX 1
 #define NODRAWTEXT
 #define NOGDI
 #define NOMCX
@@ -22,6 +22,10 @@
 #include <crtdbg.h>
 
 #include <Windows.h>
+#endif
+
+#ifdef __MINGW32__
+#include <unknwn.h>
 #endif
 
 #include <algorithm>

@@ -8,7 +8,7 @@
 
 #include "DirectXTex.h"
 
-#include <wrl.h>
+#include <wrl/client.h>
 
 //#define DISABLE_BC6HBC7_COMPRESS
 

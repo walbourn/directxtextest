@@ -15,6 +15,7 @@
 #include "DirectXTex.h"
 
 #include <exception>
+#include <stdexcept>
 
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"
@@ -572,7 +573,7 @@ namespace
         HRESULT hr = g_pSwapChain->Present(0, 0);
         if (hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
         {
-            throw std::exception("Present");
+            throw std::runtime_error("Present");
         }
     }
 }

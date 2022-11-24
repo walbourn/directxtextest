@@ -26,7 +26,9 @@ add_executable(${PROJECT_NAME} WIN32
     ../../WICTextureLoader/WICTextureLoader11.h
 )
 
-target_precompile_headers(${PROJECT_NAME} PRIVATE pch.h)
+if(NOT MINGW)
+    target_precompile_headers(${PROJECT_NAME} PRIVATE pch.h)
+endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE
      ../../DDSTextureLoader
@@ -38,6 +40,10 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     kernel32.lib user32.lib
     DirectXTex
     )
+
+if(MINGW)
+    target_link_options(${PROJECT_NAME} PRIVATE -municode)
+endif()
 
 # Build HLSL shaders
 add_custom_target(shaders11)

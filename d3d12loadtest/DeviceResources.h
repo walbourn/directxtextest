@@ -73,13 +73,25 @@ namespace DX
 
         CD3DX12_CPU_DESCRIPTOR_HANDLE GetRenderTargetView() const noexcept
         {
-            return CD3DX12_CPU_DESCRIPTOR_HANDLE(
-                m_rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(),
-                static_cast<INT>(m_backBufferIndex), m_rtvDescriptorSize);
+        #ifdef __MINGW32__
+            D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle;
+            auto hcpu = *m_rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(&cpuHandle);
+        #else
+            auto hcpu = m_rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+        #endif
+
+            return CD3DX12_CPU_DESCRIPTOR_HANDLE(hcpu, static_cast<INT>(m_backBufferIndex), m_rtvDescriptorSize);
         }
         CD3DX12_CPU_DESCRIPTOR_HANDLE GetDepthStencilView() const noexcept
         {
-            return CD3DX12_CPU_DESCRIPTOR_HANDLE(m_dsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart());
+        #ifdef __MINGW32__
+            D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle;
+            auto hcpu = *m_dsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(&cpuHandle);
+        #else
+            auto hcpu = m_dsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+        #endif
+
+            return CD3DX12_CPU_DESCRIPTOR_HANDLE(hcpu);
         }
 
     private:

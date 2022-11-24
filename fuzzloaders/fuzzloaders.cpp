@@ -28,6 +28,7 @@
 #include <Windows.h>
 
 #include <cassert>
+#include <cstdio>
 #include <cwchar>
 #include <memory>
 #include <list>

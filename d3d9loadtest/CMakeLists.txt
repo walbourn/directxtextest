@@ -23,7 +23,9 @@ add_executable(${PROJECT_NAME} WIN32
     ../../WICTextureLoader/WICTextureLoader9.h
 )
 
-target_precompile_headers(${PROJECT_NAME} PRIVATE pch.h)
+if(NOT MINGW)
+    target_precompile_headers(${PROJECT_NAME} PRIVATE pch.h)
+endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE
      ../../DDSTextureLoader
@@ -34,6 +36,10 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     d3d9.lib dxguid.lib uuid.lib
     kernel32.lib user32.lib
     )
+
+if(MINGW)
+    target_link_options(${PROJECT_NAME} PRIVATE -municode)
+endif()
 
 add_custom_command(
   TARGET ${PROJECT_NAME} POST_BUILD

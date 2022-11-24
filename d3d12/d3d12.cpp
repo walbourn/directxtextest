@@ -6,13 +6,19 @@
 
 #include "directxtest.h"
 
-#include <d3d12.h>
-
-#include "DirectXTex.h"
-
 #define D3DX12_NO_STATE_OBJECT_HELPERS
 #define D3DX12_NO_CHECK_FEATURE_SUPPORT_CLASS
+
+#ifdef USING_DIRECTX_HEADERS
+#include <directx/d3d12.h>
+#include <directx/d3dx12.h>
+#include <dxguids/dxguids.h>
+#else
+#include <d3d12.h>
 #include "d3dx12.h"
+#endif
+
+#include "DirectXTex.h"
 
 #include <wrl/client.h>
 
@@ -363,6 +369,8 @@ bool Test03()
                 if (g_TestMedia[index].options & FLAGS_SRGB)
                 {
                     // CREATETEX_FORCE_SRGB
+
+
                     hr = CreateTextureEx(device.Get(), metadata, D3D12_RESOURCE_FLAG_NONE,
                         CREATETEX_FORCE_SRGB, pResource.ReleaseAndGetAddressOf());
                     if (FAILED(hr))
@@ -373,7 +381,13 @@ bool Test03()
                     }
                     else
                     {
-                        DXGI_FORMAT format = pResource->GetDesc().Format;
+                    #if defined(_MSC_VER) || !defined(WIN32)
+                        auto desc = pResource->GetDesc();
+                    #else
+                        D3D12_RESOURCE_DESC tmpDesc;
+                        auto desc = *pResource->GetDesc(&tmpDesc);
+                    #endif
+                        DXGI_FORMAT format = desc.Format;
                         if (!IsSRGB(format))
                         {
                             success = false;
@@ -393,7 +407,13 @@ bool Test03()
                     }
                     else
                     {
-                        DXGI_FORMAT format = pResource->GetDesc().Format;
+                    #if defined(_MSC_VER) || !defined(WIN32)
+                        auto desc = pResource->GetDesc();
+                    #else
+                        D3D12_RESOURCE_DESC tmpDesc;
+                        auto desc = *pResource->GetDesc(&tmpDesc);
+                    #endif
+                        DXGI_FORMAT format = desc.Format;
                         if (IsSRGB(format))
                         {
                             success = false;

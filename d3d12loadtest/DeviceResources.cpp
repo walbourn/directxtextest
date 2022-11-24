@@ -361,6 +361,13 @@ void DeviceResources::CreateWindowSizeDependentResources()
 
     // Obtain the back buffers for this window which will be the final render targets
     // and create render target views for each of them.
+#ifdef __MINGW32__
+    D3D12_CPU_DESCRIPTOR_HANDLE hcpu;
+    std::ignore = m_rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(&hcpu);
+#else
+    auto hcpu = m_rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+#endif
+
     for (UINT n = 0; n < m_backBufferCount; n++)
     {
         ThrowIfFailed(m_swapChain->GetBuffer(n, IID_PPV_ARGS(m_renderTargets[n].GetAddressOf())));
@@ -374,7 +381,7 @@ void DeviceResources::CreateWindowSizeDependentResources()
         rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 
         const CD3DX12_CPU_DESCRIPTOR_HANDLE rtvDescriptor(
-            m_rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(),
+            hcpu,
             static_cast<INT>(n), m_rtvDescriptorSize);
         m_d3dDevice->CreateRenderTargetView(m_renderTargets[n].Get(), &rtvDesc, rtvDescriptor);
     }
@@ -417,7 +424,12 @@ void DeviceResources::CreateWindowSizeDependentResources()
         dsvDesc.Format = m_depthBufferFormat;
         dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
 
-        m_d3dDevice->CreateDepthStencilView(m_depthStencil.Get(), &dsvDesc, m_dsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart());
+    #ifdef __MINGW32__
+        std::ignore = m_dsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(&hcpu);
+    #else
+        hcpu = m_dsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+    #endif
+        m_d3dDevice->CreateDepthStencilView(m_depthStencil.Get(), &dsvDesc, hcpu);
     }
 
     // Set the 3D rendering viewport and scissor rectangle to target the entire window.
@@ -445,14 +457,14 @@ void DeviceResources::SetWindow(HWND window, int width, int height) noexcept
 // This method is called when the Win32 window changes size.
 bool DeviceResources::WindowSizeChanged(int width, int height)
 {
+    if (!m_window)
+        return false;
+
     RECT newRc;
     newRc.left = newRc.top = 0;
     newRc.right = width;
     newRc.bottom = height;
-    if (newRc.left == m_outputSize.left
-        && newRc.top == m_outputSize.top
-        && newRc.right == m_outputSize.right
-        && newRc.bottom == m_outputSize.bottom)
+    if (newRc.right == m_outputSize.right && newRc.bottom == m_outputSize.bottom)
     {
         // Handle color space settings for HDR
         UpdateColorSpace();
@@ -651,7 +663,7 @@ void DeviceResources::GetAdapter(IDXGIAdapter1** ppAdapter)
             }
 
             // Check to see if the adapter supports Direct3D 12, but don't create the actual device yet.
-            if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), m_d3dMinFeatureLevel, _uuidof(ID3D12Device), nullptr)))
+            if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), m_d3dMinFeatureLevel, IID_ID3D12Device, nullptr)))
             {
 #ifdef _DEBUG
                 wchar_t buff[256] = {};
@@ -681,7 +693,7 @@ void DeviceResources::GetAdapter(IDXGIAdapter1** ppAdapter)
             }
 
             // Check to see if the adapter supports Direct3D 12, but don't create the actual device yet.
-            if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), m_d3dMinFeatureLevel, _uuidof(ID3D12Device), nullptr)))
+            if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), m_d3dMinFeatureLevel, IID_ID3D12Device, nullptr)))
             {
 #ifdef _DEBUG
                 wchar_t buff[256] = {};
