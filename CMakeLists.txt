@@ -106,7 +106,7 @@ add_executable(xtfilter
     filter/filter.h filter/directxtest.cpp filter/testutils.cpp)
 target_include_directories(xtfilter PRIVATE ./inc)
 add_test(NAME "filter" COMMAND xtfilter)
-#set_tests_properties(filter PROPERTIES TIMEOUT 240)
+set_tests_properties(filter PROPERTIES TIMEOUT 240)
 
 # compress
 list(APPEND TEST_EXES xtcompress)
@@ -114,7 +114,7 @@ add_executable(xtcompress compress/compress.cpp compress/directxtest.cpp compres
 target_include_directories(xtcompress PRIVATE ./inc)
 target_link_libraries(xtcompress PRIVATE d3d11.lib)
 add_test(NAME "compress" COMMAND xtcompress)
-#set_tests_properties(compress PROPERTIES TIMEOUT 2060)
+set_tests_properties(compress PROPERTIES TIMEOUT 2000)
 
 # d3d11
 list(APPEND TEST_EXES xtd3d11)
