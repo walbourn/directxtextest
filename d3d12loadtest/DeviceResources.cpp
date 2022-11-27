@@ -98,6 +98,7 @@ void DeviceResources::CreateDeviceResources()
             OutputDebugStringA("WARNING: Direct3D Debug Device is not available\n");
         }
 
+    #ifndef __MINGW32__
         ComPtr<IDXGIInfoQueue> dxgiInfoQueue;
         if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(dxgiInfoQueue.GetAddressOf()))))
         {
@@ -115,6 +116,7 @@ void DeviceResources::CreateDeviceResources()
             filter.DenyList.pIDList = hide;
             dxgiInfoQueue->AddStorageFilterEntries(DXGI_DEBUG_DXGI, &filter);
         }
+    #endif
     }
 #endif
 
@@ -501,7 +503,7 @@ void DeviceResources::HandleDeviceLost()
     m_d3dDevice.Reset();
     m_dxgiFactory.Reset();
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && !defined(__MINGW32__)
     {
         ComPtr<IDXGIDebug1> dxgiDebug;
         if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&dxgiDebug))))
