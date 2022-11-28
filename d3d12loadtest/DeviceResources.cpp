@@ -116,7 +116,7 @@ void DeviceResources::CreateDeviceResources()
             filter.DenyList.pIDList = hide;
             dxgiInfoQueue->AddStorageFilterEntries(DXGI_DEBUG_DXGI, &filter);
         }
-    #endif
+    #endif // __MINGW32__
     }
 #endif
 
@@ -363,13 +363,6 @@ void DeviceResources::CreateWindowSizeDependentResources()
 
     // Obtain the back buffers for this window which will be the final render targets
     // and create render target views for each of them.
-#ifdef __MINGW32__
-    D3D12_CPU_DESCRIPTOR_HANDLE hcpu;
-    std::ignore = m_rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(&hcpu);
-#else
-    auto hcpu = m_rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
-#endif
-
     for (UINT n = 0; n < m_backBufferCount; n++)
     {
         ThrowIfFailed(m_swapChain->GetBuffer(n, IID_PPV_ARGS(m_renderTargets[n].GetAddressOf())));
@@ -382,9 +375,14 @@ void DeviceResources::CreateWindowSizeDependentResources()
         rtvDesc.Format = m_backBufferFormat;
         rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 
-        const CD3DX12_CPU_DESCRIPTOR_HANDLE rtvDescriptor(
-            hcpu,
-            static_cast<INT>(n), m_rtvDescriptorSize);
+    #ifdef __MINGW32__
+        D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle;
+        std::ignore = m_rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(&cpuHandle);
+    #else
+        auto cpuHandle = m_rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+    #endif
+
+        const CD3DX12_CPU_DESCRIPTOR_HANDLE rtvDescriptor(cpuHandle, static_cast<INT>(n), m_rtvDescriptorSize);
         m_d3dDevice->CreateRenderTargetView(m_renderTargets[n].Get(), &rtvDesc, rtvDescriptor);
     }
 
@@ -408,7 +406,7 @@ void DeviceResources::CreateWindowSizeDependentResources()
 
         D3D12_CLEAR_VALUE depthOptimizedClearValue = {};
         depthOptimizedClearValue.Format = m_depthBufferFormat;
-        depthOptimizedClearValue.DepthStencil.Depth = 1.0f;
+        depthOptimizedClearValue.DepthStencil.Depth = (m_options & c_ReverseDepth) ? 0.0f : 1.0f;
         depthOptimizedClearValue.DepthStencil.Stencil = 0;
 
         ThrowIfFailed(m_d3dDevice->CreateCommittedResource(
@@ -427,11 +425,13 @@ void DeviceResources::CreateWindowSizeDependentResources()
         dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
 
     #ifdef __MINGW32__
-        std::ignore = m_dsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(&hcpu);
+        D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle;
+        std::ignore = m_dsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(&cpuHandle);
     #else
-        hcpu = m_dsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+        auto cpuHandle = m_dsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
     #endif
-        m_d3dDevice->CreateDepthStencilView(m_depthStencil.Get(), &dsvDesc, hcpu);
+
+        m_d3dDevice->CreateDepthStencilView(m_depthStencil.Get(), &dsvDesc, cpuHandle);
     }
 
     // Set the 3D rendering viewport and scissor rectangle to target the entire window.
@@ -452,8 +452,8 @@ void DeviceResources::SetWindow(HWND window, int width, int height) noexcept
     m_window = window;
 
     m_outputSize.left = m_outputSize.top = 0;
-    m_outputSize.right = width;
-    m_outputSize.bottom = height;
+    m_outputSize.right = static_cast<long>(width);
+    m_outputSize.bottom = static_cast<long>(height);
 }
 
 // This method is called when the Win32 window changes size.
@@ -464,8 +464,8 @@ bool DeviceResources::WindowSizeChanged(int width, int height)
 
     RECT newRc;
     newRc.left = newRc.top = 0;
-    newRc.right = width;
-    newRc.bottom = height;
+    newRc.right = static_cast<long>(width);
+    newRc.bottom = static_cast<long>(height);
     if (newRc.right == m_outputSize.right && newRc.bottom == m_outputSize.bottom)
     {
         // Handle color space settings for HDR
@@ -606,7 +606,7 @@ void DeviceResources::WaitForGpu() noexcept
             // Wait until the Signal has been processed.
             if (SUCCEEDED(m_fence->SetEventOnCompletion(fenceValue, m_fenceEvent.Get())))
             {
-                WaitForSingleObjectEx(m_fenceEvent.Get(), INFINITE, FALSE);
+                std::ignore = WaitForSingleObjectEx(m_fenceEvent.Get(), INFINITE, FALSE);
 
                 // Increment the fence value for the current frame.
                 m_fenceValues[m_backBufferIndex]++;
@@ -629,7 +629,7 @@ void DeviceResources::MoveToNextFrame()
     if (m_fence->GetCompletedValue() < m_fenceValues[m_backBufferIndex])
     {
         ThrowIfFailed(m_fence->SetEventOnCompletion(m_fenceValues[m_backBufferIndex], m_fenceEvent.Get()));
-        WaitForSingleObjectEx(m_fenceEvent.Get(), INFINITE, FALSE);
+        std::ignore = WaitForSingleObjectEx(m_fenceEvent.Get(), INFINITE, FALSE);
     }
 
     // Set the fence value for the next frame.
@@ -665,7 +665,7 @@ void DeviceResources::GetAdapter(IDXGIAdapter1** ppAdapter)
             }
 
             // Check to see if the adapter supports Direct3D 12, but don't create the actual device yet.
-            if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), m_d3dMinFeatureLevel, IID_ID3D12Device, nullptr)))
+            if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), m_d3dMinFeatureLevel, __uuidof(ID3D12Device), nullptr)))
             {
 #ifdef _DEBUG
                 wchar_t buff[256] = {};
@@ -695,7 +695,7 @@ void DeviceResources::GetAdapter(IDXGIAdapter1** ppAdapter)
             }
 
             // Check to see if the adapter supports Direct3D 12, but don't create the actual device yet.
-            if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), m_d3dMinFeatureLevel, IID_ID3D12Device, nullptr)))
+            if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), m_d3dMinFeatureLevel, __uuidof(ID3D12Device), nullptr)))
             {
 #ifdef _DEBUG
                 wchar_t buff[256] = {};

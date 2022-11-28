@@ -22,6 +22,7 @@ namespace DX
     public:
         static constexpr unsigned int c_AllowTearing = 0x1;
         static constexpr unsigned int c_EnableHDR    = 0x2;
+        static constexpr unsigned int c_ReverseDepth = 0x4;
 
         DeviceResources(DXGI_FORMAT backBufferFormat = DXGI_FORMAT_B8G8R8A8_UNORM,
                         DXGI_FORMAT depthBufferFormat = DXGI_FORMAT_D32_FLOAT,
@@ -75,23 +76,23 @@ namespace DX
         {
         #ifdef __MINGW32__
             D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle;
-            auto hcpu = *m_rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(&cpuHandle);
+            std::ignore = m_rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(&cpuHandle);
         #else
-            auto hcpu = m_rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+            auto cpuHandle = m_rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
         #endif
 
-            return CD3DX12_CPU_DESCRIPTOR_HANDLE(hcpu, static_cast<INT>(m_backBufferIndex), m_rtvDescriptorSize);
+            return CD3DX12_CPU_DESCRIPTOR_HANDLE(cpuHandle, static_cast<INT>(m_backBufferIndex), m_rtvDescriptorSize);
         }
         CD3DX12_CPU_DESCRIPTOR_HANDLE GetDepthStencilView() const noexcept
         {
         #ifdef __MINGW32__
             D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle;
-            auto hcpu = *m_dsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(&cpuHandle);
+            std::ignore = m_dsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(&cpuHandle);
         #else
-            auto hcpu = m_dsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+            auto cpuHandle = m_dsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
         #endif
 
-            return CD3DX12_CPU_DESCRIPTOR_HANDLE(hcpu);
+            return CD3DX12_CPU_DESCRIPTOR_HANDLE(cpuHandle);
         }
 
     private:

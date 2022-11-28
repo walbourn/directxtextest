@@ -106,7 +106,7 @@ add_executable(xtfilter
     filter/filter.h filter/directxtest.cpp filter/testutils.cpp)
 target_include_directories(xtfilter PRIVATE ./inc)
 add_test(NAME "filter" COMMAND xtfilter)
-set_tests_properties(filter PROPERTIES TIMEOUT 240)
+set_tests_properties(filter PROPERTIES TIMEOUT 360)
 
 # compress
 list(APPEND TEST_EXES xtcompress)

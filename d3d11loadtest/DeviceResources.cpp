@@ -378,13 +378,7 @@ void DeviceResources::CreateWindowSizeDependentResources()
     }
 
     // Set the 3D rendering viewport to target the entire window.
-    m_screenViewport = {
-        0.0f,
-        0.0f,
-        static_cast<float>(backBufferWidth),
-        static_cast<float>(backBufferHeight),
-        0.f,
-        1.f };
+    m_screenViewport = { 0.0f, 0.0f, static_cast<float>(backBufferWidth), static_cast<float>(backBufferHeight), 0.f, 1.f };
 }
 
 // This method is called when the Win32 window is created (or re-created).
@@ -393,8 +387,8 @@ void DeviceResources::SetWindow(HWND window, int width, int height) noexcept
     m_window = window;
 
     m_outputSize.left = m_outputSize.top = 0;
-    m_outputSize.right = width;
-    m_outputSize.bottom = height;
+    m_outputSize.right = static_cast<long>(width);
+    m_outputSize.bottom = static_cast<long>(height);
 }
 
 // This method is called when the Win32 window changes size
@@ -405,8 +399,8 @@ bool DeviceResources::WindowSizeChanged(int width, int height)
 
     RECT newRc;
     newRc.left = newRc.top = 0;
-    newRc.right = width;
-    newRc.bottom = height;
+    newRc.right = static_cast<long>(width);
+    newRc.bottom = static_cast<long>(height);
     if (newRc.right == m_outputSize.right && newRc.bottom == m_outputSize.bottom)
     {
         // Handle color space settings for HDR
