@@ -219,13 +219,13 @@ void Game::CreateDeviceDependentResources()
     auto device = m_deviceResources->GetD3DDevice();
 
     // Load and create shaders.
-    auto vertexShaderBlob = DX::ReadData(L"VertexShader.cso");
+    auto vertexShaderBlob = DX::ReadData(L"VertexShader11.cso");
 
     DX::ThrowIfFailed(
         device->CreateVertexShader(vertexShaderBlob.data(), vertexShaderBlob.size(),
             nullptr, m_spVertexShader.ReleaseAndGetAddressOf()));
 
-    auto pixelShaderBlob = DX::ReadData(L"PixelShader.cso");
+    auto pixelShaderBlob = DX::ReadData(L"PixelShader11.cso");
 
     DX::ThrowIfFailed(
         device->CreatePixelShader(pixelShaderBlob.data(), pixelShaderBlob.size(),

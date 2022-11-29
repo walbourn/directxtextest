@@ -8,7 +8,7 @@
 
 #include "DirectXTex.h"
 
-#include <wrl.h>
+#include <wrl/client.h>
 
 //#define DISABLE_BC6HBC7_COMPRESS
 
@@ -1122,7 +1122,6 @@ bool Test03()
 
         TexMetadata metadata;
         ScratchImage srcimage;
-        HRESULT hr;
 
         if ( _wcsicmp( ext, L".dds" ) == 0 )
         {

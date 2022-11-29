@@ -401,17 +401,17 @@ bool TEXTest::Test13()
                 }
                 else
                 {
-                    const TexMetadata& metadata2 = alpha.GetMetadata();
+                    const TexMetadata& metadata3 = alpha.GetMetadata();
 
-                    TexMetadata chk = metadata;
-                    chk.SetAlphaMode(TEX_ALPHA_MODE_STRAIGHT);
+                    TexMetadata chk2 = metadata;
+                    chk2.SetAlphaMode(TEX_ALPHA_MODE_STRAIGHT);
 
-                    if (memcmp(&metadata2, &chk, sizeof(TexMetadata)) != 0)
+                    if (memcmp(&metadata3, &chk2, sizeof(TexMetadata)) != 0)
                     {
                         success = false;
                         printe("Metadata error in delmul alpha [complex] \n");
-                        printmeta(&metadata2);
-                        printmetachk(&chk);
+                        printmeta(&metadata3);
+                        printmetachk(&chk2);
                     }
                     else
                     {

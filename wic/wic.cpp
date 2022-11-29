@@ -315,14 +315,15 @@ namespace
           { 0x2c,0x79,0x80,0x35,0xc9,0xc0,0x3f,0x12,0x50,0xad,0x6f,0x60,0xa3,0xbb,0xb8,0x0f } },
         { FLAGS_NONE, { 512, 512, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"wood.jpg",
           { 0x31,0xc0,0xd2,0x6e,0x8d,0xdc,0x3a,0x60,0xf8,0xda,0x86,0x3d,0x05,0x1a,0x10,0x1b } },
-        { FLAGS_NONE,{ 512, 768, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"memorial.jpg",{ 0x05,0x4e,0x13,0x9f,0xe8,0xb8,0x38,0xc3,0xd0,0x34,0x64,0x3d,0xa3,0x5b,0x95,0xde } },
+        { ALTMD5(24),{ 512, 768, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"memorial.jpg",
+          { 0x05,0x4e,0x13,0x9f,0xe8,0xb8,0x38,0xc3,0xd0,0x34,0x64,0x3d,0xa3,0x5b,0x95,0xde } },
 
         // Multi-frame example files
         { FLAGS_NONE, { 500, 350, 1, 15, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"Animated.gif", {0xa7,0xdb,0x2e,0x1e,0x35,0x50,0xb0,0xb1,0x4c,0xe7,0x37,0x2e,0xce,0x9e,0x9d,0x95} },
         { FLAGS_MQR_ORIENT | ALTMD5(13), { 512, 512, 1, 4, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"MultiFrame.tif", {0xfb,0x22,0x3e,0x83,0x13,0x99,0x17,0x64,0x5c,0x76,0xde,0x16,0xf7,0xbd,0xff,0x58} },
         { FLAGS_NONE, { 500, 500, 1, 24, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"SpinCube.gif", {0x3b,0x32,0x85,0x22,0xc5,0xb9,0x48,0x4b,0xa6,0x93,0xba,0x9d,0x30,0xd4,0x6a,0x0e} },
-        { FLAGS_NONE, { 400, 600, 1, 50, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"flame.gif", {0xbd,0xd5,0x4b,0x3e,0x5e,0x8f,0xba,0x17,0x10,0xff,0x9a,0x9a,0x60,0x8d,0xe1,0x77} },
-        { FLAGS_NONE, { 256, 64, 1, 253, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"MeshFluid.gif", {0xda,0xd5,0x94,0xda,0x34,0x70,0x19,0xb6,0x00,0xb1,0x09,0x88,0x96,0x96,0x13,0x88} },
+        { ALTMD5(25), { 400, 600, 1, 50, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"flame.gif", {0xbd,0xd5,0x4b,0x3e,0x5e,0x8f,0xba,0x17,0x10,0xff,0x9a,0x9a,0x60,0x8d,0xe1,0x77} },
+        { ALTMD5(26), { 256, 64, 1, 253, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"MeshFluid.gif", {0xda,0xd5,0x94,0xda,0x34,0x70,0x19,0xb6,0x00,0xb1,0x09,0x88,0x96,0x96,0x13,0x88} },
 
         // Direct2D Test Images
         { FLAGS_NONE, { 300, 227, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"32bppRGBAI.png", { 0x8e,0x69,0x69,0xa1,0x04,0x0b,0xf7,0x90,0xbf,0x19,0x31,0xbd,0x0e,0xa1,0x9c,0x4f } },
@@ -335,11 +336,11 @@ namespace
         { FLAGS_GDI, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8X8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"rgb32table888td.bmp", { 0x7e,0xfe,0x6a,0x59,0xbc,0xdd,0xb4,0xd4,0x35,0x56,0x60,0xab,0x71,0x3b,0x39,0xb9 } },
 
         #ifdef _M_X64
-        { FLAGS_MQR_ORIENT | ALTMD5(8), { 1024, 768, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"Dock.jpg", { 0x38,0x1e,0xd2,0x54,0x50,0xa3,0x7a,0xa9,0x06,0x48,0xce,0x78,0x91,0x77,0x3d,0xce } },
+        { FLAGS_MQR_ORIENT | ALTMD5(8), { 1024, 768, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"Dock.jpg", { 0x71,0x31,0x34,0x10,0x14,0xa6,0x7a,0x44,0xc4,0x4c,0xc2,0x52,0x9a,0xcb,0xad,0x08 } },
         { ALTMD5(10), { 640, 480, 1, 1, 1, 0, 0, DXGI_FORMAT_R8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"image.127839287370267572.jpg", { 0xde,0xff,0x04,0x06,0x82,0xdc,0x05,0x76,0x66,0x56,0xd0,0x8d,0xfd,0xc3,0x1b,0xaa } },
         { FLAGS_MQR_ORIENT | ALTMD5(11), { 500, 500, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"progressivehuffman.jpg", { 0x5e,0x89,0x13,0x94,0xe5,0x4b,0x58,0xa1,0x03,0xc0,0x13,0xe4,0x32,0xea,0x42,0x8c } },
         #else
-        { FLAGS_MQR_ORIENT | ALTMD5(8), { 1024, 768, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"Dock.jpg", { 0xeb,0x05,0x4e,0x02,0x81,0x22,0xfd,0x3a,0x35,0xe7,0xe2,0x80,0x54,0xfd,0x85,0xf5 } },
+        { FLAGS_MQR_ORIENT | ALTMD5(8), { 1024, 768, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"Dock.jpg", { 0x71,0x31,0x34,0x10,0x14,0xa6,0x7a,0x44,0xc4,0x4c,0xc2,0x52,0x9a,0xcb,0xad,0x08 } },
         { ALTMD5(10), { 640, 480, 1, 1, 1, 0, 0, DXGI_FORMAT_R8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"image.127839287370267572.jpg", { 0xa6,0xfb,0x0c,0xae,0x75,0xeb,0xca,0xce,0xed,0x6d,0x88,0x6b,0x2c,0x62,0xb7,0xc4 } },
         { FLAGS_MQR_ORIENT | ALTMD5(11), { 500, 500, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"progressivehuffman.jpg", { 0x57,0x72,0x29,0x57,0x51,0x49,0xf3,0xdc,0xa1,0x4d,0x3b,0x23,0x42,0x49,0x2a,0xf8 } },
         #endif
@@ -378,7 +379,7 @@ namespace
         { FLAGS_NONE, { 1280, 1024, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D  }, MEDIA_PATH L"testpattern.png", { 0x1e,0x85,0xd6,0xef,0xe1,0xa9,0x24,0x58,0xb4,0x00,0x6d,0x12,0xf8,0x1c,0xf6,0x44 } },
         { FLAGS_NONE, { 64, 24, 1, 1, 1, 0, 0, DXGI_FORMAT_R8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"p99sr.png", {0x32,0xd0,0xe2,0x92,0x5d,0x00,0x43,0xbb,0xaa,0xbd,0xa2,0x52,0xc4,0xcf,0x9f,0xdd} },
         { FLAGS_NONE, { 976, 800, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"chip_lagrange_o3_400_sigm_6p5x50.png", {0x24,0x02,0xa9,0x6b,0x21,0x17,0x30,0xbc,0x65,0x8c,0x3e,0x1d,0x29,0x8d,0x52,0x73} },
-        { FLAGS_MQR_ORIENT, { 512, 683, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"cup_small.jpg", {0x2f,0x7c,0x2d,0xa6,0x8e,0x25,0x10,0x26,0xcc,0x05,0xb6,0x70,0x63,0xd2,0x44,0x7b} },
+        { FLAGS_MQR_ORIENT | ALTMD5(27), { 512, 683, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"cup_small.jpg", {0x2f,0x7c,0x2d,0xa6,0x8e,0x25,0x10,0x26,0xcc,0x05,0xb6,0x70,0x63,0xd2,0x44,0x7b} },
         { FLAGS_NONE, { 800, 600, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"livingrobot-rear.tiff", {0xf0,0xa0,0x56,0xc3,0xda,0x17,0x4e,0x8a,0x79,0x44,0xa3,0xa1,0x5f,0x96,0x84,0xc2} },
         { FLAGS_NONE, { 2048, 2048, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"tex4.png", {0x37,0x6c,0x85,0xd5,0x20,0x4e,0xab,0xbd,0xf1,0x98,0xa3,0x07,0xde,0x7b,0x2d,0xb1} },
         { FLAGS_NONE, { 21600, 10800, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthdiffuse.png", {0x26,0x00,0xa1,0x94,0x33,0xe7,0x36,0x46,0x03,0xb6,0xe0,0xf8,0x1c,0xfb,0x56,0x6c} },
@@ -418,7 +419,7 @@ namespace
 		{ 0x5d,0x8b,0xb6,0x4a,0x28,0x5d,0x86,0x6f,0x73,0x51,0x72,0x7b,0xc0,0xa9,0xd8,0x33 }, // ALTMD5(5)
 		{ 0x91,0xa5,0x65,0xe7,0x9d,0x66,0xcc,0xc9,0x20,0x86,0x91,0x3f,0x60,0xac,0x2a,0xf5 }, // ALTMD5(6)
 		{ 0x41,0x58,0x80,0xbe,0x82,0x4d,0x69,0x14,0x78,0xeb,0xac,0x05,0xde,0x82,0xd1,0x6f }, // ALTMD5(7)
-		{ 0x71,0x31,0x34,0x10,0x14,0xa6,0x7a,0x44,0xc4,0x4c,0xc2,0x52,0x9a,0xcb,0xad,0x08 }, // ALTMD5(8)
+		{ 0x78,0xdf,0x2e,0x2c,0x15,0x4a,0xcd,0x00,0x74,0x51,0xfd,0xca,0xb7,0xe6,0xde,0xa3 }, // ALTMD5(8)
 		{ 0x7d,0x06,0xdf,0x39,0x2c,0xa1,0xad,0x92,0x16,0x53,0xc1,0x45,0xa4,0x51,0x0e,0xeb }, // ALTMD5(9)
 		{ 0x87,0xc1,0x51,0xe4,0x3e,0x42,0x46,0x51,0x88,0x5b,0xf1,0x6c,0xc6,0x20,0x66,0x1e }, // ALTMD5(10)
 		{ 0xe1,0x8b,0x77,0x55,0x0e,0xcb,0xf2,0xc5,0x3f,0xa4,0xd0,0xe6,0xe6,0x91,0x70,0xe4 }, // ALTMD5(11)
@@ -438,6 +439,10 @@ namespace
 		{ 0x98,0xbc,0xf8,0xff,0x0e,0x38,0x97,0x5a,0x58,0x4d,0x87,0x1d,0x8d,0x62,0xe6,0xf4 }, // ALTMD5(21)
 		{ 0x2d,0x7b,0xcc,0x6e,0x00,0x3c,0x39,0xc0,0x7a,0x65,0x0c,0x04,0xc2,0x45,0x1f,0xf9 }, // ALTMD5(22)
 		{ 0xf3,0x6b,0x14,0xb3,0xd8,0xf2,0xc5,0x26,0x25,0xcd,0x29,0xb5,0x96,0x9f,0x8a,0xbf }, // ALTMD5(23)
+        { 0x6a,0x24,0x35,0x0d,0xcc,0xd7,0x31,0x9b,0xf1,0xd8,0xc3,0x4b,0x03,0x95,0xc7,0xac }, // ALTMD5(24)
+        { 0xfa,0x58,0xf1,0xe4,0x08,0x02,0x7c,0x0d,0x3b,0x7f,0x24,0xb1,0x95,0x87,0x04,0xf4 }, // ALTMD5(25)
+        { 0x56,0x81,0x10,0xb9,0xca,0xb4,0xec,0x77,0xeb,0x2f,0xf5,0x69,0xad,0xfe,0xc3,0xad }, // ALTMD5(26)
+        { 0x84,0x72,0xeb,0x98,0xdb,0xf1,0x79,0xf0,0xdc,0x06,0xa0,0x8c,0x1a,0x28,0x39,0x38 }, // ALTMD5(27)
 	};
 
     //-------------------------------------------------------------------------------------
@@ -1266,25 +1271,25 @@ bool WICTest::Test05()
                 }
                 else
                 {
-                    TexMetadata metadata2;
-                    ScratchImage image2;
-                    hr = LoadFromWICMemory( blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO, &metadata2, image2 );
+                    TexMetadata metadata3;
+                    ScratchImage image3;
+                    hr = LoadFromWICMemory( blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO, &metadata3, image3 );
                     if ( FAILED(hr) )
                     {
                         success = false;
                         pass = false;
                         printe( "Failed reading back written wic 24bpp (%ls) from memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, static_cast<unsigned int>(hr), szPath );
                     }
-                    else if ( metadata.width != metadata2.width
-                              || metadata.height != metadata2.height
-                              || metadata.arraySize != metadata2.arraySize
-                              || metadata.dimension != metadata2.dimension
-                              || (metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM && metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM_SRGB) )
+                    else if ( metadata.width != metadata3.width
+                              || metadata.height != metadata3.height
+                              || metadata.arraySize != metadata3.arraySize
+                              || metadata.dimension != metadata3.dimension
+                              || (metadata3.format != DXGI_FORMAT_R8G8B8A8_UNORM && metadata3.format != DXGI_FORMAT_R8G8B8A8_UNORM_SRGB) )
                     { // miplevel is going to be 1 for WIC images
                         success = false;
                         pass = false;
                         printe( "Metadata error in wic 24bpp (%ls) memory readback:\n%ls\n", g_SaveMedia[index].ext, szPath );
-                        printmeta( &metadata2 );
+                        printmeta( &metadata3 );
                         printmetachk( &metadata );
                     }
                 }
@@ -1316,24 +1321,24 @@ bool WICTest::Test05()
                     }
                     else
                     {
-                        TexMetadata metadata2;
-                        ScratchImage image2;
-                        hr = LoadFromWICMemory( blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO, &metadata2, image2 );
+                        TexMetadata metadata3;
+                        ScratchImage image3;
+                        hr = LoadFromWICMemory( blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO, &metadata3, image3 );
                         if ( FAILED(hr) )
                         {
                             success = false;
                             pass = false;
                             printe( "Failed reading back written wic custom props (%ls) from memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, static_cast<unsigned int>(hr), szPath );
                         }
-                        else if ( metadata.width != metadata2.width
-                                    || metadata.height != metadata2.height
-                                    || metadata.arraySize != metadata2.arraySize
-                                    || metadata.dimension != metadata2.dimension )
+                        else if ( metadata.width != metadata3.width
+                                    || metadata.height != metadata3.height
+                                    || metadata.arraySize != metadata3.arraySize
+                                    || metadata.dimension != metadata3.dimension )
                         { // miplevel is going to be 1 for WIC images, format changes
                             success = false;
                             pass = false;
                             printe( "Metadata error in wic custom props (%ls) memory readback:\n%ls\n", g_SaveMedia[index].ext, szPath );
-                            printmeta( &metadata2 );
+                            printmeta( &metadata3 );
                             printmetachk( &metadata );
                         }
                         else if ( blob.GetBufferSize() <= original )
@@ -1365,21 +1370,21 @@ bool WICTest::Test05()
                         }
                         else
                         {
-                            TexMetadata metadata2;
-                            ScratchImage image2;
-                            hr = LoadFromWICMemory(blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO, &metadata2, image2);
+                            TexMetadata metadata3;
+                            ScratchImage image3;
+                            hr = LoadFromWICMemory(blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO, &metadata3, image3);
                             if (FAILED(hr))
                             {
                                 success = false;
                                 pass = false;
                                 printe("Failed reading back written force srgb (%ls) from memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, static_cast<unsigned int>(hr), szPath);
                             }
-                            else if (!IsSRGB(metadata2.format))
+                            else if (!IsSRGB(metadata3.format))
                             {
                                 success = false;
                                 pass = false;
                                 printe("Metadata error in force srgb (%ls) memory readback:\n%ls\n", g_SaveMedia[index].ext, szPath);
-                                printmeta(&metadata2);
+                                printmeta(&metadata3);
                                 printmetachk(&metadata);
                             }
                         }
@@ -1399,21 +1404,21 @@ bool WICTest::Test05()
                         }
                         else
                         {
-                            TexMetadata metadata2;
-                            ScratchImage image2;
-                            hr = LoadFromWICMemory(blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO, &metadata2, image2);
+                            TexMetadata metadata3;
+                            ScratchImage image3;
+                            hr = LoadFromWICMemory(blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO, &metadata3, image3);
                             if (FAILED(hr))
                             {
                                 success = false;
                                 pass = false;
                                 printe("Failed reading back written force linear (%ls) from memory (HRESULT %08X):\n%ls\n", g_SaveMedia[index].ext, static_cast<unsigned int>(hr), szPath);
                             }
-                            else if (IsSRGB(metadata2.format))
+                            else if (IsSRGB(metadata3.format))
                             {
                                 success = false;
                                 pass = false;
                                 printe("Metadata error in force linear (%ls) memory readback:\n%ls\n", g_SaveMedia[index].ext, szPath);
-                                printmeta(&metadata2);
+                                printmeta(&metadata3);
                                 printmetachk(&metadata);
                             }
                         }

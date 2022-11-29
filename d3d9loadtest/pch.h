@@ -6,7 +6,9 @@
 #pragma once
 
 #include <winsdkver.h>
+#ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0601
+#endif
 #include <sdkddkver.h>
 
 // Use the C++ standard templated min/max
@@ -25,7 +27,9 @@
 // WinHelp is deprecated
 #define NOHELP
 
+#ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
+#endif
 #include <Windows.h>
 
 #include <wrl/client.h>

@@ -74,10 +74,10 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="PixelShader.hlsl">
+    <FxCompile Include="PixelShader11.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="VertexShader.hlsl">
+    <FxCompile Include="VertexShader11.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

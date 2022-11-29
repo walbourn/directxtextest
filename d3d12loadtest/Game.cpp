@@ -138,7 +138,14 @@ void Game::Render()
     auto heap = m_srvHeap.Get();
     commandList->SetDescriptorHeaps(1, &heap);
 
-    commandList->SetGraphicsRootDescriptorTable(0, m_srvHeap->GetGPUDescriptorHandleForHeapStart());
+#ifdef __MINGW32__
+    D3D12_GPU_DESCRIPTOR_HANDLE hgpu;
+    std::ignore = m_srvHeap->GetGPUDescriptorHandleForHeapStart(&hgpu);
+#else
+    auto hgpu = m_srvHeap->GetGPUDescriptorHandleForHeapStart();
+#endif
+
+    commandList->SetGraphicsRootDescriptorTable(0, hgpu);
 
     // Set necessary state.
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -149,7 +156,7 @@ void Game::Render()
     commandList->DrawIndexedInstanced(6, 1, 0, 0, 0);
 
     // Draw quad 2. 
-    commandList->SetGraphicsRootDescriptorTable(0, CD3DX12_GPU_DESCRIPTOR_HANDLE(m_srvHeap->GetGPUDescriptorHandleForHeapStart()).Offset(1, m_strideSRV));
+    commandList->SetGraphicsRootDescriptorTable(0, CD3DX12_GPU_DESCRIPTOR_HANDLE(hgpu).Offset(1, m_strideSRV));
     commandList->DrawIndexedInstanced(6, 1, 0, 4, 0);
 
     PIXEndEvent(commandList);
@@ -306,9 +313,9 @@ void Game::CreateDeviceDependentResources()
     }
 
     // Create the pipeline state, which includes loading shaders.
-    auto vertexShaderBlob = DX::ReadData(L"VertexShader.cso");
+    auto vertexShaderBlob = DX::ReadData(L"VertexShader12.cso");
 
-    auto pixelShaderBlob = DX::ReadData(L"PixelShader.cso");
+    auto pixelShaderBlob = DX::ReadData(L"PixelShader12.cso");
 
     static const D3D12_INPUT_ELEMENT_DESC s_inputElementDesc[2] =
     {
@@ -421,7 +428,14 @@ void Game::CreateDeviceDependentResources()
         ComPtr<ID3D12Resource> ddsUploadHeap;
         ComPtr<ID3D12Resource> ddsUploadHeap2;
 
-        CD3DX12_CPU_DESCRIPTOR_HANDLE cpuHandle(m_srvHeap->GetCPUDescriptorHandleForHeapStart());
+    #ifdef __MINGW32__
+        D3D12_CPU_DESCRIPTOR_HANDLE hcpu;
+        std::ignore = m_srvHeap->GetCPUDescriptorHandleForHeapStart(&hcpu);
+    #else
+        auto hcpu = m_srvHeap->GetCPUDescriptorHandleForHeapStart();
+    #endif
+
+        CD3DX12_CPU_DESCRIPTOR_HANDLE cpuHandle(hcpu);
         {
             std::unique_ptr<uint8_t[]> ddsData;
             std::vector<D3D12_SUBRESOURCE_DATA> subresources;
@@ -448,7 +462,12 @@ void Game::CreateDeviceDependentResources()
                 D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
             commandList->ResourceBarrier(1, &barrier);
 
+        #if defined(_MSC_VER) || !defined(WIN32)
             auto desc = m_dx5logo->GetDesc();
+        #else
+            D3D12_RESOURCE_DESC tmpDesc;
+            auto desc = *m_dx5logo->GetDesc(&tmpDesc);
+        #endif
 
             D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
             srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
@@ -515,7 +534,12 @@ void Game::CreateDeviceDependentResources()
                 D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
             commandList->ResourceBarrier(1, &barrier);
 
+        #if defined(_MSC_VER) || !defined(WIN32)
             auto desc = m_cup->GetDesc();
+        #else
+            D3D12_RESOURCE_DESC tmpDesc;
+            auto desc = *m_cup->GetDesc(&tmpDesc);
+        #endif
 
             D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
             srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;

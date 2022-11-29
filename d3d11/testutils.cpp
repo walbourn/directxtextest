@@ -15,6 +15,7 @@
 #include "DirectXTex.h"
 
 #include <exception>
+#include <stdexcept>
 
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"
@@ -92,25 +93,24 @@ namespace
 
     //---------------------------------------------------------------------------------
 
-    #include "shaders\vs2D.h"
-    #include "shaders\ps1D.h"
-    #include "shaders\ps2D.h"
-    #include "shaders\vsCube.h"
-    #include "shaders\psCube.h"
-    #include "shaders\vs3D.h"
-    #include "shaders\ps3D.h"
+    #include "vs2D.h"
+    #include "ps1D.h"
+    #include "ps2D.h"
+    #include "vsCube.h"
+    #include "psCube.h"
+    #include "vs3D.h"
+    #include "ps3D.h"
 
     //---------------------------------------------------------------------------------
 
     LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         PAINTSTRUCT ps;
-        HDC hdc;
 
         switch (message)
         {
         case WM_PAINT:
-            hdc = BeginPaint(hWnd, &ps);
+            std::ignore = BeginPaint(hWnd, &ps);
             EndPaint(hWnd, &ps);
             break;
 
@@ -573,7 +573,7 @@ namespace
         HRESULT hr = g_pSwapChain->Present(0, 0);
         if (hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
         {
-            throw std::exception("Present");
+            throw std::runtime_error("Present");
         }
     }
 }

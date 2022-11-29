@@ -10,7 +10,7 @@
 #pragma warning(push)
 #pragma warning(disable : 4005)
 #define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
+#define NOMINMAX 1
 #define NODRAWTEXT
 #define NOGDI
 #define NOMCX
@@ -22,6 +22,10 @@
 #include <crtdbg.h>
 
 #include <Windows.h>
+#endif
+
+#ifdef __MINGW32__
+#include <unknwn.h>
 #endif
 
 #include <algorithm>
@@ -69,7 +73,7 @@ inline void DebugPrint(_In_z_ _Printf_format_string_ const char* format, ...) no
                                        digest[8], digest[9], digest[10], digest[11], digest[12], digest[13], digest[14], digest[15] );
 
 #if !defined(WINAPI_FAMILY) || (WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP)
-#define MEDIA_PATH L"D:\\Microsoft\\directxtexmedia\\"
+#define MEDIA_PATH L"%DIRECTXTEX_MEDIA_PATH%\\"
 #define TEMP_PATH L"%TEMP%\\"
 #elif (WINAPI_FAMILY == WINAPI_FAMILY_APP)
 #define MEDIA_PATH L"Assets\\"

@@ -11,14 +11,24 @@
 #include "directxtest.h"
 
 #include <wrl/client.h>
+
+#define D3DX12_NO_STATE_OBJECT_HELPERS
+#define D3DX12_NO_CHECK_FEATURE_SUPPORT_CLASS
+
+#ifdef USING_DIRECTX_HEADERS
+#include <directx/d3d12.h>
+#include <directx/d3dx12.h>
+#include <dxguids/dxguids.h>
+#else
 #include <d3d12.h>
+#include "d3dx12.h"
+#endif
+
 #include <dxgi1_4.h>
 
 #include "DirectXTex.h"
 
-#define D3DX12_NO_STATE_OBJECT_HELPERS
-#define D3DX12_NO_CHECK_FEATURE_SUPPORT_CLASS
-#include "d3dx12.h"
+#include <stdexcept>
 
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"
@@ -130,25 +140,24 @@ namespace
 
     //---------------------------------------------------------------------------------
 
-    #include "shaders\vs2D.h"
-    #include "shaders\ps1D.h"
-    #include "shaders\ps2D.h"
-    #include "shaders\vsCube.h"
-    #include "shaders\psCube.h"
-    #include "shaders\vs3D.h"
-    #include "shaders\ps3D.h"
+    #include "vs2D.h"
+    #include "ps1D.h"
+    #include "ps2D.h"
+    #include "vsCube.h"
+    #include "psCube.h"
+    #include "vs3D.h"
+    #include "ps3D.h"
 
     //---------------------------------------------------------------------------------
 
     LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         PAINTSTRUCT ps;
-        HDC hdc;
 
         switch (message)
         {
         case WM_PAINT:
-            hdc = BeginPaint(hWnd, &ps);
+            std::ignore = BeginPaint(hWnd, &ps);
             EndPaint(hWnd, &ps);
             break;
 
@@ -209,7 +218,7 @@ HRESULT CreateDevice( ID3D12Device** pDev )
         }
 
         // Check to see if the adapter supports Direct3D 12, but don't create the actual device yet.
-        if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, _uuidof(ID3D12Device), nullptr)))
+        if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_ID3D12Device, nullptr)))
         {
             break;
         }
@@ -406,10 +415,17 @@ HRESULT SetupRenderTest(ID3D12Device** pDev, ID3D12CommandQueue** pCommandQ, ID3
 
         g_rtvDescriptorSize = g_pd3dDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 
-        CD3DX12_CPU_DESCRIPTOR_HANDLE rtvDescriptor0(g_pd3dHeapRTV->GetCPUDescriptorHandleForHeapStart());
+    #if defined(_MSC_VER) || !defined(_WIN32)
+        auto hcpu = g_pd3dHeapRTV->GetCPUDescriptorHandleForHeapStart();
+    #else
+        D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle;
+        auto hcpu = *g_pd3dHeapRTV->GetCPUDescriptorHandleForHeapStart(&cpuHandle);
+    #endif
+
+        CD3DX12_CPU_DESCRIPTOR_HANDLE rtvDescriptor0(hcpu);
         g_pd3dDevice->CreateRenderTargetView(g_pRenderTarget[0], &rtvDesc, rtvDescriptor0);
 
-        CD3DX12_CPU_DESCRIPTOR_HANDLE rtvDescriptor1(g_pd3dHeapRTV->GetCPUDescriptorHandleForHeapStart(), 1, g_rtvDescriptorSize);
+        CD3DX12_CPU_DESCRIPTOR_HANDLE rtvDescriptor1(hcpu, 1, g_rtvDescriptorSize);
         g_pd3dDevice->CreateRenderTargetView(g_pRenderTarget[1], &rtvDesc, rtvDescriptor1);
 
         hr = swapChain->QueryInterface(IID_PPV_ARGS(&g_pSwapChain));
@@ -454,7 +470,14 @@ HRESULT SetupRenderTest(ID3D12Device** pDev, ID3D12CommandQueue** pCommandQ, ID3
         dsvDesc.Format = desc.Format;
         dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
 
-        g_pd3dDevice->CreateDepthStencilView(g_pDepthStencil, &dsvDesc, g_pd3dHeapDSV->GetCPUDescriptorHandleForHeapStart());
+    #if defined(_MSC_VER) || !defined(_WIN32)
+        auto hcpu = g_pd3dHeapDSV->GetCPUDescriptorHandleForHeapStart();
+    #else
+        D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle;
+        auto hcpu = *g_pd3dHeapDSV->GetCPUDescriptorHandleForHeapStart(&cpuHandle);
+    #endif
+
+        g_pd3dDevice->CreateDepthStencilView(g_pDepthStencil, &dsvDesc, hcpu);
     }
 
     //--- Setup PSOs ------------------------------------------------------------------
@@ -779,9 +802,18 @@ namespace
 
         D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(g_pRenderTarget[g_backBufferIndex], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
         g_pd3dCommandList->ResourceBarrier(1, &barrier);
-     
+
+    #if defined(_MSC_VER) || !defined(_WIN32)
         CD3DX12_CPU_DESCRIPTOR_HANDLE rtvDescriptor(g_pd3dHeapRTV->GetCPUDescriptorHandleForHeapStart(), g_backBufferIndex, g_rtvDescriptorSize);
         auto dsvDescriptor = g_pd3dHeapDSV->GetCPUDescriptorHandleForHeapStart();
+    #else
+        D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle;
+        g_pd3dHeapRTV->GetCPUDescriptorHandleForHeapStart(&cpuHandle);
+        CD3DX12_CPU_DESCRIPTOR_HANDLE rtvDescriptor(cpuHandle, g_backBufferIndex, g_rtvDescriptorSize);
+
+        auto dsvDescriptor = *g_pd3dHeapDSV->GetCPUDescriptorHandleForHeapStart(&cpuHandle);
+    #endif
+
 
         g_pd3dCommandList->OMSetRenderTargets(1, &rtvDescriptor, FALSE, &dsvDescriptor);
 
@@ -824,7 +856,14 @@ namespace
 
         g_pd3dCommandList->SetDescriptorHeaps(1, &g_pd3dHeapSRV);
 
-        g_pd3dCommandList->SetGraphicsRootDescriptorTable(RootParameterIndex::TextureSRV, g_pd3dHeapSRV->GetGPUDescriptorHandleForHeapStart());
+    #if defined(_MSC_VER) || !defined(_WIN32)
+        auto hgpu = g_pd3dHeapSRV->GetGPUDescriptorHandleForHeapStart();
+    #else
+        D3D12_GPU_DESCRIPTOR_HANDLE tmpHandle;
+        auto hgpu = *g_pd3dHeapSRV->GetGPUDescriptorHandleForHeapStart(&tmpHandle);
+    #endif
+
+        g_pd3dCommandList->SetGraphicsRootDescriptorTable(RootParameterIndex::TextureSRV, hgpu);
 
         D3D12_GPU_VIRTUAL_ADDRESS ptr = g_CB->GetGPUVirtualAddress();
         g_pd3dCommandList->SetGraphicsRootConstantBufferView(RootParameterIndex::CBNever, ptr);
@@ -854,7 +893,7 @@ namespace
         HRESULT hr = g_pSwapChain->Present(1, 0);
         if (hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
         {
-            throw std::exception("Present");
+            throw std::runtime_error("Present");
         }
 
         const UINT64 fence = g_fenceValue;
@@ -911,7 +950,13 @@ void RenderTest(const TexMetadata& metadata, ID3D12Resource* pResource)
     g_pd3dCommandQueue->ExecuteCommandLists(static_cast<UINT>(std::size(ppCommandLists)), ppCommandLists);
 
     {
-        D3D12_RESOURCE_DESC desc = pResource->GetDesc();
+    #if defined(_MSC_VER) || !defined(WIN32)
+        auto desc = pResource->GetDesc();
+    #else
+        D3D12_RESOURCE_DESC tmpDesc;
+        auto desc = *pResource->GetDesc(&tmpDesc);
+    #endif
+
         D3D12_SHADER_RESOURCE_VIEW_DESC SRVDesc = {};
         SRVDesc.Format = desc.Format;
         SRVDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
@@ -966,7 +1011,13 @@ void RenderTest(const TexMetadata& metadata, ID3D12Resource* pResource)
             break;
         }
 
-        g_pd3dDevice->CreateShaderResourceView(pResource, &SRVDesc, g_pd3dHeapSRV->GetCPUDescriptorHandleForHeapStart());
+    #if defined(_MSC_VER) || !defined(_WIN32)
+        auto hcpu = g_pd3dHeapSRV->GetCPUDescriptorHandleForHeapStart();
+    #else
+        D3D12_CPU_DESCRIPTOR_HANDLE tmpHandle;
+        auto hcpu = *g_pd3dHeapSRV->GetCPUDescriptorHandleForHeapStart(&tmpHandle);
+    #endif
+        g_pd3dDevice->CreateShaderResourceView(pResource, &SRVDesc, hcpu);
     }
 
     WaitForGpu();

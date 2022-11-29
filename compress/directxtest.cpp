@@ -28,8 +28,10 @@ extern bool Test03();
 TestInfo g_Tests[] =
 {
     { "Decompress", Test01 },
+#ifndef _M_ARM64
     { "Compress (CPU)", Test02 },
     { "Compress (GPU)", Test03 },
+#endif
 };
 
 extern int __cdecl DescribeException(PEXCEPTION_POINTERS pData);
@@ -55,6 +57,9 @@ bool RunTests()
 
         bool pass = false;
 
+    #ifdef __MINGW32__
+        pass = g_Tests[i].func();
+    #else
         __try
         {
             pass = g_Tests[i].func();
@@ -63,6 +68,7 @@ bool RunTests()
         {
             pass = false;
         }
+    #endif
 
         if (pass)
         {
@@ -99,7 +105,9 @@ int __cdecl main()
         return -1;
     }
 
+#ifdef _MSC_VER
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
 
     HRESULT hr = CoInitializeEx( nullptr, COINIT_MULTITHREADED );
     if (FAILED(hr))
