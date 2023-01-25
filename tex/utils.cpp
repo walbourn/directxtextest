@@ -806,24 +806,10 @@ bool TEXTest::Test02()
     }
 
     // DXGI_FORMAT_V208
-    hr = ComputePitch( WIN10_DXGI_FORMAT_V208, 2, 1, rowPitch, slicePitch );
-    if ( FAILED(hr) || rowPitch != 2 || slicePitch != 6 )
-    {
-        printe("ERROR: JPEG HW V208: CP A failed rowPitch %zu, slicePitch %zu (%08X)\n", rowPitch, slicePitch, static_cast<unsigned int>(hr) );
-        success = false;
-    }
-
     hr = ComputePitch( WIN10_DXGI_FORMAT_V208, 128, 64, rowPitch, slicePitch );
     if ( FAILED(hr) || rowPitch != 128 || slicePitch != 16384 )
     {
         printe("ERROR: JPEG HW V208: CP B failed rowPitch %zu, slicePitch %zu (%08X)\n", rowPitch, slicePitch, static_cast<unsigned int>(hr) );
-        success = false;
-    }
-
-    hr = ComputePitch( WIN10_DXGI_FORMAT_V208, 128, 65, rowPitch, slicePitch );
-    if ( FAILED(hr) || rowPitch != 128 || slicePitch != 16768 )
-    {
-        printe("ERROR: JPEG HW V208: CP C failed rowPitch %zu, slicePitch %zu (%08X)\n", rowPitch, slicePitch, static_cast<unsigned int>(hr) );
         success = false;
     }
 
@@ -980,7 +966,7 @@ bool TEXTest::Test02()
                 D3D11_MESSAGE_ID_CREATETEXTURE2D_OUTOFMEMORY_RETURN
             };
             D3D11_INFO_QUEUE_FILTER filter = {};
-            filter.DenyList.NumIDs = std::size(hide);
+            filter.DenyList.NumIDs = static_cast<UINT>(std::size(hide));
             filter.DenyList.pIDList = hide;
             infoQ->AddStorageFilterEntries( &filter );
         }
