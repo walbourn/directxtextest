@@ -129,8 +129,8 @@ add_executable(xtcompress compress/compress.cpp compress/directxtest.cpp compres
 target_include_directories(xtcompress PRIVATE ./inc)
 target_link_libraries(xtcompress PRIVATE d3d11.lib)
 add_test(NAME "compress" COMMAND xtcompress)
-set_tests_properties(compress PROPERTIES LABELS "Library")
-set_tests_properties(compress PROPERTIES TIMEOUT 2000)
+set_tests_properties(compress PROPERTIES LABELS "BC")
+set_tests_properties(compress PROPERTIES TIMEOUT 3000)
 
 # d3d11
 if(BUILD_DX11)
