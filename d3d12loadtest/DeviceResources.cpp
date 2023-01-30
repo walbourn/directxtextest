@@ -5,6 +5,8 @@
 #include "pch.h"
 #include "DeviceResources.h"
 
+#define ENABLE_GPU_VALIDATION
+
 using namespace DirectX;
 using namespace DX;
 
@@ -92,6 +94,13 @@ void DeviceResources::CreateDeviceResources()
         if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(debugController.GetAddressOf()))))
         {
             debugController->EnableDebugLayer();
+        #ifdef ENABLE_GPU_VALIDATION
+            ComPtr<ID3D12Debug1> debugController1;
+            if (SUCCEEDED(debugController.As(&debugController1)))
+            {
+                debugController1->SetEnableGPUBasedValidation(true);
+            }
+        #endif
         }
         else
         {

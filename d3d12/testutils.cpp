@@ -5,6 +5,7 @@
 //-------------------------------------------------------------------------------------
 
 //#define D3D_DEBUG
+//#define ENABLE_GPU_VALIDATION
 
 #include <assert.h>
 
@@ -182,6 +183,14 @@ HRESULT CreateDevice( ID3D12Device** pDev )
         if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(debugController.GetAddressOf()))))
         {
             debugController->EnableDebugLayer();
+
+        #ifdef ENABLE_GPU_VALIDATION
+            ComPtr<ID3D12Debug1> debugController1;
+            if (SUCCEEDED(debugController.As(&debugController1)))
+            {
+                debugController1->SetEnableGPUBasedValidation(true);
+            }
+        #endif
         }
         else
         {
