@@ -806,6 +806,20 @@ bool TEXTest::Test02()
     }
 
     // DXGI_FORMAT_V208
+    hr = ComputePitch(WIN10_DXGI_FORMAT_V208, 2, 1, rowPitch, slicePitch);
+    if (SUCCEEDED(hr) || hr != E_INVALIDARG)
+    {
+        printe("ERROR: JPEG HW V208: CP should have failed on a height of 1!\n");
+        success = false;
+    }
+
+    hr = ComputePitch( WIN10_DXGI_FORMAT_V208, 2, 2, rowPitch, slicePitch );
+    if ( FAILED(hr) || rowPitch != 2 || slicePitch != 8 )
+    {
+        printe("ERROR: JPEG HW V208: CP A failed rowPitch %zu, slicePitch %zu (%08X)\n", rowPitch, slicePitch, static_cast<unsigned int>(hr) );
+        success = false;
+    }
+
     hr = ComputePitch( WIN10_DXGI_FORMAT_V208, 128, 64, rowPitch, slicePitch );
     if ( FAILED(hr) || rowPitch != 128 || slicePitch != 16384 )
     {
@@ -929,6 +943,64 @@ bool TEXTest::Test02()
             printe("ERROR: CS R4G4_UNORM [Xbox] failed rows %zu\n", rows );
             success = false;
         }
+    }
+
+    // DXGI_FORMAT_NV12
+    hr = ComputePitch(DXGI_FORMAT_NV12, 2, 1, rowPitch, slicePitch);
+    if (SUCCEEDED(hr) || hr != E_INVALIDARG)
+    {
+        printe("ERROR: NV12: CP should have failed on a height of 1!\n");
+        success = false;
+    }
+
+    hr = ComputePitch(DXGI_FORMAT_NV12, 2, 2, rowPitch, slicePitch);
+    if (FAILED(hr) || rowPitch != 2 || slicePitch != 6)
+    {
+        printe("ERROR: NV12: CP A failed rowPitch %zu, slicePitch %zu (%08X)\n", rowPitch, slicePitch, static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    hr = ComputePitch(DXGI_FORMAT_NV12, 128, 64, rowPitch, slicePitch);
+    if (FAILED(hr) || rowPitch != 128 || slicePitch != 12288)
+    {
+        printe("ERROR: NV12: CP B failed rowPitch %zu, slicePitch %zu (%08X)\n", rowPitch, slicePitch, static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    rows = ComputeScanlines(DXGI_FORMAT_NV12, 64);
+    if (rows != 96)
+    {
+        printe("ERROR: NV12 failed rows %zu\n", rows);
+        success = false;
+    }
+
+    // DXGI_FORMAT_P010
+    hr = ComputePitch(DXGI_FORMAT_P010, 2, 1, rowPitch, slicePitch);
+    if (SUCCEEDED(hr) || hr != E_INVALIDARG)
+    {
+        printe("ERROR: P010: CP should have failed on a height of 1!\n");
+        success = false;
+    }
+
+    hr = ComputePitch(DXGI_FORMAT_P010, 2, 2, rowPitch, slicePitch);
+    if (FAILED(hr) || rowPitch != 4 || slicePitch != 12)
+    {
+        printe("ERROR: P010: CP A failed rowPitch %zu, slicePitch %zu (%08X)\n", rowPitch, slicePitch, static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    hr = ComputePitch(DXGI_FORMAT_P010, 128, 64, rowPitch, slicePitch);
+    if (FAILED(hr) || rowPitch != 256 || slicePitch != 24576)
+    {
+        printe("ERROR: P010: CP B failed rowPitch %zu, slicePitch %zu (%08X)\n", rowPitch, slicePitch, static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    rows = ComputeScanlines(DXGI_FORMAT_P010, 64);
+    if (rows != 96)
+    {
+        printe("ERROR: P010 failed rows %zu\n", rows);
+        success = false;
     }
 
     //
