@@ -69,18 +69,25 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ../../ScreenGrab
     ../../WICTextureLoader)
 
-if (MINGW OR (NOT WIN32) OR VCPKG_TOOLCHAIN)
-    message("INFO: Using VCPKG for DirectX-Headers and DirectXMath.")
-    find_package(directx-headers CONFIG REQUIRED)
+if(MINGW OR (NOT WIN32))
     find_package(directxmath CONFIG REQUIRED)
-    target_link_libraries(${PROJECT_NAME} PRIVATE Microsoft::DirectX-Headers Microsoft::DirectX-Guids Microsoft::DirectXMath)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE USING_DIRECTX_HEADERS)
+    find_package(directx-headers CONFIG REQUIRED)
+else()
+    find_package(directxmath CONFIG QUIET)
+    find_package(directx-headers CONFIG QUIET)
 endif()
 
-if (WIN32 AND NOT MINGW)
-    target_link_libraries(${PROJECT_NAME} PRIVATE dxguid.lib)
+if(directxmath_FOUND)
+    message(STATUS "Using DirectXMath package")
+    target_link_libraries(${PROJECT_NAME} PUBLIC Microsoft::DirectXMath)
+endif()
+
+if(directx-headers_FOUND)
+    message(STATUS "Using DirectX-Headers package")
+    target_link_libraries(${PROJECT_NAME} PRIVATE Microsoft::DirectX-Headers Microsoft::DirectX-Guids)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE USING_DIRECTX_HEADERS)
 else()
-    target_link_libraries(${PROJECT_NAME} PRIVATE Microsoft::DirectX-Guids)
+    target_link_libraries(${PROJECT_NAME} PRIVATE dxguid.lib)
 endif()
 
 if(MSVC)
