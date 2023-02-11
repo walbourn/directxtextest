@@ -47,8 +47,10 @@ endif()
 #TODO: platformtest
 
 # bcvalidator
-list(APPEND TEST_EXES bcvalidator)
-add_executable(bcvalidator bcvalidator/bcvalidator.cpp)
+if(BUILD_DX11)
+    list(APPEND TEST_EXES bcvalidator)
+    add_executable(bcvalidator bcvalidator/bcvalidator.cpp)
+endif()
 
 # fuzzloaders
 list(APPEND TEST_EXES fuzzloaders)
@@ -124,13 +126,15 @@ set_tests_properties(filter PROPERTIES LABELS "Library")
 set_tests_properties(filter PROPERTIES TIMEOUT 360)
 
 # compress
-list(APPEND TEST_EXES xtcompress)
-add_executable(xtcompress compress/compress.cpp compress/directxtest.cpp compress/testutils.cpp)
-target_include_directories(xtcompress PRIVATE ./inc)
-target_link_libraries(xtcompress PRIVATE d3d11.lib)
-add_test(NAME "compress" COMMAND xtcompress)
-set_tests_properties(compress PROPERTIES LABELS "BC")
-set_tests_properties(compress PROPERTIES TIMEOUT 3000)
+if(BUILD_DX11)
+  list(APPEND TEST_EXES xtcompress)
+  add_executable(xtcompress compress/compress.cpp compress/directxtest.cpp compress/testutils.cpp)
+  target_include_directories(xtcompress PRIVATE ./inc)
+  target_link_libraries(xtcompress PRIVATE d3d11.lib)
+  add_test(NAME "compress" COMMAND xtcompress)
+  set_tests_properties(compress PROPERTIES LABELS "BC")
+  set_tests_properties(compress PROPERTIES TIMEOUT 3000)
+endif()
 
 # d3d11
 if(BUILD_DX11)
