@@ -133,7 +133,7 @@ if(BUILD_DX11)
   target_link_libraries(xtcompress PRIVATE d3d11.lib)
   add_test(NAME "compress" COMMAND xtcompress)
   set_tests_properties(compress PROPERTIES LABELS "BC")
-  set_tests_properties(compress PROPERTIES TIMEOUT 3000)
+  set_tests_properties(compress PROPERTIES TIMEOUT $<IF:$<CONFIG:DEBUG>,10000,3000>)
 endif()
 
 # d3d11
