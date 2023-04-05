@@ -4,6 +4,7 @@ setlocal
 
 set TARGETEXE=..\..\..\Texconv\Bin\Desktop_2019\Win32\Debug\texconv.exe
 REM set TARGETEXE=..\..\..\Texconv\Bin\Desktop_2019\Win32\Release\texconv.exe
+REM set TARGETEXE=D:\vcpkg\installed\arm64-windows\tools\directxtex\texconv.exe
 set SPEC=*
 
 call onetime.cmd
