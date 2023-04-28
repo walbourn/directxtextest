@@ -24,13 +24,13 @@ namespace
     std::unique_ptr<Game> g_game;
     HANDLE g_plmSuspendComplete = nullptr;
     HANDLE g_plmSignalResume = nullptr;
-};
+}
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 void ExitGame() noexcept;
 
 // Entry point
-int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
+int ATGMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
     UNREFERENCED_PARAMETER(lpCmdLine);
 
@@ -78,7 +78,8 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE, _In_ LPWSTR lp
 
         // Create window
         HWND hwnd = CreateWindowExA(0, u8"PlatformTestWindowClass", u8"PlatformTest", WS_OVERLAPPEDWINDOW,
-            CW_USEDEFAULT, CW_USEDEFAULT, 1920, 1080, nullptr, nullptr, hInstance,
+            CW_USEDEFAULT, CW_USEDEFAULT, 1920, 1080,
+            nullptr, nullptr, hInstance,
             nullptr);
         if (!hwnd)
             return 1;
@@ -150,6 +151,26 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE, _In_ LPWSTR lp
     CoUninitialize();
 
     return static_cast<int>(msg.wParam);
+}
+
+int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
+{
+    try
+    {
+        return ATGMain(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
+    }
+    catch (const std::exception& e)
+    {
+        OutputDebugStringA("*** ERROR: Unhandled C++ exception thrown: ");
+        OutputDebugStringA(e.what());
+        OutputDebugStringA(" *** \n");
+        return 1;
+    }
+    catch (...)
+    {
+        OutputDebugStringA("*** ERROR: Unknown unhandled C++ exception thrown ***\n");
+        return 1;
+    }
 }
 
 // Windows procedure
