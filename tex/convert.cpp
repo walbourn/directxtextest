@@ -120,6 +120,7 @@ namespace
         { FLAGS_YUV, { 200, 200, 4, 1, 1, 0, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"lenaVolYUY2.dds" },
         { FLAGS_XBOX, { 1920, 1485, 1, 1, 1, 0, 0, XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"7E3_1920x1485.dds" },
         { FLAGS_XBOX, { 1920, 1485, 1, 1, 1, 0, 0, XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"6E4_1920x1485.dds" },
+        { FLAGS_NONE, { 256, 256, 1, 1, 1, 0, 0, WIN11_DXGI_FORMAT_A4B4G4R4_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_191.dds" },
         // TODO - R11G11B10_FLOAT, DXGI_FORMAT_R9G9B9E5_SHAREDEXP
     };
 
@@ -204,8 +205,9 @@ namespace
         { FLAGS_NONE, XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT },
         { FLAGS_NONE, XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT },
         { FLAGS_DITHER, XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM },
-        { FLAGS_DITHER, XBOX_DXGI_FORMAT_R4G4_UNORM }
+        { FLAGS_DITHER, XBOX_DXGI_FORMAT_R4G4_UNORM },
     #endif // _M_X64
+        { FLAGS_DITHER, WIN11_DXGI_FORMAT_A4B4G4R4_UNORM },
     };
 
     //-------------------------------------------------------------------------------------
@@ -704,6 +706,16 @@ namespace
         { XBOX_DXGI_FORMAT_R4G4_UNORM, XMFLOAT4(1.0f, 1.0f, 0.f, 1.0f), 1, { 0xFF } },
         { XBOX_DXGI_FORMAT_R4G4_UNORM, XMFLOAT4(0.266667f, 0.533333f, 0.f, 1.0f), 1, { 0x84 } },
     #endif // _M_X64
+        // DXGI_FORMAT_A4B4G4R4_UNORM [D3D11on12]
+        { WIN11_DXGI_FORMAT_A4B4G4R4_UNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 2, { 0x0, 0x0 } },
+        { WIN11_DXGI_FORMAT_A4B4G4R4_UNORM, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 2, { 0xFF, 0xFF } },
+    #ifdef _M_ARM64
+        { WIN11_DXGI_FORMAT_A4B4G4R4_UNORM, XMFLOAT4(0.466667f, 0.466667f, 0.466667f, 0.466667f), 2, { 0x77, 0x77 } },
+        { WIN11_DXGI_FORMAT_A4B4G4R4_UNORM, XMFLOAT4(0.266667f, 0.466667f, 0.666667f, 1.0f), 2, { 0xAF, 0x47 } },
+    #else
+        { WIN11_DXGI_FORMAT_A4B4G4R4_UNORM, XMFLOAT4(0.533333f, 0.533333f, 0.533333f, 0.533333f), 2, { 0x88, 0x88 } },
+        { WIN11_DXGI_FORMAT_A4B4G4R4_UNORM, XMFLOAT4(0.266667f, 0.533333f, 0.733333f, 1.0f), 2, { 0xBF, 0x48 } },
+    #endif
     };
 
     const XMVECTORF32 g_PixelEpsilon = { { { 0.01f, 0.01f, 0.01f, 0.01f } } };
@@ -2911,7 +2923,7 @@ bool TEXTest::Test06()
                             targMSE = 3.f;
                         else if ( tformat == DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM )
                             targMSE = 0.02f;
-                        else if ( tformat == DXGI_FORMAT_B4G4R4A4_UNORM || tformat == XBOX_DXGI_FORMAT_R4G4_UNORM )
+                        else if ( tformat == DXGI_FORMAT_B4G4R4A4_UNORM || tformat == XBOX_DXGI_FORMAT_R4G4_UNORM || tformat == WIN11_DXGI_FORMAT_A4B4G4R4_UNORM)
                             targMSE = 0.03f;
                         CMSE_FLAGS flags = CMSE_DEFAULT;
                         switch( static_cast<int>(tformat) )

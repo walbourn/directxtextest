@@ -19,7 +19,7 @@ using namespace DirectX;
 namespace
 {
     const UINT DXGI_START = 1;
-    const UINT DXGI_END = 190; // as of DXGI 1.3
+    const UINT DXGI_END = 191; // as of DirectX Agility SDK 1.610
 }
 
 //-------------------------------------------------------------------------------------
@@ -79,6 +79,7 @@ bool TEXTest::Test01()
         DXGI_FORMAT_B5G6R5_UNORM, DXGI_FORMAT_B5G5R5A1_UNORM, DXGI_FORMAT_B4G4R4A4_UNORM,
         DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_B8G8R8A8_TYPELESS, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB,
         DXGI_FORMAT_B8G8R8X8_UNORM, DXGI_FORMAT_B8G8R8X8_TYPELESS, DXGI_FORMAT_B8G8R8X8_UNORM_SRGB,
+        WIN11_DXGI_FORMAT_A4B4G4R4_UNORM,
     };
     static const DXGI_FORMAT typeless[] = 
     {
@@ -113,6 +114,7 @@ bool TEXTest::Test01()
         DXGI_FORMAT_AYUV, DXGI_FORMAT_Y410, DXGI_FORMAT_Y416, DXGI_FORMAT_A8P8, DXGI_FORMAT_AI44, DXGI_FORMAT_IA44,
         DXGI_FORMAT_B4G4R4A4_UNORM,
         XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT, XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT, XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM,
+        WIN11_DXGI_FORMAT_A4B4G4R4_UNORM,
     };
     static const DXGI_FORMAT video[] = 
     {
@@ -180,6 +182,7 @@ bool TEXTest::Test01()
         DXGI_FORMAT_B4G4R4A4_UNORM,
         DXGI_FORMAT_AYUV, DXGI_FORMAT_Y410, DXGI_FORMAT_Y416, DXGI_FORMAT_YUY2, DXGI_FORMAT_Y210, DXGI_FORMAT_Y216,
         XBOX_DXGI_FORMAT_R4G4_UNORM,
+        WIN11_DXGI_FORMAT_A4B4G4R4_UNORM,
     };
     static const DXGI_FORMAT uintType[] =
     {
@@ -1072,6 +1075,10 @@ bool TEXTest::Test02()
         case WIN10_DXGI_FORMAT_V208:
         case WIN10_DXGI_FORMAT_V408:
             // JPEG hardware decode formats
+            continue;
+
+        case WIN11_DXGI_FORMAT_A4B4G4R4_UNORM:
+            // D3D11On12-only format
             continue;
         }
 

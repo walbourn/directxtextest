@@ -744,6 +744,8 @@ namespace
         { FLAGS_NONE, {  1024, 1024, 1, 1, 11, 0, 0, DXGI_FORMAT_BC7_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"Sphere2Mat_emissive.DDS", { 0x15,0xa3,0x80,0xd8,0xd9,0x9c,0x61,0x75,0x3a,0xe8,0x8e,0x7a,0xc8,0xb6,0xdf,0x3f } },
         { FLAGS_NONE, { 1024, 1024, 1, 1, 11, 0, 0, DXGI_FORMAT_BC5_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"Sphere2Mat_normal.DDS", { 0xf0,0x89,0x1f,0xed,0xb7,0x87,0x37,0x1e,0x8f,0x91,0x61,0xc2,0xc0,0x58,0xa1,0x50 } },
         { FLAGS_NONE, {  1024, 1024, 1, 1, 11, 0, 0, DXGI_FORMAT_BC7_UNORM, TEX_DIMENSION_TEXTURE2D  }, MEDIA_PATH L"Sphere2Mat_occlusionRoughnessMetallic.DDS", { 0x1c,0x88,0x44,0x0c,0xeb,0x8c,0xf5,0x92,0x6d,0xb1,0x0e,0x44,0xc3,0x00,0x99,0x0c } },
+
+        { FLAGS_NONE,{ 256, 256, 1, 1, 1, 0, 0, WIN11_DXGI_FORMAT_A4B4G4R4_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_191.dds",{ 0x12,0x68,0x2a,0xa4,0x07,0x24,0x35,0x8e,0x28,0xfa,0xba,0x10,0x37,0xb6,0xeb,0x52 } },
     };
 
     //-------------------------------------------------------------------------------------
@@ -925,11 +927,12 @@ bool Test01()
                 }
             }
 
-            switch ( metadata.format )
+            switch ( static_cast<int>(metadata.format) )
             {
             case DXGI_FORMAT_B5G6R5_UNORM:
             case DXGI_FORMAT_B5G5R5A1_UNORM:
             case DXGI_FORMAT_B4G4R4A4_UNORM:
+            case WIN11_DXGI_FORMAT_A4B4G4R4_UNORM:
                 {
                     TexMetadata metadata2;
                     hr = GetMetadataFromDDSFile( szPath, DDS_FLAGS_NO_16BPP, metadata2 );
@@ -1035,7 +1038,7 @@ bool Test02()
 
                 // TESTTEST- SaveScratchImage( L"C:\\Temp\\XXX.DDS", DDS_FLAGS_NONE, image );
 
-                switch (metadata.format)
+                switch (static_cast<int>(metadata.format))
                 {
                 case DXGI_FORMAT_R10G10B10A2_UNORM:
                     {
@@ -1124,6 +1127,7 @@ bool Test02()
                 case DXGI_FORMAT_B5G6R5_UNORM:
                 case DXGI_FORMAT_B5G5R5A1_UNORM:
                 case DXGI_FORMAT_B4G4R4A4_UNORM:
+                case WIN11_DXGI_FORMAT_A4B4G4R4_UNORM:
                     {
                         TexMetadata metadata2;
                         ScratchImage image2;
@@ -1136,11 +1140,12 @@ bool Test02()
                         }
                         else
                         {
-                            switch( metadata2.format )
+                            switch( static_cast<int>(metadata2.format) )
                             {
                             case DXGI_FORMAT_B5G6R5_UNORM:
                             case DXGI_FORMAT_B5G5R5A1_UNORM:
                             case DXGI_FORMAT_B4G4R4A4_UNORM:
+                            case WIN11_DXGI_FORMAT_A4B4G4R4_UNORM:
                                 success = false;
                                 printe( "Failed NO_16BPP still using 16BPP format %d:\n%ls\n", metadata2.format, szPath );
                                 break;
@@ -1301,7 +1306,7 @@ bool Test03()
 
             // TESTTEST- SaveScratchImage( L"C:\\Temp\\XXX.DDS", DDS_FLAGS_NONE, image );
 
-            switch (metadata.format)
+            switch (static_cast<int>(metadata.format))
             {
             case DXGI_FORMAT_R10G10B10A2_UNORM:
                 {
@@ -1390,6 +1395,7 @@ bool Test03()
             case DXGI_FORMAT_B5G6R5_UNORM:
             case DXGI_FORMAT_B5G5R5A1_UNORM:
             case DXGI_FORMAT_B4G4R4A4_UNORM:
+            case WIN11_DXGI_FORMAT_A4B4G4R4_UNORM:
                 {
                     TexMetadata metadata2;
                     ScratchImage image2;
@@ -1402,11 +1408,14 @@ bool Test03()
                     }
                     else
                     {
-                        switch( metadata2.format )
+                        // TESTTEST- SaveScratchImage( L"C:\\Temp\\XXX.DDS", DDS_FLAGS_NONE, image2 );
+
+                        switch( static_cast<int>(metadata2.format) )
                         {
                         case DXGI_FORMAT_B5G6R5_UNORM:
                         case DXGI_FORMAT_B5G5R5A1_UNORM:
                         case DXGI_FORMAT_B4G4R4A4_UNORM:
+                        case WIN11_DXGI_FORMAT_A4B4G4R4_UNORM:
                             success = false;
                             printe( "Failed NO_16BPP still using 16BPP format %d:\n%ls\n", metadata2.format, szPath );
                             break;
