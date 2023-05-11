@@ -927,7 +927,7 @@ bool Test01()
                 }
             }
 
-            switch ( metadata.format )
+            switch ( static_cast<int>(metadata.format) )
             {
             case DXGI_FORMAT_B5G6R5_UNORM:
             case DXGI_FORMAT_B5G5R5A1_UNORM:
@@ -1038,7 +1038,7 @@ bool Test02()
 
                 // TESTTEST- SaveScratchImage( L"C:\\Temp\\XXX.DDS", DDS_FLAGS_NONE, image );
 
-                switch (metadata.format)
+                switch (static_cast<int>(metadata.format))
                 {
                 case DXGI_FORMAT_R10G10B10A2_UNORM:
                     {
@@ -1140,7 +1140,7 @@ bool Test02()
                         }
                         else
                         {
-                            switch( metadata2.format )
+                            switch( static_cast<int>(metadata2.format) )
                             {
                             case DXGI_FORMAT_B5G6R5_UNORM:
                             case DXGI_FORMAT_B5G5R5A1_UNORM:
@@ -1306,7 +1306,7 @@ bool Test03()
 
             // TESTTEST- SaveScratchImage( L"C:\\Temp\\XXX.DDS", DDS_FLAGS_NONE, image );
 
-            switch (metadata.format)
+            switch (static_cast<int>(metadata.format))
             {
             case DXGI_FORMAT_R10G10B10A2_UNORM:
                 {
@@ -1410,7 +1410,7 @@ bool Test03()
                     {
                         // TESTTEST- SaveScratchImage( L"C:\\Temp\\XXX.DDS", DDS_FLAGS_NONE, image2 );
 
-                        switch( metadata2.format )
+                        switch( static_cast<int>(metadata2.format) )
                         {
                         case DXGI_FORMAT_B5G6R5_UNORM:
                         case DXGI_FORMAT_B5G5R5A1_UNORM:
