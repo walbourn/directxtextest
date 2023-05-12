@@ -31,6 +31,7 @@
     <ClInclude Include="shaders\vsCube.h">
       <Filter>Shaders</Filter>
     </ClInclude>
+    <ClInclude Include="..\inc\getname.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Common">

@@ -28,6 +28,7 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\inc\directxtest.h" />
+    <ClInclude Include="..\inc\getname.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />

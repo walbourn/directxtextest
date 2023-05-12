@@ -14,5 +14,6 @@
   <ItemGroup>
     <ClInclude Include="..\inc\directxtest.h" />
     <ClInclude Include="tex.h" />
+    <ClInclude Include="..\inc\getname.h" />
   </ItemGroup>
 </Project>

@@ -290,6 +290,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\directxtest.h" />
+    <ClInclude Include="..\inc\getname.h" />
     <ClInclude Include="DeviceResourcesUWP.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="pch.h" />
