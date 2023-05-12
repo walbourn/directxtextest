@@ -7,5 +7,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\directxtest.h" />
+    <ClInclude Include="..\inc\getname.h" />
   </ItemGroup>
 </Project>

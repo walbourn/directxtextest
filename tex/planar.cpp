@@ -7,7 +7,9 @@
 #include "directxtest.h"
 #include "tex.h"
 
-#include "DirectXTex.h"
+#include "DirectXTexP.h"
+
+#include "getname.h"
 
 using namespace DirectX;
 
@@ -34,7 +36,6 @@ namespace
 //-------------------------------------------------------------------------------------
 
 extern HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DirectX::DDS_FLAGS flags, _In_ const ScratchImage& image );
-extern const wchar_t* GetName( DXGI_FORMAT fmt );
 
 //-------------------------------------------------------------------------------------
 // ConvertToSinglePlane

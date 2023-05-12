@@ -52,6 +52,7 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\inc\directxtest.h" />
+    <ClInclude Include="..\inc\getname.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Logo.scale-100.png">

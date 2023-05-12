@@ -9,6 +9,8 @@
 
 #include "DirectXTexP.h"
 
+#include "getname.h"
+
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"
 #pragma clang diagnostic ignored "-Wswitch-enum"
@@ -770,7 +772,6 @@ namespace
 
 extern HRESULT SaveScratchImage(_In_z_ const wchar_t* szFile, _In_ DirectX::DDS_FLAGS flags, _In_ const ScratchImage& image);
 extern HRESULT CopyViaLoadStoreScanline(const Image& srcImage, ScratchImage& image);
-extern const wchar_t* GetName(DXGI_FORMAT fmt);
 
 //-------------------------------------------------------------------------------------
 // Convert (internalA)

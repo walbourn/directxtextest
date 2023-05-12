@@ -1,6 +1,6 @@
 //-------------------------------------------------------=------------------------------
 // d3d12.cpp
-//  
+//
 // Copyright (c) Microsoft Corporation.
 //-------------------------------------------------------------------------------------
 
@@ -18,9 +18,11 @@
 #include "d3dx12.h"
 #endif
 
-#include "DirectXTex.h"
+#include "DirectXTexP.h"
 
 #include <wrl/client.h>
+
+#include "getname.h"
 
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
@@ -34,7 +36,7 @@ namespace
     {
         FLAGS_NONE = 0x0,
         FLAGS_YUV = 0x1,
-        FLAGS_NOT_SUPPORTED = 0x2,
+        FLAGS_OPTIONAL = 0x2,
         FLAGS_SRGB = 0x4,
     };
 
@@ -71,27 +73,26 @@ namespace
         { FLAGS_YUV, { 200, 200, 1, 1, 8, 0, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaYUY2.dds" },
         { FLAGS_YUV, { 200, 200, 1, 1, 8, 0, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaUYVY.dds" },
         { FLAGS_YUV, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_NV12, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenanv12.dds" },
-        { FLAGS_YUV, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_NV11, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenanv11.dds" },
         { FLAGS_YUV
-          | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_P010, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaP010.dds" },
+          | FLAGS_OPTIONAL, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_P010, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaP010.dds" },
         { FLAGS_YUV
-          | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaCubeYUY2.dds" },
+          | FLAGS_OPTIONAL, { 200, 200, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaCubeYUY2.dds" },
         { FLAGS_YUV
-          | FLAGS_NOT_SUPPORTED, { 200, 200, 4, 1, 1, 0, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"lenaVolYUY2.dds" },
+          | FLAGS_OPTIONAL, { 200, 200, 4, 1, 1, 0, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"lenaVolYUY2.dds" },
         { FLAGS_YUV
-          | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_AYUV, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaAYUV.dds" },
+          | FLAGS_OPTIONAL, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_AYUV, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaAYUV.dds" },
         { FLAGS_YUV
-          | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_Y210, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaY210.dds" },
+          | FLAGS_OPTIONAL, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_Y210, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaY210.dds" },
         { FLAGS_YUV
-          | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_Y216, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaY216.dds" },
+          | FLAGS_OPTIONAL, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_Y216, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaY216.dds" },
         { FLAGS_YUV
-          | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_Y410, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaY410.dds" },
+          | FLAGS_OPTIONAL, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_Y410, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaY410.dds" },
         { FLAGS_YUV
-          | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_Y416, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaY416.dds" },
+          | FLAGS_OPTIONAL, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_Y416, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaY416.dds" },
         { FLAGS_YUV
-          | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_P016, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaP016.dds" },
+          | FLAGS_OPTIONAL, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_P016, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaP016.dds" },
         { FLAGS_YUV
-           | FLAGS_NOT_SUPPORTED, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_NV11, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenanv11.dds" },
+           | FLAGS_OPTIONAL, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_NV11, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenanv11.dds" },
     };
 }
 
@@ -132,7 +133,7 @@ bool Test01()
         {
             if (count == 1 && f != DXGI_FORMAT_420_OPAQUE)
             {
-                printe("ERROR: D3D12 and IsPlanar don't agree on on DXGI Format %u\n", f);
+                printe("ERROR: D3D12 and IsPlanar don't agree on on DXGI Format %u (%ls)\n", f, GetName(DXGI_FORMAT(f)));
                 success = false;
             }
         }
@@ -155,7 +156,7 @@ bool Test01()
                 break;
 
             default:
-                printe("ERROR: D3D12 and DirectXTex don't agree on on DXGI Format %u\n", f);
+                printe("ERROR: D3D12 and DirectXTex don't agree on on DXGI Format %u (%ls)\n", f, GetName(DXGI_FORMAT(f)));
                 success = false;
                 break;
             }
@@ -236,9 +237,9 @@ bool Test02()
                     metadata.mipLevels = 1;
                     if (!IsSupportedTexture(device.Get(), metadata))
                     {
-                        if (!(g_TestMedia[index].options & FLAGS_NOT_SUPPORTED))
+                        if (!(g_TestMedia[index].options & FLAGS_OPTIONAL))
                         {
-                            print("WARNING: Format %u is not supported by this hardware\n", metadata.format);
+                            print("WARNING: Format %ls is not supported by this hardware\n", GetName(metadata.format));
                         }
                     }
                 }
@@ -284,11 +285,6 @@ bool Test03()
 
     for (size_t index = 0; index < std::size(g_TestMedia); ++index)
     {
-        if (g_TestMedia[index].options & FLAGS_NOT_SUPPORTED)
-        {
-            continue;
-        }
-
         wchar_t szPath[MAX_PATH];
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
         if (!ret || ret > MAX_PATH)
@@ -341,7 +337,10 @@ bool Test03()
 
                     if (!IsSupportedTexture(device.Get(), metadata))
                     {
-                        print("WARNING: Format %u is not supported by this hardware\n", metadata.format);
+                        if (!(g_TestMedia[index].options & FLAGS_OPTIONAL))
+                        {
+                            print("WARNING: Format %ls is not supported by this hardware\n", GetName(metadata.format));
+                        }
                         continue;
                     }
                 }
@@ -558,7 +557,7 @@ bool Test05()
 
     for (size_t index = 0; index < std::size(g_TestMedia); ++index)
     {
-        if (g_TestMedia[index].options & (FLAGS_YUV | FLAGS_NOT_SUPPORTED))
+        if (g_TestMedia[index].options & FLAGS_YUV)
         {
             // Skip video textures which need special options to render
             continue;
@@ -716,7 +715,7 @@ bool Test06()
 
     for (size_t index = 0; index < std::size(g_TestMedia); ++index)
     {
-        if (g_TestMedia[index].options & FLAGS_NOT_SUPPORTED)
+        if (g_TestMedia[index].options & FLAGS_YUV)
         {
             // Skip video textures which need special options to render
             continue;
@@ -791,7 +790,10 @@ bool Test06()
 
                     if (!IsSupportedTexture(device.Get(), metadata))
                     {
-                        print("WARNING: Format %u is not supported by this hardware\n", metadata.format);
+                        if (!(g_TestMedia[index].options & FLAGS_OPTIONAL))
+                        {
+                            print("WARNING: Format %ls is not supported by this hardware\n", GetName(metadata.format));
+                        }
                         continue;
                     }
                 }

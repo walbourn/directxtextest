@@ -6,9 +6,11 @@
 
 #include "directxtest.h"
 
-#include "DirectXTex.h"
+#include "DirectXTexP.h"
 
 #include <wrl/client.h>
+
+#include "getname.h"
 
 //#define DISABLE_BC6HBC7_COMPRESS
 
@@ -212,8 +214,6 @@ namespace
 extern HRESULT CreateDevice( ID3D11Device** pDev, ID3D11DeviceContext** pContext );
 extern HRESULT CreateWideImage( _In_count_(nimages) const Image* images, size_t nimages, _In_ const TexMetadata& metadata, _Out_ ScratchImage& result ); 
 extern HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DirectX::DDS_FLAGS flags, _In_ const ScratchImage& image );
-extern const wchar_t* GetName( DXGI_FORMAT fmt );
-
 
 //-------------------------------------------------------------------------------------
 namespace

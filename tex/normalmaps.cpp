@@ -7,7 +7,9 @@
 #include "directxtest.h"
 #include "tex.h"
 
-#include "DirectXTex.h"
+#include "DirectXTexP.h"
+
+#include "getname.h"
 
 using namespace DirectX;
 
@@ -36,8 +38,6 @@ namespace
 //-------------------------------------------------------------------------------------
 
 extern HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DirectX::DDS_FLAGS flags, _In_ const ScratchImage& image );
-extern const wchar_t* GetName(DXGI_FORMAT fmt);
-
 
 //-------------------------------------------------------------------------------------
 // ComputeNormalMap
@@ -114,7 +114,7 @@ bool TEXTest::Test11()
                     {
                         success = false;
                         pass = false;
-                        printe("Failed computing normal map for format %u [single] (HRESULT %08X)\n", static_cast<unsigned int>(hr), fmt);
+                        printe("Failed computing normal map for format %u (%ls) [single] (HRESULT %08X)\n", fmt, GetName(DXGI_FORMAT(fmt)), static_cast<unsigned int>(hr));
                     }
                     else
                     {
@@ -141,7 +141,7 @@ bool TEXTest::Test11()
                     {
                         success = false;
                         pass = false;
-                        printe("Failed computing normal map for format %u [mipmap] (HRESULT %08X)\n", static_cast<unsigned int>(hr), fmt);
+                        printe("Failed computing normal map for format %u (%ls) [mipmap] (HRESULT %08X)\n", fmt, GetName(DXGI_FORMAT(fmt)), static_cast<unsigned int>(hr));
                     }
                     else
                     {

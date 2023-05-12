@@ -13,6 +13,8 @@
 
 #include <algorithm>
 
+#include "getname.h"
+
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
 
@@ -21,10 +23,6 @@ namespace
     const UINT DXGI_START = 1;
     const UINT DXGI_END = 191; // as of DirectX Agility SDK 1.610
 }
-
-//-------------------------------------------------------------------------------------
-
-extern const wchar_t* GetName( DXGI_FORMAT fmt );
 
 //-------------------------------------------------------------------------------------
 
@@ -1271,7 +1269,8 @@ bool TEXTest::Test12()
         
         if ( !IsSRGB( f ) )
         {
-            printe( "ERROR: MakeSRGB failed on DXGI Format %u\n", hasSRGB[i] );
+            DXGI_FORMAT fmt = hasSRGB[i];
+            printe("ERROR: MakeSRGB failed on DXGI Format %u (%ls)\n", static_cast<unsigned int>(fmt), GetName(fmt));
             success = false;
         }
     }
@@ -1290,7 +1289,7 @@ bool TEXTest::Test12()
 
         if ( MakeSRGB( static_cast<DXGI_FORMAT>(f) ) != static_cast<DXGI_FORMAT>(f) )
         {
-            printe( "ERROR: MakeSRGB failed on DXGI Format %u\n", f );
+            printe( "ERROR: MakeSRGB failed on DXGI Format %u (%ls)\n", f, GetName(DXGI_FORMAT(f)));
             success = false;
         }
     }
@@ -1308,7 +1307,8 @@ bool TEXTest::Test12()
 
         if (IsSRGB(f))
         {
-            printe("ERROR: MakeLinear failed on DXGI Format %u\n", isSRGB[i]);
+            DXGI_FORMAT fmt = isSRGB[i];
+            printe("ERROR: MakeLinear failed on DXGI Format %u (%ls)\n", static_cast<unsigned int>(fmt), GetName(fmt));
             success = false;
         }
     }
@@ -1327,7 +1327,7 @@ bool TEXTest::Test12()
 
         if (MakeLinear(static_cast<DXGI_FORMAT>(f)) != static_cast<DXGI_FORMAT>(f))
         {
-            printe("ERROR: MakeLinear failed on DXGI Format %u\n", f);
+            printe("ERROR: MakeLinear failed on DXGI Format %u (%ls)\n", f, GetName(DXGI_FORMAT(f)));
             success = false;
         }
     }
@@ -1362,7 +1362,8 @@ bool TEXTest::Test12()
         
         if ( !IsTypeless( f ) )
         {
-            printe( "ERROR: MakeTypeless failed on DXGI Format %u\n", hasTypeless[i] );
+            DXGI_FORMAT fmt = hasTypeless[i];
+            printe("ERROR: MakeTypeless failed on DXGI Format %u (%ls)\n", static_cast<unsigned int>(fmt), GetName(fmt));
             success = false;
         }
     }
@@ -1381,7 +1382,7 @@ bool TEXTest::Test12()
 
         if ( MakeTypeless( static_cast<DXGI_FORMAT>(f) ) != static_cast<DXGI_FORMAT>(f) )
         {
-            printe( "ERROR: MakeTypeless failed on DXGI Format %u\n", f );
+            printe("ERROR: MakeTypeless failed on DXGI Format %u (%ls)\n", f, GetName(DXGI_FORMAT(f)));
             success = false;
         }
     }
@@ -1419,7 +1420,10 @@ bool TEXTest::Test12()
                 break;
 
             default:
-                printe( "ERROR: MakeTypelessUNORM failed on DXGI Format %u\n", typeless[t] );
+                {
+                    DXGI_FORMAT fmt = typeless[t];
+                    printe("ERROR: MakeTypelessUNORM failed on DXGI Format %u (%ls)\n", static_cast<unsigned int>(fmt), GetName(fmt));
+                }
                 success = false;
             }
         }
@@ -1460,7 +1464,10 @@ bool TEXTest::Test12()
                 break;
 
             default:
-                printe( "ERROR: MakeTypelessFLOAT failed on DXGI Format %u\n", typeless[t] );
+                {
+                    DXGI_FORMAT fmt = typeless[t];
+                    printe("ERROR: MakeTypelessFLOAT failed on DXGI Format %u (%ls)\n", static_cast<unsigned int>(fmt), GetName(fmt));
+                }
                 success = false;
             }
         }

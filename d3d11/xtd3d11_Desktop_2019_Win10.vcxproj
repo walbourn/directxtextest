@@ -250,6 +250,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\directxtest.h" />
+    <ClInclude Include="..\inc\getname.h" />
     <ClInclude Include="shaders\ps1D.h" />
     <ClInclude Include="shaders\ps2D.h" />
     <ClInclude Include="shaders\ps3D.h" />

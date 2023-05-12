@@ -305,6 +305,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\directxtest.h" />
+    <ClInclude Include="..\inc\getname.h" />
     <ClInclude Include="DeviceResourcesGXDK.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="StepTimer.h" />
