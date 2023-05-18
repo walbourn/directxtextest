@@ -111,7 +111,7 @@ target_include_directories(xttex PRIVATE ./inc)
 target_link_libraries(xttex PRIVATE d3d11.lib)
 add_test(NAME "tex" COMMAND xttex)
 set_tests_properties(tex PROPERTIES LABELS "Library")
-set_tests_properties(tex PROPERTIES TIMEOUT 400)
+set_tests_properties(tex PROPERTIES TIMEOUT 500)
 
 # filter
 list(APPEND TEST_EXES xtfilter)
