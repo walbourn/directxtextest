@@ -27,12 +27,18 @@ extern bool Test03();
 extern bool Test04();
 extern bool Test05();
 extern bool Test06();
+extern bool Test07();
+extern bool Test08();
+extern bool Test09();
 
 TestInfo g_Tests[] =
 {
     { "GetMetadataFromDDSMemory/File", Test01 },
     { "LoadFromDDSMemory", Test02 },
     { "LoadFromDDSFile", Test03 },
+    { "GetMetadataFromDDSMemory/FileEx", Test07 },
+    { "LoadFromDDSMemoryEx", Test08 },
+    { "LoadFromDDSFileEx", Test09 },
     { "SaveDDSToMemory", Test04 },
     { "SaveDDSToFile", Test05 },
     { "Fuzz", Test06 },
