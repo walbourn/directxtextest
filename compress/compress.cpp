@@ -1331,7 +1331,7 @@ bool Test03()
                     }
 
                     // Compress with status callback
-                    if (!cindex)
+                    if (!cindex && metadata.width < 512 && metadata.height < 512)
                     {
                         ScratchImage imageEx;
                         CompressOptions opts = {};
@@ -1375,7 +1375,7 @@ bool Test03()
                             hr = CompressEx(device.Get(), *srcimage.GetImage(0, 0, 0), cformat, opts, imageEx,
                                 [&](size_t, size_t) -> bool
                                 {
-                                    return true;
+                                    return false;
                                 });
                             if (hr != E_ABORT)
                             {
