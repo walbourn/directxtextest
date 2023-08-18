@@ -516,7 +516,7 @@ bool Test01()
 
 
 //-------------------------------------------------------------------------------------
-// Compress (CPU)
+// Compress[Ex] (CPU)
 bool Test02()
 {
     InitCounter();
@@ -748,6 +748,67 @@ bool Test02()
                             }
                         }
 #endif
+
+                        // Compress with status callback
+                        if (!cindex && metadata.width < 512 && metadata.height < 512)
+                        {
+                            ScratchImage imageEx;
+                            CompressOptions opts = {};
+                            opts.flags = TEX_COMPRESS_DEFAULT;
+#ifdef _OPENMP
+                            opts.flags |= TEX_COMPRESS_PARALLEL;
+#endif
+                            opts.threshold = TEX_THRESHOLD_DEFAULT;
+                            bool statusCallback = false;
+                            hr = CompressEx(*srcimage.GetImage(0, 0, 0), cformat, opts, imageEx,
+                                [&](size_t, size_t) -> bool
+                                {
+                                    statusCallback = true;
+                                    return true;
+                                });
+                            if (FAILED(hr))
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed compress w/ status (HRESULT %08X) to %ls:\n%ls\n", static_cast<unsigned int>(hr), GetName(cformat), szPath);
+                            }
+                            else if (image.GetMetadata().format != cformat
+                                || image.GetMetadata().width != metadata.width
+                                || image.GetMetadata().height != metadata.height)
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Unexpected compress w/ status result %zu x %zu %ls\n... %zu x %zu %ls:\n%ls\n",
+                                    image.GetMetadata().width, image.GetMetadata().height, GetName(image.GetMetadata().format),
+                                    metadata.width, metadata.height, GetName(cformat), szPath);
+                            }
+                            else if (!statusCallback)
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Compression w/ status callback never invoked %zu x %zu %ls:\n%ls)\n",
+                                    image.GetMetadata().width, image.GetMetadata().height, GetName(image.GetMetadata().format),
+                                    szPath);
+                            }
+                            else
+                            {
+                                // Try abort case
+                                hr = CompressEx(*srcimage.GetImage(0, 0, 0), cformat, opts, imageEx,
+                                    [&](size_t, size_t) -> bool
+                                    {
+                                        return false;
+                                    });
+                                if (hr != E_ABORT)
+                                {
+                                    success = false;
+                                    pass = false;
+                                    printe("Failed compression w/ abort (HRESULT %08X) %zu x %zu %ls:\n%ls)\n",
+                                        static_cast<unsigned int>(hr),
+                                        image.GetMetadata().width, image.GetMetadata().height, GetName(image.GetMetadata().format),
+                                        szPath);
+                                }
+                            }
+                        }
 
                         // Dithering
                         if ( cformat == DXGI_FORMAT_BC1_UNORM || cformat == DXGI_FORMAT_BC1_UNORM_SRGB
@@ -1070,7 +1131,7 @@ bool Test02()
 
 
  //-------------------------------------------------------------------------------------
-// Compress (GPU)
+// Compress[Ex] (GPU)
 bool Test03()
 {
     InitCounter();
@@ -1166,7 +1227,7 @@ bool Test03()
                 StartCounter();
 
                 ScratchImage image;
-                hr = Compress( device.Get(), *srcimage.GetImage(0,0,0), cformat, TEX_COMPRESS_DEFAULT, 1.f, image );
+                hr = Compress( device.Get(), *srcimage.GetImage(0,0,0), cformat, TEX_COMPRESS_DEFAULT, TEX_ALPHA_WEIGHT_DEFAULT, image );
                 if ( FAILED(hr) )
                 {
                     success = false;
@@ -1214,7 +1275,7 @@ bool Test03()
                     {
                         // Test complex image compress
                         ScratchImage image2;
-                        hr = Compress( device.Get(), srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), cformat, TEX_COMPRESS_DEFAULT, 1.f, image2 );
+                        hr = Compress( device.Get(), srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), cformat, TEX_COMPRESS_DEFAULT, TEX_ALPHA_WEIGHT_DEFAULT, image2 );
                         if ( FAILED(hr) )
                         {
                             success = false;
@@ -1267,6 +1328,65 @@ bool Test03()
                     else
                     {
                         SaveScratchImage( szDestPath, DDS_FLAGS_NONE, image );
+                    }
+
+                    // Compress with status callback
+                    if (!cindex && metadata.width < 512 && metadata.height < 512)
+                    {
+                        ScratchImage imageEx;
+                        CompressOptions opts = {};
+                        opts.flags = TEX_COMPRESS_DEFAULT;
+                        opts.threshold = TEX_THRESHOLD_DEFAULT;
+                        opts.alphaWeight = TEX_ALPHA_WEIGHT_DEFAULT;
+                        bool statusCallback = false;
+                        hr = CompressEx(device.Get(), *srcimage.GetImage(0, 0, 0), cformat, opts, imageEx,
+                            [&](size_t, size_t) -> bool
+                            {
+                                statusCallback = true;
+                                return true;
+                            });
+                        if (FAILED(hr))
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed GPU compress w/ status (HRESULT %08X) to %ls:\n%ls\n", static_cast<unsigned int>(hr), GetName(cformat), szPath);
+                        }
+                        else if (image.GetMetadata().format != cformat
+                            || image.GetMetadata().width != metadata.width
+                            || image.GetMetadata().height != metadata.height)
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Unexpected GPU compress w/ status result %zu x %zu %ls\n... %zu x %zu %ls:\n%ls\n",
+                                image.GetMetadata().width, image.GetMetadata().height, GetName(image.GetMetadata().format),
+                                metadata.width, metadata.height, GetName(cformat), szPath);
+                        }
+                        else if (!statusCallback)
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Compression w/ status callback never invoked %zu x %zu %ls:\n%ls)\n",
+                                image.GetMetadata().width, image.GetMetadata().height, GetName(image.GetMetadata().format),
+                                szPath);
+                        }
+                        else
+                        {
+                            // Try abort case
+                            hr = CompressEx(device.Get(), *srcimage.GetImage(0, 0, 0), cformat, opts, imageEx,
+                                [&](size_t, size_t) -> bool
+                                {
+                                    return false;
+                                });
+                            if (hr != E_ABORT)
+                            {
+                                success = false;
+                                pass = false;
+                                printe("Failed GPU compress w/ abort (HRESULT %08X) %zu x %zu %ls:\n%ls)\n",
+                                    static_cast<unsigned int>(hr),
+                                    image.GetMetadata().width, image.GetMetadata().height, GetName(image.GetMetadata().format),
+                                    szPath);
+                            }
+                        }
                     }
 
                     // Alpha weight
@@ -1415,7 +1535,7 @@ bool Test03()
                         else
                         {
                             ScratchImage image2;
-                            hr = Compress( device.Get(), *imageWide.GetImage(0,0,0), cformat, TEX_COMPRESS_DEFAULT, 1.f, image2 );
+                            hr = Compress( device.Get(), *imageWide.GetImage(0,0,0), cformat, TEX_COMPRESS_DEFAULT, TEX_ALPHA_WEIGHT_DEFAULT, image2 );
                             if ( FAILED(hr) )
                             {
                                 success = false;
