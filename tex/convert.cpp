@@ -2788,7 +2788,7 @@ bool TEXTest::Test05D()
 
 
 //-------------------------------------------------------------------------------------
-// Convert
+// Convert(Ex)
 bool TEXTest::Test06()
 {
     bool success = true;
@@ -2955,6 +2955,59 @@ bool TEXTest::Test06()
 
                 if (FAILED(hr))
                     continue;
+
+                //--- Simple convert with status callback -----------------------------
+                if (!findex)
+                {
+                    ScratchImage imageEx;
+                    ConvertOptions opts = {};
+                    opts.filter = filter;
+                    opts.threshold = TEX_THRESHOLD_DEFAULT;
+                    bool statusCallback = false;
+                    hr = ConvertEx(*srcimage.GetImage(0, 0, 0), tformat, opts, imageEx,
+                        [&](size_t, size_t) -> bool
+                        {
+                            statusCallback = true;
+                            return true;
+                        });
+                    if (FAILED(hr))
+                    {
+                        success = false;
+                        pass = false;
+                        printe("Failed conversion w/ status (HRESULT %08X) to %ls:\n%ls\n", static_cast<unsigned int>(hr), GetName(tformat), szPath);
+                    }
+                    else if (image.GetMetadata().format != tformat
+                        || image.GetMetadata().width != srcimage.GetMetadata().width || image.GetMetadata().height != srcimage.GetMetadata().height)
+                    {
+                        success = false;
+                        pass = false;
+                        printe("Failed conversion w/ status result is %zu x %zu (format %ls):\n",
+                            image.GetMetadata().width, image.GetMetadata().height, GetName(image.GetMetadata().format));
+                        printe("\n...(check) %zu x %zu (format %ls):\n%ls\n",
+                            srcimage.GetMetadata().width, srcimage.GetMetadata().height, GetName(tformat), szPath);
+                    }
+                    else if (!statusCallback)
+                    {
+                        success = false;
+                        pass = false;
+                        printe("Conversion w/ status callback never invoked:\n%ls)\n", szPath);
+                    }
+                    else
+                    {
+                        // Try abort case
+                        hr = ConvertEx(*srcimage.GetImage(0, 0, 0), tformat, opts, imageEx,
+                            [&](size_t, size_t) -> bool
+                            {
+                                return false;
+                            });
+                        if (hr != E_ABORT)
+                        {
+                            success = false;
+                            pass = false;
+                            printe("Failed conversion w/ abort (HRESULT %08X) to %ls:\n%ls\n", static_cast<unsigned int>(hr), GetName(tformat), szPath);
+                        }
+                    }
+                }
 
                 //--- Dither convert --------------------------------------------------
                 ScratchImage imageDither;
