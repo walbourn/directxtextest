@@ -33,6 +33,7 @@ namespace
         FLAGS_BAD_TAILS = 0x80,
         FLAGS_ALTMD5_MASK = 0xf00,
         FLAGS_UT_2004 = 0x10000,
+        FLAGS_OFF_BY_ONE_MIPS = 0x20000,
     };
 
     struct TestMedia
@@ -731,6 +732,9 @@ namespace
         { FLAGS_UT_2004, { 64, 64, 1, 1, 7, 0, 0, DXGI_FORMAT_BC2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"UT2004_bc2.dds",{ 0xc5,0x21,0xc6,0x71,0x2f,0xfd,0x08,0xf0,0xcf,0xb4,0x37,0x5c,0x11,0xd5,0x3c,0xe4 } },
         { FLAGS_UT_2004, { 64, 64, 1, 1, 7, 0, 0, DXGI_FORMAT_BC3_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"UT2004_bc3.dds",{ 0x5f,0x31,0xdf,0x38,0xe6,0xf2,0x57,0xda,0xd4,0xe1,0x06,0xdd,0x70,0x1a,0x62,0x2a } },
 
+        // Common error where mipcount is off by one
+        { FLAGS_OFF_BY_ONE_MIPS, { 256, 256, 1, 1, 9, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"beam_lo.dds",{ 0x1d,0xc9,0x2a,0x3c,0xee,0x90,0x07,0x0b,0x1b,0x00,0xcc,0x2a,0x1f,0x8c,0x2e,0x87 } },
+
         #ifdef _M_X64
         // Very large images
         { FLAGS_NONE, { 16384, 16384, 1, 1, 15, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth16kby16k.dds", { 0x8a,0xde,0x0f,0xaf,0xd6,0xab,0x6d,0x2a,0x3a,0x83,0x9f,0x59,0x4d,0xdd,0xd3,0x2c } },
@@ -874,8 +878,14 @@ bool Test01()
         OutputDebugStringA("\n");
 #endif
 
+        DDS_FLAGS flags = DDS_FLAGS_NONE;
+        if (g_TestMedia[index].options & (FLAGS_UT_2004 | FLAGS_OFF_BY_ONE_MIPS))
+        {
+            flags |= DDS_FLAGS_PERMISSIVE;
+        }
+
         TexMetadata metadata;
-        HRESULT hr = GetMetadataFromDDSFile( szPath, DDS_FLAGS_NONE, metadata );
+        HRESULT hr = GetMetadataFromDDSFile(szPath, flags, metadata);
 
         const TexMetadata* check = &g_TestMedia[index].metadata;
         if ( FAILED(hr) )
@@ -897,7 +907,7 @@ bool Test01()
             if ( g_TestMedia[index].options & FLAGS_EXPAND )
             {
                 TexMetadata metadata2;
-                hr = GetMetadataFromDDSFile( szPath, DDS_FLAGS_NO_LEGACY_EXPANSION, metadata2 );
+                hr = GetMetadataFromDDSFile(szPath, flags | DDS_FLAGS_NO_LEGACY_EXPANSION, metadata2);
 
                 if ( SUCCEEDED(hr) )
                 {
@@ -909,7 +919,7 @@ bool Test01()
             if ( g_TestMedia[index].options & FLAGS_BGR )
             {
                 TexMetadata metadata2;
-                hr = GetMetadataFromDDSFile( szPath, DDS_FLAGS_FORCE_RGB, metadata2 );
+                hr = GetMetadataFromDDSFile(szPath, flags | DDS_FLAGS_FORCE_RGB, metadata2);
 
                 if ( FAILED(hr) || (metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM
                                     && metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM_SRGB
@@ -923,7 +933,7 @@ bool Test01()
             if ( g_TestMedia[index].options & FLAGS_LUMINANCE )
             {
                 TexMetadata metadata2;
-                hr = GetMetadataFromDDSFile( szPath, DDS_FLAGS_EXPAND_LUMINANCE, metadata2 );
+                hr = GetMetadataFromDDSFile(szPath, flags | DDS_FLAGS_EXPAND_LUMINANCE, metadata2);
 
                 if ( FAILED(hr) || (metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM
                                     && metadata2.format != DXGI_FORMAT_R16G16B16A16_UNORM) )
@@ -941,7 +951,7 @@ bool Test01()
             case WIN11_DXGI_FORMAT_A4B4G4R4_UNORM:
                 {
                     TexMetadata metadata2;
-                    hr = GetMetadataFromDDSFile(szPath, DDS_FLAGS_NO_16BPP, metadata2);
+                    hr = GetMetadataFromDDSFile(szPath, flags | DDS_FLAGS_NO_16BPP, metadata2);
 
                     if (FAILED(hr) || (metadata2.format == metadata.format) || (BitsPerPixel(metadata2.format) == 16))
                     {
@@ -989,9 +999,15 @@ bool Test07()
         OutputDebugStringA("\n");
     #endif
 
+        DDS_FLAGS flags = DDS_FLAGS_NONE;
+        if (g_TestMedia[index].options & (FLAGS_UT_2004 | FLAGS_OFF_BY_ONE_MIPS))
+        {
+            flags |= DDS_FLAGS_PERMISSIVE;
+        }
+
         TexMetadata metadata;
         DDSMetaData ddsPixelFormat;
-        HRESULT hr = GetMetadataFromDDSFileEx(szPath, DDS_FLAGS_NONE, metadata, &ddsPixelFormat);
+        HRESULT hr = GetMetadataFromDDSFileEx(szPath, flags, metadata, &ddsPixelFormat);
 
         const TexMetadata* check = &g_TestMedia[index].metadata;
         if (FAILED(hr))
@@ -1134,6 +1150,10 @@ bool Test02()
             if (g_TestMedia[index].options & FLAGS_BAD_TAILS)
             {
                 flags |= DDS_FLAGS_BAD_DXTN_TAILS;
+            }
+            if (g_TestMedia[index].options & (FLAGS_UT_2004 | FLAGS_OFF_BY_ONE_MIPS))
+            {
+                flags |= DDS_FLAGS_PERMISSIVE;
             }
 
             TexMetadata metadata;
@@ -1410,6 +1430,10 @@ bool Test08()
             {
                 flags |= DDS_FLAGS_BAD_DXTN_TAILS;
             }
+            if (g_TestMedia[index].options & (FLAGS_UT_2004 | FLAGS_OFF_BY_ONE_MIPS))
+            {
+                flags |= DDS_FLAGS_PERMISSIVE;
+            }
 
             TexMetadata metadata;
             ScratchImage image;
@@ -1566,6 +1590,10 @@ bool Test03()
         if (g_TestMedia[index].options & FLAGS_BAD_TAILS)
         {
             flags |= DDS_FLAGS_BAD_DXTN_TAILS;
+        }
+        if (g_TestMedia[index].options & (FLAGS_UT_2004 | FLAGS_OFF_BY_ONE_MIPS))
+        {
+            flags |= DDS_FLAGS_PERMISSIVE;
         }
 
         TexMetadata metadata;
@@ -1833,6 +1861,10 @@ bool Test09()
         if (g_TestMedia[index].options & FLAGS_BAD_TAILS)
         {
             flags |= DDS_FLAGS_BAD_DXTN_TAILS;
+        }
+        if (g_TestMedia[index].options & (FLAGS_UT_2004 | FLAGS_OFF_BY_ONE_MIPS))
+        {
+            flags |= DDS_FLAGS_PERMISSIVE;
         }
 
         TexMetadata metadata;
@@ -2758,6 +2790,8 @@ bool Test06()
             OutputDebugString(findData.cFileName);
             OutputDebugStringA("\n");
 
+            constexpr DDS_FLAGS ddsFlags = DDS_FLAGS_ALLOW_LARGE_FILES | DDS_FLAGS_PERMISSIVE;
+
             // memory
             {
                 Blob blob;
@@ -2774,11 +2808,11 @@ bool Test06()
                         TexMetadata metadata;
                         ScratchImage image;
                         hr = LoadFromDDSMemory(blob.GetBufferPointer(), blob.GetBufferSize(),
-                            DDS_FLAGS_ALLOW_LARGE_FILES, &metadata, image);
+                            ddsFlags, &metadata, image);
                         if (hr == HRESULT_FROM_WIN32(ERROR_HANDLE_EOF))
                         {
                             hr = LoadFromDDSMemory(blob.GetBufferPointer(), blob.GetBufferSize(),
-                                DDS_FLAGS_ALLOW_LARGE_FILES | DDS_FLAGS_BAD_DXTN_TAILS, &metadata, image);
+                                ddsFlags | DDS_FLAGS_BAD_DXTN_TAILS, &metadata, image);
                         }
 
                         if (FAILED(hr) && isdds)
@@ -2806,10 +2840,10 @@ bool Test06()
             {
                 TexMetadata metadata;
                 ScratchImage image;
-                HRESULT hr = LoadFromDDSFile(szPath, DDS_FLAGS_ALLOW_LARGE_FILES, &metadata, image);
+                HRESULT hr = LoadFromDDSFile(szPath, ddsFlags, &metadata, image);
                 if (hr == HRESULT_FROM_WIN32( ERROR_HANDLE_EOF ))
                 {
-                    hr = LoadFromDDSFile(szPath, DDS_FLAGS_ALLOW_LARGE_FILES | DDS_FLAGS_BAD_DXTN_TAILS, &metadata, image);
+                    hr = LoadFromDDSFile(szPath, ddsFlags | DDS_FLAGS_BAD_DXTN_TAILS, &metadata, image);
                 }
 
                 if (FAILED(hr) && isdds)
