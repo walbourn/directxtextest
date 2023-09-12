@@ -2276,7 +2276,7 @@ bool Test04()
                     }
                     else
                     {
-                        DDS_FLAGS ddsflags = ( metadata.dimension == TEX_DIMENSION_TEXTURE1D ) ? DDS_FLAGS_FORCE_DX10_EXT : DDS_FLAGS_NONE;
+                        const DDS_FLAGS ddsflags = ( metadata.dimension == TEX_DIMENSION_TEXTURE1D ) ? DDS_FLAGS_FORCE_DX10_EXT : DDS_FLAGS_NONE;
 
                         hr = SaveToDDSMemory( imageWide.GetImages(), imageWide.GetImageCount(), imageWide.GetMetadata(), ddsflags, blob2 );
                         if ( FAILED(hr) )
@@ -2662,7 +2662,7 @@ bool Test05()
                     }
                     else
                     {
-                        DDS_FLAGS ddsflags = ( metadata.dimension == TEX_DIMENSION_TEXTURE1D ) ? DDS_FLAGS_FORCE_DX10_EXT : DDS_FLAGS_NONE;
+                        const DDS_FLAGS ddsflags = ( metadata.dimension == TEX_DIMENSION_TEXTURE1D ) ? DDS_FLAGS_FORCE_DX10_EXT : DDS_FLAGS_NONE;
 
                         hr = SaveToDDSFile( imageWide.GetImages(), imageWide.GetImageCount(), imageWide.GetMetadata(), ddsflags, szDestPathWide );
                         if ( FAILED(hr) )
@@ -2790,7 +2790,7 @@ bool Test06()
             OutputDebugString(findData.cFileName);
             OutputDebugStringA("\n");
 
-            constexpr DDS_FLAGS ddsFlags = DDS_FLAGS_ALLOW_LARGE_FILES | DDS_FLAGS_PERMISSIVE;
+            ENUM_FLAGS_CONSTEXPR DDS_FLAGS ddsFlags = DDS_FLAGS_ALLOW_LARGE_FILES | DDS_FLAGS_PERMISSIVE;
 
             // memory
             {

@@ -1219,7 +1219,7 @@ bool Test03()
                 if ( SkipCompressCases( check->format, cformat, g_CompressMedia[index].flags, true ) )
                     continue;
 
-                CMSE_FLAGS flags = (cformat == DXGI_FORMAT_BC6H_UF16 || cformat == DXGI_FORMAT_BC6H_SF16) ? CMSE_IGNORE_ALPHA : CMSE_DEFAULT;
+                const CMSE_FLAGS flags = (cformat == DXGI_FORMAT_BC6H_UF16 || cformat == DXGI_FORMAT_BC6H_SF16) ? CMSE_IGNORE_ALPHA : CMSE_DEFAULT;
 
                 float mse, mseV[4];
 
@@ -1298,7 +1298,7 @@ bool Test03()
                             // Verify the image data
                             SaveScratchImage( szDestPath, DDS_FLAGS_NONE, image2 );
 
-                            float targMSE = ( cformat == DXGI_FORMAT_BC6H_UF16 || cformat == DXGI_FORMAT_BC6H_SF16) ? 0.2f : 0.05f;
+                            const float targMSE = ( cformat == DXGI_FORMAT_BC6H_UF16 || cformat == DXGI_FORMAT_BC6H_SF16) ? 0.2f : 0.05f;
 
                             for( size_t j = 0; j < srcimage.GetImageCount(); ++j )
                             {

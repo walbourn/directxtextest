@@ -89,4 +89,13 @@ inline void DebugPrint(_In_z_ _Printf_format_string_ const char* format, ...) no
 #define TEMP_PATH L"T:\\"
 #endif
 
+// See https://walbourn.github.io/modern-c++-bitmask-types/
+#ifndef ENUM_FLAGS_CONSTEXPR
+#if defined(NTDDI_WIN10_RS1) && !defined(__MINGW32__)
+#define ENUM_FLAGS_CONSTEXPR constexpr
+#else
+#define ENUM_FLAGS_CONSTEXPR const
+#endif
+#endif
+
 //#define VERBOSE

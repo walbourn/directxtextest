@@ -2902,7 +2902,9 @@ bool TEXTest::Test06()
 
                 TEX_FILTER_FLAGS filter = TEX_FILTER_DEFAULT;
                 if ( g_TestMedia[index].options & FLAGS_SEPALPHA )
+                {
                     filter |= TEX_FILTER_SEPARATE_ALPHA;
+                }
 
                 //--- Simple convert --------------------------------------------------
                 ScratchImage image;
