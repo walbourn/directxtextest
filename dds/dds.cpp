@@ -34,6 +34,7 @@ namespace
         FLAGS_ALTMD5_MASK = 0xf00,
         FLAGS_UT_2004 = 0x10000,
         FLAGS_OFF_BY_ONE_MIPS = 0x20000,
+        FLAGS_STALKER_24 = 0x40000,
     };
 
     struct TestMedia
@@ -735,6 +736,9 @@ namespace
         // Common error where mipcount is off by one
         { FLAGS_OFF_BY_ONE_MIPS, { 256, 256, 1, 1, 9, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"beam_lo.dds",{ 0x1d,0xc9,0x2a,0x3c,0xee,0x90,0x07,0x0b,0x1b,0x00,0xcc,0x2a,0x1f,0x8c,0x2e,0x87 } },
 
+        // STALKER DDS variant (DDS_HEADER size is set to 24 instead of 124)
+        { FLAGS_STALKER_24, { 256, 512, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"DDSHeaderSize24.dds",{ 0x58,0xf4,0x8a,0xdf,0xf0,0xce,0xeb,0x5f,0x08,0x4d,0xea,0xae,0xef,0xf0,0xb6,0x72 } },
+
         #ifdef _M_X64
         // Very large images
         { FLAGS_NONE, { 16384, 16384, 1, 1, 15, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth16kby16k.dds", { 0x8a,0xde,0x0f,0xaf,0xd6,0xab,0x6d,0x2a,0x3a,0x83,0x9f,0x59,0x4d,0xdd,0xd3,0x2c } },
@@ -879,7 +883,7 @@ bool Test01()
 #endif
 
         DDS_FLAGS flags = DDS_FLAGS_NONE;
-        if (g_TestMedia[index].options & (FLAGS_UT_2004 | FLAGS_OFF_BY_ONE_MIPS))
+        if (g_TestMedia[index].options & (FLAGS_UT_2004 | FLAGS_OFF_BY_ONE_MIPS | FLAGS_STALKER_24))
         {
             flags |= DDS_FLAGS_PERMISSIVE;
         }
@@ -1000,7 +1004,7 @@ bool Test07()
     #endif
 
         DDS_FLAGS flags = DDS_FLAGS_NONE;
-        if (g_TestMedia[index].options & (FLAGS_UT_2004 | FLAGS_OFF_BY_ONE_MIPS))
+        if (g_TestMedia[index].options & (FLAGS_UT_2004 | FLAGS_OFF_BY_ONE_MIPS | FLAGS_STALKER_24))
         {
             flags |= DDS_FLAGS_PERMISSIVE;
         }
@@ -1151,7 +1155,7 @@ bool Test02()
             {
                 flags |= DDS_FLAGS_BAD_DXTN_TAILS;
             }
-            if (g_TestMedia[index].options & (FLAGS_UT_2004 | FLAGS_OFF_BY_ONE_MIPS))
+            if (g_TestMedia[index].options & (FLAGS_UT_2004 | FLAGS_OFF_BY_ONE_MIPS | FLAGS_STALKER_24))
             {
                 flags |= DDS_FLAGS_PERMISSIVE;
             }
@@ -1430,7 +1434,7 @@ bool Test08()
             {
                 flags |= DDS_FLAGS_BAD_DXTN_TAILS;
             }
-            if (g_TestMedia[index].options & (FLAGS_UT_2004 | FLAGS_OFF_BY_ONE_MIPS))
+            if (g_TestMedia[index].options & (FLAGS_UT_2004 | FLAGS_OFF_BY_ONE_MIPS | FLAGS_STALKER_24))
             {
                 flags |= DDS_FLAGS_PERMISSIVE;
             }
@@ -1591,7 +1595,7 @@ bool Test03()
         {
             flags |= DDS_FLAGS_BAD_DXTN_TAILS;
         }
-        if (g_TestMedia[index].options & (FLAGS_UT_2004 | FLAGS_OFF_BY_ONE_MIPS))
+        if (g_TestMedia[index].options & (FLAGS_UT_2004 | FLAGS_OFF_BY_ONE_MIPS | FLAGS_STALKER_24))
         {
             flags |= DDS_FLAGS_PERMISSIVE;
         }
@@ -1862,7 +1866,7 @@ bool Test09()
         {
             flags |= DDS_FLAGS_BAD_DXTN_TAILS;
         }
-        if (g_TestMedia[index].options & (FLAGS_UT_2004 | FLAGS_OFF_BY_ONE_MIPS))
+        if (g_TestMedia[index].options & (FLAGS_UT_2004 | FLAGS_OFF_BY_ONE_MIPS | FLAGS_STALKER_24))
         {
             flags |= DDS_FLAGS_PERMISSIVE;
         }
