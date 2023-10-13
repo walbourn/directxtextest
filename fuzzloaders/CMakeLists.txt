@@ -3,10 +3,14 @@
 
 cmake_minimum_required (VERSION 3.20)
 
-project (standalonetest
-  DESCRIPTION "DirectXTex Standalone Module Test"
+project (fuzzloaders
+  DESCRIPTION "DirectXTex File Fuzzer"
   HOMEPAGE_URL "http://go.microsoft.com/fwlink/?LinkId=248926"
   LANGUAGES CXX)
+
+if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
+  message(FATAL_ERROR "DirectXTex Fuzz Tester should be built by the main CMakeLists")
+endif()
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -28,46 +32,7 @@ elseif(CMAKE_GENERATOR_PLATFORM MATCHES "^[Aa][Rr][Mm]64$")
     set(DIRECTX_ARCH arm64)
 endif()
 
-set(TEST_SOURCES
-    test12.cpp
-    ../../DDSTextureLoader/DDSTextureLoader12.h
-    ../../DDSTextureLoader/DDSTextureLoader12.cpp
-    ../../ScreenGrab/ScreenGrab12.h
-    ../../ScreenGrab/ScreenGrab12.cpp)
-
-if(WIN32)
-    set(TEST_SOURCES ${TEST_SOURCES}
-        ../../WICTextureLoader/WICTextureLoader12.h
-        ../../WICTextureLoader/WICTextureLoader12.cpp)
-
-    if (NOT WINDOWS_STORE)
-        set(TEST_SOURCES ${TEST_SOURCES}
-            test9.cpp
-            ../../DDSTextureLoader/DDSTextureLoader9.h
-            ../../DDSTextureLoader/DDSTextureLoader9.cpp
-            ../../ScreenGrab/ScreenGrab9.h
-            ../../ScreenGrab/ScreenGrab9.cpp
-            ../../WICTextureLoader/WICTextureLoader9.h
-           ../../WICTextureLoader/WICTextureLoader9.cpp)
-    endif()
-
-    set(TEST_SOURCES ${TEST_SOURCES}
-        test11.cpp
-        ../../DDSTextureLoader/DDSTextureLoader11.h
-        ../../DDSTextureLoader/DDSTextureLoader11.cpp
-        ../../ScreenGrab/ScreenGrab11.h
-        ../../ScreenGrab/ScreenGrab11.cpp
-        ../../WICTextureLoader/WICTextureLoader11.h
-        ../../WICTextureLoader/WICTextureLoader11.cpp)
-endif()
-
-add_executable(${PROJECT_NAME} main.cpp ${TEST_SOURCES})
-
-target_include_directories(${PROJECT_NAME} PUBLIC
-    ../inc
-    ../../DDSTextureLoader
-    ../../ScreenGrab
-    ../../WICTextureLoader)
+add_executable(${PROJECT_NAME} fuzzloaders.cpp ../../Texconv/PortablePixMap.cpp)
 
 if(MINGW OR (NOT WIN32))
     find_package(directxmath CONFIG REQUIRED)
@@ -76,6 +41,8 @@ else()
     find_package(directxmath CONFIG QUIET)
     find_package(directx-headers CONFIG QUIET)
 endif()
+
+target_link_libraries(${PROJECT_NAME} PRIVATE DirectXTex bcrypt.lib)
 
 if(directxmath_FOUND)
     message(STATUS "Using DirectXMath package")
@@ -125,14 +92,14 @@ if(NOT ${DIRECTX_ARCH} MATCHES "^arm")
 endif()
 
 if ( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
-    set(WarningsEXE "-Wpedantic" "-Wextra" "-Wno-c++98-compat" "-Wno-c++98-compat-pedantic" "-Wno-float-equal" "-Wno-global-constructors" "-Wno-language-extension-token" "-Wno-missing-prototypes" "-Wno-missing-variable-declarations" "-Wno-reserved-id-macro")
+    set(WarningsEXE "-Wpedantic" "-Wextra" "-Wno-c++98-compat" "-Wno-c++98-compat-pedantic" "-Wno-float-equal" "-Wno-global-constructors" "-Wno-language-extension-token" "-Wno-missing-prototypes" "-Wno-missing-variable-declarations" "-Wno-reserved-id-macro" "-Wno-unused-macros" "-Wno-switch-enum")
     target_compile_options(${PROJECT_NAME} PRIVATE ${WarningsEXE})
     if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 16.0)
         target_compile_options(${PROJECT_NAME} PRIVATE "-Wno-unsafe-buffer-usage")
     endif()
 endif()
 if(MINGW)
-    target_link_options(${PROJECT_NAME} PRIVATE -Wl,--allow-multiple-definition)
+    target_link_options(${PROJECT_NAME} PRIVATE -Wl,--allow-multiple-definition -municode)
 endif()
 if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
     target_compile_options(${PROJECT_NAME} PRIVATE /permissive- /JMC- /Zc:__cplusplus /Zc:inline)
@@ -146,13 +113,14 @@ if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
     if((CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 19.27) AND (NOT ((${DIRECTX_ARCH} MATCHES "^arm"))))
         target_link_options(${PROJECT_NAME} PRIVATE /CETCOMPAT)
     endif()
+
+    if (BUILD_FUZZING AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 19.32)
+        target_compile_options(${PROJECT_NAME} PRIVATE /fsanitize=address /fsanitize-coverage=inline-8bit-counters /fsanitize-coverage=edge /fsanitize-coverage=trace-cmp /fsanitize-coverage=trace-div)
+        target_link_libraries(${PROJECT_NAME} PRIVATE sancov.lib)
+    endif()
 endif()
 
 if(WIN32)
-    if(WINDOWS_STORE)
-      target_compile_definitions(${PROJECT_NAME} PRIVATE WINAPI_FAMILY=WINAPI_FAMILY_APP)
-    endif()
-
     # Windows 10 is used here to build the DirectX 12 code paths as well
     target_compile_definitions(${PROJECT_NAME} PRIVATE _UNICODE UNICODE _WIN32_WINNT=0x0A00)
 endif()

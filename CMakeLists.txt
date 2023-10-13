@@ -54,7 +54,8 @@ endif()
 
 # fuzzloaders
 list(APPEND TEST_EXES fuzzloaders)
-add_executable(fuzzloaders fuzzloaders/fuzzloaders.cpp ../Texconv/PortablePixMap.cpp)
+
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/fuzzloaders)
 
 # DDS
 list(APPEND TEST_EXES xtdds)
@@ -237,7 +238,6 @@ elseif(MINGW)
       target_compile_options(${t} PRIVATE -Wno-ignored-attributes)
     endforeach()
     target_link_options(bcvalidator PRIVATE -municode)
-    target_link_options(fuzzloaders PRIVATE -municode)
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     foreach(t IN LISTS TEST_EXE)
       target_compile_options(${t} PRIVATE /sdl /permissive- /JMC- /Zc:__cplusplus /Zc:inline)
@@ -276,6 +276,13 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 19.35)
       foreach(t IN LISTS TEST_EXES)
         target_compile_options(${t} PRIVATE /Zc:checkGwOdr $<$<VERSION_GREATER_EQUAL:${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION},10.0.22000>:/Zc:templateScope>)
+      endforeach()
+    endif()
+
+    if (BUILD_FUZZING AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 19.32)
+      foreach(t IN LISTS TEST_EXES)
+         target_compile_options(${t} PRIVATE /fsanitize=address /fsanitize-coverage=inline-8bit-counters /fsanitize-coverage=edge /fsanitize-coverage=trace-cmp /fsanitize-coverage=trace-div)
+         target_link_libraries(${t} PRIVATE sancov.lib)
       endforeach()
     endif()
 endif()
