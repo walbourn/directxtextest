@@ -1975,7 +1975,7 @@ bool WICTest::Test07()
 
             if (_wcsicmp(ext, L".dds") == 0)
             {
-                hr = LoadFromDDSFile(szPath, DDS_FLAGS_NONE, &metadata, image);
+                hr = LoadFromDDSFile(szPath, DDS_FLAGS_PERMISSIVE, &metadata, image);
             }
             else if (_wcsicmp(ext, L".hdr") == 0)
             {
