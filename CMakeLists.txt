@@ -182,7 +182,7 @@ endif()
 if(MSVC)
   foreach(t IN LISTS TEST_EXES)
     target_compile_options(${t} PRIVATE "$<IF:$<STREQUAL:${t},headertest>,/Wall,/W4>" /GR- /fp:fast "$<$<NOT:$<CONFIG:DEBUG>>:/guard:cf>")
-    target_link_options(${t} PRIVATE /DYNAMICBASE /NXCOMPAT)
+    target_link_options(${t} PRIVATE /DYNAMICBASE /NXCOMPAT /INCREMENTAL:NO)
   endforeach()
 
   if((CMAKE_SIZEOF_VOID_P EQUAL 4) AND (NOT (${DIRECTX_ARCH} MATCHES "^arm")))
