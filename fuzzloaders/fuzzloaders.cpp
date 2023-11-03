@@ -479,7 +479,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
                     }
                     else if (pass)
                     {
-                        wprintf(SUCCEEDED(hr) ? L"*" : L".");
+                        wprintf(L"%ls", SUCCEEDED(hr) ? L"*" : L".");
                     }
                 }
             }
@@ -503,7 +503,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
             }
             else
             {
-                wprintf(SUCCEEDED(hr) ? L"*" : L".");
+                wprintf(L"%ls", SUCCEEDED(hr) ? L"*" : L".");
             }
         }
         else if (usepfm)
@@ -525,7 +525,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
             }
             else
             {
-                wprintf(SUCCEEDED(hr) ? L"*" : L".");
+                wprintf(L"%ls", SUCCEEDED(hr) ? L"*" : L".");
             }
         }
         else if (useppm)
@@ -547,7 +547,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
             }
             else
             {
-                wprintf(SUCCEEDED(hr) ? L"*" : L".");
+                wprintf(L"%ls", SUCCEEDED(hr) ? L"*" : L".");
             }
         }
         else if (usetga)
@@ -609,7 +609,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
                         }
                         else if (pass)
                         {
-                            wprintf(SUCCEEDED(hr) ? L"*" : L".");
+                            wprintf(L"%ls", SUCCEEDED(hr) ? L"*" : L".");
                         }
                     }
                 }
@@ -634,7 +634,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
             }
             else
             {
-                wprintf(SUCCEEDED(hr) ? L"*" : L".");
+                wprintf(L"%ls", SUCCEEDED(hr) ? L"*" : L".");
             }
         }
         fflush(stdout);
