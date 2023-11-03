@@ -32,6 +32,7 @@
 #include <cwchar>
 #include <memory>
 #include <list>
+#include <tuple>
 
 #include "DirectXTex.h"
 
@@ -46,6 +47,8 @@ namespace
     struct find_closer { void operator()(HANDLE h) noexcept { assert(h != INVALID_HANDLE_VALUE); if (h) FindClose(h); } };
 
     using ScopedFindHandle = std::unique_ptr<void, find_closer>;
+
+    constexpr DirectX::DDS_FLAGS c_ddsFlags = DirectX::DDS_FLAGS_ALLOW_LARGE_FILES | DirectX::DDS_FLAGS_PERMISSIVE;
 
     //////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////
@@ -193,7 +196,7 @@ namespace
         if (szFile == nullptr)
             return E_INVALIDARG;
 
-        ScopedHandle hFile(safe_handle(CreateFile(szFile, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING,
+        ScopedHandle hFile(safe_handle(CreateFileW(szFile, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING,
             FILE_FLAG_SEQUENTIAL_SCAN, nullptr)));
         if (!hFile)
         {
@@ -424,10 +427,9 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
         DirectX::ScratchImage result;
         if (usedds)
         {
-            constexpr DirectX::DDS_FLAGS ddsFlags = DirectX::DDS_FLAGS_ALLOW_LARGE_FILES;
             bool pass = false;
 
-            hr = DirectX::LoadFromDDSFile(pConv.szSrc, ddsFlags, nullptr, result);
+            hr = DirectX::LoadFromDDSFile(pConv.szSrc, c_ddsFlags, nullptr, result);
             if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
             {
                 wprintf(L"ERROR: DDSTexture file not not found:\n%ls\n", pConv.szSrc);
@@ -451,6 +453,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
             {
                 DirectX::Blob blob;
                 hr = LoadBlobFromFile(pConv.szSrc, blob);
+
                 if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
                 {
                     wprintf(L"ERROR: DDSTexture file not not found:\n%ls\n", pConv.szSrc);
@@ -467,7 +470,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
                 }
                 else
                 {
-                    hr = DirectX::LoadFromDDSMemory(blob.GetBufferPointer(), blob.GetBufferSize(), ddsFlags, nullptr, result);
+                    hr = DirectX::LoadFromDDSMemory(blob.GetBufferPointer(), blob.GetBufferSize(), c_ddsFlags, nullptr, result);
                     if (FAILED(hr) && hr != E_INVALIDARG && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != E_OUTOFMEMORY && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF) && (hr != E_FAIL || (hr == E_FAIL && isdds)))
                     {
 #ifdef _DEBUG
@@ -641,6 +644,51 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
     }
 
     wprintf(L"\n*** FUZZING COMPLETE ***\n");
+
+    return 0;
+}
+
+
+//--------------------------------------------------------------------------------------
+// Libfuzzer entry-point
+//--------------------------------------------------------------------------------------
+extern "C" __declspec(dllexport) int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
+{
+    DirectX::ScratchImage result;
+
+    // Validate memory version
+    std::ignore = DirectX::LoadFromDDSMemory(data, size, c_ddsFlags, nullptr, result);
+    std::ignore = DirectX::LoadFromTGAMemory(data, size, DirectX::TGA_FLAGS_NONE, nullptr, result);
+    std::ignore = DirectX::LoadFromTGAMemory(data, size, DirectX::TGA_FLAGS_BGR, nullptr, result);
+    std::ignore = LoadFromHDRMemory(data, size, nullptr, result);
+
+    // Disk version
+    wchar_t tempFileName[MAX_PATH] = {};
+    wchar_t tempPath[MAX_PATH] = {};
+
+    if (!GetTempPathW(MAX_PATH, tempPath))
+        return 0;
+
+    if (!GetTempFileNameW(tempPath, L"fuzz", 0, tempFileName))
+        return 0;
+
+    {
+        ScopedHandle hFile(safe_handle(CreateFileW(tempFileName, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS,
+                FILE_ATTRIBUTE_NORMAL, nullptr)));
+        if (!hFile)
+            return 0;
+
+        DWORD bytesWritten = 0;
+        if (!WriteFile(hFile.get(), data, static_cast<DWORD>(size), &bytesWritten, nullptr))
+            return 0;
+    }
+
+    std::ignore = DirectX::LoadFromDDSFile(tempFileName, c_ddsFlags, nullptr, result);
+    std::ignore = DirectX::LoadFromHDRFile(tempFileName, nullptr, result);
+    std::ignore = DirectX::LoadFromTGAFile(tempFileName, DirectX::TGA_FLAGS_NONE, nullptr, result);
+    std::ignore = DirectX::LoadFromTGAFile(tempFileName, DirectX::TGA_FLAGS_BGR, nullptr, result);
+    std::ignore = LoadFromPortablePixMap(tempFileName, nullptr, result);
+    std::ignore = LoadFromPortablePixMapHDR(tempFileName, nullptr, result);
 
     return 0;
 }
