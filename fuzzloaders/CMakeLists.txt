@@ -34,6 +34,10 @@ endif()
 
 add_executable(${PROJECT_NAME} fuzzloaders.cpp ../../Texconv/PortablePixMap.cpp)
 
+if(BUILD_FUZZING)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE FUZZING_BUILD_MODE)
+endif()
+
 if(MINGW OR (NOT WIN32))
     find_package(directxmath CONFIG REQUIRED)
     find_package(directx-headers CONFIG REQUIRED)
@@ -115,8 +119,9 @@ if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
     endif()
 
     if (BUILD_FUZZING AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 19.32)
-        target_compile_options(${PROJECT_NAME} PRIVATE /fsanitize=address /fsanitize-coverage=inline-8bit-counters /fsanitize-coverage=edge /fsanitize-coverage=trace-cmp /fsanitize-coverage=trace-div)
+        target_compile_options(${PROJECT_NAME} PRIVATE /fsanitize=fuzzer /fsanitize=address /fsanitize-coverage=inline-8bit-counters /fsanitize-coverage=edge /fsanitize-coverage=trace-cmp /fsanitize-coverage=trace-div)
         target_link_libraries(${PROJECT_NAME} PRIVATE sancov.lib)
+        target_link_options(${PROJECT_NAME} PRIVATE /IGNORE:4291)
     endif()
 endif()
 

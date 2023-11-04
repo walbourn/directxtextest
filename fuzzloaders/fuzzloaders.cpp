@@ -290,6 +290,8 @@ HRESULT __cdecl LoadFromPortablePixMapHDR(
 //--------------------------------------------------------------------------------------
 // Entry-point
 //--------------------------------------------------------------------------------------
+#ifndef FUZZING_BUILD_MODE
+
 #ifdef _PREFAST_
 #pragma prefast(disable : 28198, "Command-line tool, frees all memory on exit")
 #endif
@@ -658,6 +660,9 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
 }
 
 
+#else // FUZZING_BUILD_MODE
+
+
 //--------------------------------------------------------------------------------------
 // Libfuzzer entry-point
 //--------------------------------------------------------------------------------------
@@ -703,3 +708,5 @@ extern "C" __declspec(dllexport) int LLVMFuzzerTestOneInput(const uint8_t *data,
     return 0;
 }
 #endif
+
+#endif // FUZZING_BUILD_MODE
