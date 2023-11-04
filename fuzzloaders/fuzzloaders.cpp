@@ -36,6 +36,15 @@
 
 #include "DirectXTex.h"
 
+// See https://walbourn.github.io/modern-c++-bitmask-types/
+#ifndef ENUM_FLAGS_CONSTEXPR
+#if defined(NTDDI_WIN10_RS1) && !defined(__MINGW32__)
+#define ENUM_FLAGS_CONSTEXPR constexpr
+#else
+#define ENUM_FLAGS_CONSTEXPR const
+#endif
+#endif
+
 namespace
 {
     struct handle_closer { void operator()(HANDLE h) noexcept { if (h) CloseHandle(h); } };
@@ -48,7 +57,7 @@ namespace
 
     using ScopedFindHandle = std::unique_ptr<void, find_closer>;
 
-    constexpr DirectX::DDS_FLAGS c_ddsFlags = DirectX::DDS_FLAGS_ALLOW_LARGE_FILES | DirectX::DDS_FLAGS_PERMISSIVE;
+    ENUM_FLAGS_CONSTEXPR DirectX::DDS_FLAGS c_ddsFlags = DirectX::DDS_FLAGS_ALLOW_LARGE_FILES | DirectX::DDS_FLAGS_PERMISSIVE;
 
     //////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////
@@ -652,6 +661,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
 //--------------------------------------------------------------------------------------
 // Libfuzzer entry-point
 //--------------------------------------------------------------------------------------
+#ifdef _MSC_VER
 extern "C" __declspec(dllexport) int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
 {
     DirectX::ScratchImage result;
@@ -692,3 +702,4 @@ extern "C" __declspec(dllexport) int LLVMFuzzerTestOneInput(const uint8_t *data,
 
     return 0;
 }
+#endif
