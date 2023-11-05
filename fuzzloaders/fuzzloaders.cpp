@@ -670,7 +670,6 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
 //--------------------------------------------------------------------------------------
 // Libfuzzer entry-point
 //--------------------------------------------------------------------------------------
-#ifdef _MSC_VER
 extern "C" __declspec(dllexport) int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
 {
     DirectX::ScratchImage result;
@@ -711,6 +710,5 @@ extern "C" __declspec(dllexport) int LLVMFuzzerTestOneInput(const uint8_t *data,
 
     return 0;
 }
-#endif
 
 #endif // FUZZING_BUILD_MODE
