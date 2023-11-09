@@ -75,7 +75,7 @@ HRESULT LoadBlobFromFile( _In_z_ const wchar_t* szFile, Blob& blob )
 #include <bcrypt.h>
 
 #ifndef NT_SUCCESS
-#define NT_SUCCESS(Status)          (((NTSTATUS)(Status)) >= 0)
+#define NT_SUCCESS(Status)          ((Status) >= 0)
 #endif
 
 struct bcrypthandle_closer { void operator()(BCRYPT_HASH_HANDLE h) { BCryptDestroyHash(h); } };
@@ -94,7 +94,7 @@ HRESULT MD5Checksum( _In_ const ScratchImage& image, _Out_bytecap_x_(16) uint8_t
     NTSTATUS status;
 
     // Ensure have the MD5 algorithm ready
-    static BCRYPT_ALG_HANDLE s_algid = 0;
+    static BCRYPT_ALG_HANDLE s_algid = nullptr;
     if ( !s_algid )
     {
         status = BCryptOpenAlgorithmProvider( &s_algid, BCRYPT_MD5_ALGORITHM, MS_PRIMITIVE_PROVIDER,  0 );
