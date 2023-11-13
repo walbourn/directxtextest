@@ -381,6 +381,8 @@ bool Test03()
         return false;
     }
 
+    bool second = false;
+
     wchar_t szPath[MAX_PATH] = {};
     wcscpy_s(szPath, szMediaPath);
     wcscat_s(szPath, L"*.*");
@@ -409,7 +411,7 @@ bool Test03()
                 print(".");
             }
 
-            wcscpy_s(szPath, szMediaPath);
+            wcscpy_s(szPath, (second) ? L"" : szMediaPath);
             wcscat_s(szPath, findData.cFileName);
 
             bool isppm = false;
@@ -434,7 +436,7 @@ bool Test03()
 
                 if (FAILED(hr) && isppm)
                 {
-                    if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                    if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && !second)
                     {
                         success = false;
                         printe("ERROR: fromfile ppm expected success ! (%08X)\n%ls\n", static_cast<unsigned int>(hr), szPath);
@@ -455,7 +457,7 @@ bool Test03()
 
                 if (FAILED(hr) && ispfm)
                 {
-                    if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                    if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && !second)
                     {
                         success = false;
                         printe("ERROR: fromfile pfm expected success ! (%08X)\n%ls\n", static_cast<unsigned int>(hr), szPath);
@@ -470,7 +472,19 @@ bool Test03()
         }
 
         if (!FindNextFile(hFile.get(), &findData))
-            break;
+        {
+            if (second)
+                break;
+
+            hFile.reset(safe_handle(FindFirstFileEx(L"*.p?m",
+                FindExInfoBasic, &findData,
+                FindExSearchNameMatch, nullptr,
+                FIND_FIRST_EX_LARGE_FETCH)));
+            if (!hFile)
+                break;
+
+            second = true;
+        }
     }
 
     if (!ncount)
