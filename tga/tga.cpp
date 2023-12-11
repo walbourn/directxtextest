@@ -1718,6 +1718,8 @@ bool Test06()
         return false;
     }
 
+    bool second = false;
+
     wchar_t szPath[MAX_PATH] = {};
     wcscpy_s(szPath, szMediaPath);
     wcscat_s(szPath, L"*.*");
@@ -1746,7 +1748,7 @@ bool Test06()
                 print(".");
             }
 
-            wcscpy_s(szPath, szMediaPath);
+            wcscpy_s(szPath, (second) ? L"" : szMediaPath);
             wcscat_s(szPath, findData.cFileName);
 
             bool istga = false;
@@ -1782,7 +1784,7 @@ bool Test06()
 
                             if (FAILED(hr) && istga)
                             {
-                                if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                                if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && !second)
                                 {
                                     success = false;
                                     printe("ERROR: frommemory expected success! (%08X) case %d\n%ls\n", static_cast<unsigned int>(hr), j, szPath);
@@ -1805,7 +1807,7 @@ bool Test06()
 
                     if (FAILED(hr) && istga)
                     {
-                        if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                        if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && !second)
                         {
                             success = false;
                             printe("ERROR: fromfile expected success ! (%08X) case %d\n%ls\n", static_cast<unsigned int>(hr), j, szPath);
@@ -1821,7 +1823,19 @@ bool Test06()
         }
 
         if (!FindNextFile(hFile.get(), &findData))
-            break;
+        {
+            if (second)
+                break;
+
+            hFile.reset(safe_handle(FindFirstFileEx(L"*.tga",
+                FindExInfoBasic, &findData,
+                FindExSearchNameMatch, nullptr,
+                FIND_FIRST_EX_LARGE_FETCH)));
+            if (!hFile)
+                break;
+
+            second = true;
+        }
     }
 
     if (!ncount)
