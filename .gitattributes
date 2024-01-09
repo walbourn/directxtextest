@@ -25,5 +25,6 @@
 *.pfm binary
 *.png binary
 *.ppm binary
+*.tga binary
 *.tiff binary
 *.wdp binary
