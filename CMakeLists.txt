@@ -230,9 +230,9 @@ if(NOT (${DIRECTX_ARCH} MATCHES "^arm"))
 endif()
 
 if(MINGW)
-	if(BUILD_DX11)
+    if(BUILD_DX11)
       target_link_options(bcvalidator PRIVATE -municode)
-	endif()
+    endif()
 endif()
 
 if( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
