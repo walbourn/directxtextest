@@ -46,6 +46,10 @@ if(BUILD_FUZZING)
     target_compile_definitions(${PROJECT_NAME} PRIVATE FUZZING_BUILD_MODE)
 endif()
 
+if(MINGW)
+  target_link_options(${PROJECT_NAME} PRIVATE -municode)
+endif()
+
 if(MINGW OR (NOT WIN32))
     find_package(directxmath CONFIG REQUIRED)
     find_package(directx-headers CONFIG REQUIRED)
