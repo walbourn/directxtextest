@@ -1,4 +1,4 @@
-﻿# Copyright (c) Microsoft Corporation.
+# Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
 cmake_minimum_required (VERSION 3.20)
@@ -44,10 +44,6 @@ add_executable(${PROJECT_NAME} fuzzloaders.cpp ../../Texconv/PortablePixMap.cpp)
 
 if(BUILD_FUZZING)
     target_compile_definitions(${PROJECT_NAME} PRIVATE FUZZING_BUILD_MODE)
-endif()
-
-if(MINGW)
-  target_link_options(${PROJECT_NAME} PRIVATE -municode)
 endif()
 
 if(MINGW OR (NOT WIN32))
@@ -107,14 +103,21 @@ if(NOT ${DIRECTX_ARCH} MATCHES "^arm")
     target_compile_options(${PROJECT_NAME} PRIVATE ${ARCH_SSE2})
 endif()
 
+if(MINGW)
+    target_link_options(${PROJECT_NAME} PRIVATE -municode)
+endif()
+
 if ( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     set(WarningsEXE "-Wpedantic" "-Wextra" "-Wno-c++98-compat" "-Wno-c++98-compat-pedantic" "-Wno-float-equal" "-Wno-global-constructors" "-Wno-language-extension-token" "-Wno-missing-prototypes" "-Wno-missing-variable-declarations" "-Wno-reserved-id-macro" "-Wno-unused-macros" "-Wno-switch-enum")
+
     if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 16.0)
         list(APPEND WarningsEXE "-Wno-unsafe-buffer-usage")
     endif()
+
     target_compile_options(${PROJECT_NAME} PRIVATE ${WarningsEXE})
-elseif(MINGW)
-    target_link_options(${PROJECT_NAME} PRIVATE -Wl,--allow-multiple-definition -municode)
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+    target_compile_options(${PROJECT_NAME} PRIVATE "-Wno-ignored-attributes" "-Walloc-size-larger-than=4GB")
+    target_link_options(${PROJECT_NAME} PRIVATE -Wl,--allow-multiple-definition)
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     target_compile_options(${PROJECT_NAME} PRIVATE /permissive- /JMC- /Zc:__cplusplus /Zc:inline)
 
