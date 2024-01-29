@@ -8,7 +8,7 @@ project (DirectXTexTest
   HOMEPAGE_URL "https://github.com/walbourn/directxtextest/wiki"
   LANGUAGES CXX)
 
-option(ENABLE_D3D12LOADERTEST "Enable d3d12loadtest test )reqiores fxc.exe)" TRUE)
+option(ENABLE_LOADERTESTS "Enable loader tests )reqiores fxc.exe)" TRUE)
 
 if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
   message(FATAL_ERROR "DirectXTex Test Suite should be built by the main CMakeLists")
@@ -24,7 +24,7 @@ add_executable(headertest headertest/main.cpp)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/standalonetest)
 
 # d3d9/11/12loadtest
-if(BUILD_DX11)
+if(BUILD_DX11 AND ENABLE_LOADERTESTS)
   list(APPEND TEST_EXES d3d9loadtest)
   add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/d3d9loadtest)
   add_test(NAME "d3d9loadtest" COMMAND d3d9loadtest -ctest WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
@@ -38,7 +38,7 @@ if(BUILD_DX11)
   set_tests_properties(d3d11loadtest PROPERTIES TIMEOUT 30)
 endif()
 
-if((BUILD_DX12) AND (ENABLE_D3D12LOADERTEST))
+if(BUILD_DX12 AND ENABLE_LOADERTESTS)
   list(APPEND TEST_EXES d3d12loadtest)
   add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/d3d12loadtest)
   add_test(NAME "d3d12loadtest" COMMAND d3d12loadtest -ctest WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
@@ -177,7 +177,7 @@ if(directx-headers_FOUND)
       target_link_libraries(${t} PRIVATE Microsoft::DirectX-Headers)
       target_compile_definitions(${t} PRIVATE USING_DIRECTX_HEADERS)
     endforeach()
-	if((BUILD_DX12) AND ENABLE_D3D12LOADERTEST)
+	if((BUILD_DX12) AND ENABLE_LOADERTESTS)
       target_link_libraries(d3d12loadtest PRIVATE Microsoft::DirectX-Guids)
 	endif()
     target_link_libraries(xtd3d12 PRIVATE Microsoft::DirectX-Guids)
