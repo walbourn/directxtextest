@@ -2845,6 +2845,11 @@ inline ID3D12CommandList * const * CommandListCast(t_CommandListType * const * p
 // To help enable root signature 1.1 features when they are available and not require maintaining
 // two code paths for building root signatures, this helper method reconstructs a 1.0 signature when
 // 1.1 is not supported.
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcovered-switch-default"
+#endif
+
 inline HRESULT D3DX12SerializeVersionedRootSignature(
     _In_ const D3D12_VERSIONED_ROOT_SIGNATURE_DESC* pRootSignatureDesc,
     D3D_ROOT_SIGNATURE_VERSION MaxVersion,
@@ -3067,6 +3072,10 @@ inline HRESULT D3DX12SerializeVersionedRootSignature(
     return E_INVALIDARG;
 }
 
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
+
 //------------------------------------------------------------------------------------------------
 struct CD3DX12_RT_FORMAT_ARRAY : public D3D12_RT_FORMAT_ARRAY
 {
@@ -3092,8 +3101,10 @@ struct CD3DX12_RT_FORMAT_ARRAY : public D3D12_RT_FORMAT_ARRAY
 struct DefaultSampleMask { operator UINT() noexcept { return UINT_MAX; } };
 struct DefaultSampleDesc { operator DXGI_SAMPLE_DESC() noexcept { return DXGI_SAMPLE_DESC{1, 0}; } };
 
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable : 4324)
+#endif
 template <typename InnerStructType, D3D12_PIPELINE_STATE_SUBOBJECT_TYPE Type, typename DefaultArg = InnerStructType>
 class alignas(void*) CD3DX12_PIPELINE_STATE_STREAM_SUBOBJECT
 {
@@ -3109,7 +3120,9 @@ public:
     InnerStructType* operator&() noexcept { return &pssInner; }
     InnerStructType const* operator&() const noexcept { return &pssInner; }
 };
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 typedef CD3DX12_PIPELINE_STATE_STREAM_SUBOBJECT< D3D12_PIPELINE_STATE_FLAGS,         D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_FLAGS>                             CD3DX12_PIPELINE_STATE_STREAM_FLAGS;
 typedef CD3DX12_PIPELINE_STATE_STREAM_SUBOBJECT< UINT,                               D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_NODE_MASK>                         CD3DX12_PIPELINE_STATE_STREAM_NODE_MASK;
 typedef CD3DX12_PIPELINE_STATE_STREAM_SUBOBJECT< ID3D12RootSignature*,               D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_ROOT_SIGNATURE>                    CD3DX12_PIPELINE_STATE_STREAM_ROOT_SIGNATURE;
