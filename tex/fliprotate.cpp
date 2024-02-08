@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------
 // fliprotate.cpp
-//  
+//
 // Copyright (c) Microsoft Corporation.
 //-------------------------------------------------------------------------------------
 
@@ -153,7 +153,7 @@ bool TEXTest::Test04()
         else
         {
             bool pass = true;
-            
+
             TEX_FR_FLAGS dwFlags = g_FlipRotateMedia[index].flags;
 
             int rotateMode = static_cast<int>(dwFlags & (TEX_FR_ROTATE0 | TEX_FR_ROTATE90 | TEX_FR_ROTATE180 | TEX_FR_ROTATE270));
@@ -165,7 +165,7 @@ bool TEXTest::Test04()
             {
                 success = false;
                 pass = false;
-                printe( "Failed flip/rotating (HRESULT %08X) using %08lX:\n%ls\n", static_cast<unsigned int>(hr), dwFlags, szPath );
+                printe( "Failed flip/rotating (HRESULT %08X) using %08X:\n%ls\n", static_cast<unsigned int>(hr), dwFlags, szPath );
             }
             else
             {
@@ -175,7 +175,7 @@ bool TEXTest::Test04()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed flip/rotating result is %zu x %zu:\n", 
+                    printe( "Failed flip/rotating result is %zu x %zu:\n",
                             image.GetMetadata().width, image.GetMetadata().height );
                     printe( "\n...(check) %zu x %zu:\n%ls\n", srcimage.GetMetadata().height, srcimage.GetMetadata().width, szPath );
                 }
@@ -226,7 +226,7 @@ bool TEXTest::Test04()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed flip/rotating complex (HRESULT %08X) using %08lX:\n%ls\n", static_cast<unsigned int>(hr), dwFlags, szPath );
+                    printe( "Failed flip/rotating complex (HRESULT %08X) using %08X:\n%ls\n", static_cast<unsigned int>(hr), dwFlags, szPath );
                 }
                 else
                 {
@@ -238,7 +238,7 @@ bool TEXTest::Test04()
                     {
                         success = false;
                         pass = false;
-                        printe( "Failed flip/rotating complex result is %zu x %zu:\n", 
+                        printe( "Failed flip/rotating complex result is %zu x %zu:\n",
                                 metadata2.width, metadata2.height );
                         printe( "\n...(check) %zu x %zu:\n%ls\n", srcimage.GetMetadata().height, srcimage.GetMetadata().width, szPath );
                     }
@@ -296,7 +296,7 @@ bool TEXTest::Test04()
             }
 
             if ( pass )
-                ++npass;            
+                ++npass;
         }
 
         ++ncount;

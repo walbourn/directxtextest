@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------
 // resize.cpp
-//  
+//
 // Copyright (c) Microsoft Corporation.
 //-------------------------------------------------------------------------------------
 
@@ -556,7 +556,7 @@ bool FilterTest::Test01()
 
 #if defined(DEBUG) && !defined(NO_WMP)
                 _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, fname2, L".wdp" );
-                SaveToWICFile( *image.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
+                SaveToWICFile( *image.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath );
 #endif
             }
 
@@ -638,7 +638,7 @@ bool FilterTest::Test01()
 
 #if defined(DEBUG) && !defined(NO_WMP)
                     _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                    SaveToWICFile( *imagePoint.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
+                    SaveToWICFile( *imagePoint.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath );
 #endif
                 }
 
@@ -716,7 +716,7 @@ bool FilterTest::Test01()
 
 #if defined(DEBUG) && !defined(NO_WMP)
                     _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                    SaveToWICFile( *imageLinear.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
+                    SaveToWICFile( *imageLinear.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath );
 #endif
                 }
 
@@ -809,7 +809,7 @@ bool FilterTest::Test01()
 
 #if defined(DEBUG) && !defined(NO_WMP)
                     _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                    SaveToWICFile( *imageCubic.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
+                    SaveToWICFile( *imageCubic.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath );
 #endif
                 }
 
@@ -871,7 +871,7 @@ bool FilterTest::Test01()
 
 #if defined(DEBUG) && !defined(NO_WMP)
                     _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                    SaveToWICFile( *imageTriangle.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
+                    SaveToWICFile( *imageTriangle.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath );
 #endif
                 }
             }
@@ -948,7 +948,7 @@ bool FilterTest::Test01()
 
 #if defined(DEBUG) && !defined(NO_WMP)
                     _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                    SaveToWICFile( *imageSepAlpha.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
+                    SaveToWICFile( *imageSepAlpha.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath );
 #endif
                 }
             }
@@ -1005,10 +1005,10 @@ bool FilterTest::Test01()
 
 #if defined(DEBUG) && !defined(NO_WMP)
                     _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                    SaveToWICFile( *nwimage.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
+                    SaveToWICFile( *nwimage.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath );
 #endif
                 }
-                
+
                 if ( !(g_ResizeMedia[index].options & FLAGS_SKIP_EXHAUSTIVE) )
                 {
                     // POINT
@@ -1060,11 +1060,11 @@ bool FilterTest::Test01()
 
 #if defined(DEBUG) && !defined(NO_WMP)
                         _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                        SaveToWICFile( *nwimagePoint.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
+                        SaveToWICFile( *nwimagePoint.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath );
 #endif
                     }
 
-                    // LINEAR 
+                    // LINEAR
                     hr = Resize( *srcimage.GetImage(0,0,0), twidth, theight, TEX_FILTER_FORCE_NON_WIC | TEX_FILTER_LINEAR, nwimageLinear );
                     if ( FAILED(hr) )
                     {
@@ -1109,7 +1109,7 @@ bool FilterTest::Test01()
 
 #if defined(DEBUG) && !defined(NO_WMP)
                         _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                        SaveToWICFile( *nwimageLinear.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
+                        SaveToWICFile( *nwimageLinear.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath );
 #endif
                     }
 
@@ -1191,7 +1191,7 @@ bool FilterTest::Test01()
 
 #if defined(DEBUG) && !defined(NO_WMP)
                         _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                        SaveToWICFile( *nwimageCubic.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
+                        SaveToWICFile( *nwimageCubic.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath );
 #endif
                     }
                 }
@@ -1252,7 +1252,7 @@ bool FilterTest::Test01()
 
 #if defined(DEBUG) && !defined(NO_WMP)
                     _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                    SaveToWICFile( *srgbimage.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
+                    SaveToWICFile( *srgbimage.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath );
 #endif
                 }
 
@@ -1310,7 +1310,7 @@ bool FilterTest::Test01()
 
 #if defined(DEBUG) && !defined(NO_WMP)
                         _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                        SaveToWICFile( *srgbimageLinear.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
+                        SaveToWICFile( *srgbimageLinear.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath );
 #endif
                     }
 
@@ -1366,7 +1366,7 @@ bool FilterTest::Test01()
 
 #if defined(DEBUG) && !defined(NO_WMP)
                         _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                        SaveToWICFile( *srgbimageCubic.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
+                        SaveToWICFile( *srgbimageCubic.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath );
 #endif
                     }
 
@@ -1422,7 +1422,7 @@ bool FilterTest::Test01()
 
 #if defined(DEBUG) && !defined(NO_WMP)
                         _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                        SaveToWICFile( *srgbimageTriangle.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
+                        SaveToWICFile( *srgbimageTriangle.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath );
 #endif
                     }
                 }
@@ -1461,7 +1461,7 @@ bool FilterTest::Test01()
                         printe( "Failed resizing complex result:\n%ls\n", szPath );
                         printmeta( &metadata2 );
                         printmetachk( check );
-                        printe( "...\n(check) w: %u x h: %u x d: %zu\narraySize: %zu  mips: 1\nmiscFlags: %08X miscFlags2: %08X format: %u dimension: %u\n", 
+                        printe( "...\n(check) w: %u x h: %u x d: %zu\narraySize: %zu  mips: 1\nmiscFlags: %08X miscFlags2: %08X format: %d dimension: %d\n",
                                 twidth, theight, check->depth, check->arraySize, check->miscFlags, check->miscFlags2, check->format, check->dimension );
                     }
                     else
@@ -1509,7 +1509,7 @@ bool FilterTest::Test01()
             }
 
             if ( pass )
-                ++npass;            
+                ++npass;
         }
 
         ++ncount;

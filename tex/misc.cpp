@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------
 // misc.cpp
-//  
+//
 // Copyright (c) Microsoft Corporation.
 //-------------------------------------------------------------------------------------
 
@@ -161,7 +161,7 @@ bool TEXTest::Test09()
                 if (FAILED(hr))
                 {
                     success = false;
-                    printe( "Failed doing test->logo offset %d by %d (HRESULT %08X)\n", static_cast<unsigned int>(hr), x, y );
+                    printe( "Failed doing test->logo offset %u by %u (HRESULT %08X)\n", x, y, static_cast<unsigned int>(hr) );
                 }
                 else
                 {
@@ -519,7 +519,7 @@ bool TEXTest::Test14()
         { { 200, 200, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lena.dds", true },
         { { 256, 256, 1, 1, 1, 0, 0, WIN11_DXGI_FORMAT_A4B4G4R4_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_191.dds", true },
     };
-    
+
     size_t ncount = 0;
     size_t npass = 0;
 
@@ -995,7 +995,7 @@ bool TEXTest::Test17()
                 {
                     static const XMVECTORF32 s_chromaKey = { { { 0.f, 1.f, 0.f, 0.f } } };
                     static const XMVECTORF32 s_tolerance = { { { 0.2f, 0.2f, 0.2f, 0.f } } };
-                    
+
                     UNREFERENCED_PARAMETER(y);
 
                     assert(y <= metadata.height);

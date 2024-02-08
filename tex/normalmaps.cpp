@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------
 // normalmaps.cpp
-//  
+//
 // Copyright (c) Microsoft Corporation.
 //-------------------------------------------------------------------------------------
 
@@ -114,7 +114,7 @@ bool TEXTest::Test11()
                     {
                         success = false;
                         pass = false;
-                        printe("Failed computing normal map for format %u (%ls) [single] (HRESULT %08X)\n", fmt, GetName(DXGI_FORMAT(fmt)), static_cast<unsigned int>(hr));
+                        printe("Failed computing normal map for format %d (%ls) [single] (HRESULT %08X)\n", fmt, GetName(DXGI_FORMAT(fmt)), static_cast<unsigned int>(hr));
                     }
                     else
                     {
@@ -141,7 +141,7 @@ bool TEXTest::Test11()
                     {
                         success = false;
                         pass = false;
-                        printe("Failed computing normal map for format %u (%ls) [mipmap] (HRESULT %08X)\n", fmt, GetName(DXGI_FORMAT(fmt)), static_cast<unsigned int>(hr));
+                        printe("Failed computing normal map for format %d (%ls) [mipmap] (HRESULT %08X)\n", fmt, GetName(DXGI_FORMAT(fmt)), static_cast<unsigned int>(hr));
                     }
                     else
                     {
