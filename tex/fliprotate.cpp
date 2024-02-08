@@ -165,7 +165,7 @@ bool TEXTest::Test04()
             {
                 success = false;
                 pass = false;
-                printe( "Failed flip/rotating (HRESULT %08X) using %08X:\n%ls\n", static_cast<unsigned int>(hr), dwFlags, szPath );
+                printe( "Failed flip/rotating (HRESULT %08X) using %08X:\n%ls\n", static_cast<unsigned int>(hr), static_cast<unsigned int>(dwFlags), szPath );
             }
             else
             {
@@ -226,7 +226,7 @@ bool TEXTest::Test04()
                 {
                     success = false;
                     pass = false;
-                    printe( "Failed flip/rotating complex (HRESULT %08X) using %08X:\n%ls\n", static_cast<unsigned int>(hr), dwFlags, szPath );
+                    printe( "Failed flip/rotating complex (HRESULT %08X) using %08X:\n%ls\n", static_cast<unsigned int>(hr), static_cast<unsigned int>(dwFlags), szPath );
                 }
                 else
                 {
