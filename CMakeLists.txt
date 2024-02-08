@@ -192,9 +192,9 @@ if(MSVC)
     endif()
 
     if((MSVC_VERSION GREATER_EQUAL 1928)
-      AND (CMAKE_SIZEOF_VOID_P EQUAL 8)
-      AND NOT ENABLE_OPENEXR_SUPPORT
-      AND ((NOT (CMAKE_CXX_COMPILER_ID MATCHES "Clang|IntelLLVM")) OR (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 13.0)))
+       AND (CMAKE_SIZEOF_VOID_P EQUAL 8)
+       AND NOT ENABLE_OPENEXR_SUPPORT
+       AND ((NOT (CMAKE_CXX_COMPILER_ID MATCHES "Clang|IntelLLVM")) OR (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 13.0)))
         foreach(t IN LISTS TEST_EXES)
           target_compile_options(${t} PRIVATE "$<$<NOT:$<CONFIG:DEBUG>>:/guard:ehcont>")
           target_link_options(${t} PRIVATE "$<$<NOT:$<CONFIG:DEBUG>>:/guard:ehcont>")
@@ -285,11 +285,12 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
       endforeach()
     endif()
 
-    if (BUILD_FUZZING AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 19.32)
-      foreach(t IN LISTS TEST_EXES)
-         target_compile_options(${t} PRIVATE /fsanitize=address /fsanitize-coverage=inline-8bit-counters /fsanitize-coverage=edge /fsanitize-coverage=trace-cmp /fsanitize-coverage=trace-div)
-         target_link_libraries(${t} PRIVATE sancov.lib)
-      endforeach()
+    if (BUILD_FUZZING
+        AND (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 19.32))
+          foreach(t IN LISTS TEST_EXES)
+            target_compile_options(${t} PRIVATE /fsanitize=address /fsanitize-coverage=inline-8bit-counters /fsanitize-coverage=edge /fsanitize-coverage=trace-cmp /fsanitize-coverage=trace-div)
+            target_link_libraries(${t} PRIVATE sancov.lib)
+          endforeach()
     endif()
 endif()
 
