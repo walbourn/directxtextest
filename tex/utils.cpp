@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------
 // utils.cpp
-//  
+//
 // Copyright (c) Microsoft Corporation.
 //-------------------------------------------------------------------------------------
 
@@ -67,7 +67,7 @@ bool TEXTest::Test01()
         DXGI_FORMAT_R8G8_B8G8_UNORM, DXGI_FORMAT_G8R8_G8B8_UNORM,
         DXGI_FORMAT_YUY2, DXGI_FORMAT_Y210, DXGI_FORMAT_Y216,
     };
-    static const DXGI_FORMAT srgb[] = 
+    static const DXGI_FORMAT srgb[] =
     {
         DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, DXGI_FORMAT_B8G8R8X8_UNORM_SRGB,
         DXGI_FORMAT_BC1_UNORM_SRGB, DXGI_FORMAT_BC2_UNORM_SRGB, DXGI_FORMAT_BC3_UNORM_SRGB, DXGI_FORMAT_BC7_UNORM_SRGB
@@ -79,20 +79,20 @@ bool TEXTest::Test01()
         DXGI_FORMAT_B8G8R8X8_UNORM, DXGI_FORMAT_B8G8R8X8_TYPELESS, DXGI_FORMAT_B8G8R8X8_UNORM_SRGB,
         WIN11_DXGI_FORMAT_A4B4G4R4_UNORM,
     };
-    static const DXGI_FORMAT typeless[] = 
+    static const DXGI_FORMAT typeless[] =
     {
         DXGI_FORMAT_R32G32B32A32_TYPELESS, DXGI_FORMAT_R32G32B32_TYPELESS, DXGI_FORMAT_R16G16B16A16_TYPELESS, DXGI_FORMAT_R32G32_TYPELESS,
         DXGI_FORMAT_R32G8X24_TYPELESS, DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS, DXGI_FORMAT_X32_TYPELESS_G8X24_UINT, DXGI_FORMAT_R10G10B10A2_TYPELESS,
         DXGI_FORMAT_R8G8B8A8_TYPELESS, DXGI_FORMAT_R16G16_TYPELESS, DXGI_FORMAT_R32_TYPELESS, DXGI_FORMAT_R24G8_TYPELESS, DXGI_FORMAT_R24_UNORM_X8_TYPELESS,
         DXGI_FORMAT_X24_TYPELESS_G8_UINT, DXGI_FORMAT_R8G8_TYPELESS, DXGI_FORMAT_R16_TYPELESS, DXGI_FORMAT_R8_TYPELESS,
-        DXGI_FORMAT_BC1_TYPELESS, DXGI_FORMAT_BC2_TYPELESS, DXGI_FORMAT_BC3_TYPELESS, DXGI_FORMAT_BC4_TYPELESS, DXGI_FORMAT_BC5_TYPELESS, 
+        DXGI_FORMAT_BC1_TYPELESS, DXGI_FORMAT_BC2_TYPELESS, DXGI_FORMAT_BC3_TYPELESS, DXGI_FORMAT_BC4_TYPELESS, DXGI_FORMAT_BC5_TYPELESS,
         DXGI_FORMAT_B8G8R8A8_TYPELESS, DXGI_FORMAT_B8G8R8X8_TYPELESS, DXGI_FORMAT_BC6H_TYPELESS, DXGI_FORMAT_BC7_TYPELESS,
         XBOX_DXGI_FORMAT_R16_UNORM_X8_TYPELESS, XBOX_DXGI_FORMAT_X16_TYPELESS_G8_UINT,
     };
-    static const DXGI_FORMAT partialTypeless[] = 
+    static const DXGI_FORMAT partialTypeless[] =
     {
-        DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS, DXGI_FORMAT_X32_TYPELESS_G8X24_UINT, 
-        DXGI_FORMAT_R24_UNORM_X8_TYPELESS, DXGI_FORMAT_X24_TYPELESS_G8_UINT, 
+        DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS, DXGI_FORMAT_X32_TYPELESS_G8X24_UINT,
+        DXGI_FORMAT_R24_UNORM_X8_TYPELESS, DXGI_FORMAT_X24_TYPELESS_G8_UINT,
         XBOX_DXGI_FORMAT_R16_UNORM_X8_TYPELESS, XBOX_DXGI_FORMAT_X16_TYPELESS_G8_UINT,
     };
     static const DXGI_FORMAT alpha[] =
@@ -114,7 +114,7 @@ bool TEXTest::Test01()
         XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT, XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT, XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM,
         WIN11_DXGI_FORMAT_A4B4G4R4_UNORM,
     };
-    static const DXGI_FORMAT video[] = 
+    static const DXGI_FORMAT video[] =
     {
         DXGI_FORMAT_AYUV, DXGI_FORMAT_Y410, DXGI_FORMAT_Y416,
         DXGI_FORMAT_YUY2, DXGI_FORMAT_Y210, DXGI_FORMAT_Y216,
@@ -122,7 +122,7 @@ bool TEXTest::Test01()
         DXGI_FORMAT_AI44, DXGI_FORMAT_IA44, DXGI_FORMAT_P8, DXGI_FORMAT_A8P8,
         WIN10_DXGI_FORMAT_P208, WIN10_DXGI_FORMAT_V208, WIN10_DXGI_FORMAT_V408,
     };
-    static const DXGI_FORMAT planar[] = 
+    static const DXGI_FORMAT planar[] =
     {
         DXGI_FORMAT_NV12, DXGI_FORMAT_P010, DXGI_FORMAT_P016, DXGI_FORMAT_420_OPAQUE, DXGI_FORMAT_NV11,
         XBOX_DXGI_FORMAT_D16_UNORM_S8_UINT, XBOX_DXGI_FORMAT_R16_UNORM_X8_TYPELESS, XBOX_DXGI_FORMAT_X16_TYPELESS_G8_UINT,
@@ -135,10 +135,10 @@ bool TEXTest::Test01()
     static const DXGI_FORMAT depthStencil[] =
     {
         DXGI_FORMAT_R32G8X24_TYPELESS,
-        DXGI_FORMAT_D32_FLOAT_S8X24_UINT, DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS, DXGI_FORMAT_X32_TYPELESS_G8X24_UINT, 
+        DXGI_FORMAT_D32_FLOAT_S8X24_UINT, DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS, DXGI_FORMAT_X32_TYPELESS_G8X24_UINT,
         DXGI_FORMAT_D32_FLOAT,
         DXGI_FORMAT_R24G8_TYPELESS,
-        DXGI_FORMAT_D24_UNORM_S8_UINT, DXGI_FORMAT_R24_UNORM_X8_TYPELESS, DXGI_FORMAT_X24_TYPELESS_G8_UINT, 
+        DXGI_FORMAT_D24_UNORM_S8_UINT, DXGI_FORMAT_R24_UNORM_X8_TYPELESS, DXGI_FORMAT_X24_TYPELESS_G8_UINT,
         DXGI_FORMAT_D16_UNORM,
         XBOX_DXGI_FORMAT_D16_UNORM_S8_UINT, XBOX_DXGI_FORMAT_R16_UNORM_X8_TYPELESS, XBOX_DXGI_FORMAT_X16_TYPELESS_G8_UINT,
     };
@@ -1005,7 +1005,7 @@ bool TEXTest::Test02()
     }
 
     //
-    // Here we are comparing the DirectX Runtime vs. DirectXTex, so we only need a nullptr device. 
+    // Here we are comparing the DirectX Runtime vs. DirectXTex, so we only need a nullptr device.
     //
     ComPtr<ID3D11Device> device;
     D3D_FEATURE_LEVEL lvl;
@@ -1260,13 +1260,13 @@ bool TEXTest::Test12()
     static const DXGI_FORMAT hasSRGB[] =
     {
         DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_B8G8R8X8_UNORM,
-        DXGI_FORMAT_BC1_UNORM, DXGI_FORMAT_BC2_UNORM, DXGI_FORMAT_BC3_UNORM, DXGI_FORMAT_BC7_UNORM, 
+        DXGI_FORMAT_BC1_UNORM, DXGI_FORMAT_BC2_UNORM, DXGI_FORMAT_BC3_UNORM, DXGI_FORMAT_BC7_UNORM,
     };
 
     for( size_t i = 0; i < std::size(hasSRGB); ++i )
     {
         DXGI_FORMAT f = MakeSRGB( hasSRGB[i] );
-        
+
         if ( !IsSRGB( f ) )
         {
             DXGI_FORMAT fmt = hasSRGB[i];
@@ -1333,17 +1333,17 @@ bool TEXTest::Test12()
     }
 
     //--- MakeTypeless
-    static const DXGI_FORMAT hasTypeless[] = 
+    static const DXGI_FORMAT hasTypeless[] =
     {
         DXGI_FORMAT_R32G32B32A32_FLOAT, DXGI_FORMAT_R32G32B32A32_UINT, DXGI_FORMAT_R32G32B32A32_SINT,
         DXGI_FORMAT_R32G32B32_FLOAT, DXGI_FORMAT_R32G32B32_UINT, DXGI_FORMAT_R32G32B32_SINT,
         DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_R16G16B16A16_UNORM, DXGI_FORMAT_R16G16B16A16_UINT, DXGI_FORMAT_R16G16B16A16_SNORM, DXGI_FORMAT_R16G16B16A16_SINT,
-        DXGI_FORMAT_R32G32_FLOAT, DXGI_FORMAT_R32G32_UINT, DXGI_FORMAT_R32G32_SINT, 
+        DXGI_FORMAT_R32G32_FLOAT, DXGI_FORMAT_R32G32_UINT, DXGI_FORMAT_R32G32_SINT,
         DXGI_FORMAT_R10G10B10A2_UNORM, DXGI_FORMAT_R10G10B10A2_UINT,
         DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, DXGI_FORMAT_R8G8B8A8_UINT, DXGI_FORMAT_R8G8B8A8_SNORM, DXGI_FORMAT_R8G8B8A8_SINT,
         DXGI_FORMAT_R16G16_FLOAT, DXGI_FORMAT_R16G16_UNORM, DXGI_FORMAT_R16G16_UINT, DXGI_FORMAT_R16G16_SNORM, DXGI_FORMAT_R16G16_SINT,
         DXGI_FORMAT_D32_FLOAT, DXGI_FORMAT_R32_FLOAT, DXGI_FORMAT_R32_UINT, DXGI_FORMAT_R32_SINT,
-        DXGI_FORMAT_R8G8_UNORM, DXGI_FORMAT_R8G8_UINT, DXGI_FORMAT_R8G8_SNORM, DXGI_FORMAT_R8G8_SINT, 
+        DXGI_FORMAT_R8G8_UNORM, DXGI_FORMAT_R8G8_UINT, DXGI_FORMAT_R8G8_SNORM, DXGI_FORMAT_R8G8_SINT,
         DXGI_FORMAT_R16_FLOAT, DXGI_FORMAT_D16_UNORM, DXGI_FORMAT_R16_UNORM, DXGI_FORMAT_R16_UINT, DXGI_FORMAT_R16_SNORM, DXGI_FORMAT_R16_SINT,
         DXGI_FORMAT_R8_UNORM, DXGI_FORMAT_R8_UINT, DXGI_FORMAT_R8_SNORM, DXGI_FORMAT_R8_SINT,
         DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, DXGI_FORMAT_B8G8R8X8_UNORM, DXGI_FORMAT_B8G8R8X8_UNORM_SRGB,
@@ -1359,7 +1359,7 @@ bool TEXTest::Test12()
     for( size_t i = 0; i < std::size(hasTypeless); ++i )
     {
         DXGI_FORMAT f = MakeTypeless( hasTypeless[i] );
-        
+
         if ( !IsTypeless( f ) )
         {
             DXGI_FORMAT fmt = hasTypeless[i];
@@ -1422,7 +1422,7 @@ bool TEXTest::Test12()
             default:
                 {
                     DXGI_FORMAT fmt = typeless[t];
-                    printe("ERROR: MakeTypelessUNORM failed on DXGI Format %u (%ls)\n", static_cast<unsigned int>(fmt), GetName(fmt));
+                    printe("ERROR: MakeTypelessUNORM failed on DXGI Format %d (%ls)\n", fmt, GetName(fmt));
                 }
                 success = false;
             }
@@ -1431,7 +1431,7 @@ bool TEXTest::Test12()
         {
             if ( BitsPerPixel( typeless[t] ) != BitsPerPixel( fu ) )
             {
-                printe( "ERROR: MakeTypelessUNORM %u -> %u changes bpp\n", typeless[t], fu );
+                printe( "ERROR: MakeTypelessUNORM %d -> %d changes bpp\n", typeless[t], fu );
                 success = false;
             }
         }
@@ -1466,7 +1466,7 @@ bool TEXTest::Test12()
             default:
                 {
                     DXGI_FORMAT fmt = typeless[t];
-                    printe("ERROR: MakeTypelessFLOAT failed on DXGI Format %u (%ls)\n", static_cast<unsigned int>(fmt), GetName(fmt));
+                    printe("ERROR: MakeTypelessFLOAT failed on DXGI Format %d (%ls)\n", fmt, GetName(fmt));
                 }
                 success = false;
             }
@@ -1475,7 +1475,7 @@ bool TEXTest::Test12()
         {
             if ( BitsPerPixel( typeless[t] ) != BitsPerPixel( ff ) )
             {
-                printe( "ERROR: MakeTypelessFLOAT %u -> %u changes bpp\n", typeless[t], fu );
+                printe( "ERROR: MakeTypelessFLOAT %d -> %d changes bpp\n", typeless[t], fu );
                 success = false;
             }
         }

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------
 // DirectXTest.h
-//  
+//
 // Copyright (c) Microsoft Corporation.
 //-------------------------------------------------------------------------------------
 
@@ -62,13 +62,13 @@ inline void DebugPrint(_In_z_ _Printf_format_string_ const char* format, ...) no
 
 #define printxmv(v) print("%s: %f,%f,%f,%f\n", #v, XMVectorGetX(v), XMVectorGetY(v), XMVectorGetZ(v), XMVectorGetW(v))
 
-#define printmeta(md) print( "(actual) w: %zu x h: %zu x d: %zu\narraySize: %zu  mips: %zu\nmiscFlags: %08X miscFlags2: %08X format: %u dimension: %u\n", \
+#define printmeta(md) print( "(actual) w: %zu x h: %zu x d: %zu\narraySize: %zu  mips: %zu\nmiscFlags: %08X miscFlags2: %08X format: %d dimension: %d\n", \
                               (md)->width, (md)->height, (md)->depth, (md)->arraySize, (md)->mipLevels, (md)->miscFlags, (md)->miscFlags2, (md)->format, (md)->dimension );
 
 #define printdds(md) print( " size: %u  flags: %08X   fourCC %08X\nbitCount %u   %08X/%08X/%08X/%08X\n", \
                               md.size, md.flags, md.fourCC, md.RGBBitCount, md.RBitMask, md.GBitMask, md.BBitMask, md.ABitMask);
 
-#define printmetachk(md) print( "...\n(check) w: %zu x h: %zu x d: %zu\narraySize: %zu  mips: %zu\nmiscFlags: %08X miscFlags2: %08X format: %u dimension: %u\n", \
+#define printmetachk(md) print( "...\n(check) w: %zu x h: %zu x d: %zu\narraySize: %zu  mips: %zu\nmiscFlags: %08X miscFlags2: %08X format: %d dimension: %d\n", \
                               (md)->width, (md)->height, (md)->depth, (md)->arraySize, (md)->mipLevels, (md)->miscFlags, (md)->miscFlags2, (md)->format, (md)->dimension );
 
 #define printdigest(str,digest) print( "%s:\n0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x\n", str, \

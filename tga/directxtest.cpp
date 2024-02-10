@@ -44,10 +44,10 @@ TestInfo g_Tests[] =
 //-------------------------------------------------------------------------------------
 bool RunTests()
 {
-    UINT nPass = 0;
-    UINT nFail = 0;
+    size_t nPass = 0;
+    size_t nFail = 0;
 
-    for( UINT i=0; i < ( sizeof(g_Tests) / sizeof(TestInfo) ); ++i)
+    for(size_t i=0; i < std::size(g_Tests); ++i)
     {
         print("%s: ", g_Tests[i].name );
 
@@ -63,7 +63,7 @@ bool RunTests()
         }
     }
 
-    print("Ran %d tests, %d pass, %d fail\n", nPass+nFail, nPass, nFail);
+    print("Ran %zu tests, %zu pass, %zu fail\n", nPass+nFail, nPass, nFail);
 
     return (nFail == 0);
 }
