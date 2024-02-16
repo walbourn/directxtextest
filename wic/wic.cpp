@@ -2002,6 +2002,7 @@ bool WICTest::Test07()
                 || hr == static_cast<HRESULT>(0xc00d36bb) /* MF_E_UNEXPECTED */
                 || hr == static_cast<HRESULT>(0xc00d36be) /* MF_E_INVALID_FILE_FORMAT */
                 || hr == static_cast<HRESULT>(0xc00d3e8c) /* MF_E_INVALID_FORMAT */
+                || hr == HRESULT_FROM_WIN32(ERROR_INSTALL_RESOLVE_DEPENDENCY_FAILED)
                 || hr == E_OUTOFMEMORY
                 || hr == E_UNEXPECTED
                 || metadata.width >= 8192)
