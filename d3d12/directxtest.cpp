@@ -27,9 +27,11 @@ extern bool Test03();
 extern bool Test04();
 extern bool Test05();
 extern bool Test06();
+extern bool Test07();
 
 TestInfo g_Tests[] =
 {
+    { "CalcuateSubresource", Test07 },
     { "planetest", Test01 },
     { "IsSupportedTexture", Test02 },
     { "CreateTexture", Test03 },
