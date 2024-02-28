@@ -121,7 +121,7 @@ HRESULT MD5Checksum( _In_ const ScratchImage& image, _Out_bytecap_x_(16) uint8_t
     static BCRYPT_ALG_HANDLE s_algid = nullptr;
     if ( !s_algid )
     {
-        status = BCryptOpenAlgorithmProvider( &WWid, BCRYPT_MD5_ALGORITHM, MS_PRIMITIVE_PROVIDER,  0 );
+        status = BCryptOpenAlgorithmProvider( &s_algid, BCRYPT_MD5_ALGORITHM, MS_PRIMITIVE_PROVIDER,  0 );
         if ( !NT_SUCCESS(status) )
             return HRESULT_FROM_NT(status);
 
