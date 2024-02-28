@@ -870,3 +870,49 @@ bool Test05()
 
     return success;
 }
+
+//-------------------------------------------------------------------------------------
+// CalcuateSubresource
+bool Test06()
+{
+    bool success = true;
+
+    for (size_t index = 0; index < std::size(g_TestMedia); ++index)
+    {
+        const auto& metadata = g_TestMedia[index].metadata;
+
+        if (metadata.IsVolumemap())
+        {
+            for (uint32_t level = 0; level < metadata.mipLevels; ++level)
+            {
+                uint32_t expected = D3D11CalcSubresource(level, 0, static_cast<UINT>(metadata.mipLevels));
+                uint32_t result = metadata.CalculateSubresource(level, 0);
+
+                if (expected != result)
+                {
+                    success = false;
+                    printe("Failed CalcuateSubresource [3D %zu] %u = %u...%u\n", index, level, result, expected);
+                }
+            }
+        }
+        else
+        {
+            for (uint32_t item = 0; item < metadata.arraySize; ++item)
+            {
+                for (uint32_t level = 0; level < metadata.mipLevels; ++level)
+                {
+                    uint32_t expected = D3D11CalcSubresource(level, item, static_cast<UINT>(metadata.mipLevels));
+                    uint32_t result = metadata.CalculateSubresource(level, item);
+
+                    if (expected != result)
+                    {
+                        success = false;
+                        printe("Failed CalcuateSubresource [2D %zu] %u, %u = %u...%u\n", index, item, level, result, expected);
+                    }
+                }
+            }
+        }
+    }
+
+    return success;
+}

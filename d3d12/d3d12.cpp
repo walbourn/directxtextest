@@ -931,3 +931,85 @@ bool Test06()
 
     return success;
 }
+
+
+//-------------------------------------------------------------------------------------
+// CalcuateSubresource
+bool Test07()
+{
+    bool success = true;
+
+    for (size_t index = 0; index < std::size(g_TestMedia); ++index)
+    {
+        const auto& metadata = g_TestMedia[index].metadata;
+
+        if (metadata.IsVolumemap())
+        {
+            for (uint32_t level = 0; level < metadata.mipLevels; ++level)
+            {
+                uint32_t expected = D3D12CalcSubresource(level, 0, 0, static_cast<UINT>(metadata.mipLevels), 1);
+                uint32_t result = metadata.CalculateSubresource(level, 0);
+
+                if (expected != result)
+                {
+                    success = false;
+                    printe("Failed CalcuateSubresource [3D %zu] %u = %u...%u\n", index, level, result, expected);
+                }
+            }
+
+            // No planar formats really used, so this test is synthetic
+            for (uint32_t plane = 0; plane < 3; ++plane)
+            {
+                for (uint32_t level = 0; level < metadata.mipLevels; ++level)
+                {
+                    uint32_t expected = D3D12CalcSubresource(level, 0, plane, static_cast<UINT>(metadata.mipLevels), 1);
+                    uint32_t result = metadata.CalculateSubresource(level, 0, plane);
+
+                    if (expected != result)
+                    {
+                        success = false;
+                        printe("Failed CalcuateSubresource [3D planar %zu] %u, %u = %u...%u\n", index, level, plane, result, expected);
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (uint32_t item = 0; item < metadata.arraySize; ++item)
+            {
+                for (uint32_t level = 0; level < metadata.mipLevels; ++level)
+                {
+                    uint32_t expected = D3D12CalcSubresource(level, item, 0, static_cast<UINT>(metadata.mipLevels), static_cast<UINT>(metadata.arraySize));
+                    uint32_t result = metadata.CalculateSubresource(level, item);
+
+                    if (expected != result)
+                    {
+                        success = false;
+                        printe("Failed CalcuateSubresource [2D %zu] %u, %u = %u...%u\n", index, item, level, result, expected);
+                    }
+                }
+            }
+
+            // No planar formats really used, so this test is synthetic
+            for (uint32_t plane = 0; plane < 3; ++plane)
+            {
+                for (uint32_t item = 0; item < metadata.arraySize; ++item)
+                {
+                    for (uint32_t level = 0; level < metadata.mipLevels; ++level)
+                    {
+                        uint32_t expected = D3D12CalcSubresource(level, item, plane, static_cast<UINT>(metadata.mipLevels), static_cast<UINT>(metadata.arraySize));
+                        uint32_t result = metadata.CalculateSubresource(level, item, plane);
+
+                        if (expected != result)
+                        {
+                            success = false;
+                            printe("Failed CalcuateSubresource [2D planar %zu] %u, %u, %u = %u...%u\n", index, item, level, plane, result, expected);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return success;
+}
