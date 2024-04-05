@@ -38,6 +38,7 @@ endif()
 
 set(TEST_SOURCES
     test12.cpp
+    test.h
     ../../DDSTextureLoader/DDSTextureLoader12.h
     ../../DDSTextureLoader/DDSTextureLoader12.cpp
     ../../ScreenGrab/ScreenGrab12.h
@@ -51,6 +52,7 @@ if(WIN32)
     if(NOT WINDOWS_STORE)
         set(TEST_SOURCES ${TEST_SOURCES}
             test9.cpp
+            test.h
             ../../DDSTextureLoader/DDSTextureLoader9.h
             ../../DDSTextureLoader/DDSTextureLoader9.cpp
             ../../ScreenGrab/ScreenGrab9.h
@@ -61,6 +63,7 @@ if(WIN32)
 
     set(TEST_SOURCES ${TEST_SOURCES}
         test11.cpp
+        test.h
         ../../DDSTextureLoader/DDSTextureLoader11.h
         ../../DDSTextureLoader/DDSTextureLoader11.cpp
         ../../ScreenGrab/ScreenGrab11.h
