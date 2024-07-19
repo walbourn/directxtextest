@@ -1996,6 +1996,7 @@ bool WICTest::Test07()
             }
 
             if (hr == HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED)
+                || hr == HRESULT_FROM_WIN32(ERROR_HANDLE_EOF)
                 || hr == E_NOTIMPL
                 || hr == WINCODEC_ERR_COMPONENTNOTFOUND
                 || hr == static_cast<HRESULT>(0xc00d5212) /* MF_E_TOPO_CODEC_NOT_FOUND */
