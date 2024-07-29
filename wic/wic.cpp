@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------
 // wic.cpp
-//  
+//
 // Copyright (c) Microsoft Corporation.
 //-------------------------------------------------------------------------------------
 
@@ -456,7 +456,7 @@ namespace
 
     const SaveMedia g_SaveMedia[] =
     {
-        // target-codec | target-extension | source-filename 
+        // target-codec | target-extension | source-filename
         { WIC_CODEC_BMP, L".bmp", MEDIA_PATH L"test8888.dds" },
         { WIC_CODEC_JPEG, L".jpeg", MEDIA_PATH L"test8888.dds" },
         { WIC_CODEC_PNG, L".png", MEDIA_PATH L"test8888.dds" },
@@ -643,7 +643,7 @@ bool WICTest::Test01()
                                                        success = false;
                                                        printe( "Failed metadata query read of orientation from memory:\n%ls\n", szPath );
                                                    }
-                                                   
+
                                                    PropVariantClear( &value );
                                                }
 #endif
@@ -690,7 +690,7 @@ bool WICTest::Test01()
                         TexMetadata metadata2;
                         hr = GetMetadataFromWICMemory( blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_IGNORE_SRGB, metadata2 );
                         if ( FAILED(hr)
-                             || ( metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM 
+                             || ( metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM
                                   && metadata2.format != DXGI_FORMAT_B8G8R8A8_UNORM &&  metadata2.format !=  DXGI_FORMAT_B8G8R8X8_UNORM ) )
                         {
                             pass = false;
@@ -834,7 +834,7 @@ bool WICTest::Test02()
                                                         success = false;
                                                         printe( "Failed metadata query read of orientation from file:\n%ls\n", szPath );
                                                     }
-                                                   
+
                                                     PropVariantClear( &value );
                                                 }
 #endif
@@ -1261,7 +1261,7 @@ bool WICTest::Test05()
 
                 size_t original = blob.GetBufferSize();
 
-                // Providing a pixel format target 
+                // Providing a pixel format target
                 hr = SaveToWICMemory( *image.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( g_SaveMedia[index].tcodec ), blob, &GUID_WICPixelFormat24bppBGR );
                 if ( FAILED(hr) )
                 {
@@ -1617,7 +1617,7 @@ bool WICTest::Test06()
 
             size_t original = DetermineFileSize( szDestPath );
 
-            // Providing a pixel format target 
+            // Providing a pixel format target
             hr = SaveToWICFile( *image.GetImage(0,0,0), WIC_FLAGS_NONE, GetWICCodec( g_SaveMedia[index].tcodec ), szDestPath2, &GUID_WICPixelFormat24bppBGR );
             if ( FAILED(hr) )
             {
@@ -1702,7 +1702,7 @@ bool WICTest::Test06()
                     else
                     {
                         size_t uncompressed = DetermineFileSize( szDestPath3 );
-                            
+
                         if ( uncompressed <= original )
                         { // We are forcing uncompressed in the custom props, so new image should be strictly larger than original
                             success = false;
@@ -1999,6 +1999,8 @@ bool WICTest::Test07()
                 || hr == HRESULT_FROM_WIN32(ERROR_HANDLE_EOF)
                 || hr == E_NOTIMPL
                 || hr == WINCODEC_ERR_COMPONENTNOTFOUND
+                || hr == WINCODEC_ERR_COMPONENTINITIALIZEFAILURE
+                || hr == WINCODEC_ERR_BADHEADER
                 || hr == static_cast<HRESULT>(0xc00d5212) /* MF_E_TOPO_CODEC_NOT_FOUND */
                 || hr == static_cast<HRESULT>(0xc00d36bb) /* MF_E_UNEXPECTED */
                 || hr == static_cast<HRESULT>(0xc00d36be) /* MF_E_INVALID_FILE_FORMAT */

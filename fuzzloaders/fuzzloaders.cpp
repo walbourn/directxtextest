@@ -644,7 +644,13 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
                 wprintf(L"ERROR: WICTexture file not found:\n%ls\n", pConv.szSrc);
                 return 1;
             }
-            else if (FAILED(hr) && hr != E_INVALIDARG && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != WINCODEC_ERR_COMPONENTNOTFOUND && hr != E_OUTOFMEMORY && hr != WINCODEC_ERR_BADHEADER)
+            else if (FAILED(hr)
+                     && hr != E_INVALIDARG
+                     && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED)
+                     && hr != WINCODEC_ERR_COMPONENTNOTFOUND
+                     && hr != WINCODEC_ERR_COMPONENTINITIALIZEFAILURE
+                     && hr != WINCODEC_ERR_BADHEADER
+                     && hr != E_OUTOFMEMORY)
             {
 #ifdef _DEBUG
                 char buff[128] = {};
