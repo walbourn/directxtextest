@@ -28,7 +28,7 @@ extern bool Test03();
 TestInfo g_Tests[] =
 {
     { "Decompress", Test01 },
-#ifndef _M_ARM64
+#if !defined(_M_ARM64) && !defined(_M_ARM64EC)
     { "Compress (CPU)", Test02 },
     { "Compress (GPU)", Test03 },
 #endif

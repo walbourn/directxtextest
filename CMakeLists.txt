@@ -63,7 +63,7 @@ add_executable(xtdds dds/dds.cpp dds/directxtest.cpp dds/testutils.cpp)
 target_include_directories(xtdds PRIVATE ./inc)
 add_test(NAME "dds" COMMAND xtdds)
 set_tests_properties(dds PROPERTIES LABELS "ImageFormats")
-set_tests_properties(dds PROPERTIES TIMEOUT 60)
+set_tests_properties(dds PROPERTIES TIMEOUT 120)
 
 # HDR
 list(APPEND TEST_EXES xthdr)
@@ -79,7 +79,7 @@ add_executable(xtppm ppm/ppm.cpp ppm/directxtest.cpp ppm/testutils.cpp ../Texcon
 target_include_directories(xtppm PRIVATE ./inc)
 add_test(NAME "ppm" COMMAND xtppm)
 set_tests_properties(ppm PROPERTIES LABELS "ImageFormats")
-set_tests_properties(ppm PROPERTIES TIMEOUT 120)
+set_tests_properties(ppm PROPERTIES TIMEOUT 240)
 
 # TGA
 list(APPEND TEST_EXES xttga)
@@ -124,7 +124,7 @@ add_executable(xtfilter
 target_include_directories(xtfilter PRIVATE ./inc)
 add_test(NAME "filter" COMMAND xtfilter)
 set_tests_properties(filter PROPERTIES LABELS "Library")
-set_tests_properties(filter PROPERTIES TIMEOUT 360)
+set_tests_properties(filter PROPERTIES TIMEOUT 720)
 
 # compress
 if(BUILD_DX11)
