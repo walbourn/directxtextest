@@ -144,6 +144,13 @@ namespace
         { FLAGS_NONE,{ 512, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8_SNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthbumpdudv.dds",{ 0xae,0x49,0x6c,0xfc,0x39,0xe8,0x0e,0xa3,0x27,0xf1,0xf9,0x72,0x87,0xa3,0x6f,0xbc } },
         { FLAGS_NONE,{ 512, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_SNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthbumpdudv2.dds",{ 0x37,0x8a,0xe1,0x0f,0xe4,0x67,0x9c,0xa4,0xdb,0x90,0x43,0x1a,0xbc,0x73,0x71,0xc3 } },
         { FLAGS_NONE,{ 512, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R16G16_SNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthbumpdudv3.dds",{ 0xbd,0x5b,0xaa,0x62,0xee,0xd5,0x65,0x1b,0x10,0x02,0x02,0x70,0x59,0xb6,0xbd,0xc6 } },
+        { FLAGS_NONE,{ 512, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8_SNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthbump_VU88.dds",{ 0xf9,0xc7,0x89,0xe4,0x24,0xb0,0x3b,0x01,0xff,0xd4,0xa5,0xbd,0x39,0xeb,0x08,0xba } },
+
+        // Bump Luminance / Mixed formats (legacy)
+        { FLAGS_NONE,{ 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"bmap_map_grass.dds",{ 0 } }, // X8L8V8U8
+        { FLAGS_NONE,{ 512, 512, 1, 1, 10, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"bmap_map_snowmannorthpole.dds",{ 0 } }, // X8L8V8U8
+        { FLAGS_NONE,{ 512, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthbump_LVU655.dds",{ 0 } },
+        { FLAGS_NONE,{ 512, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthbump_UVW10.dds",{ 0 } },
 
         // Edge cases
         { FLAGS_NONE, { 1, 1, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH "MASTER_Interior_01_Material_NormalUnc.DDS", { 0xec,0x30,0x79,0xd6,0x97,0xd4,0xa7,0xab,0xa0,0xb9,0x77,0x0d,0xfb,0x6d,0x01,0xbb } },
