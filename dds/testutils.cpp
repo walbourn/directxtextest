@@ -169,10 +169,9 @@ HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DirectX::DDS_FLAGS 
         return E_INVALIDARG;
 
     // Create DDS Header
-    const size_t MAX_HEADER_SIZE = sizeof(DWORD) + sizeof(DDS_HEADER) + sizeof(DDS_HEADER_DXT10);
-    BYTE header[MAX_HEADER_SIZE];
+    BYTE header[DDS_DX10_HEADER_SIZE];
     size_t required;
-    HRESULT hr = EncodeDDSHeader( image.GetMetadata(), flags, header, MAX_HEADER_SIZE, required );
+    HRESULT hr = EncodeDDSHeader( image.GetMetadata(), flags, header, DDS_DX10_HEADER_SIZE, required );
     if ( FAILED(hr) )
         return hr;
 
@@ -331,11 +330,10 @@ HRESULT IsDDSHeaderPresent( _In_z_ const wchar_t* szFile )
     }
 
     // Read the header in (including extended header if present)
-    const size_t MAX_HEADER_SIZE = sizeof(DWORD) + sizeof(DDS_HEADER) + sizeof(DDS_HEADER_DXT10);
-    BYTE header[MAX_HEADER_SIZE];
+    BYTE header[DDS_DX10_HEADER_SIZE];
 
     DWORD bytesRead = 0;
-    if ( !ReadFile( hFile.get(), header, MAX_HEADER_SIZE, &bytesRead, nullptr ) )
+    if ( !ReadFile( hFile.get(), header, DDS_DX10_HEADER_SIZE, &bytesRead, nullptr ) )
     {
         return HRESULT_FROM_WIN32( GetLastError() );
     }
