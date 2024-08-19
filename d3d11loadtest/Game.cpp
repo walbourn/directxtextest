@@ -102,13 +102,13 @@ void Game::Render()
     auto sampler = m_spSampler.Get();
     context->PSSetSamplers(0, 1, &sampler);
 
-    // Draw quad 1. 
+    // Draw quad 1.
     auto texture = m_dx5logo.Get();
     context->PSSetShaderResources(0, 1, &texture);
 
     context->DrawIndexed(6, 0, 0);
 
-    // Draw quad 2. 
+    // Draw quad 2.
     texture = m_cup.Get();
     context->PSSetShaderResources(0, 1, &texture);
 
@@ -131,7 +131,7 @@ void Game::Render()
 
         ScratchImage image;
         DX::ThrowIfFailed(CaptureTexture(m_deviceResources->GetD3DDevice(), context, backbuffer.Get(), image));
-        
+
         DX::ThrowIfFailed(SaveToDDSFile(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DDS_FLAGS_NONE, L"screenshot2.dds"));
         DX::ThrowIfFailed(SaveToWICFile(*image.GetImage(0,0,0), WIC_FLAGS_NONE, GUID_ContainerFormatJpeg, L"screenshot2.jpg"));
     }

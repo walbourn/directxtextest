@@ -152,10 +152,10 @@ void Game::Render()
     commandList->IASetVertexBuffers(0, 1, &m_vertexBufferView);
     commandList->IASetIndexBuffer(&m_indexBufferView);
 
-    // Draw quad 1. 
+    // Draw quad 1.
     commandList->DrawIndexedInstanced(6, 1, 0, 0, 0);
 
-    // Draw quad 2. 
+    // Draw quad 2.
     commandList->SetGraphicsRootDescriptorTable(0, CD3DX12_GPU_DESCRIPTOR_HANDLE(hgpu).Offset(1, m_strideSRV));
     commandList->DrawIndexedInstanced(6, 1, 0, 4, 0);
 
@@ -359,9 +359,9 @@ void Game::CreateDeviceDependentResources()
             { { 0.f,  0.5f, 0.5f, 1.0f },{ 0.f, 0.f } },
         };
 
-        // Note: using upload heaps to transfer static data like vert buffers is not 
-        // recommended. Every time the GPU needs it, the upload heap will be marshalled 
-        // over. Please read up on Default Heap usage. An upload heap is used here for 
+        // Note: using upload heaps to transfer static data like vert buffers is not
+        // recommended. Every time the GPU needs it, the upload heap will be marshalled
+        // over. Please read up on Default Heap usage. An upload heap is used here for
         // code simplicity and because there are very few verts to actually transfer.
         auto desc = CD3DX12_RESOURCE_DESC::Buffer(sizeof(s_vertexData));
 

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------
 // mipmaps.cpp
-//  
+//
 // Copyright (c) Microsoft Corporation.
 //-------------------------------------------------------------------------------------
 
@@ -569,7 +569,7 @@ bool FilterTest::Test02()
 
 #if defined(DEBUG) && !defined(NO_WMP)
                     _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, fname, L".wdp" );
-                    SaveToWICFile( *mipChain.GetImage(1,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
+                    SaveToWICFile( *mipChain.GetImage(1,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath );
 #endif
                 }
 
@@ -616,7 +616,7 @@ bool FilterTest::Test02()
                             printdigest("expected", srcdigest);
                         }
 
-                        // Verify the mip-chain image data 
+                        // Verify the mip-chain image data
                         const uint8_t* expected2 = nullptr;
                         if (g_MipMapMedia[index].options & FLAGS_ALTMD5_MASK)
                         {
@@ -1029,7 +1029,7 @@ bool FilterTest::Test02()
                         }
                     }
                 }
-                
+
                 //--- WIC vs. non-WIC mipgen ----------------------------------------------
                 ScratchImage nwMipChain;
                 ScratchImage nwMipChainLinear;
@@ -1334,7 +1334,7 @@ bool FilterTest::Test02()
 
 #if defined(DEBUG) && !defined(NO_WMP)
                         _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".wdp" );
-                        SaveToWICFile( *srgbMipChain.GetImage(1,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath ); 
+                        SaveToWICFile( *srgbMipChain.GetImage(1,0,0), WIC_FLAGS_NONE, GetWICCodec( WIC_CODEC_WMP ), szDestPath );
 #endif
                     }
 
@@ -1746,7 +1746,7 @@ bool FilterTest::Test03()
                         printdigest( "expected", srcdigest );
                     }
 
-                    // Verify the mip-chain image data 
+                    // Verify the mip-chain image data
                     const uint8_t* expected2 = nullptr;
                     if ( g_MipMapMedia3D[index].options & FLAGS_ALTMD5_MASK )
                     {
