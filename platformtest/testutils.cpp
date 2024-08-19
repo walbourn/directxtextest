@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------
 // testutils.cpp
-//  
+//
 // Copyright (c) Microsoft Corporation.
 //-------------------------------------------------------------------------------------
 
@@ -52,7 +52,7 @@ HRESULT LoadBlobFromFile( _In_z_ const wchar_t* szFile, Blob& blob )
     HRESULT hr = blob.Initialize( fileSize.LowPart );
     if ( FAILED(hr) )
         return hr;
-  
+
     // Load entire file into blob memory
     DWORD bytesRead = 0;
     if ( !ReadFile( hFile.get(), blob.GetBufferPointer(), static_cast<DWORD>( blob.GetBufferSize() ), &bytesRead, nullptr ) )
@@ -135,7 +135,7 @@ HRESULT MD5Checksum( _In_ const ScratchImage& image, _Out_bytecap_x_(16) uint8_t
 
     // Create hash object
     BCRYPT_HASH_HANDLE hobj;
-    status = BCryptCreateHash( s_algid, &hobj, nullptr, 0, nullptr, 0, 0 ); 
+    status = BCryptCreateHash( s_algid, &hobj, nullptr, 0, nullptr, 0, 0 );
     if ( !NT_SUCCESS(status) )
         return HRESULT_FROM_NT(status);
 

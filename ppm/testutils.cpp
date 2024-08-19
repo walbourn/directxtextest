@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------
 // testutils.cpp
-//  
+//
 // Copyright (c) Microsoft Corporation.
 //-------------------------------------------------------------------------------------
 
@@ -53,7 +53,7 @@ HRESULT MD5Checksum( _In_ const ScratchImage& image, _Out_bytecap_x_(16) uint8_t
 
     // Create hash object
     BCRYPT_HASH_HANDLE hobj;
-    status = BCryptCreateHash( s_algid, &hobj, nullptr, 0, nullptr, 0, 0 ); 
+    status = BCryptCreateHash( s_algid, &hobj, nullptr, 0, nullptr, 0, 0 );
     if ( !NT_SUCCESS(status) )
         return HRESULT_FROM_NT(status);
 
@@ -77,7 +77,7 @@ HRESULT MD5Checksum( _In_ const ScratchImage& image, _Out_bytecap_x_(16) uint8_t
         for( ; pix < epix; pix += pitch )
         {
             status = BCryptHashData( hash.get(), (PBYTE)pix, (ULONG)pitch, 0 );
-            if ( !NT_SUCCESS(status) )	
+            if ( !NT_SUCCESS(status) )
                 return HRESULT_FROM_NT(status);
         }
     }

@@ -126,7 +126,7 @@ const SValue g_pCodecs[] =
     { nullptr,  0 }
 };
 
-#define CODEC_DDS 0xFFFF0001 
+#define CODEC_DDS 0xFFFF0001
 #define CODEC_TGA 0xFFFF0002
 #define CODEC_HDP 0xFFFF0003
 #define CODEC_JXR 0xFFFF0004
@@ -212,7 +212,7 @@ namespace
                     break;
             }
         }
-            
+
         // Process directories
         if (recursive)
         {
