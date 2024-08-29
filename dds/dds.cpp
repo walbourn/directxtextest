@@ -36,6 +36,7 @@ namespace
         FLAGS_OFF_BY_ONE_MIPS = 0x20000,
         FLAGS_STALKER_24 = 0x40000,
         FLAGS_IGNORE_MIPS = 0x80000,
+        FLAGS_SKIP_1010102_FIXUP = 0x100000,
     };
 
     struct TestMedia
@@ -158,10 +159,11 @@ namespace
         { FLAGS_NONE,{ 512, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8_SNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthbump_VU88.dds",{ 0xf9,0xc7,0x89,0xe4,0x24,0xb0,0x3b,0x01,0xff,0xd4,0xa5,0xbd,0x39,0xeb,0x08,0xba } }, // D3DFMT_V8U8
 
         // Bump Luminance / Mixed formats (legacy)
-        { FLAGS_NONE,{ 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"bmap_map_grass.dds",{ 0 } }, // D3DFMT_X8L8V8U8
-        { FLAGS_NONE,{ 512, 512, 1, 1, 10, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"bmap_map_snowmannorthpole.dds",{ 0 } }, // D3DFMT_X8L8V8U8
-        { FLAGS_EXPAND,{ 512, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthbump_LVU655.dds",{ 0 } }, // D3DFMT_L6V5U5
-        { FLAGS_NONE,{ 512, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthbump_UVW10.dds",{ 0 } }, // D3DFMT_A2W10V10U10
+        { FLAGS_NONE,{ 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"bmap_map_grass.dds",{ 0x48,0x63,0xc0,0x82,0xf6,0x4f,0xdb,0x2c,0x14,0x7e,0x87,0x79,0xab,0xa8,0xab,0x0d } }, // D3DFMT_X8L8V8U8
+        { FLAGS_NONE,{ 512, 512, 1, 1, 10, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"bmap_map_snowmannorthpole.dds",{ 0x3d,0xf4,0x6e,0x47,0x0a,0x6e,0x1c,0xba,0xdd,0x06,0x4d,0x50,0x53,0xf1,0x5f,0x7c } }, // D3DFMT_X8L8V8U8
+        { FLAGS_EXPAND,{ 512, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthbump_LVU655.dds",{ 0x77,0x28,0x6d,0x45,0x01,0xf5,0x9a,0x88,0x3a,0x25,0xe9,0xc2,0x27,0x14,0x10,0x4f } }, // D3DFMT_L6V5U5
+        { FLAGS_NONE,{ 512, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthbump_LVU888.dds",{ 0x24,0x09,0x5f,0xa1,0x6d,0xbd,0x52,0x3e,0x56,0x72,0x3f,0x07,0x04,0x69,0xbd,0x74 } }, // D3DFMT_X8L8V8U8
+        { FLAGS_SKIP_1010102_FIXUP,{ 512, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthbump_UVW10.dds",{ 0x47,0xd6,0xf4,0xe1,0x23,0xde,0x19,0xf6,0xb3,0xb3,0x58,0x88,0x13,0xdd,0x3a,0x96 } }, // D3DFMT_A2W10V10U10
 
         // Edge cases
         { FLAGS_NONE, { 1, 1, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH "MASTER_Interior_01_Material_NormalUnc.DDS", { 0xec,0x30,0x79,0xd6,0x97,0xd4,0xa7,0xab,0xa0,0xb9,0x77,0x0d,0xfb,0x6d,0x01,0xbb } },
@@ -1226,6 +1228,7 @@ bool Test02()
                 switch (static_cast<int>(metadata.format))
                 {
                 case DXGI_FORMAT_R10G10B10A2_UNORM:
+                    if (!(g_TestMedia[index].options & FLAGS_SKIP_1010102_FIXUP))
                     {
                         TexMetadata metadata2;
                         ScratchImage image2;
