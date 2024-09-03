@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30105.148
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xttex_Desktop_2019", "tex\xttex_Desktop_2019.vcxproj", "{8395A22A-016B-4F36-9EDE-9D274980DFE9}"
 EndProject
@@ -37,6 +37,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		..\.editorconfig = ..\.editorconfig
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xtpng_Desktop_2019", "png\xtpng_Desktop_2019.vcxproj", "{3CC15E65-F497-481E-82F0-ADEBB47BA10B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -172,6 +174,14 @@ Global
 		{F76E12D4-D509-4868-BC20-CE42E8CC3BE5}.Release|x64.Build.0 = Release|x64
 		{F76E12D4-D509-4868-BC20-CE42E8CC3BE5}.Release|x86.ActiveCfg = Release|Win32
 		{F76E12D4-D509-4868-BC20-CE42E8CC3BE5}.Release|x86.Build.0 = Release|Win32
+		{3CC15E65-F497-481E-82F0-ADEBB47BA10B}.Debug|x64.ActiveCfg = Debug|x64
+		{3CC15E65-F497-481E-82F0-ADEBB47BA10B}.Debug|x64.Build.0 = Debug|x64
+		{3CC15E65-F497-481E-82F0-ADEBB47BA10B}.Debug|x86.ActiveCfg = Debug|Win32
+		{3CC15E65-F497-481E-82F0-ADEBB47BA10B}.Debug|x86.Build.0 = Debug|Win32
+		{3CC15E65-F497-481E-82F0-ADEBB47BA10B}.Release|x64.ActiveCfg = Release|x64
+		{3CC15E65-F497-481E-82F0-ADEBB47BA10B}.Release|x64.Build.0 = Release|x64
+		{3CC15E65-F497-481E-82F0-ADEBB47BA10B}.Release|x86.ActiveCfg = Release|Win32
+		{3CC15E65-F497-481E-82F0-ADEBB47BA10B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -190,6 +200,7 @@ Global
 		{3C1C24A2-CD10-4851-849B-94E995E95D12} = {7156CDB9-DE84-4016-80FE-4573A142145F}
 		{3C9C9DDD-AA8C-44E9-B0E1-5FA28E2F2390} = {7156CDB9-DE84-4016-80FE-4573A142145F}
 		{F76E12D4-D509-4868-BC20-CE42E8CC3BE5} = {7156CDB9-DE84-4016-80FE-4573A142145F}
+		{3CC15E65-F497-481E-82F0-ADEBB47BA10B} = {7156CDB9-DE84-4016-80FE-4573A142145F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {54FA22AB-EA2F-43BD-A91A-5DC0F7BB3B5C}
