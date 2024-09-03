@@ -73,6 +73,16 @@ add_test(NAME "hdr" COMMAND xthdr)
 set_tests_properties(hdr PROPERTIES LABELS "ImageFormats")
 set_tests_properties(hdr PROPERTIES TIMEOUT 450)
 
+# JPEG
+if(ENABLE_LIBJPEG_SUPPORT)
+  list(APPEND TEST_EXES xtjpg)
+  add_executable(xtjpg jpg/jpeg.cpp jpg/directxtest.cpp jpg/testutils.cpp)
+  target_include_directories(xtjpg PRIVATE ./inc ../Auxiliary)
+  add_test(NAME "jpeg" COMMAND xtjpg)
+  set_tests_properties(jpeg PROPERTIES LABELS "ImageFormats")
+  set_tests_properties(jpeg PROPERTIES TIMEOUT 120)
+endif()
+
 # PNG
 if(ENABLE_LIBPNG_SUPPORT)
   list(APPEND TEST_EXES xtpng)
