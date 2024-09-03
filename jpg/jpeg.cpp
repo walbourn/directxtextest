@@ -39,6 +39,11 @@ namespace
         { { 1024, 768, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"Dock.jpg", { 0x38,0x1e,0xd2,0x54,0x50,0xa3,0x7a,0xa9,0x06,0x48,0xce,0x78,0x91,0x77,0x3d,0xce } },
         { { 500, 500, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"progressivehuffman.jpg", { 0x5e,0x89,0x13,0x94,0xe5,0x4b,0x58,0xa1,0x03,0xc0,0x13,0xe4,0x32,0xea,0x42,0x8c } },
         { { 512, 683, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"cup_small.jpg", { 0x1f,0xa5,0x90,0x49,0xde,0xf7,0x27,0x7e,0x4c,0x8e,0x22,0xdb,0x81,0x70,0xbd,0x11 } }, // How to get _SRGB?
+
+        { { 2048, 1536, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"jpeg420exif.jpg", { 0xce,0x64,0x1c,0x0f,0xe1,0x85,0xc4,0xe9,0x20,0x39,0x32,0xfc,0x3e,0xcf,0x93,0x34 } },
+        { { 2048, 1536, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"jpeg422jfif.jpg", { 0x24,0xd5,0xd1,0xbe,0x5d,0xb4,0x19,0xbd,0x51,0x60,0x7d,0xba,0x35,0x97,0x2f,0xce } },
+        { { 600, 800, 1, 1, 1, 0, 0, DXGI_FORMAT_R8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"jpeg400jfif.jpg", { 0x01,0x00,0xb4,0xf9,0x60,0x1a,0xb9,0x55,0x74,0x5a,0xa1,0x8f,0xd3,0xe3,0xb1,0x0f } },
+        { { 256, 256, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"jpeg444.jpg", { 0x81,0xdf,0xa8,0xd1,0x2b,0x08,0x60,0x66,0x71,0x80,0x09,0xd4,0x90,0x14,0xf9,0x82 } },
     };
 
     //-------------------------------------------------------------------------------------
@@ -54,6 +59,7 @@ namespace
     {
         // source-dxgi-format save-dxgi-format | source-filename
         { DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"lena.dds" },
+        { DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"reftexture.dds" },
     };
 
     inline bool IsErrorTooLarge(float f, float threshold)
@@ -296,7 +302,7 @@ bool Test03()
                     }
                     else
                     {
-                        float targMSE = 0.0001f;
+                        float targMSE = 0.001f;
                         float mse = 0, mseV[4] = {};
                         CMSE_FLAGS cflags = CMSE_DEFAULT;
                         if (IsSRGB(g_SaveMedia[index].src_format))
