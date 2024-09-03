@@ -18,6 +18,7 @@
 *.VC.db
 .vs
 [Bb]in
+packages
 out
 /ipch
 /AppPackages
