@@ -97,6 +97,42 @@ namespace
         { FLAGS_NONE, { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R16G16B16A16_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"BASN4A16.PNG", { 0x2a, 0xd0, 0x3a, 0x20, 0xbe, 0x76, 0xd8, 0xb6, 0x5b, 0x05, 0x31, 0x92, 0x3b, 0x92, 0x73, 0x76 } },
         { FLAGS_NONE, { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"BASN6A08.PNG", { 0x04, 0x6e, 0xa7, 0x73, 0x99, 0xc2, 0x25, 0x9f, 0xee, 0x17, 0xf9, 0x7e, 0x44, 0xdc, 0x6a, 0x00 } },
         { FLAGS_NONE, { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R16G16B16A16_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"BASN6A16.PNG", { 0xd5, 0x7e, 0xc1, 0x98, 0x62, 0x87, 0xa5, 0x42, 0x8d, 0xd8, 0x40, 0x5b, 0xd5, 0x95, 0x27, 0x32 } },
+//TODO - g04n0g16.png
+//TODO - g04n2c08.png
+//TODO - g04n3p04.png
+//TODO - s01n3p01.png
+//TODO - s02n3p01.png
+//TODO - s03n3p01.png
+//TODO - s04n3p01.png
+//TODO - s05n3p02.png
+//TODO - s06n3p02.png
+//TODO - s07n3p02.png
+//TODO - s08n3p02.png
+//TODO - s09n3p02.png
+//TODO - s32n3p04.png
+//TODO - s33n3p04.png
+//TODO - s34n3p04.png
+//TODO - s35n3p04.png
+//TODO - s36n3p04.png
+//TODO - s37n3p04.png
+//TODO - s38n3p04.png
+//TODO - s39n3p04.png
+//TODO - s40n3p04.png
+//TODO - tbbn0g04.png
+//TODO - tbbn2c16.png
+//TODO - tbbn3p08.png
+//TODO - tbgn2c16.png
+//TODO - tbgn3p08.png
+//TODO - tbrn2c08.png
+//TODO - tbwn0g16.png
+//TODO - tbwn3p08.png
+//TODO - tbyn3p08.png
+//TODO - tm3n3p02.png
+//TODO - tp0n0g08.png
+//TODO - tp0n2c08.png
+//TODO - tp0n3p08.png
+//TODO - tp1n3p08.png
+
         { FLAGS_NONE, { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"AlphaBall.png", { 0x25, 0x35, 0x0c, 0x71, 0xea, 0x44, 0x04, 0xfb, 0xe2, 0xae, 0x2a, 0xfd, 0x8b, 0x5a, 0xea, 0xcc } },
         { FLAGS_NONE, { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"AlphaEdge.png", { 0x02, 0x8c, 0x1b, 0x06, 0x61, 0x06, 0x12, 0x7e, 0x36, 0x6f, 0xda, 0x0b, 0x61, 0x19, 0x45, 0xf2 } },
         { FLAGS_NONE, { 480, 360, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"black817-480x360-3_5.png", { 0x36, 0x3d, 0x9e, 0x53, 0x7f, 0xf6, 0x1c, 0xba, 0x66, 0x1d, 0xee, 0x10, 0xb7, 0x9a, 0x19, 0x85 } },
