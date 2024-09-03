@@ -10,4 +10,7 @@
     <ClInclude Include="..\inc\directxtest.h" />
     <ClInclude Include="..\..\Auxiliary\DirectXTexJPEG.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
 </Project>
