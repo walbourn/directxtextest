@@ -254,8 +254,7 @@ bool Test02()
             else
                 ++npass;
 
-            // TESTTEST-
-            SaveScratchImage( L"C:\\Temp\\XXX.DDS", DDS_FLAGS_NONE, image );
+            // TESTTEST- SaveScratchImage( L"C:\\Temp\\XXX.DDS", DDS_FLAGS_NONE, image );
         }
 
         ++ncount;
