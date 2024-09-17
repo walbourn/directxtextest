@@ -31,6 +31,7 @@ if(NOT MINGW)
 endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE
+     ../inc
      ../../DDSTextureLoader
      ../../ScreenGrab
      ../../WICTextureLoader)

@@ -133,7 +133,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <FloatingPointModel>Fast</FloatingPointModel>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-      <AdditionalIncludeDirectories>$(ProjectDir);..\..\DirectXTex;..\..\DDSTextureLoader;..\..\WICTextureLoader;..\..\ScreenGrab</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);..\inc;..\..\DirectXTex;..\..\DDSTextureLoader;..\..\WICTextureLoader;..\..\ScreenGrab</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>26812</DisableSpecificWarnings>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
@@ -157,7 +157,7 @@
       <PreprocessorDefinitions>_WIN32_WINNT=0x0A00;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <AdditionalIncludeDirectories>$(ProjectDir);..\..\DirectXTex;..\..\DDSTextureLoader;..\..\WICTextureLoader;..\..\ScreenGrab</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);..\inc;..\..\DirectXTex;..\..\DDSTextureLoader;..\..\WICTextureLoader;..\..\ScreenGrab</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>26812</DisableSpecificWarnings>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
@@ -181,7 +181,7 @@
       <PreprocessorDefinitions>_WIN32_WINNT=0x0A00;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <AdditionalIncludeDirectories>$(ProjectDir);..\..\DirectXTex;..\..\DDSTextureLoader;..\..\WICTextureLoader;..\..\ScreenGrab</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);..\inc;..\..\DirectXTex;..\..\DDSTextureLoader;..\..\WICTextureLoader;..\..\ScreenGrab</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>26812</DisableSpecificWarnings>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
@@ -208,7 +208,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <FloatingPointModel>Fast</FloatingPointModel>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-      <AdditionalIncludeDirectories>$(ProjectDir);..\..\DirectXTex;..\..\DDSTextureLoader;..\..\WICTextureLoader;..\..\ScreenGrab</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);..\inc;..\..\DirectXTex;..\..\DDSTextureLoader;..\..\WICTextureLoader;..\..\ScreenGrab</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>26812</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -235,7 +235,7 @@
       <PreprocessorDefinitions>_WIN32_WINNT=0x0A00;WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <AdditionalIncludeDirectories>$(ProjectDir);..\..\DirectXTex;..\..\DDSTextureLoader;..\..\WICTextureLoader;..\..\ScreenGrab</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);..\inc;..\..\DirectXTex;..\..\DDSTextureLoader;..\..\WICTextureLoader;..\..\ScreenGrab</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>26812</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -262,7 +262,7 @@
       <PreprocessorDefinitions>_WIN32_WINNT=0x0A00;WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <AdditionalIncludeDirectories>$(ProjectDir);..\..\DirectXTex;..\..\DDSTextureLoader;..\..\WICTextureLoader;..\..\ScreenGrab</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);..\inc;..\..\DirectXTex;..\..\DDSTextureLoader;..\..\WICTextureLoader;..\..\ScreenGrab</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>26812</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -281,9 +281,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\DDSTextureLoader\DDSTextureLoader12.h" />
-    <ClInclude Include="..\..\DirectXTex\d3dx12.h" />
     <ClInclude Include="..\..\ScreenGrab\ScreenGrab12.h" />
     <ClInclude Include="..\..\WICTextureLoader\WICTextureLoader12.h" />
+    <ClInclude Include="..\inc\d3dx12.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ReadData.h" />

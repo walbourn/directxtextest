@@ -42,7 +42,7 @@
     <ClInclude Include="..\..\ScreenGrab\ScreenGrab12.h">
       <Filter>ScreenGrab</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\DirectXTex\d3dx12.h">
+    <ClInclude Include="..\inc\d3dx12.h">
       <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>

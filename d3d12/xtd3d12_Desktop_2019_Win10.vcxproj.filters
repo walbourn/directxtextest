@@ -7,9 +7,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\directxtest.h" />
-    <ClInclude Include="..\..\DirectXTex\d3dx12.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="shaders\ps1D.h">
       <Filter>Shaders</Filter>
     </ClInclude>
@@ -32,6 +29,9 @@
       <Filter>Shaders</Filter>
     </ClInclude>
     <ClInclude Include="..\inc\getname.h" />
+    <ClInclude Include="..\inc\d3dx12.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Common">
