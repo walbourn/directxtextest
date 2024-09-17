@@ -168,7 +168,7 @@ bool TEXTest::Test09()
                     // TODO - Verify the image data (perhaps MD5 checksum)
 
                     wchar_t tname[MAX_PATH] = {};
-                    swprintf_s( tname, L"%s_%d_%d", fname, x, y );
+                    swprintf_s( tname, L"%s_%u_%u", fname, x, y );
 
                     wchar_t szDestPath[MAX_PATH] = {};
                     _wmakepath_s( szDestPath, MAX_PATH, nullptr, tempDir, tname, L".dds" );
