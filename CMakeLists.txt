@@ -179,7 +179,7 @@ if(BUILD_DX12)
   set_tests_properties(d3d12 PROPERTIES TIMEOUT 120)
 endif()
 
-message("INFO: Enabled tests: ${TEST_EXES}")
+message(STATUS "Enabled tests: ${TEST_EXES}")
 foreach(t IN LISTS TEST_EXES)
   target_link_libraries(${t} PRIVATE DirectXTex bcrypt.lib)
 endforeach()
