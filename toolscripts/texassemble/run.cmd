@@ -2,7 +2,8 @@
 
 setlocal
 
-set TARGETEXE=..\..\..\Texassemble\Bin\Desktop_2019\Win32\Debug\texassemble.exe
+set TARGETEXE=..\..\..\out\build\x64-Debug\bin\texassemble.exe
+REM set TARGETEXE=..\..\..\Texassemble\Bin\Desktop_2019\Win32\Debug\texassemble.exe
 REM set TARGETEXE=..\..\..\Texassemble\Bin\Desktop_2019\Win32\Release\texassemble.exe
 REM set TARGETEXE=D:\vcpkg\installed\arm64-windows\tools\directxtex\texassemble.exe
 REM set TARGETEXE=..\..\..\out\build\x64-Debug-JPEG-PNG\bin\texassemble.exe

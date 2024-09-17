@@ -2,7 +2,8 @@
 
 setlocal
 
-set TARGETEXE=..\..\..\Texconv\Bin\Desktop_2019\Win32\Debug\texconv.exe
+set TARGETEXE=..\..\..\out\build\x64-Debug\bin\texconv.exe
+REM set TARGETEXE=..\..\..\Texconv\Bin\Desktop_2019\Win32\Debug\texconv.exe
 REM set TARGETEXE=..\..\..\Texconv\Bin\Desktop_2019\Win32\Release\texconv.exe
 REM set TARGETEXE=D:\vcpkg\installed\arm64-windows\tools\directxtex\texconv.exe
 REM set TARGETEXE=..\..\..\out\build\x64-Debug-JPEG-PNG\bin\texconv.exe
