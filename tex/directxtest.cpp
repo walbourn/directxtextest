@@ -24,7 +24,7 @@ struct TestInfo
 
 TestInfo g_Tests[] =
 {
-    { "Is*/BPP/BPC", TEXTest::Test01 },
+    { "Is*/BP*/FDT", TEXTest::Test01 },
     { "ComputePitch/Scanlines", TEXTest::Test02 },
     { "Make*", TEXTest::Test12 },
     { "ComputeMSE", TEXTest::Test10 },
