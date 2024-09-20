@@ -49,6 +49,7 @@ static_assert(std::is_nothrow_move_assignable<Blob>::value, "Move Assign.");
 // IsTypeless
 // BitsPerPixel
 // BitsPerColor
+// BytesPerBlock
 // FormatDataType
 bool TEXTest::Test01()
 {
@@ -361,6 +362,23 @@ bool TEXTest::Test01()
             if (BitsPerColor(static_cast<DXGI_FORMAT>(f)) == 0)
             {
                 printe("ERROR: BitsPerColor failed on DXGI Format %u (%ls)\n", f, GetName(DXGI_FORMAT(f)));
+                success = false;
+            }
+        }
+
+        if (isCompressed)
+        {
+            if (BytesPerBlock(static_cast<DXGI_FORMAT>(f)) == 0)
+            {
+                printe("ERROR: BytesPerBlock failed on DXGI Format %u (%ls)\n", f, GetName(DXGI_FORMAT(f)));
+                success = false;
+            }
+        }
+        else
+        {
+            if (BytesPerBlock(static_cast<DXGI_FORMAT>(f)) != 0)
+            {
+                printe("ERROR: BytesPerBlock succeeded on DXGI Format %u when it should have returned 0 (%ls)\n", f, GetName(DXGI_FORMAT(f)));
                 success = false;
             }
         }
