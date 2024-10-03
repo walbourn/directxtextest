@@ -226,7 +226,7 @@ if(directxmath_FOUND)
     endforeach()
 endif()
 
-if(directx-headers_FOUND)
+if(directx-headers_FOUND AND BUILD_DX12)
     foreach(t IN LISTS TEST_EXES)
       target_link_libraries(${t} PRIVATE Microsoft::DirectX-Headers)
       target_compile_definitions(${t} PRIVATE USING_DIRECTX_HEADERS)
