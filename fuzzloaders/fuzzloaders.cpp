@@ -98,10 +98,6 @@ namespace
     //////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////
 
-#ifdef _PREFAST_
-#pragma prefast(disable : 26018, "Only used with static internal arrays")
-#endif
-
     //-------------------------------------------------------------------------------------
     HRESULT LoadBlobFromFile(_In_z_ const wchar_t* szFile, DirectX::Blob& blob)
     {
