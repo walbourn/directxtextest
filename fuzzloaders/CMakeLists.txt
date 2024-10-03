@@ -12,7 +12,12 @@ if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
   message(FATAL_ERROR "DirectXTex Fuzz Tester should be built by the main CMakeLists")
 endif()
 
-add_executable(${PROJECT_NAME} fuzzloaders.cpp ../../Texconv/PortablePixMap.cpp)
+add_executable(${PROJECT_NAME}
+    fuzzloaders.cpp
+    ../../Texconv/PortablePixMap.cpp
+    ../../Common/CmdLineHelpers.h)
+
+target_include_directories(${PROJECT_NAME} PRIVATE ../../Common)
 
 if(BUILD_FUZZING)
     target_compile_definitions(${PROJECT_NAME} PRIVATE FUZZING_BUILD_MODE)
@@ -26,7 +31,7 @@ else()
     find_package(directx-headers CONFIG QUIET)
 endif()
 
-target_link_libraries(${PROJECT_NAME} PRIVATE DirectXTex bcrypt.lib)
+target_link_libraries(${PROJECT_NAME} PRIVATE DirectXTex bcrypt.lib version.lib)
 
 if(directxmath_FOUND)
     message(STATUS "Using DirectXMath package")
