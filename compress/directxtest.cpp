@@ -30,7 +30,9 @@ TestInfo g_Tests[] =
     { "Decompress", Test01 },
 #if !defined(_M_ARM64) && !defined(_M_ARM64EC)
     { "Compress (CPU)", Test02 },
+#ifndef BUILD_BVT_ONLY
     { "Compress (GPU)", Test03 },
+#endif
 #endif
 };
 

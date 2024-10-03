@@ -58,6 +58,7 @@ namespace
         { ALTMD5(2), { 200, 200, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lena.jpg", { 0x35, 0x8b, 0x3f, 0xdb, 0x55, 0x97, 0x32, 0xbc, 0xa2, 0x15, 0x86, 0x78, 0xf7, 0x18, 0xf3, 0x4b } },
         #endif
 
+    #ifndef BUILD_BVT_ONLY
         { FLAGS_MQR_ORIENT, { 512, 512, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"baboon.tiff", { 0x5b, 0x60, 0x5c, 0xb3, 0x59, 0x6e, 0xb1, 0x05, 0xba, 0x49, 0xb9, 0xe1, 0x0f, 0xfe, 0x97, 0x5f } },
         { FLAGS_MQR_ORIENT, { 512, 512, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"f16.tiff", { 0xcf, 0x54, 0xa2, 0xb6, 0x06, 0xf0, 0x25, 0x68, 0x03, 0x02, 0xe2, 0xb6, 0xba, 0x44, 0xdf, 0x3f } },
         { FLAGS_MQR_ORIENT, { 512, 512, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"peppers.tiff", { 0x71, 0xe3, 0xf1, 0x0f, 0xfe, 0xb1, 0x4d, 0x00, 0x45, 0xa5, 0xfb, 0x87, 0x88, 0x7d, 0x36, 0x24 } },
@@ -437,6 +438,7 @@ namespace
         // Very large images
         { FLAGS_NONE,{ 16384, 16384, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth16kby16k.png",{ 0x59,0x27,0x14,0xf9,0x22,0x6e,0x09,0xc2,0x6b,0x43,0xff,0xc3,0x98,0x4d,0x37,0x2c } },
         #endif
+    #endif
     };
 
     //-------------------------------------------------------------------------------------
@@ -497,6 +499,8 @@ namespace
         { WIC_CODEC_JPEG, L".jpeg", MEDIA_PATH L"test8888.dds" },
         { WIC_CODEC_PNG, L".png", MEDIA_PATH L"test8888.dds" },
         { WIC_CODEC_TIFF, L".tiff", MEDIA_PATH L"test8888.dds" },
+
+    #ifndef BUILD_BVT_ONLY
         { WIC_CODEC_BMP, L".bmp", MEDIA_PATH L"windowslogo_R5G6B5.dds" },
         { WIC_CODEC_JPEG, L".jpeg", MEDIA_PATH L"windowslogo_R5G6B5.dds" },
         { WIC_CODEC_TIFF, L".tiff", MEDIA_PATH L"windowslogo_R5G6B5.dds" },
@@ -538,6 +542,7 @@ namespace
         { WIC_CODEC_WMP, L".wdp", MEDIA_PATH L"alphaedge.dds" },
         { WIC_CODEC_WMP, L".wdp", MEDIA_PATH L"testpattern.png" },
         #endif
+    #endif
     };
 }
 
@@ -2029,6 +2034,16 @@ bool WICTest::Test07()
             if (hr == static_cast<HRESULT>(0xc00d5212) /* MF_E_TOPO_CODEC_NOT_FOUND */)
             {
                 notemissingopt = true;
+            }
+
+            if (_wcsicmp(ext, L".heic") == 0 && (hr == E_FAIL))
+            {
+                notemissingopt = true;
+
+                if (!FindNextFile(hFile.get(), &findData))
+                    break;
+
+                continue;
             }
 
             if (hr == HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED)

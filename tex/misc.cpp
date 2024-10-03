@@ -480,16 +480,18 @@ bool TEXTest::Test14()
     {
         // width height depth arraySize mipLevels miscFlags miscFlags2 format dimension | filename | bool
         { { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"reftexture.dds", true },
-        { { 200, 150, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_B5G5R5A1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test555.dds", true },
         { { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test8888.dds", true },
+        { { 32, 32, 4, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888.dds", true },
+        { { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testdxt1.dds", true },
+
+    #ifndef BUILD_BVT_ONLY
+        { { 200, 150, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_B5G5R5A1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test555.dds", true },
         { { 32, 32, 1, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test8888mip.dds", true },
         { { 32, 32, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcube8888.dds", true },
         { { 32, 32, 1, 6, 6, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcube8888mip.dds", true },
         { { 32, 32, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_BC3_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcubedxt5.dds", true },
         { { 32, 32, 1, 6, 6, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_BC3_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcubedxt5mip.dds", true },
-        { { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testdxt1.dds", true },
         { { 32, 32, 1, 1, 6, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testdxt1mip.dds", true },
-        { { 32, 32, 4, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888.dds", true },
         { { 32, 32, 4, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888mip.dds", true },
         { { 32, 32, 4, 1, 6, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvoldxt1mip.dds", true },
         { { 512, 256, 1, 1, 10, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth_A2B10G10R10.dds", true },
@@ -518,6 +520,7 @@ bool TEXTest::Test14()
         { { 800, 800, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"SplashScreen2.dds", false },
         { { 200, 200, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lena.dds", true },
         { { 256, 256, 1, 1, 1, 0, 0, WIN11_DXGI_FORMAT_A4B4G4R4_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_191.dds", true },
+    #endif
     };
 
     size_t ncount = 0;
@@ -592,16 +595,18 @@ bool TEXTest::Test16()
     {
         // width height depth arraySize mipLevels miscFlags miscFlags2 format dimension | filename | float
         { { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"reftexture.dds", 1.f, 1.f },
-        { { 200, 150, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_B5G5R5A1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test555.dds", 0.931935f, 0.f },
         { { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test8888.dds", 0.11f, 0.f },
+        { { 32, 32, 4, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888.dds", 0.11f, 0.886275f },
+        { { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testdxt1.dds", 0.11f, 0.f },
+
+    #ifndef BUILD_BVT_ONLY
+        { { 200, 150, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_B5G5R5A1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test555.dds", 0.931935f, 0.f },
         { { 32, 32, 1, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test8888mip.dds", 0.11f, 0.11f },
         { { 32, 32, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcube8888.dds", 0.11f, 0.962863f },
         { { 32, 32, 1, 6, 6, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcube8888mip.dds", 0.11f, 0.962863f },
         { { 32, 32, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_BC3_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcubedxt5.dds", 0.11f, 0.985806f },
         { { 32, 32, 1, 6, 6, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_BC3_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcubedxt5mip.dds", 0.11f, 0.985806f },
-        { { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testdxt1.dds", 0.11f, 0.f },
         { { 32, 32, 1, 1, 6, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testdxt1mip.dds", 0.11f, 0.11f },
-        { { 32, 32, 4, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888.dds", 0.11f, 0.886275f },
         { { 32, 32, 4, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888mip.dds", 0.11f, 0.886275f },
         { { 32, 32, 4, 1, 6, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvoldxt1mip.dds", 0.11f, 0.936088f },
         { { 512, 256, 1, 1, 10, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth_A2B10G10R10.dds", 0.984360f, 0.984360f },
@@ -629,6 +634,7 @@ bool TEXTest::Test16()
         { { 800, 800, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"SplashScreen2.dds", 0.910078f, 0.f },
         { { 200, 200, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lena.dds", 0.933569f, 0.f },
         { { 256, 256, 1, 1, 1, 0, 0, WIN11_DXGI_FORMAT_A4B4G4R4_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_191.dds", 1.f, 0.f },
+    #endif
     };
 
     bool success = true;
@@ -829,14 +835,19 @@ bool TEXTest::Test17()
             { 0x9d,0xf2,0x92,0xf3,0x17,0x9f,0x43,0xad,0x47,0xbe,0x57,0x0c,0x10,0x14,0x6d,0xa7 },
             { 0x74,0x67,0xf6,0x3c,0x61,0x8c,0xc7,0x98,0x6f,0x4a,0x7e,0x92,0x0b,0x03,0x0c,0x4c },
             { 0xea,0x69,0x1a,0xca,0xce,0x98,0x0b,0x7f,0x3a,0xb4,0x60,0x39,0x41,0xe0,0x1c,0x90 } },
-        { { 200, 150, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_B5G5R5A1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test555.dds",
-            { 0x00,0x5c,0x5d,0x42,0x6c,0xed,0x64,0xc4,0xfd,0x2d,0xc5,0x67,0x89,0x2f,0x34,0x8c },
-            { 0x42,0x84,0xfb,0x2c,0xf4,0x9c,0x4e,0x45,0x63,0x1b,0xd9,0x1e,0xa5,0x01,0x0c,0x38 },
-            { 0x00,0x5c,0x5d,0x42,0x6c,0xed,0x64,0xc4,0xfd,0x2d,0xc5,0x67,0x89,0x2f,0x34,0x8c } /*same as copy*/},
         { { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test8888.dds",
             { 0x38,0x9b,0x4e,0x56,0x4f,0xd1,0x5f,0x0d,0x63,0x05,0x44,0x35,0xba,0x66,0xdd,0x9b },
             { 0x63,0x3b,0xa4,0x71,0x89,0xdd,0xc6,0x22,0xc1,0xb6,0xe6,0xb5,0x00,0x1d,0x92,0x74 },
             { 0x38,0x9b,0x4e,0x56,0x4f,0xd1,0x5f,0x0d,0x63,0x05,0x44,0x35,0xba,0x66,0xdd,0x9b /*same as copy*/ } },
+        { { 32, 32, 4, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888.dds",
+            { 0x4e,0xa9,0xb0,0x2b,0xfc,0x5f,0xbd,0x8a,0x0e,0x43,0x31,0x93,0xf5,0x82,0x19,0x87 },
+            { 0xc2,0xd6,0x9d,0xa4,0xce,0xea,0x50,0x38,0xb0,0xe8,0x76,0x38,0x0f,0xb2,0x3c,0x90 },
+            { 0x4e,0xa9,0xb0,0x2b,0xfc,0x5f,0xbd,0x8a,0x0e,0x43,0x31,0x93,0xf5,0x82,0x19,0x87 /*same as copy*/ } },
+    #ifndef BUILD_BVT_ONLY
+        { { 200, 150, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_B5G5R5A1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test555.dds",
+            { 0x00,0x5c,0x5d,0x42,0x6c,0xed,0x64,0xc4,0xfd,0x2d,0xc5,0x67,0x89,0x2f,0x34,0x8c },
+            { 0x42,0x84,0xfb,0x2c,0xf4,0x9c,0x4e,0x45,0x63,0x1b,0xd9,0x1e,0xa5,0x01,0x0c,0x38 },
+            { 0x00,0x5c,0x5d,0x42,0x6c,0xed,0x64,0xc4,0xfd,0x2d,0xc5,0x67,0x89,0x2f,0x34,0x8c } /*same as copy*/},
         { { 32, 32, 1, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test8888mip.dds",
             { 0x4c,0xe7,0x4a,0xd7,0x0f,0xee,0xfb,0x6e,0x5b,0x27,0xd1,0x5b,0x45,0xb9,0xd5,0x5a },
             { 0x93,0xde,0x1e,0x20,0x91,0xc6,0x46,0x8f,0x2b,0x96,0x1f,0xf4,0xef,0xac,0x23,0xbd },
@@ -849,14 +860,11 @@ bool TEXTest::Test17()
             { 0xa6,0xd9,0xb8,0xcd,0x81,0x3c,0x30,0xd6,0xcd,0x57,0x81,0xd0,0x4a,0x87,0xdf,0x9f },
             { 0x70,0x0a,0xb9,0x4f,0xb8,0x2f,0x20,0x60,0x87,0x33,0x6f,0xed,0xfc,0x3b,0x8a,0x29 },
             { 0xa6,0xd9,0xb8,0xcd,0x81,0x3c,0x30,0xd6,0xcd,0x57,0x81,0xd0,0x4a,0x87,0xdf,0x9f /*same as copy*/ } },
-        { { 32, 32, 4, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888.dds",
-            { 0x4e,0xa9,0xb0,0x2b,0xfc,0x5f,0xbd,0x8a,0x0e,0x43,0x31,0x93,0xf5,0x82,0x19,0x87 },
-            { 0xc2,0xd6,0x9d,0xa4,0xce,0xea,0x50,0x38,0xb0,0xe8,0x76,0x38,0x0f,0xb2,0x3c,0x90 },
-            { 0x4e,0xa9,0xb0,0x2b,0xfc,0x5f,0xbd,0x8a,0x0e,0x43,0x31,0x93,0xf5,0x82,0x19,0x87 /*same as copy*/ } },
         { { 32, 32, 4, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888mip.dds",
             { 0x4e,0x65,0xb5,0xc5,0x85,0x1f,0x1a,0x2e,0x2f,0x29,0xf2,0x9e,0x48,0x20,0xb7,0x87 },
             { 0x5c,0xc8,0x81,0x96,0x6d,0x7a,0xc2,0x7a,0x25,0x8a,0xfd,0xbb,0x8b,0xb4,0x9c,0x20 },
             { 0x4e,0x65,0xb5,0xc5,0x85,0x1f,0x1a,0x2e,0x2f,0x29,0xf2,0x9e,0x48,0x20,0xb7,0x87 /*same as copy*/ } },
+    #endif
     };
 
     bool success = true;

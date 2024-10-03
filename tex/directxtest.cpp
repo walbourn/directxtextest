@@ -27,7 +27,9 @@ TestInfo g_Tests[] =
     { "Is*/BP*/FDT", TEXTest::Test01 },
     { "ComputePitch/Scanlines", TEXTest::Test02 },
     { "Make*", TEXTest::Test12 },
+#ifndef BUILD_BVT_ONLY
     { "ComputeMSE", TEXTest::Test10 },
+#endif
     { "EvaluateImage", TEXTest::Test16 },
     { "TransformImage", TEXTest::Test17 },
     { "IsAlphaAllOpaque", TEXTest::Test14 },
@@ -37,10 +39,12 @@ TestInfo g_Tests[] =
     { "Convert (internalC)", TEXTest::Test05C },
     { "Convert (internalD)", TEXTest::Test05D },
     { "Convert", TEXTest::Test06 },
+#ifndef BUILD_BVT_ONLY
     { "ConvertToSinglePlane", TEXTest::Test15 },
     { "CopyRectangle", TEXTest::Test09 },
     { "ComputeNormalMap", TEXTest::Test11 },
     { "PremultiplyAlpha", TEXTest::Test13 },
+#endif
 };
 
 extern int __cdecl DescribeException(PEXCEPTION_POINTERS pData);
