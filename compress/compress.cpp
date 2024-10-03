@@ -35,6 +35,9 @@ namespace
     const BCMedia g_BCMedia[] =
     {
         // width height depth arraySize mipLevels miscFlags miscFlags2 format dimension | filename
+        { { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"testdxt1.dds" },
+
+    #ifndef BUILD_BVT_ONLY
         { { 32, 128, 1, 6, 1, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"io_BC1_UNORM_SRV_DIMENSION_TEXTURE2DArray_MipOff.DDS" },
         { { 32, 128, 1, 6, 8, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"io_BC1_UNORM_SRV_DIMENSION_TEXTURE2DArray_MipOn.DDS" },
         { { 32, 128, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"io_BC1_UNORM_SRV_DIMENSION_TEXTURE2D_MipOff.DDS" },
@@ -93,7 +96,6 @@ namespace
         { { 32, 32, 1, 6, 6, 0, 0, DXGI_FORMAT_BC5_UNORM, TEX_DIMENSION_TEXTURE2D }, DXGI_FORMAT_R8G8_UNORM, MEDIA_PATH L"io_BC5_UNORM_SRV_DIMENSION_TEXTURECube_MipOn.DDS" },
         { { 32, 32, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_BC3_UNORM, TEX_DIMENSION_TEXTURE2D }, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"testcubedxt5.dds" },
         { { 32, 32, 1, 6, 6, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_BC3_UNORM, TEX_DIMENSION_TEXTURE2D }, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"testcubedxt5mip.dds" },
-        { { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"testdxt1.dds" },
         { { 32, 32, 1, 1, 6, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"testdxt1mip.dds" },
         { { 32, 32, 4, 1, 6, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE3D }, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"testvoldxt1mip.dds" },
         { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_BC2_UNORM, TEX_DIMENSION_TEXTURE2D }, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"windowslogo_DXT3.dds" },
@@ -104,6 +106,7 @@ namespace
         { { 8192, 4096, 1, 1, 14, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"world8192.dds" },
         { { 756, 512, 1, 1, 10, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"grydirt1.dds" },
         { { 756, 512, 1, 1, 10, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"TreeBark.dds" },
+    #endif
     };
 
     //-------------------------------------------------------------------------------------
@@ -134,6 +137,8 @@ namespace
     {
         // cmedia-flags | <source> width height depth arraySize mipLevels miscFlags format dimension | filename
         { FLAGS_ALL, { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"reftexture.dds" },
+
+    #ifndef BUILD_BVT_ONLY
         { FLAGS_ALL
           & ~FLAGS_BC45,{ 32, 32, 1, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test8888mip.dds" },
         { FLAGS_ALL
@@ -206,6 +211,7 @@ namespace
         { FLAGS_NOALPHA
           | FLAGS_SKIP_WIDE, { 16384, 8192, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthdiffuseTexture.png" },
         #endif
+    #endif
     };
 }
 

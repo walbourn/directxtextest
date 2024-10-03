@@ -44,6 +44,7 @@ namespace
     {
         // test-options | width height depth arraySize mipLevels miscFlags miscFlags2 format dimension | filename
         { FLAGS_NONE, { 320, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"bounce.tga",{ 0x0a,0x27,0xfb,0x35,0x57,0x6a,0x07,0x10,0x4a,0xf0,0x11,0x79,0xec,0x64,0x13,0x2e } },
+    #ifndef BUILD_BVT_ONLY
         { FLAGS_24BPP, { 128, 128, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth.tga", { 0x28,0xe6,0x0f,0x9b,0xc5,0x66,0xf3,0x4e,0xb0,0x0e,0x93,0xff,0x59,0x57,0xb5,0xc5 } },
         { FLAGS_ZALPHA, { 200, 150, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_B5G5R5A1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test555.tga", { 0x00,0x5c,0x5d,0x42,0x6c,0xed,0x64,0xc4,0xfd,0x2d,0xc5,0x67,0x89,0x2f,0x34,0x8c } },
         { FLAGS_NONE, { 320, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testunc.tga", { 0x0a,0x27,0xfb,0x35,0x57,0x6a,0x07,0x10,0x4a,0xf0,0x11,0x79,0xec,0x64,0x13,0x2e } },
@@ -217,6 +218,7 @@ namespace
         // Substance painter can produce 24bpp color-mapped TGA files
         { FLAGS_24BPP, { 256, 256, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"1234-indexed.tga", { 0xd6,0xbd,0x58,0x1a,0x6c,0x5e,0xb7,0x33,0xc4,0x02,0x6b,0xa7,0x77,0x41,0xc7,0x5d } },
         { FLAGS_24BPP, { 512, 256, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth-indexed.tga", { 0xcc,0xfa,0x5a,0x36,0x62,0x85,0x02,0x58,0xd4,0x3c,0xfa,0xaa,0x13,0x13,0x81,0x1b } },
+    #endif
     };
 
     //-------------------------------------------------------------------------------------
@@ -234,11 +236,14 @@ namespace
     {
         // flags | source-dxgi-format save-dxgi-format | source-filename
         { ALTMD5(2), DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_ALPHA_MODE_OPAQUE, MEDIA_PATH L"test8888.dds" },
+
+    #ifndef BUILD_BVT_ONLY
         { ALTMD5(3), DXGI_FORMAT_B8G8R8X8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_ALPHA_MODE_OPAQUE, MEDIA_PATH L"windowslogo_X8R8G8B8.dds" },
         { FLAGS_NONE, DXGI_FORMAT_B5G5R5A1_UNORM, DXGI_FORMAT_B5G5R5A1_UNORM, TEX_ALPHA_MODE_OPAQUE, MEDIA_PATH L"test555.dds" },
         { FLAGS_NONE, DXGI_FORMAT_R8_UNORM, DXGI_FORMAT_R8_UNORM, TEX_ALPHA_MODE_UNKNOWN, MEDIA_PATH L"windowslogo_L8.dds" },
         { FLAGS_NONE, DXGI_FORMAT_A8_UNORM, DXGI_FORMAT_R8_UNORM, TEX_ALPHA_MODE_UNKNOWN, MEDIA_PATH L"alphaedge.dds" },
         { ALTMD5(4), DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_ALPHA_MODE_UNKNOWN, MEDIA_PATH L"tree02S.dds" },
+    #endif
     };
 
     struct AltMD5

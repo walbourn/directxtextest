@@ -42,12 +42,13 @@ namespace
     const TestMedia g_TestMedia[] =
     {
         // width height depth arraySize mipLevels miscFlags miscFlags2 format dimension | filename
+        { { 227, 149, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testimg.ppm",
+            { 0xaa,0xfc,0x17,0x0b,0x55,0x56,0x5d,0xc1,0x3e,0xe2,0x08,0x85,0x59,0xdd,0xe4,0x11 } },
+    #ifndef BUILD_BVT_ONLY
         { { 615, 461, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"image.ppm",
             { 0x32,0x27,0xc7,0x8d,0x57,0x23,0xff,0x3f,0xe5,0x55,0xf5,0xd7,0xb5,0x94,0x94,0xd1 } },
         { { 501, 501, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"mandelbrot.ppm",
             { 0xdb,0xfa,0x11,0xaf,0xc1,0xdc,0x89,0x12,0x4b,0x9f,0x90,0xa4,0xea,0x46,0x72,0x35 } },
-        { { 227, 149, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testimg.ppm",
-            { 0xaa,0xfc,0x17,0x0b,0x55,0x56,0x5d,0xc1,0x3e,0xe2,0x08,0x85,0x59,0xdd,0xe4,0x11 } },
         { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"input_small.ppm",
             { 0x1d,0x5c,0x6a,0x69,0xb6,0x02,0x3e,0x03,0x29,0xb0,0x61,0xd6,0x1c,0x5f,0x3c,0xd6 } },
         { { 512, 512, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"input_large.ppm",
@@ -62,6 +63,7 @@ namespace
             { 0x3b,0x2f,0x29,0x1b,0x44,0xfa,0x41,0x8a,0xe7,0xda,0xa6,0x82,0x6e,0xc1,0x0e,0xd0 } },
         { { 512, 768, 1, 1, 1, 0, 0, DXGI_FORMAT_R32G32B32A32_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"memorial_be_com.pfm",
             { 0x3b,0x2f,0x29,0x1b,0x44,0xfa,0x41,0x8a,0xe7,0xda,0xa6,0x82,0x6e,0xc1,0x0e,0xd0 } },
+    #endif
     };
 
     //-------------------------------------------------------------------------------------
@@ -77,9 +79,11 @@ namespace
     const SaveMedia g_SaveMedia[] =
     {
         // source-dxgi-format save-dxgi-format | source-filename
-        { false, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"lena.dds" },
         { false, DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"test8888.dds" },
         { false, DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"reftexture.dds" },
+
+    #ifndef BUILD_BVT_ONLY
+        { false, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"lena.dds" },
         { false, DXGI_FORMAT_B8G8R8X8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"ball.dds" },
         { false, DXGI_FORMAT_B8G8R8X8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"cookie.dds" },
 
@@ -92,6 +96,7 @@ namespace
         // Very large images
         { false, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"earth16kby16k.dds" },
         #endif
+    #endif
     };
 
     inline bool IsErrorTooLarge(float f, float threshold)
