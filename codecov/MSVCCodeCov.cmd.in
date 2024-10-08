@@ -8,7 +8,8 @@ where /Q Microsoft.CodeCoverage.Console.exe
 
 set "FILES="
 
-for %%1 in (xtdds xthdr xtppm xttga xtwic xttex xtfilter xtcompress xtd3d11 xtd3d12) do (Microsoft.CodeCoverage.Console collect .\%%1.exe
+for %%1 in (xtdds xthdr xtppm xttga xtwic xttex xtfilter xtcompress xtd3d11 xtd3d12) do (Microsoft.CodeCoverage.Console instrument --settings coverage.config .\%%1.exe
+Microsoft.CodeCoverage.Console collect .\%%1.exe
 @if errorlevel 1 goto failure
 call set "FILES=%%FILES%% output_%%1.coverage"
 move output.coverage output_%%1.coverage)
