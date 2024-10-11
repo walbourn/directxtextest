@@ -76,8 +76,6 @@ bool Test01()
 {
     bool success = true;
 
-    // GetMetadataFromHDRMemory is used internally to the File version, so we only need to explicitly test the File version
-
     size_t ncount = 0;
     size_t npass = 0;
 
@@ -96,8 +94,43 @@ bool Test01()
         OutputDebugStringA("\n");
 #endif
 
+        bool pass = false;
+
+        // FromMemory
+        Blob blob;
+        HRESULT hr = LoadBlobFromFile(szPath, blob);
+        if (FAILED(hr))
+        {
+            success = false;
+            printe("Failed getting raw file data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+        }
+        else
+        {
+            TexMetadata metadata;
+            hr = GetMetadataFromHDRMemory(blob.GetBufferPointer(), blob.GetBufferSize(), metadata);
+
+            const TexMetadata* check = &g_TestMedia[index].metadata;
+            if (FAILED(hr))
+            {
+                success = false;
+                printe("Failed getting data from memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+            }
+            else if (memcmp(&metadata, check, sizeof(TexMetadata)) != 0)
+            {
+                success = false;
+                printe("Metadata error in:\n%ls\n", szPath);
+                printmeta(&metadata);
+                printmetachk(check);
+            }
+            else
+            {
+                pass = true;
+            }
+        }
+
+        // FromFile
         TexMetadata metadata;
-        HRESULT hr = GetMetadataFromHDRFile( szPath, metadata );
+        hr = GetMetadataFromHDRFile( szPath, metadata );
 
         const TexMetadata* check = &g_TestMedia[index].metadata;
         if ( FAILED(hr) )
@@ -114,8 +147,11 @@ bool Test01()
         }
         else
         {
-            ++npass;
+            pass = true;
         }
+
+        if (pass)
+            ++npass;
 
         ++ncount;
     }

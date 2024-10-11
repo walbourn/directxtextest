@@ -47,7 +47,7 @@ namespace
         uint8_t md5[16];
     };
 
-    inline DDS_FLAGS GetTestDDSFlags(DWORD options)
+    inline DDS_FLAGS GetTestDDSFlags(DWORD options) noexcept
     {
         DDS_FLAGS flags = DDS_FLAGS_NONE;
         if (options & FLAGS_DWORDA)
@@ -903,6 +903,53 @@ namespace
         { DDS_FLAGS_NONE, MEDIA_PATH L"lenaVolYUY2.dds" },
     #endif
     };
+
+    bool IsCorrectDDPF(const TexMetadata& metadata, const DDSMetaData& ddsPixelFormat, const wchar_t* szPath) noexcept
+    {
+        if (!ddsPixelFormat.IsDX10())
+        {
+            // Test a few specific cases.
+            switch (metadata.format)
+            {
+            case DXGI_FORMAT_BC1_UNORM:
+                if (ddsPixelFormat.fourCC != 0x31545844 /* DXT1 */)
+                {
+                    return false;
+                }
+                break;
+
+            case DXGI_FORMAT_BC2_UNORM:
+                if (ddsPixelFormat.fourCC != 0x32545844 /* DXT2 */ && ddsPixelFormat.fourCC != 0x33545844 /* DXT3 */)
+                {
+                    return false;
+                }
+                break;
+
+            case DXGI_FORMAT_BC3_UNORM:
+                if (ddsPixelFormat.fourCC != 0x34545844 /* DXT4 */&& ddsPixelFormat.fourCC != 0x35545844 /* DXT5 */)
+                {
+                    return false;
+                }
+                break;
+
+            case DXGI_FORMAT_BC4_UNORM:
+                if (ddsPixelFormat.fourCC != 0x55344342 /* BC4U */ && ddsPixelFormat.fourCC != 0x31495441 /* ATI1 */)
+                {
+                    return false;
+                }
+                break;
+
+            case DXGI_FORMAT_BC5_UNORM:
+                if (ddsPixelFormat.fourCC != 0x55354342 /* BC5U */ && ddsPixelFormat.fourCC != 0x32495441 /* ATI2 */ && ddsPixelFormat.fourCC != 0x59583241 /* A2XY */)
+                {
+                    return false;
+                }
+                break;
+            }
+        }
+
+        return true;
+    }
 }
 
 //-------------------------------------------------------------------------------------
@@ -940,9 +987,44 @@ bool Test01()
         OutputDebugStringA("\n");
 #endif
 
-        DDS_FLAGS flags = GetTestDDSFlags(g_TestMedia[index].options);
+        const DDS_FLAGS flags = GetTestDDSFlags(g_TestMedia[index].options);
+        bool pass = false;
+
+        // FromMemory
+        Blob blob;
+        HRESULT hr = LoadBlobFromFile(szPath, blob);
+        if (FAILED(hr))
+        {
+            success = false;
+            printe("Failed getting raw file data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+        }
+        else
+        {
+            TexMetadata metadata;
+            hr = GetMetadataFromDDSMemory(blob.GetBufferPointer(), blob.GetBufferSize(), flags, metadata);
+
+            const TexMetadata* check = &g_TestMedia[index].metadata;
+            if (FAILED(hr))
+            {
+                success = false;
+                printe("Failed getting data from memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+            }
+            else if (memcmp(&metadata, check, sizeof(TexMetadata)) != 0)
+            {
+                success = false;
+                printe("Metadata error in:\n%ls\n", szPath);
+                printmeta(&metadata);
+                printmetachk(check);
+            }
+            else
+            {
+                pass = true;
+            }
+        }
+
+        // FromFile
         TexMetadata metadata;
-        HRESULT hr = GetMetadataFromDDSFile(szPath, flags, metadata);
+        hr = GetMetadataFromDDSFile(szPath, flags, metadata);
 
         const TexMetadata* check = &g_TestMedia[index].metadata;
         if ( FAILED(hr) )
@@ -959,41 +1041,41 @@ bool Test01()
         }
         else
         {
-            bool pass = true;
+            pass = true;
 
-            if ( g_TestMedia[index].options & FLAGS_EXPAND )
+            if (g_TestMedia[index].options & FLAGS_EXPAND)
             {
                 TexMetadata metadata2;
                 hr = GetMetadataFromDDSFile(szPath, flags | DDS_FLAGS_NO_LEGACY_EXPANSION, metadata2);
 
-                if ( SUCCEEDED(hr) )
+                if (SUCCEEDED(hr))
                 {
                     success = pass = false;
-                    printe( "no legacy expansion flag ignored in:\n%ls\n", szPath );
+                    printe("no legacy expansion flag ignored in:\n%ls\n", szPath);
                 }
             }
 
-            if ( g_TestMedia[index].options & FLAGS_BGR )
+            if (g_TestMedia[index].options & FLAGS_BGR)
             {
                 TexMetadata metadata2;
                 hr = GetMetadataFromDDSFile(szPath, flags | DDS_FLAGS_FORCE_RGB, metadata2);
 
-                if ( FAILED(hr) || (metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM
-                                    && metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM_SRGB
-                                    && metadata2.format != DXGI_FORMAT_R8G8B8A8_TYPELESS) )
+                if (FAILED(hr) || (metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM
+                    && metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM_SRGB
+                    && metadata2.format != DXGI_FORMAT_R8G8B8A8_TYPELESS))
                 {
                     success = pass = false;
-                    printe( "Failed to force RGB:\n%ls\n", szPath );
+                    printe("Failed to force RGB:\n%ls\n", szPath);
                 }
             }
 
-            if ( g_TestMedia[index].options & FLAGS_LUMINANCE )
+            if (g_TestMedia[index].options & FLAGS_LUMINANCE)
             {
                 TexMetadata metadata2;
                 hr = GetMetadataFromDDSFile(szPath, flags | DDS_FLAGS_EXPAND_LUMINANCE, metadata2);
 
-                if ( FAILED(hr) || (metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM
-                                    && metadata2.format != DXGI_FORMAT_R16G16B16A16_UNORM) )
+                if (FAILED(hr) || (metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM
+                    && metadata2.format != DXGI_FORMAT_R16G16B16A16_UNORM))
                 {
                     success = pass = false;
                     printe("Failed to expand LUMINANCE expansion:\n%ls\n", szPath);
@@ -1018,10 +1100,10 @@ bool Test01()
                 }
                 break;
             }
-
-            if (pass)
-                ++npass;
         }
+
+        if (pass)
+            ++npass;
 
         ++ncount;
     }
@@ -1035,8 +1117,6 @@ bool Test01()
 bool Test07()
 {
     bool success = true;
-
-    // GetMetadataFromDDSMemoryEx is used internally to the File version, so we only need to explicitly test the File version
 
     size_t ncount = 0;
     size_t npass = 0;
@@ -1057,15 +1137,92 @@ bool Test07()
     #endif
 
         DDS_FLAGS flags = GetTestDDSFlags(g_TestMedia[index].options);
-        TexMetadata metadata;
-        DDSMetaData ddsPixelFormat;
-        HRESULT hr = GetMetadataFromDDSFileEx(szPath, flags, metadata, &ddsPixelFormat);
+        bool pass = false;
 
-        const TexMetadata* check = &g_TestMedia[index].metadata;
+        // FromMemory
+        Blob blob;
+        HRESULT hr = LoadBlobFromFile(szPath, blob);
         if (FAILED(hr))
         {
             success = false;
-            printe("Failed getting data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+            printe("Failed getting raw file data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+        }
+        else
+        {
+            const TexMetadata* check = &g_TestMedia[index].metadata;
+
+            // Validate null parameter
+            TexMetadata metadata;
+            hr = GetMetadataFromDDSMemoryEx(blob.GetBufferPointer(), blob.GetBufferSize(), flags, metadata, nullptr);
+            if (FAILED(hr))
+            {
+                success = false;
+                printe("Failed getting data from memory null (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+            }
+            else if (memcmp(&metadata, check, sizeof(TexMetadata)) != 0)
+            {
+                success = false;
+                printe("Metadata error in:\n%ls\n", szPath);
+                printmeta(&metadata);
+                printmetachk(check);
+            }
+
+            // Validate DDPF
+            DDSMetaData ddsPixelFormat;
+            hr = GetMetadataFromDDSMemoryEx(blob.GetBufferPointer(), blob.GetBufferSize(), flags, metadata, &ddsPixelFormat);
+
+            if (FAILED(hr))
+            {
+                success = false;
+                printe("Failed getting data from memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+            }
+            else if (memcmp(&metadata, check, sizeof(TexMetadata)) != 0)
+            {
+                success = false;
+                printe("Metadata error in:\n%ls\n", szPath);
+                printmeta(&metadata);
+                printmetachk(check);
+            }
+            else if (!IsCorrectDDPF(metadata, ddsPixelFormat, szPath))
+            {
+                success = false;
+                printe("DDS pixel format error in:\n%ls\n", szPath);
+                printdds(ddsPixelFormat);
+            }
+            else
+            {
+                pass = true;
+            }
+        }
+
+        // FromFile
+        TexMetadata metadata;
+        const TexMetadata* check = &g_TestMedia[index].metadata;
+
+        // Validate null parameter
+        hr = GetMetadataFromDDSFileEx(szPath, flags, metadata, nullptr);
+
+        if (FAILED(hr))
+        {
+            success = false;
+            printe("Failed getting data from file null (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+        }
+        else if (memcmp(&metadata, check, sizeof(TexMetadata)) != 0)
+        {
+            success = false;
+            printe("Metadata error in:\n%ls\n", szPath);
+            printmeta(&metadata);
+            printmetachk(check);
+        }
+
+        // Validate DDPF
+        DDSMetaData ddsPixelFormat;
+        hr = GetMetadataFromDDSFileEx(szPath, flags, metadata, &ddsPixelFormat);
+
+        if (FAILED(hr))
+        {
+            success = false;
+            printe("Failed getting data from file (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
         }
         else if (memcmp(&metadata, check, sizeof(TexMetadata)) != 0)
         {
@@ -1088,70 +1245,19 @@ bool Test07()
             printe("DDS pixel format error in:\n%ls\n", szPath);
             printdds(ddsPixelFormat);
         }
+        else if (!IsCorrectDDPF(metadata, ddsPixelFormat, szPath))
+        {
+            success = false;
+            printe("DDS pixel format error in:\n%ls\n", szPath);
+            printdds(ddsPixelFormat);
+        }
         else
         {
-            bool pass = true;
-
-            if (!ddsPixelFormat.IsDX10())
-            {
-                // Test a few specific cases.
-                switch (metadata.format)
-                {
-                case DXGI_FORMAT_BC1_UNORM:
-                    if (ddsPixelFormat.fourCC != 0x31545844 /* DXT1 */)
-                    {
-                        success = false;
-                        pass = false;
-                        printe("DDS pixel format error in:\n%ls\n", szPath);
-                        printdds(ddsPixelFormat);
-                    }
-                    break;
-
-                case DXGI_FORMAT_BC2_UNORM:
-                    if (ddsPixelFormat.fourCC != 0x32545844 /* DXT2 */ && ddsPixelFormat.fourCC != 0x33545844 /* DXT3 */)
-                    {
-                        success = false;
-                        pass = false;
-                        printe("DDS pixel format error in:\n%ls\n", szPath);
-                        printdds(ddsPixelFormat);
-                    }
-                    break;
-
-                case DXGI_FORMAT_BC3_UNORM:
-                    if (ddsPixelFormat.fourCC != 0x34545844 /* DXT4 */&& ddsPixelFormat.fourCC != 0x35545844 /* DXT5 */)
-                    {
-                        success = false;
-                        pass = false;
-                        printe("DDS pixel format error in:\n%ls\n", szPath);
-                        printdds(ddsPixelFormat);
-                    }
-                    break;
-
-                case DXGI_FORMAT_BC4_UNORM:
-                    if (ddsPixelFormat.fourCC != 0x55344342 /* BC4U */ && ddsPixelFormat.fourCC != 0x31495441 /* ATI1 */)
-                    {
-                        success = false;
-                        pass = false;
-                        printe("DDS pixel format error in:\n%ls\n", szPath);
-                        printdds(ddsPixelFormat);
-                    }
-                    break;
-
-                case DXGI_FORMAT_BC5_UNORM:
-                    if (ddsPixelFormat.fourCC != 0x55354342 /* BC5U */ && ddsPixelFormat.fourCC != 0x32495441 /* ATI2 */ && ddsPixelFormat.fourCC != 0x59583241 /* A2XY */)
-                    {
-                        success = false;
-                        pass = false;
-                        printe("DDS pixel format error in:\n%ls\n", szPath);
-                        printdds(ddsPixelFormat);
-                    }
-                    break;
-                }
-            }
-
-            if (pass)
-                ++npass;
+            pass = true;
         }
+
+        if (pass)
+            ++npass;
 
         ++ncount;
     }
