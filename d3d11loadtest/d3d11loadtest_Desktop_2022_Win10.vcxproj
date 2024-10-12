@@ -267,6 +267,7 @@
     <ClInclude Include="..\..\WICTextureLoader\WICTextureLoader11.h" />
     <ClInclude Include="DeviceResources.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="MSAAHelper.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ReadData.h" />
     <ClInclude Include="StepTimer.h" />
@@ -299,6 +300,7 @@
     <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MSAAHelper.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

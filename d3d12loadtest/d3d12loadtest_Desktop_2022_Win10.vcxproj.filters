@@ -45,6 +45,7 @@
     <ClInclude Include="..\inc\d3dx12.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="MSAAHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -62,6 +63,7 @@
     <ClCompile Include="..\..\ScreenGrab\ScreenGrab12.cpp">
       <Filter>ScreenGrab</Filter>
     </ClCompile>
+    <ClCompile Include="MSAAHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="dx5_logo.dds">

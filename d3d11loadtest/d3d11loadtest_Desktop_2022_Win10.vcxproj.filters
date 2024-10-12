@@ -42,6 +42,7 @@
     <ClInclude Include="ReadData.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="MSAAHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -59,6 +60,7 @@
       <Filter>ScreenGrab</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="MSAAHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest">

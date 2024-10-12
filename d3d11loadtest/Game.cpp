@@ -21,6 +21,9 @@ using Microsoft::WRL::ComPtr;
 
 namespace
 {
+    const XMVECTORF32 c_clearColor = { { { 0.127437726f, 0.300543845f, 0.846873462f, 1.f } } };
+    const XMVECTORF32 c_clearColor4 = { { { 0.015996292f, 0.258182913f, 0.015996292f, 1.f } } };
+
     struct Vertex
     {
         XMFLOAT4 position;
@@ -34,6 +37,10 @@ Game::Game() noexcept(false) :
     // Use gamma-correct rendering.
     m_deviceResources = std::make_unique<DX::DeviceResources>(DXGI_FORMAT_B8G8R8A8_UNORM_SRGB);
     m_deviceResources->RegisterDeviceNotify(this);
+
+    m_msaaHelper = std::make_unique<DX::MSAAHelper>(m_deviceResources->GetBackBufferFormat(),
+        DXGI_FORMAT_UNKNOWN,
+        4);
 }
 
 // Initialize the Direct3D resources required to run.
@@ -78,10 +85,20 @@ void Game::Render()
         return;
     }
 
+    auto context = m_deviceResources->GetD3DDeviceContext();
+
+    {
+        auto renderTarget = m_msaaHelper->GetMSAARenderTargetView();
+        context->ClearRenderTargetView(renderTarget, c_clearColor4);
+
+        // TODO: Render a triangle in MSAA
+
+        // Note we don't resolve it to the swapchain, just use it for screensave tests.
+    }
+
     Clear();
 
     m_deviceResources->PIXBeginEvent(L"Render");
-    auto context = m_deviceResources->GetD3DDeviceContext();
 
     // Set input assembler state.
     context->IASetInputLayout(m_spInputLayout.Get());
@@ -134,6 +151,17 @@ void Game::Render()
 
         DX::ThrowIfFailed(SaveToDDSFile(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DDS_FLAGS_NONE, L"screenshot2.dds"));
         DX::ThrowIfFailed(SaveToWICFile(*image.GetImage(0,0,0), WIC_FLAGS_NONE, GUID_ContainerFormatJpeg, L"screenshot2.jpg"));
+
+        // MSAA test
+        auto backBufferMSAA = m_msaaHelper->GetMSAARenderTarget();
+        DX::ThrowIfFailed(SaveDDSTextureToFile(context, backBufferMSAA, L"screenshotMSAA.dds"));
+
+        DX::ThrowIfFailed(SaveWICTextureToFile(context, backBufferMSAA, GUID_ContainerFormatPng, L"screenshotMSAA.png", nullptr, nullptr, true));
+
+        DX::ThrowIfFailed(CaptureTexture(m_deviceResources->GetD3DDevice(), context, backBufferMSAA, image));
+
+        DX::ThrowIfFailed(SaveToDDSFile(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DDS_FLAGS_NONE, L"screenshotMSAA2.dds"));
+        DX::ThrowIfFailed(SaveToWICFile(*image.GetImage(0, 0, 0), WIC_FLAGS_NONE, GUID_ContainerFormatJpeg, L"screenshotMSAA2.jpg"));
     }
 
     // Show the new frame.
@@ -151,9 +179,7 @@ void Game::Clear()
     auto depthStencil = m_deviceResources->GetDepthStencilView();
 
     // Use linear clear color for gamma-correct rendering.
-    XMVECTORF32 color;
-    color.v = XMColorSRGBToRGB(Colors::CornflowerBlue);
-    context->ClearRenderTargetView(renderTarget, color);
+    context->ClearRenderTargetView(renderTarget, c_clearColor);
 
     context->ClearDepthStencilView(depthStencil, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
     context->OMSetRenderTargets(1, &renderTarget, depthStencil);
@@ -217,6 +243,8 @@ void Game::GetDefaultSize(int& width, int& height) const noexcept
 void Game::CreateDeviceDependentResources()
 {
     auto device = m_deviceResources->GetD3DDevice();
+
+    m_msaaHelper->SetDevice(device);
 
     // Load and create shaders.
     auto vertexShaderBlob = DX::ReadData(L"VertexShader11.cso");
@@ -335,6 +363,9 @@ void Game::CreateDeviceDependentResources()
 // Allocate all memory resources that change on a window SizeChanged event.
 void Game::CreateWindowSizeDependentResources()
 {
+    auto size = m_deviceResources->GetOutputSize();
+    m_msaaHelper->SetWindow(size);
+
 }
 
 void Game::OnDeviceLost()
@@ -348,6 +379,8 @@ void Game::OnDeviceLost()
     m_spVertexShader.Reset();
     m_spPixelShader.Reset();
     m_spSampler.Reset();
+
+    m_msaaHelper->ReleaseDevice();
 }
 
 void Game::OnDeviceRestored()

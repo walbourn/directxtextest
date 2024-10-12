@@ -6,6 +6,7 @@
 
 #include "DeviceResources.h"
 #include "StepTimer.h"
+#include "MSAAHelper.h"
 
 
 // A basic game implementation that creates a D3D12 device and
@@ -66,6 +67,7 @@ private:
     Microsoft::WRL::ComPtr<ID3D12Resource>          m_cup;
     Microsoft::WRL::ComPtr<ID3D12Resource>          m_dx5logo;
     Microsoft::WRL::ComPtr<ID3D12Resource>          m_screenshot;
+    Microsoft::WRL::ComPtr<ID3D12Resource>          m_screenshotMSAA;
 
     Microsoft::WRL::ComPtr<ID3D12Resource>          m_test1;
     Microsoft::WRL::ComPtr<ID3D12Resource>          m_test2;
@@ -79,4 +81,6 @@ private:
     D3D12_INDEX_BUFFER_VIEW                         m_indexBufferView;
 
     UINT                                            m_strideSRV;
+
+    std::unique_ptr<DX::MSAAHelper>                 m_msaaHelper;
 };
