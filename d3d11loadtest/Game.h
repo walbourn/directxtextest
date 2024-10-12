@@ -6,6 +6,7 @@
 
 #include "DeviceResources.h"
 #include "StepTimer.h"
+#include "MSAAHelper.h"
 
 
 // A basic game implementation that creates a D3D11 device and
@@ -72,4 +73,7 @@ private:
     Microsoft::WRL::ComPtr<ID3D11VertexShader>          m_spVertexShader;
     Microsoft::WRL::ComPtr<ID3D11PixelShader>           m_spPixelShader;
     Microsoft::WRL::ComPtr<ID3D11SamplerState>          m_spSampler;
+
+    std::unique_ptr<DX::MSAAHelper>                     m_msaaHelper;
+
 };
