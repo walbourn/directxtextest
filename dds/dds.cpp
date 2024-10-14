@@ -904,7 +904,7 @@ namespace
     #endif
     };
 
-    bool IsCorrectDDPF(const TexMetadata& metadata, const DDSMetaData& ddsPixelFormat, const wchar_t* szPath) noexcept
+    bool IsCorrectDDPF(const TexMetadata& metadata, const DDSMetaData& ddsPixelFormat) noexcept
     {
         if (!ddsPixelFormat.IsDX10())
         {
@@ -1183,7 +1183,7 @@ bool Test07()
                 printmeta(&metadata);
                 printmetachk(check);
             }
-            else if (!IsCorrectDDPF(metadata, ddsPixelFormat, szPath))
+            else if (!IsCorrectDDPF(metadata, ddsPixelFormat))
             {
                 success = false;
                 printe("DDS pixel format error in:\n%ls\n", szPath);
@@ -1245,7 +1245,7 @@ bool Test07()
             printe("DDS pixel format error in:\n%ls\n", szPath);
             printdds(ddsPixelFormat);
         }
-        else if (!IsCorrectDDPF(metadata, ddsPixelFormat, szPath))
+        else if (!IsCorrectDDPF(metadata, ddsPixelFormat))
         {
             success = false;
             printe("DDS pixel format error in:\n%ls\n", szPath);

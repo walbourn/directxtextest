@@ -15,6 +15,8 @@ add_executable(${PROJECT_NAME} WIN32
     DeviceResources.cpp
     DeviceResources.h
     Main.cpp
+    MSAAHelper.cpp
+    MSAAHelper.h
     ReadData.h
     StepTimer.h
     pch.h
