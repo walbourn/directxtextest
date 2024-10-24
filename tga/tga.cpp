@@ -308,7 +308,7 @@ bool Test00()
         else
         {
             TexMetadata metadata;
-            hr = GetMetadataFromTGAMemory(blob.GetBufferPointer(), blob.GetBufferSize(), metadata);
+            hr = GetMetadataFromTGAMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), metadata);
 
             const TexMetadata* check = &g_TestMedia[index].metadata;
             if (FAILED(hr))
@@ -589,7 +589,7 @@ bool Test02()
 
             TexMetadata metadata;
             ScratchImage image;
-            hr = LoadFromTGAMemory(blob.GetBufferPointer(), blob.GetBufferSize(), &metadata, image);
+            hr = LoadFromTGAMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), &metadata, image);
 
             const TexMetadata* check = &g_TestMedia[index].metadata;
             if (FAILED(hr))
@@ -630,7 +630,7 @@ bool Test02()
             if (check->format == DXGI_FORMAT_R8G8B8A8_UNORM)
             {
                 TexMetadata metadata2;
-                hr = LoadFromTGAMemory(blob.GetBufferPointer(), blob.GetBufferSize(), TGA_FLAGS_BGR, &metadata2, image);
+                hr = LoadFromTGAMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), TGA_FLAGS_BGR, &metadata2, image);
                 if (FAILED(hr))
                 {
                     success = pass = false;
@@ -692,7 +692,7 @@ bool Test02()
             if (g_TestMedia[index].options & FLAGS_ZALPHA)
             {
                 TexMetadata metadata2;
-                hr = LoadFromTGAMemory(blob.GetBufferPointer(), blob.GetBufferSize(), TGA_FLAGS_ALLOW_ALL_ZERO_ALPHA, &metadata2, image);
+                hr = LoadFromTGAMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), TGA_FLAGS_ALLOW_ALL_ZERO_ALPHA, &metadata2, image);
                 if (FAILED(hr))
                 {
                     success = pass = false;
@@ -992,7 +992,7 @@ bool Test04()
                 {
                     TexMetadata metadata2;
                     ScratchImage image2;
-                    hr = LoadFromTGAMemory( blob.GetBufferPointer(), blob.GetBufferSize(), &metadata2, image2 );
+                    hr = LoadFromTGAMemory( blob.GetConstBufferPointer(), blob.GetBufferSize(), &metadata2, image2 );
                     if ( FAILED(hr) )
                     {
                         success = false;
@@ -1055,7 +1055,7 @@ bool Test04()
                     {
                         TexMetadata metadata2;
                         ScratchImage image2;
-                        hr = LoadFromTGAMemory(blob.GetBufferPointer(), blob.GetBufferSize(), TGA_FLAGS_BGR, &metadata2, image2);
+                        hr = LoadFromTGAMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), TGA_FLAGS_BGR, &metadata2, image2);
                         if (FAILED(hr))
                         {
                             success = false;
@@ -1096,7 +1096,7 @@ bool Test04()
                         {
                             TexMetadata metadata2;
                             ScratchImage image2;
-                            hr = LoadFromTGAMemory(blob.GetBufferPointer(), blob.GetBufferSize(), TGA_FLAGS_NONE, &metadata2, image2);
+                            hr = LoadFromTGAMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), TGA_FLAGS_NONE, &metadata2, image2);
                             if (FAILED(hr))
                             {
                                 success = false;
@@ -1161,7 +1161,7 @@ bool Test04()
                     {
                         TexMetadata metadata2;
                         ScratchImage image2;
-                        hr = LoadFromTGAMemory(blob.GetBufferPointer(), blob.GetBufferSize(), TGA_FLAGS_NONE, &metadata2, image2);
+                        hr = LoadFromTGAMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), TGA_FLAGS_NONE, &metadata2, image2);
                         if (FAILED(hr))
                         {
                             success = false;
@@ -1204,7 +1204,7 @@ bool Test04()
                             }
 
                             // IGNORE_SRGB
-                            hr = LoadFromTGAMemory(blob.GetBufferPointer(), blob.GetBufferSize(), TGA_FLAGS_IGNORE_SRGB, &metadata2, image2);
+                            hr = LoadFromTGAMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), TGA_FLAGS_IGNORE_SRGB, &metadata2, image2);
                             if (FAILED(hr))
                             {
                                 success = false;
@@ -1241,7 +1241,7 @@ bool Test04()
                     {
                         TexMetadata metadata2;
                         ScratchImage image2;
-                        hr = LoadFromTGAMemory(blob.GetBufferPointer(), blob.GetBufferSize(), TGA_FLAGS_NONE, &metadata2, image2);
+                        hr = LoadFromTGAMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), TGA_FLAGS_NONE, &metadata2, image2);
                         if (FAILED(hr))
                         {
                             success = false;
@@ -1785,7 +1785,7 @@ bool Test06()
                         {
                             TexMetadata metadata;
                             ScratchImage image;
-                            hr = LoadFromTGAMemory(blob.GetBufferPointer(), blob.GetBufferSize(), !j ? TGA_FLAGS_NONE : TGA_FLAGS_BGR, &metadata, image);
+                            hr = LoadFromTGAMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), !j ? TGA_FLAGS_NONE : TGA_FLAGS_BGR, &metadata, image);
 
                             if (FAILED(hr) && istga)
                             {

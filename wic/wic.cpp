@@ -663,7 +663,7 @@ bool WICTest::Test01()
         else
         {
             TexMetadata metadata;
-            hr = GetMetadataFromWICMemory( blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO | WIC_FLAGS_ALL_FRAMES, metadata,
+            hr = GetMetadataFromWICMemory( blob.GetConstBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO | WIC_FLAGS_ALL_FRAMES, metadata,
                                            [&](IWICMetadataQueryReader* reader)
                                            {
                                                if ( !reader )
@@ -718,7 +718,7 @@ bool WICTest::Test01()
                 case DXGI_FORMAT_B8G8R8X8_UNORM:
                     {
                         TexMetadata metadata2;
-                        hr = GetMetadataFromWICMemory( blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_FORCE_RGB, metadata2 );
+                        hr = GetMetadataFromWICMemory( blob.GetConstBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_FORCE_RGB, metadata2 );
                         if ( FAILED(hr) || metadata2.format == DXGI_FORMAT_B8G8R8A8_UNORM || metadata2.format == DXGI_FORMAT_B8G8R8X8_UNORM )
                         {
                             pass = false;
@@ -734,7 +734,7 @@ bool WICTest::Test01()
                 case DXGI_FORMAT_B8G8R8X8_UNORM_SRGB:
                     {
                         TexMetadata metadata2;
-                        hr = GetMetadataFromWICMemory( blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_IGNORE_SRGB, metadata2 );
+                        hr = GetMetadataFromWICMemory( blob.GetConstBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_IGNORE_SRGB, metadata2 );
                         if ( FAILED(hr)
                              || ( metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM
                                   && metadata2.format != DXGI_FORMAT_B8G8R8A8_UNORM &&  metadata2.format !=  DXGI_FORMAT_B8G8R8X8_UNORM ) )
@@ -750,7 +750,7 @@ bool WICTest::Test01()
                 case DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM:
                     {
                         TexMetadata metadata2;
-                        hr = GetMetadataFromWICMemory( blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_NO_X2_BIAS, metadata2 );
+                        hr = GetMetadataFromWICMemory( blob.GetConstBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_NO_X2_BIAS, metadata2 );
                         if ( FAILED(hr) || metadata2.format == DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM )
                         {
                             pass = false;
@@ -766,7 +766,7 @@ bool WICTest::Test01()
                 case DXGI_FORMAT_B4G4R4A4_UNORM:
                     {
                         TexMetadata metadata2;
-                        hr = GetMetadataFromWICMemory( blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_NO_16BPP, metadata2 );
+                        hr = GetMetadataFromWICMemory( blob.GetConstBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_NO_16BPP, metadata2 );
                         if ( FAILED(hr)
                             || metadata2.format == DXGI_FORMAT_B5G5R5A1_UNORM || metadata2.format == DXGI_FORMAT_B5G6R5_UNORM
                             || metadata2.format == DXGI_FORMAT_B4G4R4A4_UNORM
@@ -783,7 +783,7 @@ bool WICTest::Test01()
                 case DXGI_FORMAT_R1_UNORM:
                     {
                         TexMetadata metadata2;
-                        hr = GetMetadataFromWICMemory( blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALL_FRAMES, metadata2 );
+                        hr = GetMetadataFromWICMemory( blob.GetConstBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALL_FRAMES, metadata2 );
                         if ( FAILED(hr) || metadata2.format != DXGI_FORMAT_R8_UNORM )
                         {
                             pass = false;
@@ -798,7 +798,7 @@ bool WICTest::Test01()
                 if ( metadata.arraySize > 1 )
                 {
                     TexMetadata metadata2;
-                    hr = GetMetadataFromWICMemory( blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_NONE, metadata2 );
+                    hr = GetMetadataFromWICMemory( blob.GetConstBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_NONE, metadata2 );
 
                     if ( FAILED(hr) || metadata2.arraySize != 1 )
                     {
@@ -1054,7 +1054,7 @@ bool WICTest::Test03()
         {
             TexMetadata metadata;
             ScratchImage image;
-            hr = LoadFromWICMemory(blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO | WIC_FLAGS_ALL_FRAMES, &metadata, image);
+            hr = LoadFromWICMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO | WIC_FLAGS_ALL_FRAMES, &metadata, image);
 
             if (hr == E_NOTIMPL && (g_TestMedia[index].options & FLAGS_GDI))
             {
@@ -1286,7 +1286,7 @@ bool WICTest::Test05()
             {
                 TexMetadata metadata2;
                 ScratchImage image2;
-                hr = LoadFromWICMemory( blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO, &metadata2, image2 );
+                hr = LoadFromWICMemory( blob.GetConstBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO, &metadata2, image2 );
                 if ( FAILED(hr) )
                 {
                     success = false;
@@ -1319,7 +1319,7 @@ bool WICTest::Test05()
                 {
                     TexMetadata metadata3;
                     ScratchImage image3;
-                    hr = LoadFromWICMemory( blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO, &metadata3, image3 );
+                    hr = LoadFromWICMemory( blob.GetConstBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO, &metadata3, image3 );
                     if ( FAILED(hr) )
                     {
                         success = false;
@@ -1369,7 +1369,7 @@ bool WICTest::Test05()
                     {
                         TexMetadata metadata3;
                         ScratchImage image3;
-                        hr = LoadFromWICMemory( blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO, &metadata3, image3 );
+                        hr = LoadFromWICMemory( blob.GetConstBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO, &metadata3, image3 );
                         if ( FAILED(hr) )
                         {
                             success = false;
@@ -1418,7 +1418,7 @@ bool WICTest::Test05()
                         {
                             TexMetadata metadata3;
                             ScratchImage image3;
-                            hr = LoadFromWICMemory(blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO, &metadata3, image3);
+                            hr = LoadFromWICMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO, &metadata3, image3);
                             if (FAILED(hr))
                             {
                                 success = false;
@@ -1452,7 +1452,7 @@ bool WICTest::Test05()
                         {
                             TexMetadata metadata3;
                             ScratchImage image3;
-                            hr = LoadFromWICMemory(blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO, &metadata3, image3);
+                            hr = LoadFromWICMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALLOW_MONO, &metadata3, image3);
                             if (FAILED(hr))
                             {
                                 success = false;
@@ -1514,7 +1514,7 @@ bool WICTest::Test05()
             {
                 TexMetadata metadata2;
                 ScratchImage image2;
-                hr = LoadFromWICMemory( blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALL_FRAMES, &metadata2, image2 );
+                hr = LoadFromWICMemory( blob.GetConstBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_ALL_FRAMES, &metadata2, image2 );
                 if ( FAILED(hr) )
                 {
                     success = false;
@@ -2193,7 +2193,7 @@ bool WICTest::Test08()
                     {
                         TexMetadata metadata;
                         ScratchImage image;
-                        std::ignore = LoadFromWICMemory(blob.GetBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_NONE, &metadata, image);
+                        std::ignore = LoadFromWICMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), WIC_FLAGS_NONE, &metadata, image);
                     }
                 }
             }
