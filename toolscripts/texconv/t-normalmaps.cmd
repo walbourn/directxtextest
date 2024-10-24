@@ -9,18 +9,18 @@ echo -nologo -nmap lo -nmapamp 4 -f BC5_SNORM -ft dds -sx BC5_SNORM -o %OUTTESTD
 if %ERRORLEVEL% NEQ 0 ( call failure.cmd "Failed" )
 
 echo.
-echo -nologo -x2bias -nmap lo -nmapamp 4 -f BC5_UNORM -ft dds -sx BC5_UNORM -o %OUTTESTDIR% %REFDIR%\heightmap.dds
-%RUN% -nologo -x2bias -nmap lo -nmapamp 4 -f BC5_UNORM -ft dds -sx BC5_UNORM -o %OUTTESTDIR% %REFDIR%\heightmap.dds
+echo -nologo --x2-bias -nmap lo -nmapamp 4 -f BC5_UNORM -ft dds -sx BC5_UNORM -o %OUTTESTDIR% %REFDIR%\heightmap.dds
+%RUN% -nologo --x2-bias -nmap lo -nmapamp 4 -f BC5_UNORM -ft dds -sx BC5_UNORM -o %OUTTESTDIR% %REFDIR%\heightmap.dds
 if %ERRORLEVEL% NEQ 0 ( call failure.cmd "Failed" )
 
 echo.
-echo -nologo -reconstructz -f R8G8B8A8_UNORM -ft dds -px RZ -o %OUTTESTDIR% %OUTTESTDIR%\heightmapBC5_UNORM.dds
-%RUN% -nologo -reconstructz -f R8G8B8A8_UNORM -ft dds -px RZ -o %OUTTESTDIR% %OUTTESTDIR%\heightmapBC5_UNORM.dds
+echo -nologo --reconstruct-z -f R8G8B8A8_UNORM -ft dds -px RZ -o %OUTTESTDIR% %OUTTESTDIR%\heightmapBC5_UNORM.dds
+%RUN% -nologo --reconstruct-z -f R8G8B8A8_UNORM -ft dds -px RZ -o %OUTTESTDIR% %OUTTESTDIR%\heightmapBC5_UNORM.dds
 if %ERRORLEVEL% NEQ 0 ( call failure.cmd "Failed" )
 
 echo.
-echo -nologo -x2bias -inverty -nmap lo -nmapamp 4 -f BC5_UNORM -ft dds -px IY -sx BC5_UNORM -o %OUTTESTDIR% %REFDIR%\heightmap.dds
-%RUN% -nologo -x2bias -inverty -nmap lo -nmapamp 4 -f BC5_UNORM -ft dds -px IY -sx BC5_UNORM -o %OUTTESTDIR% %REFDIR%\heightmap.dds
+echo -nologo --x2-bias --invert-y -nmap lo -nmapamp 4 -f BC5_UNORM -ft dds -px IY -sx BC5_UNORM -o %OUTTESTDIR% %REFDIR%\heightmap.dds
+%RUN% -nologo --x2-bias --invert-y -nmap lo -nmapamp 4 -f BC5_UNORM -ft dds -px IY -sx BC5_UNORM -o %OUTTESTDIR% %REFDIR%\heightmap.dds
 if %ERRORLEVEL% NEQ 0 ( call failure.cmd "Failed" )
 
 goto :EOF
@@ -31,4 +31,3 @@ echo -nologo -nmap lo -nmapamp 4 -f %1 -ft dds -sx %1 -o %OUTTESTDIR% %REFDIR%\h
 %RUN% -nologo -nmap lo -nmapamp 4 -f %1 -ft dds -sx %1 -o %OUTTESTDIR% %REFDIR%\heightmap.dds
 if %ERRORLEVEL% NEQ 0 ( call failure.cmd "Failed" )
 goto :EOF
-
