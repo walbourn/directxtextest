@@ -107,7 +107,7 @@ bool Test01()
         else
         {
             TexMetadata metadata;
-            hr = GetMetadataFromHDRMemory(blob.GetBufferPointer(), blob.GetBufferSize(), metadata);
+            hr = GetMetadataFromHDRMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), metadata);
 
             const TexMetadata* check = &g_TestMedia[index].metadata;
             if (FAILED(hr))
@@ -197,7 +197,7 @@ bool Test02()
         {
             TexMetadata metadata;
             ScratchImage image;
-            hr = LoadFromHDRMemory( blob.GetBufferPointer(), blob.GetBufferSize(), &metadata, image );
+            hr = LoadFromHDRMemory( blob.GetConstBufferPointer(), blob.GetBufferSize(), &metadata, image );
 
             const TexMetadata* check = &g_TestMedia[index].metadata;
             if ( FAILED(hr) )
@@ -374,7 +374,7 @@ bool Test04()
             {
                 TexMetadata metadata2;
                 ScratchImage image2;
-                hr = LoadFromHDRMemory(blob.GetBufferPointer(), blob.GetBufferSize(), &metadata2, image2);
+                hr = LoadFromHDRMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), &metadata2, image2);
                 if (FAILED(hr))
                 {
                     success = false;
@@ -441,7 +441,7 @@ bool Test04()
                     {
                         TexMetadata metadata2;
                         ScratchImage image2;
-                        hr = LoadFromHDRMemory(blob2.GetBufferPointer(), blob2.GetBufferSize(), &metadata2, image2);
+                        hr = LoadFromHDRMemory(blob2.GetConstBufferPointer(), blob2.GetBufferSize(), &metadata2, image2);
                         if (FAILED(hr))
                         {
                             success = false;
@@ -510,7 +510,7 @@ bool Test04()
                     {
                         TexMetadata metadata2;
                         ScratchImage image2;
-                        hr = LoadFromHDRMemory(blob2.GetBufferPointer(), blob2.GetBufferSize(), &metadata2, image2);
+                        hr = LoadFromHDRMemory(blob2.GetConstBufferPointer(), blob2.GetBufferSize(), &metadata2, image2);
                         if (FAILED(hr))
                         {
                             success = false;
@@ -916,7 +916,7 @@ bool Test06()
                     {
                         TexMetadata metadata;
                         ScratchImage image;
-                        hr = LoadFromHDRMemory(blob.GetBufferPointer(), blob.GetBufferSize(), &metadata, image);
+                        hr = LoadFromHDRMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), &metadata, image);
 
                         if (FAILED(hr) && ishdr)
                         {

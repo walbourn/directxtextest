@@ -1005,7 +1005,7 @@ bool Test01()
         else
         {
             TexMetadata metadata;
-            hr = GetMetadataFromDDSMemory(blob.GetBufferPointer(), blob.GetBufferSize(), flags, metadata);
+            hr = GetMetadataFromDDSMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), flags, metadata);
 
             const TexMetadata* check = &g_TestMedia[index].metadata;
             if (FAILED(hr))
@@ -1157,7 +1157,7 @@ bool Test07()
 
             // Validate null parameter
             TexMetadata metadata;
-            hr = GetMetadataFromDDSMemoryEx(blob.GetBufferPointer(), blob.GetBufferSize(), flags, metadata, nullptr);
+            hr = GetMetadataFromDDSMemoryEx(blob.GetConstBufferPointer(), blob.GetBufferSize(), flags, metadata, nullptr);
             if (FAILED(hr))
             {
                 success = false;
@@ -1173,7 +1173,7 @@ bool Test07()
 
             // Validate DDPF
             DDSMetaData ddsPixelFormat;
-            hr = GetMetadataFromDDSMemoryEx(blob.GetBufferPointer(), blob.GetBufferSize(), flags, metadata, &ddsPixelFormat);
+            hr = GetMetadataFromDDSMemoryEx(blob.GetConstBufferPointer(), blob.GetBufferSize(), flags, metadata, &ddsPixelFormat);
 
             if (FAILED(hr))
             {
@@ -1307,7 +1307,7 @@ bool Test02()
             DDS_FLAGS flags = GetTestDDSFlags(g_TestMedia[index].options);
             TexMetadata metadata;
             ScratchImage image;
-            hr = LoadFromDDSMemory( blob.GetBufferPointer(), blob.GetBufferSize(), flags, &metadata, image );
+            hr = LoadFromDDSMemory( blob.GetConstBufferPointer(), blob.GetBufferSize(), flags, &metadata, image );
 
             const TexMetadata* check = &g_TestMedia[index].metadata;
             if ( FAILED(hr) )
@@ -1349,7 +1349,7 @@ bool Test02()
                         TexMetadata metadata2;
                         ScratchImage image2;
                         flags |= DDS_FLAGS_NO_R10B10G10A2_FIXUP;
-                        hr = LoadFromDDSMemory( blob.GetBufferPointer(), blob.GetBufferSize(), flags, &metadata2, image2 );
+                        hr = LoadFromDDSMemory( blob.GetConstBufferPointer(), blob.GetBufferSize(), flags, &metadata2, image2 );
 
                         if ( FAILED(hr) )
                         {
@@ -1398,7 +1398,7 @@ bool Test02()
                         TexMetadata metadata2;
                         ScratchImage image2;
                         flags |= DDS_FLAGS_FORCE_RGB;
-                        hr = LoadFromDDSMemory( blob.GetBufferPointer(), blob.GetBufferSize(), flags, &metadata2, image2 );
+                        hr = LoadFromDDSMemory( blob.GetConstBufferPointer(), blob.GetBufferSize(), flags, &metadata2, image2 );
                         if ( FAILED(hr) )
                         {
                             success = false;
@@ -1436,7 +1436,7 @@ bool Test02()
                         TexMetadata metadata2;
                         ScratchImage image2;
                         flags |= DDS_FLAGS_NO_16BPP;
-                        hr = LoadFromDDSMemory( blob.GetBufferPointer(), blob.GetBufferSize(), flags, &metadata2, image2 );
+                        hr = LoadFromDDSMemory( blob.GetConstBufferPointer(), blob.GetBufferSize(), flags, &metadata2, image2 );
                         if ( FAILED(hr) )
                         {
                             success = false;
@@ -1470,7 +1470,7 @@ bool Test02()
                         TexMetadata metadata2;
                         ScratchImage image2;
                         flags |= DDS_FLAGS_EXPAND_LUMINANCE;
-                        hr = LoadFromDDSMemory( blob.GetBufferPointer(), blob.GetBufferSize(), flags, &metadata2, image2 );
+                        hr = LoadFromDDSMemory( blob.GetConstBufferPointer(), blob.GetBufferSize(), flags, &metadata2, image2 );
                         if ( FAILED(hr) )
                         {
                             success = false;
@@ -1575,7 +1575,7 @@ bool Test08()
             TexMetadata metadata;
             ScratchImage image;
             DDSMetaData ddsPixelFormat;
-            hr = LoadFromDDSMemoryEx(blob.GetBufferPointer(), blob.GetBufferSize(), flags, &metadata, &ddsPixelFormat, image);
+            hr = LoadFromDDSMemoryEx(blob.GetConstBufferPointer(), blob.GetBufferSize(), flags, &metadata, &ddsPixelFormat, image);
 
             const TexMetadata* check = &g_TestMedia[index].metadata;
             if (FAILED(hr))
@@ -2160,7 +2160,7 @@ bool Test04()
                 {
                     TexMetadata metadata2;
                     ScratchImage image2;
-                    hr = LoadFromDDSMemory( blob.GetBufferPointer(), blob.GetBufferSize(), DDS_FLAGS_NONE, &metadata2, image2 );
+                    hr = LoadFromDDSMemory( blob.GetConstBufferPointer(), blob.GetBufferSize(), DDS_FLAGS_NONE, &metadata2, image2 );
                     if ( FAILED(hr) )
                     {
                         success = false;
@@ -2242,7 +2242,7 @@ bool Test04()
                 {
                     TexMetadata metadata2;
                     ScratchImage image2;
-                    hr = LoadFromDDSMemory( blob2.GetBufferPointer(), blob2.GetBufferSize(), DDS_FLAGS_NONE, &metadata2, image2 );
+                    hr = LoadFromDDSMemory( blob2.GetConstBufferPointer(), blob2.GetBufferSize(), DDS_FLAGS_NONE, &metadata2, image2 );
                     if ( FAILED(hr) )
                     {
                         success = false;
@@ -2265,7 +2265,7 @@ bool Test04()
                     }
                     else
                     {
-                        hr = IsDDSHeaderPresent( blob2.GetBufferPointer(), blob2.GetBufferSize() );
+                        hr = IsDDSHeaderPresent( blob2.GetConstBufferPointer(), blob2.GetBufferSize() );
                         if ( FAILED(hr) )
                         {
                             success = false;
@@ -2311,7 +2311,7 @@ bool Test04()
                 {
                     TexMetadata metadata2;
                     ScratchImage image2;
-                    hr = LoadFromDDSMemory( blob2.GetBufferPointer(), blob2.GetBufferSize(), DDS_FLAGS_NONE, &metadata2, image2 );
+                    hr = LoadFromDDSMemory( blob2.GetConstBufferPointer(), blob2.GetBufferSize(), DDS_FLAGS_NONE, &metadata2, image2 );
                     if ( FAILED(hr) )
                     {
                         success = false;
@@ -2334,7 +2334,7 @@ bool Test04()
                     }
                     else
                     {
-                        hr = IsDDSHeaderPresent( blob2.GetBufferPointer(), blob2.GetBufferSize() );
+                        hr = IsDDSHeaderPresent( blob2.GetConstBufferPointer(), blob2.GetBufferSize() );
                         if ( FAILED(hr) )
                         {
                             success = false;
@@ -2400,7 +2400,7 @@ bool Test04()
                         {
                             TexMetadata metadata2;
                             ScratchImage image2;
-                            hr = LoadFromDDSMemory( blob2.GetBufferPointer(), blob2.GetBufferSize(), DDS_FLAGS_NONE, &metadata2, image2 );
+                            hr = LoadFromDDSMemory( blob2.GetConstBufferPointer(), blob2.GetBufferSize(), DDS_FLAGS_NONE, &metadata2, image2 );
                             if ( FAILED(hr) )
                             {
                                 success = false;
@@ -2918,11 +2918,11 @@ bool Test06()
                     {
                         TexMetadata metadata;
                         ScratchImage image;
-                        hr = LoadFromDDSMemory(blob.GetBufferPointer(), blob.GetBufferSize(),
+                        hr = LoadFromDDSMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(),
                             ddsFlags, &metadata, image);
                         if (hr == HRESULT_FROM_WIN32(ERROR_HANDLE_EOF))
                         {
-                            hr = LoadFromDDSMemory(blob.GetBufferPointer(), blob.GetBufferSize(),
+                            hr = LoadFromDDSMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(),
                                 ddsFlags | DDS_FLAGS_BAD_DXTN_TAILS | DDS_FLAGS_IGNORE_MIPS, &metadata, image);
                         }
 

@@ -389,7 +389,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
                 }
                 else
                 {
-                    hr = DirectX::LoadFromDDSMemory(blob.GetBufferPointer(), blob.GetBufferSize(), c_ddsFlags, nullptr, result);
+                    hr = DirectX::LoadFromDDSMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), c_ddsFlags, nullptr, result);
                     if (FAILED(hr) && hr != E_INVALIDARG && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != E_OUTOFMEMORY && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF) && (hr != E_FAIL || (hr == E_FAIL && isdds)))
                     {
 #ifdef _DEBUG
@@ -519,7 +519,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
                     }
                     else
                     {
-                        hr = DirectX::LoadFromTGAMemory(blob.GetBufferPointer(), blob.GetBufferSize(), tgaFlags, nullptr, result);
+                        hr = DirectX::LoadFromTGAMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), tgaFlags, nullptr, result);
                         if (FAILED(hr) && hr != E_INVALIDARG && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != E_OUTOFMEMORY && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF) && (hr != E_FAIL || (hr == E_FAIL && istga)))
                         {
 #ifdef _DEBUG
