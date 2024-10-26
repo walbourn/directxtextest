@@ -33,4 +33,5 @@ x64
 screenshot*.*
 toolscripts/texassemble/out
 toolscripts/texconv/out
+toolscripts/texdiag/out
 CMakeUserPresets.json
