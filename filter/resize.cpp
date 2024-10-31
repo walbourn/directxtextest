@@ -1447,7 +1447,7 @@ bool FilterTest::Test01()
                         printe( "Failed resizing complex result:\n%ls\n", szPath );
                         printmeta( &metadata2 );
                         printmetachk( check );
-                        printe( "...\n(check) w: %u x h: %u x d: %zu\narraySize: %zu  mips: 1\nmiscFlags: %08X miscFlags2: %08X format: %d dimension: %d\n",
+                        printe( "...\n(check) w: %u x h: %u x d: %zu\narraySize: %zu  mips: 1\nmiscFlags: %08X miscFlags2: %08X format: %d dimension: %u\n",
                                 twidth, theight, check->depth, check->arraySize, check->miscFlags, check->miscFlags2, check->format, check->dimension );
                     }
                     else
