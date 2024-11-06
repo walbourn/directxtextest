@@ -435,6 +435,7 @@ bool TEXTest::Test01()
         }
     }
 
+    // invalid args
     if ( IsValid( DXGI_FORMAT_UNKNOWN ) )
     {
         printe( "ERROR: IsValid failed on DXGI Unknown Format\n" );
@@ -447,6 +448,25 @@ bool TEXTest::Test01()
         success = false;
     }
 
+    if (IsCompressed(DXGI_FORMAT_UNKNOWN)
+        || IsPacked(DXGI_FORMAT_UNKNOWN)
+        || IsVideo(DXGI_FORMAT_UNKNOWN)
+        || IsPlanar(DXGI_FORMAT_UNKNOWN)
+        || IsPalettized(DXGI_FORMAT_UNKNOWN)
+        || IsDepthStencil(DXGI_FORMAT_UNKNOWN)
+        || IsSRGB(DXGI_FORMAT_UNKNOWN)
+        || IsBGR(DXGI_FORMAT_UNKNOWN)
+        || IsTypeless(DXGI_FORMAT_UNKNOWN)
+        || BitsPerPixel(DXGI_FORMAT_UNKNOWN) != 0
+        || BitsPerColor(DXGI_FORMAT_UNKNOWN) != 0
+        || BytesPerBlock(DXGI_FORMAT_UNKNOWN) != 0
+        || FormatDataType(DXGI_FORMAT_UNKNOWN) != FORMAT_TYPE_TYPELESS
+        )
+    {
+        success = false;
+        printe("Failed invalid DXGI arg test\n");
+    }
+
     return success;
 }
 
@@ -456,13 +476,16 @@ namespace
     //-------------------------------------------------------------------------------------
     // This function is used by DDSTextureLoader and ScreenGrab to do the same thing
     // as DirectXTex's ComputePitch, so we test it here...
+    //
+    // Also check against DirectX Tool Kit's LoaderHelpers.h
     //-------------------------------------------------------------------------------------
-    HRESULT GetSurfaceInfo(size_t width,
-        size_t height,
-        DXGI_FORMAT fmt,
+    HRESULT GetSurfaceInfo(
+        _In_ size_t width,
+        _In_ size_t height,
+        _In_ DXGI_FORMAT fmt,
         _Out_opt_ size_t* outNumBytes,
         _Out_opt_ size_t* outRowBytes,
-        _Out_opt_ size_t* outNumRows)
+        _Out_opt_ size_t* outNumRows) noexcept
     {
         uint64_t numBytes = 0;
         uint64_t rowBytes = 0;
@@ -474,6 +497,9 @@ namespace
         size_t bpe = 0;
         switch (static_cast<int>(fmt))
         {
+        case DXGI_FORMAT_UNKNOWN:
+            return E_INVALIDARG;
+
         case DXGI_FORMAT_BC1_TYPELESS:
         case DXGI_FORMAT_BC1_UNORM:
         case DXGI_FORMAT_BC1_UNORM_SRGB:
@@ -518,6 +544,15 @@ namespace
 
         case DXGI_FORMAT_NV12:
         case DXGI_FORMAT_420_OPAQUE:
+            if ((height % 2) != 0)
+            {
+                // Requires a height alignment of 2.
+                return E_INVALIDARG;
+            }
+            planar = true;
+            bpe = 2;
+            break;
+
         case WIN10_DXGI_FORMAT_P208:
             planar = true;
             bpe = 2;
@@ -525,6 +560,11 @@ namespace
 
         case DXGI_FORMAT_P010:
         case DXGI_FORMAT_P016:
+            if ((height % 2) != 0)
+            {
+                // Requires a height alignment of 2.
+                return E_INVALIDARG;
+            }
             planar = true;
             bpe = 4;
             break;
@@ -534,6 +574,9 @@ namespace
         case XBOX_DXGI_FORMAT_X16_TYPELESS_G8_UINT:
             planar = true;
             bpe = 4;
+            break;
+
+        default:
             break;
         }
 
@@ -573,7 +616,7 @@ namespace
         }
         else
         {
-            size_t bpp = BitsPerPixel(fmt);
+            const size_t bpp = BitsPerPixel(fmt);
             if (!bpp)
                 return E_INVALIDARG;
 
@@ -582,13 +625,13 @@ namespace
             numBytes = rowBytes * height;
         }
 
-#if defined(_M_IX86) || defined(_M_ARM) || defined(_M_HYBRID_X86_ARM64)
+    #if defined(_M_IX86) || defined(_M_ARM) || defined(_M_HYBRID_X86_ARM64)
         static_assert(sizeof(size_t) == 4, "Not a 32-bit platform!");
         if (numBytes > UINT32_MAX || rowBytes > UINT32_MAX || numRows > UINT32_MAX)
             return HRESULT_FROM_WIN32(ERROR_ARITHMETIC_OVERFLOW);
-#else
+    #else
         static_assert(sizeof(size_t) == 8, "Not a 64-bit platform!");
-#endif
+    #endif
 
         if (outNumBytes)
         {
@@ -1022,6 +1065,59 @@ bool TEXTest::Test02()
         success = false;
     }
 
+    // invalid/zero arg
+    hr = GetSurfaceInfo(128, 256, DXGI_FORMAT_UNKNOWN, nullptr, nullptr, nullptr);
+    if (hr != E_INVALIDARG)
+    {
+        success = false;
+        printe("GetSurfaceInfo: Failed invalid arg test\n");
+    }
+
+    hr = GetSurfaceInfo(128, 256, DXGI_FORMAT_R8G8B8A8_UNORM, nullptr, nullptr, nullptr);
+    if (FAILED(hr))
+    {
+        success = false;
+        printe("GetSurfaceInfo: Failed nullptr arg test\n");
+    }
+
+    size_t numBytes = 0;
+    size_t rowBytes = 0;
+    size_t numRows = 0;
+    hr = GetSurfaceInfo(0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, &numBytes, &rowBytes, &numRows);
+    if (FAILED(hr) || rowBytes != 0 || numBytes != 0 || numRows != 0)
+    {
+        success = false;
+        printe("GetSurfaceInfo: Failed zero arg test\n");
+    }
+
+    hr = ComputePitch(DXGI_FORMAT_UNKNOWN, 128, 64, rowPitch, slicePitch);
+    if (hr != E_INVALIDARG)
+    {
+        success = false;
+        printe("ComputePitch: Failed invalid arg test\n");
+    }
+
+    hr = ComputePitch(DXGI_FORMAT_R8G8B8A8_UNORM, 0, 0, rowPitch, slicePitch);
+    if (FAILED(hr) || rowPitch != 0|| slicePitch != 0)
+    {
+        success = false;
+        printe("ComputePitch: Failed zero arg test\n");
+    }
+
+    rows = ComputeScanlines(DXGI_FORMAT_UNKNOWN, 256);
+    if (rows != 0)
+    {
+        success = false;
+        printe("ComputeScanlines: Failed invalid arg test\n");
+    }
+
+    rows = ComputeScanlines(DXGI_FORMAT_R8G8B8A8_UNORM, 0);
+    if (rows != 0)
+    {
+        success = false;
+        printe("ComputeScanlines: Failed zero arg test\n");
+    }
+
     //
     // Here we are comparing the DirectX Runtime vs. DirectXTex, so we only need a nullptr device.
     //
@@ -1312,6 +1408,12 @@ bool TEXTest::Test12()
         }
     }
 
+    DXGI_FORMAT f = MakeSRGB(DXGI_FORMAT_UNKNOWN);
+    if (f != DXGI_FORMAT_UNKNOWN)
+    {
+        printe("MakeSRGB: Failed invalid arg test\n");
+    }
+
     //--- MakeLinear
     static const DXGI_FORMAT isSRGB[] =
     {
@@ -1348,6 +1450,12 @@ bool TEXTest::Test12()
             printe("ERROR: MakeLinear failed on DXGI Format %u (%ls)\n", f, GetName(DXGI_FORMAT(f)));
             success = false;
         }
+    }
+
+    f = MakeLinear(DXGI_FORMAT_UNKNOWN);
+    if (f != DXGI_FORMAT_UNKNOWN)
+    {
+        printe("MakeLinear: Failed invalid arg test\n");
     }
 
     //--- MakeTypeless
@@ -1405,6 +1513,12 @@ bool TEXTest::Test12()
         }
     }
 
+    f = MakeTypeless(DXGI_FORMAT_UNKNOWN);
+    if (f != DXGI_FORMAT_UNKNOWN)
+    {
+        printe("MakeTypeless: Failed invalid arg test\n");
+    }
+
     //--- MakeTypelessUNORM
     //--- MakeTypelessFLOAT
     static const DXGI_FORMAT typeless[] =
@@ -1454,6 +1568,12 @@ bool TEXTest::Test12()
             }
         }
 
+        DXGI_FORMAT f = MakeTypelessUNORM(DXGI_FORMAT_UNKNOWN);
+        if (f != DXGI_FORMAT_UNKNOWN)
+        {
+            printe("MakeTypelessUNORM: Failed invalid arg test\n");
+        }
+
         DXGI_FORMAT ff = MakeTypelessFLOAT( typeless[t] );
         if ( IsTypeless(ff) )
         {
@@ -1497,6 +1617,13 @@ bool TEXTest::Test12()
                 success = false;
             }
         }
+
+        f = MakeTypelessFLOAT(DXGI_FORMAT_UNKNOWN);
+        if (f != DXGI_FORMAT_UNKNOWN)
+        {
+            printe("MakeTypelessFLOAT: Failed invalid arg test\n");
+        }
+
     }
 
     return success;

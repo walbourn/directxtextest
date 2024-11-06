@@ -160,5 +160,56 @@ bool TEXTest::Test15()
 
     print("%zu images tested, %zu images passed ", ncount, npass );
 
+    // invalid args
+    {
+        ScratchImage image;
+        Image nullin = {};
+        nullin.width = nullin.height = 256;
+        nullin.format = DXGI_FORMAT_NV11;
+        HRESULT hr = ConvertToSinglePlane(nullin, image);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+
+        nullin.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        hr = ConvertToSinglePlane(nullin, image);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid format arg test\n");
+        }
+
+        TexMetadata metadata = {};
+        metadata.width = metadata.height = 256;
+        metadata.format = DXGI_FORMAT_NV11;
+        metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
+        metadata.dimension = TEX_DIMENSION_TEXTURE2D;
+        hr = ConvertToSinglePlane(nullptr, 0,  metadata, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg complex test\n");
+        }
+
+        metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        hr = ConvertToSinglePlane(nullptr, 0, metadata, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid format arg complex test\n");
+        }
+
+        metadata.format = DXGI_FORMAT_NV11;
+        metadata.dimension = TEX_DIMENSION_TEXTURE3D;
+        hr = ConvertToSinglePlane(nullptr, 0, metadata, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid dimension arg test\n");
+        }
+    }
+
     return success;
 }

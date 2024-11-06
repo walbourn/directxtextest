@@ -156,7 +156,7 @@ bool TEXTest::Test09()
             }
             else
             {
-                Rect rct( 0, 0, 32, 32 );
+                Rect rct = { 0, 0, 32, 32 };
                 hr = CopyRectangle( *imageTest.GetImage(0,0,0), rct, *image.GetImage(0,0,0), TEX_FILTER_DEFAULT, x, y );
                 if (FAILED(hr))
                 {
@@ -193,7 +193,7 @@ bool TEXTest::Test09()
             }
             else
             {
-                Rect rct( 5, 10, 25, 20 );
+                Rect rct = { 5, 10, 25, 20 };
                 hr = CopyRectangle( *imageTest.GetImage(0,0,0), rct, *image.GetImage(0,0,0), TEX_FILTER_DEFAULT, x, y );
                 if (FAILED(hr))
                 {
@@ -232,7 +232,7 @@ bool TEXTest::Test09()
             }
             else
             {
-                Rect rct( 0, 0, 200, 200 );
+                Rect rct = { 0, 0, 200, 200 };
                 hr = CopyRectangle( *imageLogo.GetImage(0,0,0), rct, *image.GetImage(0,0,0), TEX_FILTER_DEFAULT, x, y );
                 if (FAILED(hr))
                 {
@@ -269,7 +269,7 @@ bool TEXTest::Test09()
             }
             else
             {
-                Rect rct( 100, 50, 128, 64 );
+                Rect rct = { 100, 50, 128, 64 };
                 hr = CopyRectangle( *imageLogo.GetImage(0,0,0), rct, *image.GetImage(0,0,0), TEX_FILTER_DEFAULT, x, y );
                 if (FAILED(hr))
                 {
@@ -290,6 +290,32 @@ bool TEXTest::Test09()
                     SaveScratchImage( szDestPath, DDS_FLAGS_NONE, image );
                 }
             }
+        }
+    }
+
+    // invalid args
+    {
+        ScratchImage image;
+        Image nullin = {};
+        nullin.width = nullin.height = 256;
+        nullin.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        Rect rct = { 16, 16, 128, 128 };
+
+        Image nullout = {};
+        nullout.width = nullout.height = 256;
+        nullout.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        HRESULT hr = CopyRectangle(nullin, rct, nullout, TEX_FILTER_DEFAULT, 0, 0);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+
+        hr = CopyRectangle(*imageEarth.GetImage(0, 0, 0), rct, nullout, TEX_FILTER_DEFAULT, 0, 0);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
         }
     }
 
@@ -430,6 +456,43 @@ bool TEXTest::Test10()
     {
         success = false;
         printe( "MSE = %f (%f %f %f %f)... 0.728756\n", mse, mseV[0], mseV[1], mseV[2], mseV[3] );
+    }
+
+    // invalid args
+    {
+        ScratchImage image;
+        Image null1 = {};
+        Image null2 = {};
+        null1.width = null1.height = null2.width = null2.height = 256;
+        null1.format = null2.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+
+        HRESULT hr = ComputeMSE(null1, null2, mse, nullptr);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+
+        hr = ComputeMSE(*imageLogo.GetImage(0, 0, 0), null2, mse, nullptr);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg test B\n");
+        }
+
+        hr = ComputeMSE(null1, *imageLogo.GetImage(0, 0, 0), mse, nullptr);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg test C\n");
+        }
+
+        hr = ComputeMSE(*imageLogo.GetImage(0, 0, 0), *imageLogo.GetImage(0, 0, 0), mse, nullptr);
+        if (FAILED(hr))
+        {
+            success = false;
+            printe("Failed null mseV test\n");
+        }
     }
 
     return success;
@@ -574,6 +637,17 @@ bool TEXTest::Test14()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass );
+
+    // invalid args test
+    {
+        ScratchImage emptyImage;
+        bool res = emptyImage.IsAlphaAllOpaque();
+        if (res)
+        {
+            success = false;
+            printe("Failed empty image test\n");
+        }
+    }
 
     return success;
 }
@@ -764,6 +838,23 @@ bool TEXTest::Test16()
                 }
             }
 
+            // invalid arg
+            hr = EvaluateImage(*image.GetImage(0, 0, 0), nullptr);
+            if (hr != E_INVALIDARG)
+            {
+                success = false;
+                pass = false;
+                printe("ERROR: EvaluateImage null func failed (%08X)\n%ls\n", static_cast<unsigned int>(hr), szPath);
+            }
+
+            hr = EvaluateImage(image.GetImages(), image.GetImageCount(), metadata, nullptr);
+            if (hr != E_INVALIDARG)
+            {
+                success = false;
+                pass = false;
+                printe("ERROR: EvaluateImage [complex] null func failed (%08X)\n%ls\n", static_cast<unsigned int>(hr), szPath);
+            }
+
             if (pass)
                 ++npass;
 
@@ -772,6 +863,33 @@ bool TEXTest::Test16()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass);
+
+    // invalid args
+    {
+        auto test = [](const XMVECTOR*, size_t, size_t) {};
+
+        Image nullin = {};
+        nullin.width = nullin.height = 256;
+        nullin.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        HRESULT hr = EvaluateImage(nullin, test);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+
+        TexMetadata metadata = {};
+        metadata.width = metadata.height = 256;
+        metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
+        metadata.dimension = TEX_DIMENSION_TEXTURE2D;
+        hr = EvaluateImage(nullptr, 0, metadata, test);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg complex test\n");
+        }
+    }
 
     return success;
 }
@@ -1182,6 +1300,26 @@ bool TEXTest::Test17()
                 }
             }
 
+            // invalid arg
+            {
+                ScratchImage result;
+                hr = TransformImage(*srcimage.GetImage(0, 0, 0), nullptr, result);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    pass = false;
+                    printe("ERROR: TransformImage null func failed (%08X)\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                }
+
+                hr = TransformImage(srcimage.GetImages(), srcimage.GetImageCount(), metadata, nullptr, result);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    pass = false;
+                    printe("ERROR: TransformImage [complex] null func failed (%08X)\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                }
+            }
+
             if (pass)
                 ++npass;
 
@@ -1190,6 +1328,34 @@ bool TEXTest::Test17()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass);
+
+    // invalid args
+    {
+        auto test = [](XMVECTOR*, const XMVECTOR*, size_t, size_t) {};
+
+        ScratchImage image;
+        Image nullin = {};
+        nullin.width = nullin.height = 256;
+        nullin.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        HRESULT hr = TransformImage(nullin, test, image);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+
+        TexMetadata metadata = {};
+        metadata.width = metadata.height = 256;
+        metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
+        metadata.dimension = TEX_DIMENSION_TEXTURE2D;
+        hr = TransformImage(nullptr, 0, metadata, test, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg complex test\n");
+        }
+    }
 
     return success;
 }

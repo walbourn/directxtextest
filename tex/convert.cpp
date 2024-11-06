@@ -3704,5 +3704,39 @@ bool TEXTest::Test06()
 
     print("\n%zu images tested, %zu images passed (%zu images by %zu formats) ", ncount, npass, std::size(g_TestMedia), std::size(g_TargetFormats) );
 
+    // invalid args
+    {
+        ScratchImage image;
+        Image nullin = {};
+        nullin.width = nullin.height = 256;
+        nullin.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        HRESULT hr = Convert(nullin, DXGI_FORMAT_B8G8R8X8_UNORM, TEX_FILTER_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+
+        ConvertOptions opts{};
+        hr = ConvertEx(nullin, DXGI_FORMAT_B8G8R8A8_UNORM, opts, image);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg ex test\n");
+        }
+
+        TexMetadata metadata = {};
+        metadata.width = metadata.height = 256;
+        metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
+        metadata.dimension = TEX_DIMENSION_TEXTURE2D;
+        hr = ConvertEx(nullptr, 0, metadata, DXGI_FORMAT_B8G8R8A8_UNORM, opts, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg complex test\n");
+        }
+    }
+
     return success;
 }

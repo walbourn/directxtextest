@@ -433,5 +433,47 @@ bool TEXTest::Test13()
         }
     }
 
+    // invalid args
+    {
+        ScratchImage image;
+        Image nullin = {};
+        nullin.width = nullin.height = 256;
+        nullin.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        HRESULT hr = PremultiplyAlpha(nullin, TEX_PMALPHA_DEFAULT, image);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+
+        nullin.format = DXGI_FORMAT_NV11;
+        hr = PremultiplyAlpha(nullin, TEX_PMALPHA_DEFAULT, image);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid format arg test\n");
+        }
+
+        TexMetadata metadata = {};
+        metadata.width = metadata.height = 256;
+        metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
+        metadata.dimension = TEX_DIMENSION_TEXTURE2D;
+        hr = PremultiplyAlpha(nullptr, 0, metadata, TEX_PMALPHA_DEFAULT, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg complex test\n");
+        }
+
+        metadata.format = DXGI_FORMAT_NV11;
+        hr = PremultiplyAlpha(nullptr, 0, metadata, TEX_PMALPHA_DEFAULT, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid format arg complex test\n");
+        }
+    }
+
     return success;
 }
