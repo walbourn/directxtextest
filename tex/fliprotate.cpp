@@ -310,6 +310,8 @@ bool TEXTest::Test04()
 
     // invalid args
     {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
         ScratchImage image;
         Image nullin = {};
         nullin.width = nullin.height = 256;
@@ -332,6 +334,7 @@ bool TEXTest::Test04()
             success = false;
             printe("Failed invalid arg complex test\n");
         }
+    #pragma warning(pop)
     }
 
     return success;

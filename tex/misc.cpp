@@ -304,7 +304,7 @@ bool TEXTest::Test09()
         Image nullout = {};
         nullout.width = nullout.height = 256;
         nullout.format = DXGI_FORMAT_R8G8B8A8_UNORM;
-        HRESULT hr = CopyRectangle(nullin, rct, nullout, TEX_FILTER_DEFAULT, 0, 0);
+        hr = CopyRectangle(nullin, rct, nullout, TEX_FILTER_DEFAULT, 0, 0);
         if (hr != E_INVALIDARG && hr != E_POINTER)
         {
             success = false;
@@ -466,7 +466,7 @@ bool TEXTest::Test10()
         null1.width = null1.height = null2.width = null2.height = 256;
         null1.format = null2.format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
-        HRESULT hr = ComputeMSE(null1, null2, mse, nullptr);
+        hr = ComputeMSE(null1, null2, mse, nullptr);
         if (hr != E_INVALIDARG && hr != E_POINTER)
         {
             success = false;
@@ -866,6 +866,8 @@ bool TEXTest::Test16()
 
     // invalid args
     {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
         auto test = [](const XMVECTOR*, size_t, size_t) {};
 
         Image nullin = {};
@@ -889,6 +891,7 @@ bool TEXTest::Test16()
             success = false;
             printe("Failed invalid arg complex test\n");
         }
+    #pragma warning(pop)
     }
 
     return success;
@@ -1331,6 +1334,8 @@ bool TEXTest::Test17()
 
     // invalid args
     {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
         auto test = [](XMVECTOR*, const XMVECTOR*, size_t, size_t) {};
 
         ScratchImage image;
@@ -1355,6 +1360,7 @@ bool TEXTest::Test17()
             success = false;
             printe("Failed invalid arg complex test\n");
         }
+    #pragma warning(pop)
     }
 
     return success;

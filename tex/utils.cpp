@@ -1332,9 +1332,9 @@ bool TEXTest::Test02()
                     }
                     else
                     {
-                        size_t numBytes = 0;
-                        size_t rowBytes = 0;
-                        size_t numRows = 0;
+                        numBytes = 0;
+                        rowBytes = 0;
+                        numRows = 0;
                         hr = GetSurfaceInfo( vals[i], vals[j], DXGI_FORMAT(f), &numBytes, &rowBytes, &numRows );
 
                         if ( FAILED(hr) || rowBytes != res.RowPitch || numBytes != res.DepthPitch || numRows != targetRows )
@@ -1408,8 +1408,7 @@ bool TEXTest::Test12()
         }
     }
 
-    DXGI_FORMAT f = MakeSRGB(DXGI_FORMAT_UNKNOWN);
-    if (f != DXGI_FORMAT_UNKNOWN)
+    if (MakeSRGB(DXGI_FORMAT_UNKNOWN) != DXGI_FORMAT_UNKNOWN)
     {
         printe("MakeSRGB: Failed invalid arg test\n");
     }
@@ -1452,8 +1451,7 @@ bool TEXTest::Test12()
         }
     }
 
-    f = MakeLinear(DXGI_FORMAT_UNKNOWN);
-    if (f != DXGI_FORMAT_UNKNOWN)
+    if (MakeLinear(DXGI_FORMAT_UNKNOWN) != DXGI_FORMAT_UNKNOWN)
     {
         printe("MakeLinear: Failed invalid arg test\n");
     }
@@ -1513,8 +1511,7 @@ bool TEXTest::Test12()
         }
     }
 
-    f = MakeTypeless(DXGI_FORMAT_UNKNOWN);
-    if (f != DXGI_FORMAT_UNKNOWN)
+    if (MakeTypeless(DXGI_FORMAT_UNKNOWN) != DXGI_FORMAT_UNKNOWN)
     {
         printe("MakeTypeless: Failed invalid arg test\n");
     }
@@ -1568,8 +1565,7 @@ bool TEXTest::Test12()
             }
         }
 
-        DXGI_FORMAT f = MakeTypelessUNORM(DXGI_FORMAT_UNKNOWN);
-        if (f != DXGI_FORMAT_UNKNOWN)
+        if (MakeTypelessUNORM(DXGI_FORMAT_UNKNOWN) != DXGI_FORMAT_UNKNOWN)
         {
             printe("MakeTypelessUNORM: Failed invalid arg test\n");
         }
@@ -1618,8 +1614,7 @@ bool TEXTest::Test12()
             }
         }
 
-        f = MakeTypelessFLOAT(DXGI_FORMAT_UNKNOWN);
-        if (f != DXGI_FORMAT_UNKNOWN)
+        if (MakeTypelessFLOAT(DXGI_FORMAT_UNKNOWN) != DXGI_FORMAT_UNKNOWN)
         {
             printe("MakeTypelessFLOAT: Failed invalid arg test\n");
         }

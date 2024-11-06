@@ -516,7 +516,36 @@ bool Test01()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass );
-                                                                                                                              
+
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        ScratchImage image;
+        Image nullin = {};
+        nullin.width = nullin.height = 256;
+        nullin.format = DXGI_FORMAT_BC1_UNORM;
+        HRESULT hr = Decompress(nullin, DXGI_FORMAT_UNKNOWN, image);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+
+        TexMetadata metadata = {};
+        metadata.width = metadata.height = 256;
+        metadata.format = DXGI_FORMAT_BC1_UNORM;
+        metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
+        metadata.dimension = TEX_DIMENSION_TEXTURE2D;
+        hr = Decompress(nullptr, 0, metadata, DXGI_FORMAT_UNKNOWN, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg complex test\n");
+        }
+    #pragma warning(pop)
+    }
+
     return success;
 }
 
@@ -1132,6 +1161,52 @@ bool Test02()
 
     print("\n%zu images tested, %zu images passed (%zu source images) ", ncount, npass, std::size(g_CompressMedia) );
 
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        ScratchImage image;
+        Image nullin = {};
+        nullin.width = nullin.height = 256;
+        nullin.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        HRESULT hr = Compress(nullin, DXGI_FORMAT_BC1_UNORM, TEX_COMPRESS_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+
+        CompressOptions opts = {};
+        opts.flags = TEX_COMPRESS_DEFAULT;
+        opts.alphaWeight = TEX_ALPHA_WEIGHT_DEFAULT;
+        hr = CompressEx(nullin, DXGI_FORMAT_BC1_UNORM, opts, image);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg ex test\n");
+        }
+
+        TexMetadata metadata = {};
+        metadata.width = metadata.height = 256;
+        metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
+        metadata.dimension = TEX_DIMENSION_TEXTURE2D;
+        hr = Compress(nullptr, 0, metadata, DXGI_FORMAT_BC1_UNORM, TEX_COMPRESS_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg complex test\n");
+        }
+
+        hr = CompressEx(nullptr, 0, metadata, DXGI_FORMAT_BC1_UNORM, opts, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg ex complex test\n");
+        }
+    #pragma warning(pop)
+    }
+
     return success;
  }
 
@@ -1580,6 +1655,45 @@ bool Test03()
                         }
                     }
                 }
+
+                // invalid device arg cases
+            #pragma warning(push)
+            #pragma warning(disable:6385 6387)
+                hr = Compress(static_cast<ID3D11Device*>(nullptr), *srcimage.GetImage(0, 0, 0), cformat, TEX_COMPRESS_DEFAULT, TEX_ALPHA_WEIGHT_DEFAULT, image);
+                if (hr != E_INVALIDARG && hr != E_POINTER)
+                {
+                    success = false;
+                    pass = false;
+                    printe("Failed invalid device test\n");
+                }
+
+                hr = Compress(static_cast<ID3D11Device*>(nullptr), srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), cformat, TEX_COMPRESS_DEFAULT, TEX_ALPHA_WEIGHT_DEFAULT, image);
+                if (hr != E_INVALIDARG && hr != E_POINTER)
+                {
+                    success = false;
+                    pass = false;
+                    printe("Failed invalid device complex test\n");
+                }
+
+                CompressOptions opts = {};
+                opts.flags = TEX_COMPRESS_DEFAULT;
+                opts.alphaWeight = TEX_ALPHA_WEIGHT_DEFAULT;
+                hr = CompressEx(static_cast<ID3D11Device*>(nullptr), *srcimage.GetImage(0, 0, 0), cformat, opts, image);
+                if (hr != E_INVALIDARG && hr != E_POINTER)
+                {
+                    success = false;
+                    pass = false;
+                    printe("Failed invalid device ex test\n");
+                }
+
+                hr = CompressEx(static_cast<ID3D11Device*>(nullptr), srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), cformat, opts, image);
+                if (hr != E_INVALIDARG && hr != E_POINTER)
+                {
+                    success = false;
+                    pass = false;
+                    printe("Failed invalid device complex ex test\n");
+                }
+            #pragma warning(pop)
             }
 
             if (pass)
@@ -1590,6 +1704,53 @@ bool Test03()
     }
 
     print("\n%zu images tested, %zu images passed (%zu source images) ", ncount, npass, std::size(g_CompressMedia) );
+
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        ScratchImage image;
+        Image nullin = {};
+        nullin.width = nullin.height = 256;
+        nullin.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        hr = Compress(device.Get(), nullin, DXGI_FORMAT_BC1_UNORM, TEX_COMPRESS_DEFAULT, TEX_ALPHA_WEIGHT_DEFAULT, image);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+
+        CompressOptions opts = {};
+        opts.flags = TEX_COMPRESS_DEFAULT;
+        opts.alphaWeight = TEX_ALPHA_WEIGHT_DEFAULT;
+        hr = CompressEx(device.Get(), nullin, DXGI_FORMAT_BC1_UNORM, opts, image);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg ex test\n");
+        }
+
+        TexMetadata metadata = {};
+        metadata.width = metadata.height = 256;
+        metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
+        metadata.dimension = TEX_DIMENSION_TEXTURE2D;
+        hr = Compress(device.Get(), nullptr, 0, metadata, DXGI_FORMAT_BC1_UNORM, TEX_COMPRESS_DEFAULT, TEX_ALPHA_WEIGHT_DEFAULT, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg complex test\n");
+        }
+
+        hr = CompressEx(device.Get(), nullptr, 0, metadata, DXGI_FORMAT_BC1_UNORM, opts, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg ex complex test\n");
+        }
+    #pragma warning(pop)
+    }
+
 
     return success;
 }

@@ -435,11 +435,13 @@ bool TEXTest::Test13()
 
     // invalid args
     {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
         ScratchImage image;
         Image nullin = {};
         nullin.width = nullin.height = 256;
         nullin.format = DXGI_FORMAT_R8G8B8A8_UNORM;
-        HRESULT hr = PremultiplyAlpha(nullin, TEX_PMALPHA_DEFAULT, image);
+        hr = PremultiplyAlpha(nullin, TEX_PMALPHA_DEFAULT, image);
         if (hr != E_INVALIDARG && hr != E_POINTER)
         {
             success = false;
@@ -454,7 +456,7 @@ bool TEXTest::Test13()
             printe("Failed invalid format arg test\n");
         }
 
-        TexMetadata metadata = {};
+        metadata = {};
         metadata.width = metadata.height = 256;
         metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
         metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
@@ -473,6 +475,7 @@ bool TEXTest::Test13()
             success = false;
             printe("Failed invalid format arg complex test\n");
         }
+    #pragma warning(pop)
     }
 
     return success;

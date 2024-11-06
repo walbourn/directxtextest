@@ -1494,6 +1494,24 @@ bool FilterTest::Test01()
                 }
             }
 
+            // invalid/zero args
+            ScratchImage result;
+            hr = Resize(*srcimage.GetImage(0, 0, 0), 0, 0, TEX_FILTER_DEFAULT, result);
+            if (hr != E_INVALIDARG)
+            {
+                success = false;
+                pass = false;
+                printe("Failed invalid zero arg test\n");
+            }
+
+            hr = Resize(srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), 0, 0, TEX_FILTER_DEFAULT, result);
+            if (hr != E_INVALIDARG)
+            {
+                success = false;
+                pass = false;
+                printe("Failed invalid zero complex test\n");
+            }
+
             if ( pass )
                 ++npass;
         }
@@ -1502,6 +1520,35 @@ bool FilterTest::Test01()
     }
 
     print("\n%zu images tested, %zu images passed ", ncount, npass );
+
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        ScratchImage image;
+        Image nullin = {};
+        nullin.width = nullin.height = 256;
+        nullin.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        HRESULT hr = Resize(nullin, 128, 128, TEX_FILTER_DEFAULT, image);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+
+        TexMetadata metadata = {};
+        metadata.width = metadata.height = 256;
+        metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
+        metadata.dimension = TEX_DIMENSION_TEXTURE2D;
+        hr = Resize(nullptr, 0, metadata, 128, 128, TEX_FILTER_DEFAULT, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg complex test\n");
+        }
+    #pragma warning(pop)
+    }
 
     return success;
 }

@@ -162,6 +162,8 @@ bool TEXTest::Test15()
 
     // invalid args
     {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
         ScratchImage image;
         Image nullin = {};
         nullin.width = nullin.height = 256;
@@ -209,6 +211,7 @@ bool TEXTest::Test15()
             success = false;
             printe("Failed invalid dimension arg test\n");
         }
+    #pragma warning(pop)
     }
 
     return success;
