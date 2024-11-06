@@ -1124,7 +1124,7 @@ bool Test01()
     #pragma warning(push)
     #pragma warning(disable:6385 6387)
         TexMetadata metadata;
-        HRESULT hr = GetMetadataFromDDSMemory(nullptr, 0, DDS_FLAGS_NONE, metadata);
+        HRESULT hr = GetMetadataFromDDSMemory(static_cast<const uint8_t*>(nullptr), 0, DDS_FLAGS_NONE, metadata);
         if (hr != E_INVALIDARG)
         {
             success = false;
@@ -1299,7 +1299,7 @@ bool Test07()
     #pragma warning(push)
     #pragma warning(disable:6385 6387)
         TexMetadata metadata;
-        HRESULT hr = GetMetadataFromDDSMemoryEx(nullptr, 0, DDS_FLAGS_NONE, metadata, nullptr);
+        HRESULT hr = GetMetadataFromDDSMemoryEx(static_cast<const uint8_t*>(nullptr), 0, DDS_FLAGS_NONE, metadata, nullptr);
         if (hr != E_INVALIDARG)
         {
             success = false;
@@ -1588,7 +1588,7 @@ bool Test02()
     #pragma warning(push)
     #pragma warning(disable:6385 6387)
         ScratchImage image;
-        HRESULT hr = LoadFromDDSMemory(nullptr, 0, DDS_FLAGS_NONE, nullptr, image);
+        HRESULT hr = LoadFromDDSMemory(static_cast<const uint8_t*>(nullptr), 0, DDS_FLAGS_NONE, nullptr, image);
         if (hr != E_INVALIDARG)
         {
             success = false;
@@ -1758,7 +1758,7 @@ bool Test08()
     #pragma warning(push)
     #pragma warning(disable:6385 6387)
         ScratchImage image;
-        HRESULT hr = LoadFromDDSMemoryEx(nullptr, 0, DDS_FLAGS_NONE, nullptr, nullptr, image);
+        HRESULT hr = LoadFromDDSMemoryEx(static_cast<const uint8_t*>(nullptr), 0, DDS_FLAGS_NONE, nullptr, nullptr, image);
         if (hr != E_INVALIDARG)
         {
             success = false;

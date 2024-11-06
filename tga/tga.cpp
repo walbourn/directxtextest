@@ -419,7 +419,7 @@ bool Test00()
     #pragma warning(push)
     #pragma warning(disable:6385 6387)
         TexMetadata metadata;
-        HRESULT hr = GetMetadataFromTGAMemory(nullptr, 0, TGA_FLAGS_NONE, metadata);
+        HRESULT hr = GetMetadataFromTGAMemory(static_cast<const uint8_t*>(nullptr), 0, TGA_FLAGS_NONE, metadata);
         if (hr != E_INVALIDARG)
         {
             success = false;
@@ -774,7 +774,7 @@ bool Test02()
     #pragma warning(push)
     #pragma warning(disable:6385 6387)
         ScratchImage image;
-        HRESULT hr = LoadFromTGAMemory(nullptr, 0, TGA_FLAGS_NONE, nullptr, image);
+        HRESULT hr = LoadFromTGAMemory(static_cast<const uint8_t*>(nullptr), 0, TGA_FLAGS_NONE, nullptr, image);
         if (hr != E_INVALIDARG)
         {
             success = false;

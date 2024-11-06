@@ -163,7 +163,7 @@ bool Test01()
     #pragma warning(push)
     #pragma warning(disable:6385 6387)
         TexMetadata metadata;
-        HRESULT hr = GetMetadataFromHDRMemory(nullptr, 0, metadata);
+        HRESULT hr = GetMetadataFromHDRMemory(static_cast<const uint8_t*>(nullptr), 0, metadata);
         if (hr != E_INVALIDARG)
         {
             success = false;
@@ -268,7 +268,7 @@ bool Test02()
     #pragma warning(push)
     #pragma warning(disable:6385 6387)
         ScratchImage image;
-        HRESULT hr = LoadFromHDRMemory(nullptr, 0, nullptr, image);
+        HRESULT hr = LoadFromHDRMemory(static_cast<const uint8_t*>(nullptr), 0, nullptr, image);
         if (hr != E_INVALIDARG)
         {
             success = false;

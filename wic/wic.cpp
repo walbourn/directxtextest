@@ -824,7 +824,7 @@ bool WICTest::Test01()
     #pragma warning(push)
     #pragma warning(disable:6385 6387)
         TexMetadata metadata;
-        HRESULT hr = GetMetadataFromWICMemory(nullptr, 0, WIC_FLAGS_NONE, metadata);
+        HRESULT hr = GetMetadataFromWICMemory(static_cast<const uint8_t*>(nullptr), 0, WIC_FLAGS_NONE, metadata);
         if (hr != E_INVALIDARG)
         {
             success = false;
@@ -1153,7 +1153,7 @@ bool WICTest::Test03()
     #pragma warning(push)
     #pragma warning(disable:6385 6387)
         ScratchImage image;
-        HRESULT hr = LoadFromWICMemory(nullptr, 0, WIC_FLAGS_NONE, nullptr, image);
+        HRESULT hr = LoadFromWICMemory(static_cast<const uint8_t*>(nullptr), 0, WIC_FLAGS_NONE, nullptr, image);
         if (hr != E_INVALIDARG)
         {
             success = false;
