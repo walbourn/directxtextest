@@ -29,7 +29,7 @@ namespace
         // width height depth arraySize mipLevels miscFlags miscFlags2 format dimension | filename
 
         { { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_R8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"fishingboat.jpg", { 0xef,0xea,0x23,0xe7,0x85,0xd2,0xd9,0x10,0x55,0x1d,0xa8,0x14,0xd4,0xaf,0x53,0xca } },
-        {  { 200, 200, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lena.jpg", { 0xef,0x7a,0x90,0x3e,0xa3,0x25,0x3d,0xf9,0x65,0x37,0x77,0x5a,0x74,0xe4,0x53,0x1b } },
+        { { 200, 200, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lena.jpg", { 0xef,0x7a,0x90,0x3e,0xa3,0x25,0x3d,0xf9,0x65,0x37,0x77,0x5a,0x74,0xe4,0x53,0x1b } },
 
         { { 512, 512, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"rocks.jpg", { 0xe7,0x01,0x8a,0x3d,0xdb,0xc4,0xfe,0xbe,0x26,0x7d,0x8b,0x52,0xb3,0xe6,0x06,0x83 } },
         { { 512, 512, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"wall.jpg", { 0x9d,0x50,0x63,0x63,0x57,0xd9,0x7d,0x69,0xf7,0x01,0xf5,0x86,0xcc,0xb6,0x87,0x83 } },
@@ -128,11 +128,25 @@ bool Test01()
 
     print("%zu images tested, %zu images passed ", ncount, npass);
 
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        TexMetadata metadata;
+        HRESULT hr = GetMetadataFromJPEGFile(nullptr, metadata);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg file test\n");
+        }
+    #pragma warning(pop)
+    }
+
     return success;
 }
 
 //-------------------------------------------------------------------------------------
-// LoadFromPNGFile
+// LoadFromJPEGFile
 bool Test02()
 {
     bool success = true;
@@ -199,12 +213,26 @@ bool Test02()
 
     print("%zu images tested, %zu images passed ", ncount, npass );
 
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        ScratchImage image;
+        HRESULT hr = LoadFromJPEGFile(nullptr, nullptr, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+    #pragma warning(pop)
+    }
+
     return success;
 }
 
 
 //-------------------------------------------------------------------------------------
-// SaveToPNGFile
+// SaveToJPEGFile
 bool Test03()
 {
     bool success = true;
@@ -330,6 +358,14 @@ bool Test03()
 
                 }
 
+                hr = SaveToJPEGFile(*image.GetImage(0, 0, 0), nullptr);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    pass = false;
+                    printe("Failed null fname test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath);
+                }
+
                 if (pass)
                     ++npass;
             }
@@ -339,6 +375,22 @@ bool Test03()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass );
+
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        Image nullin = {};
+        nullin.width = nullin.height = 256;
+        nullin.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        HRESULT hr = SaveToJPEGFile(nullin, nullptr);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+    #pragma warning(pop)
+    }
 
     return success;
 }

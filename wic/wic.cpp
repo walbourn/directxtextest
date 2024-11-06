@@ -819,6 +819,20 @@ bool WICTest::Test01()
 
     print("%zu images tested, %zu images passed ", ncount, npass );
 
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        TexMetadata metadata;
+        HRESULT hr = GetMetadataFromWICMemory(nullptr, 0, WIC_FLAGS_NONE, metadata);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg mem test\n");
+        }
+    #pragma warning(pop)
+    }
+
     return success;
 }
 
@@ -1009,6 +1023,20 @@ bool WICTest::Test02()
 
     print("%zu images tested, %zu images passed ", ncount, npass );
 
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        TexMetadata metadata;
+        HRESULT hr = GetMetadataFromWICFile(nullptr, WIC_FLAGS_NONE, metadata);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg mem test\n");
+        }
+    #pragma warning(pop)
+    }
+
     return success;
 }
 
@@ -1120,6 +1148,20 @@ bool WICTest::Test03()
 
     print("%zu images tested, %zu images passed ", ncount, npass );
 
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        ScratchImage image;
+        HRESULT hr = LoadFromWICMemory(nullptr, 0, WIC_FLAGS_NONE, nullptr, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+    #pragma warning(pop)
+    }
+
     return success;
 }
 
@@ -1220,6 +1262,20 @@ bool WICTest::Test04()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass );
+
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        ScratchImage image;
+        HRESULT hr = LoadFromWICFile(nullptr, WIC_FLAGS_NONE, nullptr, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+    #pragma warning(pop)
+    }
 
     return success;
 }
@@ -1540,6 +1596,30 @@ bool WICTest::Test05()
 
     print("%zu images tested, %zu images passed ", ncount, npass );
 
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        Image nullin = {};
+        nullin.width = nullin.height = 256;
+        nullin.format = DXGI_FORMAT_B8G8R8A8_UNORM;
+        Blob result;
+        HRESULT hr = SaveToWICMemory(nullin, WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_TIFF), result, nullptr);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+
+        hr = SaveToWICMemory(nullptr, 0, WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_TIFF), result, nullptr);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg mf test\n");
+        }
+    #pragma warning(pop)
+    }
+
     return success;
 }
 
@@ -1836,6 +1916,15 @@ bool WICTest::Test06()
                 }
             }
 
+            // Validate null parameter
+            hr = SaveToWICFile(*image.GetImage(0, 0, 0), WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_TIFF), nullptr);
+            if (hr != E_INVALIDARG)
+            {
+                success = false;
+                pass = false;
+                printe("Failed null fname test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath);
+            }
+
             if ( pass )
                 ++npass;
         }
@@ -1905,10 +1994,41 @@ bool WICTest::Test06()
                     ++npass;
                 }
             }
+
+            // Validate null parameter
+            hr = SaveToWICFile(image.GetImages(), image.GetImageCount(), WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_TIFF), nullptr);
+            if (hr != E_INVALIDARG)
+            {
+                success = false;
+                printe("Failed null fname test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath);
+            }
         }
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass );
+
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        Image nullin = {};
+        nullin.width = nullin.height = 256;
+        nullin.format = DXGI_FORMAT_B8G8R8A8_UNORM;
+        HRESULT hr = SaveToWICFile(nullin, WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_TIFF), nullptr, nullptr);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+
+        hr = SaveToWICFile(nullptr, 0, WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_TIFF), nullptr, nullptr);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg mf test\n");
+        }
+    #pragma warning(pop)
+    }
 
     return success;
 }

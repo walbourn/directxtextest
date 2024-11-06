@@ -335,7 +335,7 @@ bool Test00()
                 bool pass = true;
 
                 TexMetadata metadata2;
-                hr = GetMetadataFromTGAFile(szPath, TGA_FLAGS_BGR, metadata2);
+                hr = GetMetadataFromTGAMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), TGA_FLAGS_BGR, metadata2);
                 if (FAILED(hr))
                 {
                     success = pass = false;
@@ -382,7 +382,7 @@ bool Test00()
 
                 if (IsSRGB(metadata.format))
                 {
-                    hr = GetMetadataFromTGAFile(szPath, TGA_FLAGS_IGNORE_SRGB, metadata2);
+                    hr = GetMetadataFromTGAMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), TGA_FLAGS_IGNORE_SRGB, metadata2);
                     if (FAILED(hr))
                     {
                         success = pass = false;
@@ -413,6 +413,20 @@ bool Test00()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass );
+
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        TexMetadata metadata;
+        HRESULT hr = GetMetadataFromTGAMemory(nullptr, 0, TGA_FLAGS_NONE, metadata);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg mem test\n");
+        }
+    #pragma warning(pop)
+    }
 
     return success;
 }
@@ -547,6 +561,20 @@ bool Test01()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass);
+
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        TexMetadata metadata;
+        HRESULT hr = GetMetadataFromTGAFile(nullptr, TGA_FLAGS_NONE, metadata);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg mem test\n");
+        }
+    #pragma warning(pop)
+    }
 
     return success;
 }
@@ -741,6 +769,20 @@ bool Test02()
 
     print("%zu images tested, %zu images passed ", ncount, npass );
 
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        ScratchImage image;
+        HRESULT hr = LoadFromTGAMemory(nullptr, 0, TGA_FLAGS_NONE, nullptr, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+    #pragma warning(pop)
+    }
+
     return success;
 }
 
@@ -923,6 +965,20 @@ bool Test03()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass );
+
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        ScratchImage image;
+        HRESULT hr = LoadFromTGAFile(nullptr, TGA_FLAGS_NONE, nullptr, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+    #pragma warning(pop)
+    }
 
     return success;
 }
@@ -1296,6 +1352,23 @@ bool Test04()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass );
+
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        Image nullin = {};
+        nullin.width = nullin.height = 256;
+        nullin.format = DXGI_FORMAT_B8G8R8A8_UNORM;
+        Blob result;
+        HRESULT hr = SaveToTGAMemory(nullin, TGA_FLAGS_NONE, result, nullptr);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+    #pragma warning(pop)
+    }
 
     return success;
 }
@@ -1695,6 +1768,15 @@ bool Test05()
                     break;
                 }
 
+                // Validate null parameter
+                hr = SaveToTGAFile(*image.GetImage(0, 0, 0), TGA_FLAGS_NONE, nullptr);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    pass = false;
+                    printe("Failed null fname test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath);
+                }
+
                 if (pass)
                     ++npass;
             }
@@ -1704,6 +1786,22 @@ bool Test05()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass );
+
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        Image nullin = {};
+        nullin.width = nullin.height = 256;
+        nullin.format = DXGI_FORMAT_B8G8R8A8_UNORM;
+        HRESULT hr = SaveToTGAFile(nullin, TGA_FLAGS_NONE, nullptr, nullptr);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+    #pragma warning(pop)
+    }
 
     return success;
 }

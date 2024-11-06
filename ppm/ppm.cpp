@@ -192,6 +192,27 @@ bool Test01()
 
     print("%zu images tested, %zu images passed ", ncount, npass );
 
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        ScratchImage image;
+        HRESULT hr = LoadFromPortablePixMap(nullptr, nullptr, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg ppm test\n");
+        }
+
+        hr = LoadFromPortablePixMapHDR(nullptr, nullptr, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg pfm test\n");
+        }
+    #pragma warning(pop)
+    }
+
     return success;
 }
 
@@ -355,7 +376,22 @@ bool Test02()
                         }
 
                     }
+                }
 
+                // Validate null parameter
+                if (g_SaveMedia[index].pfm)
+                {
+                    hr = SaveToPortablePixMapHDR(*image.GetImage(0, 0, 0), nullptr);
+                }
+                else
+                {
+                    hr = SaveToPortablePixMap(*image.GetImage(0, 0, 0), nullptr);
+                }
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    pass = false;
+                    printe("Failed null fname test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath);
                 }
 
                 if (pass)
@@ -367,6 +403,30 @@ bool Test02()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass );
+
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        Image nullin = {};
+        nullin.width = nullin.height = 256;
+        nullin.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        HRESULT hr = SaveToPortablePixMap(nullin, nullptr);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg ppm test\n");
+        }
+
+        nullin.format = DXGI_FORMAT_R32G32B32_FLOAT;
+        hr = SaveToPortablePixMapHDR(nullin, nullptr);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg pfm test\n");
+        }
+    #pragma warning(pop)
+    }
 
     return success;
 }

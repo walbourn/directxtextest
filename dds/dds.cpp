@@ -1119,6 +1119,27 @@ bool Test01()
 
     print("%zu images tested, %zu images passed ", ncount, npass);
 
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        TexMetadata metadata;
+        HRESULT hr = GetMetadataFromDDSMemory(nullptr, 0, DDS_FLAGS_NONE, metadata);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg mem test\n");
+        }
+
+        hr = GetMetadataFromDDSFile(nullptr, DDS_FLAGS_NONE, metadata);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg file test\n");
+        }
+    #pragma warning(pop)
+    }
+
     return success;
 }
 
@@ -1272,6 +1293,27 @@ bool Test07()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass);
+
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        TexMetadata metadata;
+        HRESULT hr = GetMetadataFromDDSMemoryEx(nullptr, 0, DDS_FLAGS_NONE, metadata, nullptr);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg mem test\n");
+        }
+
+        hr = GetMetadataFromDDSFileEx(nullptr, DDS_FLAGS_NONE, metadata, nullptr);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg file test\n");
+        }
+    #pragma warning(pop)
+    }
 
     return success;
 }
@@ -1541,6 +1583,20 @@ bool Test02()
 
     print("%zu images tested, %zu images passed ", ncount, npass );
 
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        ScratchImage image;
+        HRESULT hr = LoadFromDDSMemory(nullptr, 0, DDS_FLAGS_NONE, nullptr, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+    #pragma warning(pop)
+    }
+
     return success;
 }
 
@@ -1696,6 +1752,20 @@ bool Test08()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass);
+
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        ScratchImage image;
+        HRESULT hr = LoadFromDDSMemoryEx(nullptr, 0, DDS_FLAGS_NONE, nullptr, nullptr, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+    #pragma warning(pop)
+    }
 
     return success;
 }
@@ -1956,6 +2026,20 @@ bool Test03()
 
     print("%zu images tested, %zu images passed ", ncount, npass );
 
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        ScratchImage image;
+        HRESULT hr = LoadFromDDSFile(nullptr, DDS_FLAGS_NONE, nullptr, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+    #pragma warning(pop)
+    }
+
     return success;
 }
 
@@ -2101,6 +2185,20 @@ bool Test09()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass);
+
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        ScratchImage image;
+        HRESULT hr = LoadFromDDSFileEx(nullptr, DDS_FLAGS_NONE, nullptr, nullptr, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+    #pragma warning(pop)
+    }
 
     return success;
 }
@@ -2458,6 +2556,37 @@ bool Test04()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass );
+
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        Image nullin = {};
+        nullin.width = nullin.height = 256;
+        nullin.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        Blob result;
+        HRESULT hr = SaveToDDSMemory(nullin, DDS_FLAGS_NONE, result);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+
+        TexMetadata metadata = {};
+        metadata.width = metadata.height = 256;
+        metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
+        metadata.dimension = TEX_DIMENSION_TEXTURE2D;
+        hr = SaveToDDSMemory(nullptr, 0, metadata, DDS_FLAGS_NONE, result);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg complex test\n");
+        }
+
+        metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    #pragma warning(pop)
+    }
 
     return success;
 }
@@ -2832,6 +2961,15 @@ bool Test05()
                         }
                     }
                 }
+
+                // Validate null parameter
+                hr = SaveToDDSFile(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DDS_FLAGS_NONE, nullptr);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    pass = false;
+                    printe("Failed null fname test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath);
+                }
             }
 
             if ( pass )
@@ -2844,6 +2982,34 @@ bool Test05()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass );
+
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        Image nullin = {};
+        nullin.width = nullin.height = 256;
+        nullin.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        HRESULT hr = SaveToDDSFile(nullin, DDS_FLAGS_NONE, nullptr);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+
+        TexMetadata metadata = {};
+        metadata.width = metadata.height = 256;
+        metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
+        metadata.dimension = TEX_DIMENSION_TEXTURE2D;
+        hr = SaveToDDSFile(nullptr, 0, metadata, DDS_FLAGS_NONE, nullptr);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg complex test\n");
+        }
+    #pragma warning(pop)
+    }
 
     return success;
 }

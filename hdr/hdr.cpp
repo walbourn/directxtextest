@@ -158,6 +158,27 @@ bool Test01()
 
     print("%zu images tested, %zu images passed ", ncount, npass );
 
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        TexMetadata metadata;
+        HRESULT hr = GetMetadataFromHDRMemory(nullptr, 0, metadata);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg mem test\n");
+        }
+
+        hr = GetMetadataFromHDRFile(nullptr, metadata);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg file test\n");
+        }
+    #pragma warning(pop)
+    }
+
     return success;
 }
 
@@ -242,6 +263,20 @@ bool Test02()
 
     print("%zu images tested, %zu images passed ", ncount, npass );
 
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        ScratchImage image;
+        HRESULT hr = LoadFromHDRMemory(nullptr, 0, nullptr, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+    #pragma warning(pop)
+    }
+
     return success;
 }
 
@@ -313,6 +348,20 @@ bool Test03()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass );
+
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        ScratchImage image;
+        HRESULT hr = LoadFromHDRFile(nullptr, nullptr, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+    #pragma warning(pop)
+    }
 
     return success;
 }
@@ -562,6 +611,22 @@ bool Test04()
 
     print("%zu images tested, %zu images passed ", ncount, npass);
 
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        Image nullin = {};
+        nullin.width = nullin.height = 256;
+        nullin.format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+        Blob result;
+        HRESULT hr = SaveToHDRMemory(nullin, result);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+    #pragma warning(pop)
+    }
     return success;
 }
 
@@ -829,6 +894,15 @@ bool Test05()
                 }
             }
 
+            // Validate null parameter
+            hr = SaveToHDRFile(*image.GetImage(0, 0, 0), nullptr);
+            if (hr != E_INVALIDARG)
+            {
+                success = false;
+                pass = false;
+                printe("Failed null fname test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath);
+            }
+
             if (pass)
                 ++npass;
         }
@@ -837,6 +911,22 @@ bool Test05()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass);
+
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        Image nullin = {};
+        nullin.width = nullin.height = 256;
+        nullin.format = DXGI_FORMAT_R32G32B32_FLOAT;
+        HRESULT hr = SaveToHDRFile(nullin, nullptr);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+    #pragma warning(pop)
+    }
 
     return success;
 }
