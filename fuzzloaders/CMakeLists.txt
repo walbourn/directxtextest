@@ -34,12 +34,10 @@ endif()
 target_link_libraries(${PROJECT_NAME} PRIVATE DirectXTex bcrypt.lib version.lib)
 
 if(directxmath_FOUND)
-    message(STATUS "Using DirectXMath package")
     target_link_libraries(${PROJECT_NAME} PUBLIC Microsoft::DirectXMath)
 endif()
 
 if(directx-headers_FOUND)
-    message(STATUS "Using DirectX-Headers package")
     target_link_libraries(${PROJECT_NAME} PRIVATE Microsoft::DirectX-Headers Microsoft::DirectX-Guids)
     target_compile_definitions(${PROJECT_NAME} PRIVATE USING_DIRECTX_HEADERS)
 else()

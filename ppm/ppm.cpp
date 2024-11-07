@@ -63,6 +63,13 @@ namespace
             { 0x3b,0x2f,0x29,0x1b,0x44,0xfa,0x41,0x8a,0xe7,0xda,0xa6,0x82,0x6e,0xc1,0x0e,0xd0 } },
         { { 512, 768, 1, 1, 1, 0, 0, DXGI_FORMAT_R32G32B32A32_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"memorial_be_com.pfm",
             { 0x3b,0x2f,0x29,0x1b,0x44,0xfa,0x41,0x8a,0xe7,0xda,0xa6,0x82,0x6e,0xc1,0x0e,0xd0 } },
+
+        { { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R16G16B16A16_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"grad4d.phm",
+            { 0xcb,0x3d,0x64,0xd9,0xcf,0xf8,0x79,0x3e,0x70,0x6a,0x2a,0xce,0x24,0x3f,0xb8,0xd5 } },
+        { { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R32_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"grad4d_mono.pfm",
+            { 0x85,0xaa,0x58,0x4c,0x0a,0xd7,0x6f,0x96,0x46,0xf1,0xc0,0xff,0x9c,0x0e,0x69,0x2a } },
+        { { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R16_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"grad4d_mono.phm",
+            { 0x43,0xa6,0x79,0xce,0x64,0x70,0x3e,0x51,0x5a,0x1d,0xf8,0x90,0x69,0x91,0x12,0x02 } },
     #endif
     };
 
@@ -145,6 +152,7 @@ bool Test01()
         case DXGI_FORMAT_R32G32B32_FLOAT:
         case DXGI_FORMAT_R16G16B16A16_FLOAT:
         case DXGI_FORMAT_R32_FLOAT:
+        case DXGI_FORMAT_R16_FLOAT:
             hr = LoadFromPortablePixMapHDR(szPath, &metadata, image);
             break;
 
@@ -487,7 +495,7 @@ bool Test03()
                 _wsplitpath_s(findData.cFileName, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT);
 
                 isppm = (_wcsicmp(ext, L".ppm") == 0);
-                ispfm = (_wcsicmp(ext, L".pfm") == 0);
+                ispfm = (_wcsicmp(ext, L".pfm") == 0) || (_wcsicmp(ext, L".phm") == 0);
             }
 
             OutputDebugString(findData.cFileName);
