@@ -214,6 +214,16 @@ namespace
         { FLAGS_DITHER, XBOX_DXGI_FORMAT_R4G4_UNORM },
     #endif // _M_X64
         { FLAGS_DITHER, WIN11_DXGI_FORMAT_A4B4G4R4_UNORM },
+
+        // TODO: Missing dithering coverage for:
+        //  DXGI_FORMAT_R16G16B16A16_UNORM/UINT/SNORM/SINT
+        //  DXGI_FORMAT_R10G10B10A2_UNORM/UINT
+        //  DXGI_FORMAT_R8_UNORM/UINT/SNORM/SINT
+        //  DXGI_FORMAT_R16_UNORM/UINT/SNORM/SINT
+        //  DXGI_FORMAT_R8G8_UNORM/UINT/SNORM/SINT
+        //  DXGI_FORMAT_R16G16_UNORM/UINT/SNORM/SINT
+        //  DXGI_FORMAT_R8G8B8A8_UNORM/UINT/SNORM/SINT
+        //  DXGI_FORMAT_B8G8R8A8_UNORM
     };
 
     //-------------------------------------------------------------------------------------
@@ -1069,11 +1079,13 @@ bool TEXTest::Test05B()
         }
         else
         {
+            bool pass = true;
+
             ScratchImage image;
             hr = CopyViaLoadStoreScanline( *srcimage.GetImage(0,0,0), image );
             if ( FAILED(hr) )
             {
-                success = false;
+                success = pass = false;
                 printe( "Failed internal scanline load/store (HRESULT %08X) %ls:\n%ls\n",
                         static_cast<unsigned int>(hr), GetName( srcimage.GetMetadata().format ), szPath );
             }
@@ -1094,18 +1106,21 @@ bool TEXTest::Test05B()
                 hr = ComputeMSE( *srcimage.GetImage(0,0,0), *image.GetImage(0,0,0), mse, mseV );
                 if ( FAILED(hr) )
                 {
-                    success = false;
+                    success = pass = false;
                     printe( "Failed comparing internal convert images (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
                 }
                 else if ( IsErrorTooLarge( mse, targMSE ) )
                 {
-                    success = false;
+                    success = pass = false;
                     printe( "Failed comparing internal convert images MSE = %f (%f %f %f %f)... %f:\n%ls\n",
                             mse, mseV[0], mseV[1], mseV[2], mseV[3], targMSE, szPath );
                 }
-
-                ++npass;
             }
+
+            // TODO: CopyScanline
+
+            if (pass)
+                ++npass;
 
             ++ncount;
         }
@@ -2791,6 +2806,12 @@ bool TEXTest::Test05D()
 
     return success;
 }
+
+
+//-------------------------------------------------------------------------------------
+// Convert (internalE)
+// TODO: ConvertToR32G32B32A32, ConvertFromR32G32B32A32 (x3)
+// ConvertToR16G16B16A16, ConvertFromR16G16B16A16
 
 
 //-------------------------------------------------------------------------------------

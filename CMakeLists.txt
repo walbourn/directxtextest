@@ -149,6 +149,7 @@ list(APPEND TEST_EXES xttex)
 add_executable(xttex
     tex/convert.cpp
     tex/fliprotate.cpp
+    tex/image.cpp
     tex/misc.cpp
     tex/normalmaps.cpp
     tex/planar.cpp

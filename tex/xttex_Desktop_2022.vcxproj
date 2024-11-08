@@ -176,6 +176,7 @@
     <ClCompile Include="convert.cpp" />
     <ClCompile Include="directxtest.cpp" />
     <ClCompile Include="fliprotate.cpp" />
+    <ClCompile Include="image.cpp" />
     <ClCompile Include="misc.cpp" />
     <ClCompile Include="normalmaps.cpp" />
     <ClCompile Include="planar.cpp" />

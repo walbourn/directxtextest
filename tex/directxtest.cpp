@@ -28,6 +28,8 @@ TestInfo g_Tests[] =
     { "Is*/BP*/FDT", TEXTest::Test01 },
     { "ComputePitch/Scanlines", TEXTest::Test02 },
     { "Make*", TEXTest::Test12 },
+    { "TexMetadata", TEXTest::Test18 },
+    { "ScratchImage", TEXTest::Test19 },
 #ifndef BUILD_BVT_ONLY
     { "ComputeMSE", TEXTest::Test10 },
 #endif

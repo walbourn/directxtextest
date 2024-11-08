@@ -10,6 +10,7 @@
     <ClCompile Include="premulalpha.cpp" />
     <ClCompile Include="testutils.cpp" />
     <ClCompile Include="utils.cpp" />
+    <ClCompile Include="image.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\directxtest.h" />

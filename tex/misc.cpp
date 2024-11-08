@@ -123,7 +123,13 @@ bool TEXTest::Test00()
                 success = false;
             }
         }
+
+        // TODO: ScopedHandle
+        // TODO: ScopedFindHandle
     }
+
+    // TODO: Internal::DetermineImageArray invalid args
+    // TODO: Internal::SetupImageArray invalid args
 
     return success;
 }
@@ -601,160 +607,6 @@ bool TEXTest::Test10()
 
 
 //-------------------------------------------------------------------------------------
-// IsAlphaAllOpaque
-bool TEXTest::Test14()
-{
-    bool success = true;
-
-    {
-        ScratchImage image;
-        HRESULT hr = image.Initialize1D(DXGI_FORMAT_R8G8B8A8_UNORM, 1, 1, 1);
-        if (FAILED(hr))
-        {
-            success = false;
-            printe("Failed creating test image (HRESULT %08X)\n", static_cast<unsigned int>(hr));
-        }
-        else
-        {
-            auto img = image.GetImage(0, 0, 0);
-
-            for (unsigned j = 0; j < 256; ++j)
-            {
-                DWORD pixel = j | (j << 8) | (j << 16) | (j << 24);
-                *reinterpret_cast<uint32_t*>(img->pixels) = pixel;
-
-                bool isao = image.IsAlphaAllOpaque();
-                if (isao != (j >= 255))
-                {
-                    success = false;
-                    printe("Failed IsAlphaAllOpaque (%u): %s ... %s\n", j, (isao) ? "true" : "false", (j >= 255) ? "true" : "false");
-                }
-            }
-        }
-    }
-
-    struct TestMedia
-    {
-        TexMetadata metadata;
-        const wchar_t *fname;
-        bool isAlphaAllOpaque;
-    };
-
-    static const TestMedia s_TestMedia[] =
-    {
-        // width height depth arraySize mipLevels miscFlags miscFlags2 format dimension | filename | bool
-        { { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"reftexture.dds", true },
-        { { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test8888.dds", true },
-        { { 32, 32, 4, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888.dds", true },
-        { { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testdxt1.dds", true },
-
-    #ifndef BUILD_BVT_ONLY
-        { { 200, 150, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_B5G5R5A1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test555.dds", true },
-        { { 32, 32, 1, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test8888mip.dds", true },
-        { { 32, 32, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcube8888.dds", true },
-        { { 32, 32, 1, 6, 6, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcube8888mip.dds", true },
-        { { 32, 32, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_BC3_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcubedxt5.dds", true },
-        { { 32, 32, 1, 6, 6, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_BC3_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcubedxt5mip.dds", true },
-        { { 32, 32, 1, 1, 6, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testdxt1mip.dds", true },
-        { { 32, 32, 4, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888mip.dds", true },
-        { { 32, 32, 4, 1, 6, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvoldxt1mip.dds", true },
-        { { 512, 256, 1, 1, 10, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth_A2B10G10R10.dds", true },
-        { { 512, 256, 1, 1, 10, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth_A2R10G10B10.dds", true },
-        { { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_BC7_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"bc7_unorm.dds", true },
-        { { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_BC7_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"bc7_unorm_srgb.dds", true },
-        { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B5G5R5A1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_A1R5G5B5.dds", true },
-        { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_BC2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_DXT3.dds", true },
-        { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B5G6R5_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_R5G6B5.dds", true },
-        { { 256, 256, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_X8B8G8R8.dds", true },
-        { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_A8R3G3B2.dds", true },
-        { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R16G16B16A16_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_rgba16.dds", true },
-        { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R16G16B16A16_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_rgba16f.dds", true },
-        { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R32G32B32A32_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_rgba32f.dds", true },
-        { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"alphaedge.dds", false },
-        { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B4G4R4A4_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_A4L4.dds", true },
-        { { 256, 256, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_B4G4R4A4_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_X4R4G4B4.dds", true },
-        { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B4G4R4A4_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_A4R4G4B4.dds", true },
-        { { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"dx5_logo.dds", true },
-        { { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"win95.dds", true },
-        { { 256, 256, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lobbycube.dds", true },
-        { { 8192, 4096, 1, 1, 14, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"world8192.dds", true },
-        { { 304, 268, 1, 1, 9, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"tree02S.dds", false },
-        { { 304, 268, 1, 1, 9, 0, TEX_ALPHA_MODE_PREMULTIPLIED, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"tree02S_pmalpha.dds", false },
-        { { 1024, 512, 1, 1, 11, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthdiffuse.dds", false },
-        { { 800, 800, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"SplashScreen2.dds", false },
-        { { 200, 200, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lena.dds", true },
-        { { 256, 256, 1, 1, 1, 0, 0, WIN11_DXGI_FORMAT_A4B4G4R4_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_191.dds", true },
-    #endif
-    };
-
-    size_t ncount = 0;
-    size_t npass = 0;
-
-    for( size_t index=0; index < std::size(s_TestMedia); ++index )
-    {
-        wchar_t szPath[MAX_PATH] = {};
-        DWORD ret = ExpandEnvironmentStringsW(s_TestMedia[index].fname, szPath, MAX_PATH);
-        if ( !ret || ret > MAX_PATH )
-        {
-            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
-            return false;
-        }
-
-#if defined(_DEBUG) && defined(VERBOSE)
-        OutputDebugString(szPath);
-        OutputDebugStringA("\n");
-#endif
-
-        TexMetadata metadata;
-        ScratchImage image;
-        HRESULT hr = LoadFromDDSFile( szPath, DDS_FLAGS_NONE, &metadata, image );
-
-        const TexMetadata* check = &s_TestMedia[index].metadata;
-        if ( FAILED(hr) )
-        {
-            success = false;
-            printe( "Failed getting data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
-        }
-        else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
-        {
-            success = false;
-            printe( "Metadata error in:\n%ls\n", szPath );
-            printmeta( &metadata );
-            printmetachk( check );
-        }
-        else
-        {
-            bool isao = image.IsAlphaAllOpaque();
-            if ( isao != s_TestMedia[index].isAlphaAllOpaque )
-            {
-                success = false;
-                printe( "Failed IsAlphaAllOpaque: %s ... %s\n%ls\n", (isao) ? "true" : "false", (s_TestMedia[index].isAlphaAllOpaque) ? "true" : "false", szPath );
-            }
-            else
-                ++npass;
-        }
-
-        ++ncount;
-    }
-
-    print("%zu images tested, %zu images passed ", ncount, npass );
-
-    // invalid args test
-    {
-        ScratchImage emptyImage;
-        bool res = emptyImage.IsAlphaAllOpaque();
-        if (res)
-        {
-            success = false;
-            printe("Failed empty image test\n");
-        }
-    }
-
-    return success;
-}
-
-
-//-------------------------------------------------------------------------------------
 // EvaluateImage
 bool TEXTest::Test16()
 {
@@ -1036,6 +888,7 @@ namespace
         }
     }
 }
+
 bool TEXTest::Test17()
 {
     struct TestMedia
