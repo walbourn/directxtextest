@@ -8,6 +8,7 @@
 
 namespace TEXTest
 {
+    bool Test00();
     bool Test01();
     bool Test02();
     bool Test04();
