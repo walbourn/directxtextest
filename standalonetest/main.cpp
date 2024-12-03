@@ -17,7 +17,7 @@ extern void test11();
 
 extern void test12();
 
-int main()
+int __cdecl wmain()
 {
 #if defined(_WIN32) && (!defined(WINAPI_FAMILY) || (WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP))
     test9();
