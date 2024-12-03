@@ -84,14 +84,14 @@ bool TEXTest::Test00()
             wchar_t tempPath[MAX_PATH] = {};
             if (!GetTempPathW(MAX_PATH, tempPath))
             {
-                printe( "ERROR: GetTempPath FAILED (%08X)\n", HRESULT_FROM_WIN32(GetLastError()));
+                printe( "ERROR: GetTempPath FAILED (%08X)\n", static_cast<unsigned int>(HRESULT_FROM_WIN32(GetLastError())));
                 return false;
             }
 
             wchar_t tempFile[MAX_PATH] = {};
             if (!GetTempFileNameW(tempPath, L"dxtex", 0, tempFile))
             {
-                printe( "ERROR: GetTempFileNameW FAILED (%08X)\n", HRESULT_FROM_WIN32(GetLastError()));
+                printe( "ERROR: GetTempFileNameW FAILED (%08X)\n", static_cast<unsigned int>(HRESULT_FROM_WIN32(GetLastError())));
                 return false;
             }
 
@@ -102,7 +102,7 @@ bool TEXTest::Test00()
             #endif
             if (!hFile)
             {
-                printe( "ERROR: CrateFile FAILED (%08X)\n%S\n", HRESULT_FROM_WIN32(GetLastError()), tempFile);
+                printe( "ERROR: CrateFile FAILED (%08X)\n%S\n", static_cast<unsigned int>(HRESULT_FROM_WIN32(GetLastError())), tempFile);
                 return false;
             }
 
@@ -113,7 +113,7 @@ bool TEXTest::Test00()
 
             if (!CloseHandle(hFile))
             {
-                printe( "ERROR: CloseHandle FAILED (%08X)\n", HRESULT_FROM_WIN32(GetLastError()));
+                printe( "ERROR: CloseHandle FAILED (%08X)\n", static_cast<unsigned int>(HRESULT_FROM_WIN32(GetLastError())));
                 return false;
             }
 
