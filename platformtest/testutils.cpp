@@ -23,7 +23,10 @@ HRESULT LoadBlobFromFile( _In_z_ const wchar_t* szFile, Blob& blob )
     if ( szFile == nullptr )
         return E_INVALIDARG;
 
-    ScopedHandle hFile( safe_handle( CreateFile2( szFile, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, nullptr ) ) );
+    ScopedHandle hFile(safe_handle(CreateFile2(
+        szFile,
+        GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING,
+        nullptr)));
     if ( !hFile )
     {
         return HRESULT_FROM_WIN32( GetLastError() );
@@ -78,7 +81,10 @@ size_t DetermineFileSize( _In_z_ const wchar_t* szFile )
     if ( szFile == nullptr )
         return 0;
 
-    ScopedHandle hFile(safe_handle(CreateFile2(szFile, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, nullptr)));
+    ScopedHandle hFile(safe_handle(CreateFile2(
+        szFile,
+        GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING,
+        nullptr)));
     if ( !hFile )
     {
         return 0;
@@ -281,7 +287,10 @@ HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DirectX::DDS_FLAGS 
         return hr;
 
     // Create file and write header
-    ScopedHandle hFile( safe_handle( CreateFile2( szFile, GENERIC_WRITE, 0, CREATE_ALWAYS, nullptr ) ) );
+    ScopedHandle hFile(safe_handle(CreateFile2(
+        szFile,
+        GENERIC_WRITE, 0, CREATE_ALWAYS,
+        nullptr)));
     if ( !hFile )
     {
         return HRESULT_FROM_WIN32( GetLastError() );

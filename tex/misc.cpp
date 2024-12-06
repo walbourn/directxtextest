@@ -95,11 +95,10 @@ bool TEXTest::Test00()
                 return false;
             }
 
-            #if (_WIN32_WINNT >= _WIN32_WINNT_WIN8)
-                HANDLE hFile = CreateFile2(tempFile, GENERIC_WRITE | DELETE, 0, CREATE_ALWAYS, nullptr);
-            #else
-                HANDLE hFile = CreateFileW(tempFile, GENERIC_WRITE | DELETE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
-            #endif
+            HANDLE hFile = CreateFile2(
+                tempFile,
+                GENERIC_WRITE | DELETE, 0, CREATE_ALWAYS,
+                nullptr);
             if (!hFile)
             {
                 printe( "ERROR: CrateFile FAILED (%08X)\n%S\n", static_cast<unsigned int>(HRESULT_FROM_WIN32(GetLastError())), tempFile);
