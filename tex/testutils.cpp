@@ -157,6 +157,8 @@ HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DirectX::DDS_FLAGS 
 
 
 //-------------------------------------------------------------------------------------
+#ifndef DIRECTX_TEX_IMPORT
+
 HRESULT CopyViaLoadStoreScanline( const Image& srcImage, ScratchImage& image )
 {
     using namespace DirectX::Internal;
@@ -217,6 +219,8 @@ HRESULT CopyViaLoadStoreScanline( const Image& srcImage, ScratchImage& image )
 
     return S_OK;
 }
+
+#endif // !DIRECTX_TEX_IMPORT
 
 
 //-------------------------------------------------------------------------------------

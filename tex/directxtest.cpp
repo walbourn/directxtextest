@@ -37,10 +37,12 @@ TestInfo g_Tests[] =
     { "TransformImage", TEXTest::Test17 },
     { "IsAlphaAllOpaque", TEXTest::Test14 },
     { "FlipRotate", TEXTest::Test04 },
+#ifndef DIRECTX_TEX_IMPORT
     { "Convert (internalA)", TEXTest::Test05 },
     { "Convert (internalB)", TEXTest::Test05B },
     { "Convert (internalC)", TEXTest::Test05C },
     { "Convert (internalD)", TEXTest::Test05D },
+#endif
     { "Convert", TEXTest::Test06 },
 #ifndef BUILD_BVT_ONLY
     { "ConvertToSinglePlane", TEXTest::Test15 },

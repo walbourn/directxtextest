@@ -157,69 +157,6 @@ HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DirectX::DDS_FLAGS 
 
 
 //-------------------------------------------------------------------------------------
-HRESULT CopyViaLoadStoreScanline( const Image& srcImage, ScratchImage& image )
-{
-    using namespace DirectX::Internal;
-
-    if ( srcImage.pixels == nullptr )
-        return E_INVALIDARG;
-
-    ScratchImage temp;
-    HRESULT hr = temp.Initialize2D( DXGI_FORMAT_R32G32B32A32_FLOAT, srcImage.width, 1, 1, 1 );
-    if ( FAILED(hr) )
-        return hr;
-
-    const Image *timg = temp.GetImage( 0, 0, 0 );
-    if ( timg == nullptr )
-        return E_POINTER;
-
-    // Only need 1 scanline of temp memory (hence why temp has a height of 1 above)
-    XMVECTOR* tscanline = const_cast<XMVECTOR*>( reinterpret_cast<const XMVECTOR*>( timg->pixels ) );
-    if ( tscanline == nullptr )
-        return E_POINTER;
-
-    hr = image.Initialize2D( srcImage.format, srcImage.width, srcImage.height, 1, 1 );
-    if ( FAILED(hr) )
-        return hr;
-
-    const Image *img = image.GetImage( 0, 0, 0 );
-    if ( img == nullptr )
-    {
-        image.Release();
-        return E_POINTER;
-    }
-
-    BYTE *pDest = img->pixels;
-    if ( !pDest )
-    {
-        image.Release();
-        return E_POINTER;
-    }
-
-    const BYTE *pSrc = srcImage.pixels;
-    for( UINT h = 0; h < srcImage.height; ++h )
-    {
-        if ( !LoadScanline( tscanline, srcImage.width, pSrc, srcImage.rowPitch, srcImage.format ) )
-        {
-            image.Release();
-            return E_FAIL;
-        }
-
-        if ( !StoreScanline( pDest, img->rowPitch, srcImage.format, tscanline, srcImage.width ) )
-        {
-            image.Release();
-            return E_FAIL;
-        }
-
-        pSrc += srcImage.rowPitch;
-        pDest += img->rowPitch;
-    }
-
-    return S_OK;
-}
-
-
-//-------------------------------------------------------------------------------------
 // See https://www.gamasutra.com/view/news/169203/Exceptional_floating_point.php
 int __cdecl DescribeException(PEXCEPTION_POINTERS pData)
 

@@ -785,7 +785,8 @@ namespace
 //-------------------------------------------------------------------------------------
 
 extern HRESULT SaveScratchImage(_In_z_ const wchar_t* szFile, _In_ DirectX::DDS_FLAGS flags, _In_ const ScratchImage& image);
-extern HRESULT CopyViaLoadStoreScanline(const Image& srcImage, ScratchImage& image);
+
+#ifndef DIRECTX_TEX_IMPORT
 
 //-------------------------------------------------------------------------------------
 // Convert (internalA)
@@ -1017,6 +1018,8 @@ static const TestPixels s_TestPartialTypeless[] =
 
 //-------------------------------------------------------------------------------------
 // Convert (internalB)
+extern HRESULT CopyViaLoadStoreScanline(const Image& srcImage, ScratchImage& image);
+
 bool TEXTest::Test05B()
 {
     using namespace DirectX::Internal;
@@ -1299,7 +1302,6 @@ bool TEXTest::Test05C()
 
     return success;
 }
-
 
 
 //-------------------------------------------------------------------------------------
@@ -2813,6 +2815,8 @@ bool TEXTest::Test05D()
 // TODO: ConvertToR32G32B32A32, ConvertFromR32G32B32A32 (x3)
 // ConvertToR16G16B16A16, ConvertFromR16G16B16A16
 
+#endif // !DIRECTX_TEX_IMPORT
+
 
 //-------------------------------------------------------------------------------------
 // Convert(Ex)
@@ -3204,6 +3208,7 @@ bool TEXTest::Test06()
 
 // TODO - TEX_FILTER_MIRROR / TEX_FILTER_WRAP (requires TEX_FILTER_LINEAR or TEX_FILTER_CUBIC)
 
+#ifndef DIRECTX_TEX_IMPORT
                 //--- WIC vs. non-WIC convert -----------------------------------------
                 WICPixelFormatGUID pfGUID, targetGUID;
                 if ( Internal::DXGIToWIC( metadata.format, pfGUID )
@@ -3459,6 +3464,7 @@ bool TEXTest::Test06()
 #endif
                     }
                 }
+#endif // !DIRECTX_TEX_IMPORT
 
                 //--- SRGB convert ----------------------------------------------------
                 if (IsSRGB(tformat) || IsSRGB(metadata.format))
