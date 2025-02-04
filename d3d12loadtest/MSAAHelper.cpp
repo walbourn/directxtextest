@@ -318,8 +318,8 @@ void MSAAHelper::Transition(_In_ ID3D12GraphicsCommandList* commandList, D3D12_R
 void MSAAHelper::SetWindow(const RECT& output)
 {
     // Determine the render target size in pixels.
-    auto const width = size_t(std::max<LONG>(output.right - output.left, 1));
-    auto const height = size_t(std::max<LONG>(output.bottom - output.top, 1));
+    const auto width = size_t(std::max<LONG>(output.right - output.left, 1));
+    const auto height = size_t(std::max<LONG>(output.bottom - output.top, 1));
 
     SizeResources(width, height);
 }
