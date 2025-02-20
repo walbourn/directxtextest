@@ -35,8 +35,9 @@ namespace
         FLAGS_UT_2004 = 0x10000,
         FLAGS_OFF_BY_ONE_MIPS = 0x20000,
         FLAGS_STALKER_24 = 0x40000,
-        FLAGS_IGNORE_MIPS = 0x80000,
-        FLAGS_SKIP_1010102_FIXUP = 0x100000,
+        FLAGS_DARK_SOULS_3 = 0x80000,
+        FLAGS_IGNORE_MIPS = 0x100000,
+        FLAGS_SKIP_1010102_FIXUP = 0x200000,
     };
 
     struct TestMedia
@@ -58,7 +59,7 @@ namespace
         {
             flags |= DDS_FLAGS_BAD_DXTN_TAILS;
         }
-        if (options & (FLAGS_UT_2004 | FLAGS_OFF_BY_ONE_MIPS | FLAGS_STALKER_24))
+        if (options & (FLAGS_UT_2004 | FLAGS_OFF_BY_ONE_MIPS | FLAGS_STALKER_24 | FLAGS_DARK_SOULS_3))
         {
             flags |= DDS_FLAGS_PERMISSIVE;
         }
@@ -798,6 +799,9 @@ namespace
         // STALKER DDS variant (DDS_HEADER size is set to 24 instead of 124)
         { FLAGS_STALKER_24, { 256, 512, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"DDSHeaderSize24.dds",{ 0x58,0xf4,0x8a,0xdf,0xf0,0xce,0xeb,0x5f,0x08,0x4d,0xea,0xae,0xef,0xf0,0xb6,0x72 } },
 
+        // DARK SOULS 3 DDS variant (does not set DDS_HEADER_DXT10.arraySize to numCubes for cubemap/cubemapArrays)
+        { FLAGS_DARK_SOULS_3, { 128, 128, 1, 6, 7, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_BC6H_UF16, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH "GILM0010.dds", { 0x35,0x92,0x82,0x95,0x38,0xe4,0x71,0xa1,0x6d,0xac,0x80,0xa8,0x20,0x8c,0xbc,0xcd } },
+
         // Test for ignoring mip tails due to missing data
         { FLAGS_IGNORE_MIPS, { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"reftexture.dds", { 0x29,0x26,0xa3,0x35,0x71,0x2f,0x3c,0x08,0x02,0xcf,0xde,0x38,0x22,0x73,0xd2,0xeb } },
         { FLAGS_IGNORE_MIPS, { 512, 512, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"_decal_202.dds",{ 0x30,0x79,0xa0,0x55,0x05,0xdf,0x21,0x44,0x3d,0x88,0x6b,0x51,0xa4,0xc5,0xd2,0xfe } },
@@ -915,6 +919,31 @@ namespace
     #endif
     };
 
+    bool IsCorrectMetadata(const TexMetadata& metadata, const TexMetadata& check, DWORD options) noexcept
+    {
+        if (memcmp(&metadata, &check, sizeof(TexMetadata)) == 0)
+            return true;
+
+        // This variant writes the arraySize incorrectly, but we don't know that until we try to read the full image.
+        if (options & FLAGS_DARK_SOULS_3)
+        {
+            if (check.width == metadata.width
+                && check.height == metadata.height
+                && check.depth == metadata.depth
+                && (check.arraySize * 6) == metadata.arraySize
+                && check.mipLevels == metadata.mipLevels
+                && check.miscFlags == metadata.miscFlags
+                && check.miscFlags2 == metadata.miscFlags2
+                && check.format == metadata.format
+                && check.dimension == metadata.dimension)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     bool IsCorrectDDPF(const TexMetadata& metadata, const DDSMetaData& ddsPixelFormat) noexcept
     {
         if (!ddsPixelFormat.IsDX10())
@@ -1020,7 +1049,7 @@ bool Test01()
                 success = false;
                 printe("Failed getting data from memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
             }
-            else if (memcmp(&metadata, check, sizeof(TexMetadata)) != 0)
+            else if (!IsCorrectMetadata(metadata, *check, g_TestMedia[index].options))
             {
                 success = false;
                 printe("Metadata error in:\n%ls\n", szPath);
@@ -1043,12 +1072,12 @@ bool Test01()
             success = false;
             printe( "Failed getting data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
         }
-        else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
+        else if (!IsCorrectMetadata(metadata, *check, g_TestMedia[index].options))
         {
             success = false;
-            printe( "Metadata error in:\n%ls\n", szPath );
-            printmeta( &metadata );
-            printmetachk( check );
+            printe("Metadata error in:\n%ls\n", szPath);
+            printmeta(&metadata);
+            printmetachk(check);
         }
         else
         {
@@ -1191,7 +1220,7 @@ bool Test07()
                 success = false;
                 printe("Failed getting data from memory null (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
             }
-            else if (memcmp(&metadata, check, sizeof(TexMetadata)) != 0)
+            else if (!IsCorrectMetadata(metadata, *check, g_TestMedia[index].options))
             {
                 success = false;
                 printe("Metadata error in:\n%ls\n", szPath);
@@ -1208,7 +1237,7 @@ bool Test07()
                 success = false;
                 printe("Failed getting data from memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
             }
-            else if (memcmp(&metadata, check, sizeof(TexMetadata)) != 0)
+            else if (!IsCorrectMetadata(metadata, *check, g_TestMedia[index].options))
             {
                 success = false;
                 printe("Metadata error in:\n%ls\n", szPath);
@@ -1239,7 +1268,7 @@ bool Test07()
             success = false;
             printe("Failed getting data from file null (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
         }
-        else if (memcmp(&metadata, check, sizeof(TexMetadata)) != 0)
+        else if (!IsCorrectMetadata(metadata, *check, g_TestMedia[index].options))
         {
             success = false;
             printe("Metadata error in:\n%ls\n", szPath);
@@ -1256,7 +1285,7 @@ bool Test07()
             success = false;
             printe("Failed getting data from file (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
         }
-        else if (memcmp(&metadata, check, sizeof(TexMetadata)) != 0)
+        else if (!IsCorrectMetadata(metadata, *check, g_TestMedia[index].options))
         {
             success = false;
             printe("Metadata error in:\n%ls\n", szPath);
