@@ -49,6 +49,8 @@ TestInfo g_Tests[] =
     { "ConvertToSinglePlane", TEXTest::Test15 },
     { "ComputeNormalMap", TEXTest::Test11 },
     { "PremultiplyAlpha", TEXTest::Test13 },
+    { "StandardSwizzle", TEXTest::Test20 },
+#endif
 };
 
 extern int __cdecl DescribeException(PEXCEPTION_POINTERS pData);
