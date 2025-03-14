@@ -181,6 +181,7 @@
     <ClCompile Include="normalmaps.cpp" />
     <ClCompile Include="planar.cpp" />
     <ClCompile Include="premulalpha.cpp" />
+    <ClCompile Include="swizzle.cpp" />
     <ClCompile Include="testutils.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>

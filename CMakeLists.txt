@@ -138,7 +138,7 @@ list(APPEND TEST_EXES xtwic)
 add_executable(xtwic wic/wic.cpp wic/directxtest.cpp wic/testutils.cpp)
 target_include_directories(xtwic PRIVATE ./inc)
 add_test(NAME "wic" COMMAND xtwic)
-set_tests_properties(wic PROPERTIES LABELS "ImageFormats")
+set_tests_properties(wic PROPERTIES LABELS "ImageFormats;WIC")
 set_tests_properties(wic PROPERTIES TIMEOUT 600)
 if(BUILD_BVT)
   set_tests_properties(wic PROPERTIES ENVIRONMENT "DIRECTXTEX_MEDIA_PATH=${BVT_MEDIA_PATH}")
@@ -154,12 +154,13 @@ add_executable(xttex
     tex/normalmaps.cpp
     tex/planar.cpp
     tex/premulalpha.cpp
+    tex/swizzle.cpp
     tex/utils.cpp
     tex/tex.h tex/directxtest.cpp tex/testutils.cpp)
 target_include_directories(xttex PRIVATE ./inc)
 target_link_libraries(xttex PRIVATE d3d11.lib)
 add_test(NAME "tex" COMMAND xttex)
-set_tests_properties(tex PROPERTIES LABELS "Library")
+set_tests_properties(tex PROPERTIES LABELS "Library;Tex")
 set_tests_properties(tex PROPERTIES TIMEOUT 500)
 if(BUILD_BVT)
   set_tests_properties(tex PROPERTIES ENVIRONMENT "DIRECTXTEX_MEDIA_PATH=${BVT_MEDIA_PATH}")
@@ -174,7 +175,7 @@ add_executable(xtfilter
     filter/filter.h filter/directxtest.cpp filter/testutils.cpp)
 target_include_directories(xtfilter PRIVATE ./inc)
 add_test(NAME "filter" COMMAND xtfilter)
-set_tests_properties(filter PROPERTIES LABELS "Library")
+set_tests_properties(filter PROPERTIES LABELS "Library;Filter")
 set_tests_properties(filter PROPERTIES TIMEOUT 720)
 if(BUILD_BVT)
   set_tests_properties(filter PROPERTIES ENVIRONMENT "DIRECTXTEX_MEDIA_PATH=${BVT_MEDIA_PATH}")

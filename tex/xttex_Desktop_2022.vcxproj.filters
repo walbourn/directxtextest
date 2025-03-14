@@ -11,6 +11,7 @@
     <ClCompile Include="testutils.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="image.cpp" />
+    <ClCompile Include="swizzle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\directxtest.h" />

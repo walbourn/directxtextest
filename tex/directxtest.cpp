@@ -49,6 +49,7 @@ TestInfo g_Tests[] =
     { "CopyRectangle", TEXTest::Test09 },
     { "ComputeNormalMap", TEXTest::Test11 },
     { "PremultiplyAlpha", TEXTest::Test13 },
+    { "StandardSwizzle", TEXTest::Test20 },
 #endif
 };
 
