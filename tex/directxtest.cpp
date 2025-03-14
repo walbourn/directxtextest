@@ -24,6 +24,9 @@ struct TestInfo
 
 TestInfo g_Tests[] =
 {
+#if 1
+    { "StandardSwizzle", TEXTest::Test20 },
+#else
     { "Internal", TEXTest::Test00},
     { "Is*/BP*/FDT", TEXTest::Test01 },
     { "ComputePitch/Scanlines", TEXTest::Test02 },
@@ -51,6 +54,7 @@ TestInfo g_Tests[] =
     { "PremultiplyAlpha", TEXTest::Test13 },
     { "StandardSwizzle", TEXTest::Test20 },
 #endif
+#endif // #if 1
 };
 
 extern int __cdecl DescribeException(PEXCEPTION_POINTERS pData);
