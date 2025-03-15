@@ -1013,3 +1013,128 @@ bool Test07()
 
     return success;
 }
+
+
+//-------------------------------------------------------------------------------------
+// formattest
+#ifdef USING_DIRECTX_HEADERS
+bool Test08()
+{
+    bool success = true;
+
+    for (UINT f = DXGI_START; f <= DXGI_END; ++f)
+    {
+        if (!IsValid(static_cast<DXGI_FORMAT>(f)))
+            continue;
+
+        if (!D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::FormatExists(static_cast<DXGI_FORMAT>(f)))
+            continue;
+
+        if ((f == XBOX_DXGI_FORMAT_D16_UNORM_S8_UINT)
+            || (f == XBOX_DXGI_FORMAT_R16_UNORM_X8_TYPELESS)
+            || (f == XBOX_DXGI_FORMAT_X16_TYPELESS_G8_UINT)
+            || (f == XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM)
+            || (f == XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT)
+            || (f == XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT))
+            continue;
+
+        size_t bbp = BitsPerPixel(static_cast<DXGI_FORMAT>(f));
+        size_t d3dxbpu = D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetBitsPerUnit(static_cast<DXGI_FORMAT>(f));
+        switch(f)
+        {
+            case DXGI_FORMAT_R8G8_B8G8_UNORM:
+            case DXGI_FORMAT_G8R8_G8B8_UNORM:
+                d3dxbpu = 32;
+                break;
+
+            case DXGI_FORMAT_BC1_TYPELESS:
+            case DXGI_FORMAT_BC1_UNORM:
+            case DXGI_FORMAT_BC1_UNORM_SRGB:
+            case DXGI_FORMAT_BC4_TYPELESS:
+            case DXGI_FORMAT_BC4_UNORM:
+            case DXGI_FORMAT_BC4_SNORM:
+                d3dxbpu = 4;
+                break;
+
+            case DXGI_FORMAT_BC2_TYPELESS:
+            case DXGI_FORMAT_BC2_UNORM:
+            case DXGI_FORMAT_BC2_UNORM_SRGB:
+            case DXGI_FORMAT_BC3_TYPELESS:
+            case DXGI_FORMAT_BC3_UNORM:
+            case DXGI_FORMAT_BC3_UNORM_SRGB:
+            case DXGI_FORMAT_BC5_TYPELESS:
+            case DXGI_FORMAT_BC5_UNORM:
+            case DXGI_FORMAT_BC5_SNORM:
+            case DXGI_FORMAT_BC6H_TYPELESS:
+            case DXGI_FORMAT_BC6H_UF16:
+            case DXGI_FORMAT_BC6H_SF16:
+            case DXGI_FORMAT_BC7_TYPELESS:
+            case DXGI_FORMAT_BC7_UNORM:
+            case DXGI_FORMAT_BC7_UNORM_SRGB:
+                d3dxbpu = 8;
+                break;
+
+            case DXGI_FORMAT_NV12:
+            case DXGI_FORMAT_420_OPAQUE:
+            case DXGI_FORMAT_NV11:
+                d3dxbpu = 12;
+                break;
+
+            case WIN10_DXGI_FORMAT_P208:
+            case WIN10_DXGI_FORMAT_V208:
+                d3dxbpu = 16;
+                break;
+
+            case DXGI_FORMAT_P010:
+            case DXGI_FORMAT_P016:
+            case WIN10_DXGI_FORMAT_V408:
+                d3dxbpu = 24;
+                break;
+
+            case DXGI_FORMAT_YUY2:
+                d3dxbpu = 32;
+                break;
+
+            case DXGI_FORMAT_Y210:
+            case DXGI_FORMAT_Y216:
+                d3dxbpu = 64;
+                break;
+
+            default:
+                break;
+        }
+
+        if (bbp != d3dxbpu)
+        {
+            printe("ERROR: BitsPerPixel mismatch with D3DX12 on DXGI Format %u (%zu .. %zu)\n", f, bbp, d3dxbpu);
+            success = false;
+        }
+
+        if (IsCompressed(static_cast<DXGI_FORMAT>(f)) != D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::IsBlockCompressFormat(static_cast<DXGI_FORMAT>(f)))
+        {
+            printe("ERROR: IsCompressed mismatch with D3DX12 on DXGI Format %u\n", f);
+            success = false;
+        }
+
+        if (IsSRGB(static_cast<DXGI_FORMAT>(f)) != D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::IsSRGBFormat(static_cast<DXGI_FORMAT>(f)))
+        {
+            printe("ERROR: IsSRGB mismatch with D3DX12 on DXGI Format %u\n", f);
+            success = false;
+        }
+
+        if (IsPlanar(static_cast<DXGI_FORMAT>(f), true) != static_cast<bool>(D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::Planar(static_cast<DXGI_FORMAT>(f)) != 0))
+        {
+            printe("ERROR: IsPlanar mismatch with D3DX12 on DXGI Format %u\n", f);
+            success = false;
+        }
+
+        if (IsVideo(static_cast<DXGI_FORMAT>(f)) != static_cast<bool>(D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::YUV(static_cast<DXGI_FORMAT>(f)) != 0))
+        {
+            printe("ERROR: IsVideo mismatch with D3DX12 on DXGI Format %u\n", f);
+            success = false;
+        }
+    }
+
+    return success;
+}
+#endif // USING_DIRECTX_HEADERS
