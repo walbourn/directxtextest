@@ -1038,7 +1038,7 @@ bool Test08()
             || (f == XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT))
             continue;
 
-        size_t bbp = BitsPerPixel(static_cast<DXGI_FORMAT>(f));
+        const size_t bbp = BitsPerPixel(static_cast<DXGI_FORMAT>(f));
         size_t d3dxbpu = D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetBitsPerUnit(static_cast<DXGI_FORMAT>(f));
         switch(f)
         {
