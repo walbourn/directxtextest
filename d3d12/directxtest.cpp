@@ -28,11 +28,17 @@ extern bool Test04();
 extern bool Test05();
 extern bool Test06();
 extern bool Test07();
+#ifdef USING_DIRECTX_HEADERS
+extern bool Test08();
+#endif
 
 TestInfo g_Tests[] =
 {
     { "CalcuateSubresource", Test07 },
     { "planetest", Test01 },
+#ifdef USING_DIRECTX_HEADERS
+    { "formattest", Test08 },
+#endif
     { "IsSupportedTexture", Test02 },
     { "CreateTexture", Test03 },
     { "PrepareUpload", Test04 },
