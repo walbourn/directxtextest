@@ -1218,6 +1218,27 @@ bool Test08()
                 printe("ERROR: ComputeTileShape mismatch with D3DX12 on DXGI Format %u for 3D\n", f);
                 success = false;
             }
+            else
+            {
+                D3D12_TILE_SHAPE shape12;
+                shape.GetTileShape12(shape12);
+                if (shape.width != shape12.WidthInTexels
+                    || shape.height != shape12.HeightInTexels
+                    || shape.depth != shape12.DepthInTexels)
+                {
+                    printe("ERROR: Mismatch for D3D12_TILE_SHAPE operator on DXGI Format %u for 3D\n", f);
+                    success = false;
+                }
+
+                TileShape shape2 = shape12;
+                if (shape.width != shape2.width
+                    || shape.height != shape2.height
+                    || shape.depth != shape2.depth)
+                {
+                    printe("ERROR: Mismatch for D3D12_TILE_SHAPE ctor on DXGI Format %u for 3D\n", f);
+                    success = false;
+                }
+            }
         }
     }
 
