@@ -966,7 +966,7 @@ bool Test07()
         hr = device2->CreateTexture2D(&desc, nullptr, tiledTex.GetAddressOf());
         if (FAILED(hr))
         {
-            printe("ERROR: Failed to create tiled texture for DXGI format %u (%08X)\n", desc.Format, static_cast<unsigned int>(hr));
+            printe("ERROR: Failed to create tiled texture for DXGI format %d (%08X)\n", desc.Format, static_cast<unsigned int>(hr));
             success = false;
         }
         else
@@ -975,7 +975,7 @@ bool Test07()
             hr = ComputeTileShape(desc.Format, TEX_DIMENSION_TEXTURE2D, shape);
             if (FAILED(hr))
             {
-                printe("ERROR: Failed calling ComputeTileShape for DXGI format %u (%08X)\n", desc.Format, static_cast<unsigned int>(hr));
+                printe("ERROR: Failed calling ComputeTileShape for DXGI format %d (%08X)\n", desc.Format, static_cast<unsigned int>(hr));
                 success = false;
             }
             else
@@ -989,7 +989,7 @@ bool Test07()
                     || shape.height != d3dtile.HeightInTexels
                     || shape.depth != d3dtile.DepthInTexels)
                 {
-                    printe("ERROR: ComputeTileShape mismatch with D3D11 on DXGI Format %u\n", desc.Format);
+                    printe("ERROR: ComputeTileShape mismatch with D3D11 on DXGI Format %d\n", desc.Format);
                     success = false;
                 }
                 else
@@ -1000,7 +1000,7 @@ bool Test07()
                         || shape.height != shape11.HeightInTexels
                         || shape.depth != shape11.DepthInTexels)
                     {
-                        printe("ERROR: Mismatch for D3D11_TILE_SHAPE operator on DXGI Format %u\n", desc.Format);
+                        printe("ERROR: Mismatch for D3D11_TILE_SHAPE operator on DXGI Format %d\n", desc.Format);
                         success = false;
                     }
 
@@ -1009,7 +1009,7 @@ bool Test07()
                         || shape.height != shape2.height
                         || shape.depth != shape2.depth)
                     {
-                        printe("ERROR: Mismatch for D3D11_TILE_SHAPE ctor on DXGI Format %u\n", desc.Format);
+                        printe("ERROR: Mismatch for D3D11_TILE_SHAPE ctor on DXGI Format %d\n", desc.Format);
                         success = false;
                     }
                 }
