@@ -1038,12 +1038,14 @@ bool Test08()
             || (f == XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT))
             continue;
 
-        const size_t bbp = BitsPerPixel(static_cast<DXGI_FORMAT>(f));
+        const size_t bpp = BitsPerPixel(static_cast<DXGI_FORMAT>(f));
         size_t d3dxbpu = D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetBitsPerUnit(static_cast<DXGI_FORMAT>(f));
+        bool supports_tiling = true;
         switch(f)
         {
             case DXGI_FORMAT_R8G8_B8G8_UNORM:
             case DXGI_FORMAT_G8R8_G8B8_UNORM:
+                supports_tiling = false;
                 d3dxbpu = 32;
                 break;
 
@@ -1078,39 +1080,60 @@ bool Test08()
             case DXGI_FORMAT_420_OPAQUE:
             case DXGI_FORMAT_NV11:
                 d3dxbpu = 12;
+                supports_tiling = false;
                 break;
 
             case WIN10_DXGI_FORMAT_P208:
             case WIN10_DXGI_FORMAT_V208:
                 d3dxbpu = 16;
+                supports_tiling = false;
                 break;
 
             case DXGI_FORMAT_P010:
             case DXGI_FORMAT_P016:
             case WIN10_DXGI_FORMAT_V408:
                 d3dxbpu = 24;
+                supports_tiling = false;
                 break;
 
             case DXGI_FORMAT_YUY2:
                 d3dxbpu = 32;
+                supports_tiling = false;
                 break;
 
             case DXGI_FORMAT_Y210:
             case DXGI_FORMAT_Y216:
                 d3dxbpu = 64;
+                supports_tiling = false;
+                break;
+
+            case DXGI_FORMAT_R32G32B32_TYPELESS:
+            case DXGI_FORMAT_R32G32B32_FLOAT:
+            case DXGI_FORMAT_R32G32B32_UINT:
+            case DXGI_FORMAT_R32G32B32_SINT:
+            case DXGI_FORMAT_R1_UNORM:
+            case DXGI_FORMAT_AYUV:
+            case DXGI_FORMAT_Y410:
+            case DXGI_FORMAT_Y416:
+            case DXGI_FORMAT_AI44:
+            case DXGI_FORMAT_IA44:
+            case DXGI_FORMAT_P8:
+            case DXGI_FORMAT_A8P8:
+                supports_tiling = false;
                 break;
 
             default:
                 break;
         }
 
-        if (bbp != d3dxbpu)
+        if (bpp != d3dxbpu)
         {
-            printe("ERROR: BitsPerPixel mismatch with D3DX12 on DXGI Format %u (%zu .. %zu)\n", f, bbp, d3dxbpu);
+            printe("ERROR: BitsPerPixel mismatch with D3DX12 on DXGI Format %u (%zu .. %zu)\n", f, bpp, d3dxbpu);
             success = false;
         }
 
-        if (IsCompressed(static_cast<DXGI_FORMAT>(f)) != D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::IsBlockCompressFormat(static_cast<DXGI_FORMAT>(f)))
+        const bool iscompressed = IsCompressed(static_cast<DXGI_FORMAT>(f));
+        if (iscompressed != D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::IsBlockCompressFormat(static_cast<DXGI_FORMAT>(f)))
         {
             printe("ERROR: IsCompressed mismatch with D3DX12 on DXGI Format %u\n", f);
             success = false;
@@ -1132,6 +1155,69 @@ bool Test08()
         {
             printe("ERROR: IsVideo mismatch with D3DX12 on DXGI Format %u\n", f);
             success = false;
+        }
+
+        if (supports_tiling && !iscompressed && bpp != 0)
+        {
+            TileShape shape = {};
+            HRESULT hr = ComputeTileShape(static_cast<DXGI_FORMAT>(f), TEX_DIMENSION_TEXTURE1D, shape);
+            if (FAILED(hr))
+            {
+                printe("ERROR: Failed calling ComputeTileShape on DXGI Format %u (%08X) for 1D\n", f, static_cast<unsigned int>(hr));
+                success = false;
+            }
+
+            D3D12_TILE_SHAPE d3dxtile = { 4, 5, 6 };
+            D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetTileShape(&d3dxtile, static_cast<DXGI_FORMAT>(f), D3D12_RESOURCE_DIMENSION_TEXTURE1D, 1);
+
+            if (shape.width != d3dxtile.WidthInTexels
+                || shape.height != d3dxtile.HeightInTexels
+                || shape.depth != d3dxtile.DepthInTexels)
+            {
+                printe("ERROR: ComputeTileShape mismatch with D3DX12 on DXGI Format %u for 1D\n", f);
+                success = false;
+            }
+        }
+
+        if (supports_tiling && bpp != 0)
+        {
+            TileShape shape = {};
+            HRESULT hr = ComputeTileShape(static_cast<DXGI_FORMAT>(f), TEX_DIMENSION_TEXTURE2D, shape);
+            if (FAILED(hr))
+            {
+                printe("ERROR: Failed calling ComputeTileShape on DXGI Format %u (%08X) for 2D\n", f, static_cast<unsigned int>(hr));
+                success = false;
+            }
+
+            D3D12_TILE_SHAPE d3dxtile = { 4, 5, 6 };
+            D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetTileShape(&d3dxtile, static_cast<DXGI_FORMAT>(f), D3D12_RESOURCE_DIMENSION_TEXTURE2D, 1);
+
+            if (shape.width != d3dxtile.WidthInTexels
+                || shape.height != d3dxtile.HeightInTexels
+                || shape.depth != d3dxtile.DepthInTexels)
+            {
+                printe("ERROR: ComputeTileShape mismatch with D3DX12 on DXGI Format %u for 2D\n", f);
+                success = false;
+            }
+
+            shape = {};
+            hr = ComputeTileShape(static_cast<DXGI_FORMAT>(f), TEX_DIMENSION_TEXTURE3D, shape);
+            if (FAILED(hr))
+            {
+                printe("ERROR: Failed calling ComputeTileShape on DXGI Format %u (%08X) for 3D\n", f, static_cast<unsigned int>(hr));
+                success = false;
+            }
+
+            d3dxtile = { 4, 5, 6 };
+            D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetTileShape(&d3dxtile, static_cast<DXGI_FORMAT>(f), D3D12_RESOURCE_DIMENSION_TEXTURE3D, 1);
+
+            if (shape.width != d3dxtile.WidthInTexels
+                || shape.height != d3dxtile.HeightInTexels
+                || shape.depth != d3dxtile.DepthInTexels)
+            {
+                printe("ERROR: ComputeTileShape mismatch with D3DX12 on DXGI Format %u for 3D\n", f);
+                success = false;
+            }
         }
     }
 
