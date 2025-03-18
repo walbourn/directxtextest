@@ -251,6 +251,47 @@ bool Test02()
                 }
             }
 
+            // invalid metadata
+            TexMetadata imdata = metadata;
+            imdata.format = DXGI_FORMAT_UNKNOWN;
+            if (IsSupportedTexture(device.Get(), imdata))
+            {
+                success = false;
+                printe("Failed testing invalid format metadata\n");
+            }
+
+            imdata = metadata;
+            imdata.dimension = static_cast<TEX_DIMENSION>(0);
+            if (IsSupportedTexture(device.Get(), imdata))
+            {
+                success = false;
+                printe("Failed testing invalid dimension metadata\n");
+            }
+
+            imdata = metadata;
+            imdata.mipLevels = UINT16_MAX;
+            if (IsSupportedTexture(device.Get(), imdata))
+            {
+                success = false;
+                printe("Failed testing invalid miplevels metadata\n");
+            }
+
+            imdata = metadata;
+            imdata.arraySize = UINT32_MAX;
+            if (IsSupportedTexture(device.Get(), imdata))
+            {
+                success = false;
+                printe("Failed testing invalid arraySize metadata\n");
+            }
+
+            imdata = metadata;
+            imdata.width = UINT32_MAX;
+            if (IsSupportedTexture(device.Get(), imdata))
+            {
+                success = false;
+                printe("Failed testing invalid size metadata\n");
+            }
+
             if (pass)
             {
                 ++npass;
@@ -261,6 +302,23 @@ bool Test02()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass);
+
+    // invalid args
+    {
+        #pragma warning(push)
+        #pragma warning(disable:6385 6387)
+            TexMetadata metadata = {};
+            metadata.width = metadata.height = 256;
+            metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+            metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
+            metadata.dimension = TEX_DIMENSION_TEXTURE2D;
+            if (IsSupportedTexture(static_cast<ID3D12Device*>(nullptr), metadata))
+            {
+                success = false;
+                printe("Failed invalid arg device test\n");
+            }
+        #pragma warning(pop)
+    }
 
     return success;
 }
@@ -370,7 +428,6 @@ bool Test03()
                 {
                     // CREATETEX_FORCE_SRGB
 
-
                     hr = CreateTextureEx(device.Get(), metadata, D3D12_RESOURCE_FLAG_NONE,
                         CREATETEX_FORCE_SRGB, pResource.ReleaseAndGetAddressOf());
                     if (FAILED(hr))
@@ -423,6 +480,45 @@ bool Test03()
                     }
                 }
 
+                // invalid arg
+            #pragma warning(push)
+            #pragma warning(disable:6385 6387)
+                hr = CreateTexture(device.Get(), metadata, nullptr);
+                if (SUCCEEDED(hr))
+                {
+                    success = false;
+                    printe("Failed testing invalid return arg\n");
+                }
+            #pragma warning(pop)
+
+                // invalid metadata
+                TexMetadata imdata = metadata;
+                imdata.mipLevels = 0;
+                hr = CreateTexture(device.Get(), imdata, pResource.ReleaseAndGetAddressOf());
+                if (SUCCEEDED(hr))
+                {
+                    success = false;
+                    printe("Failed testing zero mipLevel metadata\n");
+                }
+
+                imdata = metadata;
+                imdata.arraySize = UINT32_MAX;
+                hr = CreateTexture(device.Get(), imdata, pResource.ReleaseAndGetAddressOf());
+                if (SUCCEEDED(hr))
+                {
+                    success = false;
+                    printe("Failed testing invalid arraySize metadata\n");
+                }
+
+                imdata = metadata;
+                imdata.dimension = static_cast<TEX_DIMENSION>(0);
+                hr = CreateTexture(device.Get(), imdata, pResource.ReleaseAndGetAddressOf());
+                if (SUCCEEDED(hr))
+                {
+                    success = false;
+                    printe("Failed testing invalid dimension metadata\n");
+                }
+
                 if (pass)
                     ++npass;
             }
@@ -432,6 +528,25 @@ bool Test03()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass);
+
+    // invalid args
+    {
+        #pragma warning(push)
+        #pragma warning(disable:6385 6387)
+            TexMetadata metadata = {};
+            metadata.width = metadata.height = 256;
+            metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+            metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
+            metadata.dimension = TEX_DIMENSION_TEXTURE2D;
+            ComPtr<ID3D12Resource> res;
+            hr = CreateTexture(nullptr, metadata, res.GetAddressOf());
+            if (SUCCEEDED(hr))
+            {
+                success = false;
+                printe("Failed invalid arg device test\n");
+            }
+        #pragma warning(pop)
+    }
 
     return success;
 }
@@ -522,6 +637,34 @@ bool Test04()
                 }
                 else
                 {
+                    // invalid metadata
+                    TexMetadata imdata = metadata;
+                    imdata.mipLevels = 0;
+                    hr = PrepareUpload(device.Get(), image.GetImages(), image.GetImageCount(), imdata, subresources);
+                    if (SUCCEEDED(hr))
+                    {
+                        success = false;
+                        printe("Failed testing zero mipLevel metadata\n");
+                    }
+
+                    imdata = metadata;
+                    imdata.arraySize = UINT32_MAX;
+                    hr = PrepareUpload(device.Get(), image.GetImages(), image.GetImageCount(), imdata, subresources);
+                    if (SUCCEEDED(hr))
+                    {
+                        success = false;
+                        printe("Failed testing invalid arraySize metadata\n");
+                    }
+
+                    imdata = metadata;
+                    imdata.dimension = static_cast<TEX_DIMENSION>(0);
+                    hr = PrepareUpload(device.Get(), image.GetImages(), image.GetImageCount(), imdata, subresources);
+                    if (SUCCEEDED(hr))
+                    {
+                        success = false;
+                        printe("Failed testing invalid dimension metadata\n");
+                    }
+
                     ++npass;
                 }
             }
@@ -531,6 +674,26 @@ bool Test04()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass);
+
+    // invalid args
+    {
+        #pragma warning(push)
+        #pragma warning(disable:6385 6387)
+            TexMetadata metadata = {};
+            metadata.width = metadata.height = 256;
+            metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+            metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
+            metadata.dimension = TEX_DIMENSION_TEXTURE2D;
+
+            std::vector<D3D12_SUBRESOURCE_DATA> subresources;
+            hr = PrepareUpload(nullptr, nullptr, 0, metadata, subresources);
+            if (SUCCEEDED(hr))
+            {
+                success = false;
+                printe("Failed invalid args test\n");
+            }
+        #pragma warning(pop)
+    }
 
     return success;
 }
@@ -923,6 +1086,27 @@ bool Test06()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass);
+
+    // invalid args
+    {
+        #pragma warning(push)
+        #pragma warning(disable:6385 6387)
+            TexMetadata metadata = {};
+            metadata.width = metadata.height = 256;
+            metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+            metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
+            metadata.dimension = TEX_DIMENSION_TEXTURE2D;
+            ScratchImage image2;
+            hr = CaptureTexture(nullptr, nullptr,
+                false,
+                image2);
+            if (SUCCEEDED(hr))
+            {
+                success = false;
+                printe("Failed invalid null args test\n");
+            }
+        #pragma warning(pop)
+    }
 
     queue.Reset();
     commandList.Reset();

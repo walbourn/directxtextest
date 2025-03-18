@@ -1685,7 +1685,14 @@ bool TEXTest::Test20()
 
     // invalid args
     TileShape shape = {};
-    HRESULT hr = ComputeTileShape(DXGI_FORMAT_BC5_UNORM, TEX_DIMENSION_TEXTURE1D, shape);
+    HRESULT hr = ComputeTileShape(DXGI_FORMAT_R8G8B8A8_UNORM, static_cast<TEX_DIMENSION>(0), shape);
+    if (SUCCEEDED(hr))
+    {
+        printe("ERROR: Expected failure for invalid dimension (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    hr = ComputeTileShape(DXGI_FORMAT_BC5_UNORM, TEX_DIMENSION_TEXTURE1D, shape);
     if (SUCCEEDED(hr))
     {
         printe("ERROR: Expected failure for BC format for 1D (%08X)\n", static_cast<unsigned int>(hr));
