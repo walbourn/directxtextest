@@ -916,3 +916,108 @@ bool Test06()
 
     return success;
 }
+
+//-------------------------------------------------------------------------------------
+// ComputeTileShape
+bool Test07()
+{
+    ComPtr<ID3D11Device> device;
+    ComPtr<ID3D11DeviceContext> context;
+    HRESULT hr = CreateDevice(device.GetAddressOf(), context.GetAddressOf());
+    if (FAILED(hr))
+    {
+        printe("Failed creating device (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+        return false;
+    }
+
+    D3D11_FEATURE_DATA_D3D11_OPTIONS1 opts1 = {};
+    hr = device->CheckFeatureSupport(D3D11_FEATURE_D3D11_OPTIONS1, &opts1, sizeof(D3D11_FEATURE_DATA_D3D11_OPTIONS1));
+    if (FAILED(hr) || (opts1.TiledResourcesTier == D3D11_TILED_RESOURCES_NOT_SUPPORTED))
+    {
+        print("skipping...");
+        return true;
+    }
+
+    ComPtr<ID3D11Device2> device2;
+    hr = device.As(&device2);
+    if (FAILED(hr))
+    {
+        print("skipping...");
+        return true;
+    }
+
+    bool success = true;
+
+    const static DXGI_FORMAT s_fmts[] = { DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_BC7_UNORM };
+
+    for (size_t j = 0; j < std::size(s_fmts); ++j)
+    {
+        // We only test a couple of cases as we've more exhaustively tested it in other places.
+        D3D11_TEXTURE2D_DESC desc = {};
+        desc.Width = 16384;
+        desc.Height = 16384;
+        desc.MipLevels = desc.ArraySize = 1;
+        desc.Format = s_fmts[j];
+        desc.SampleDesc.Count = 1;
+        desc.Usage = D3D11_USAGE_DEFAULT;
+        desc.MiscFlags = D3D11_RESOURCE_MISC_TILED;
+
+        ComPtr<ID3D11Texture2D> tiledTex;
+        hr = device2->CreateTexture2D(&desc, nullptr, tiledTex.GetAddressOf());
+        if (FAILED(hr))
+        {
+            printe("ERROR: Failed to create tiled texture for DXGI format %u (%08X)\n", desc.Format, static_cast<unsigned int>(hr));
+            success = false;
+        }
+        else
+        {
+            TileShape shape;
+            hr = ComputeTileShape(desc.Format, TEX_DIMENSION_TEXTURE2D, shape);
+            if (FAILED(hr))
+            {
+                printe("ERROR: Failed calling ComputeTileShape for DXGI format %u (%08X)\n", desc.Format, static_cast<unsigned int>(hr));
+                success = false;
+            }
+            else
+            {
+                D3D11_TILE_SHAPE d3dtile;
+                UINT numSubTilings = 1;
+                D3D11_SUBRESOURCE_TILING subTiling;
+                device2->GetResourceTiling(tiledTex.Get(), nullptr, nullptr, &d3dtile, &numSubTilings, 0, &subTiling);
+
+                if (shape.width != d3dtile.WidthInTexels
+                    || shape.height != d3dtile.HeightInTexels
+                    || shape.depth != d3dtile.DepthInTexels)
+                {
+                    printe("ERROR: ComputeTileShape mismatch with D3D11 on DXGI Format %u\n", desc.Format);
+                    success = false;
+                }
+                else
+                {
+                    D3D11_TILE_SHAPE shape11;
+                    shape.GetTileShape11(shape11);
+                    if (shape.width != shape11.WidthInTexels
+                        || shape.height != shape11.HeightInTexels
+                        || shape.depth != shape11.DepthInTexels)
+                    {
+                        printe("ERROR: Mismatch for D3D11_TILE_SHAPE operator on DXGI Format %u\n", desc.Format);
+                        success = false;
+                    }
+
+                    TileShape shape2 = shape11;
+                    if (shape.width != shape2.width
+                        || shape.height != shape2.height
+                        || shape.depth != shape2.depth)
+                    {
+                        printe("ERROR: Mismatch for D3D11_TILE_SHAPE ctor on DXGI Format %u\n", desc.Format);
+                        success = false;
+                    }
+                }
+            }
+        }
+
+        // We could check the 3D case if (opts1.TiledResourcesTier >= D3D11_TILED_RESOURCES_TIER_3) but this would require d3d11_3.h
+    }
+
+    return success;
+}
