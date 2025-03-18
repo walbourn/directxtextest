@@ -27,10 +27,12 @@ extern bool Test03();
 extern bool Test04();
 extern bool Test05();
 extern bool Test06();
+extern bool Test07();
 
 TestInfo g_Tests[] =
 {
     { "CalculateSubresource", Test06 },
+    { "ComputeTileShape", Test07 },
     { "IsSupportedTexture", Test01 },
     { "CreateTexture", Test02 },
     { "CreateShaderResourceView", Test03 },

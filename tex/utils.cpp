@@ -1623,3 +1623,123 @@ bool TEXTest::Test12()
 
     return success;
 }
+
+
+//-------------------------------------------------------------------------------------
+// ComputeTileShape
+bool TEXTest::Test20()
+{
+    bool success = true;
+
+    for (UINT f = DXGI_START; f <= DXGI_END; ++f )
+    {
+        const size_t bpp = BitsPerPixel(static_cast<DXGI_FORMAT>(f));
+        if (!bpp || bpp == 1 || bpp == 24 || bpp == 96)
+            continue;
+
+        if (IsVideo(static_cast<DXGI_FORMAT>(f)) || IsPacked(static_cast<DXGI_FORMAT>(f)))
+            continue;
+
+        if (!IsCompressed(static_cast<DXGI_FORMAT>(f)))
+        {
+            TileShape shape = {};
+            HRESULT hr = ComputeTileShape(static_cast<DXGI_FORMAT>(f), TEX_DIMENSION_TEXTURE1D, shape);
+            if (FAILED(hr))
+            {
+                printe("ERROR: Failed calling ComputeTileShape on DXGI Format %u (%ls) (%08X) for 1D\n", f, GetName(DXGI_FORMAT(f)), static_cast<unsigned int>(hr));
+                success = false;
+            }
+            else if (shape.width == 0 || shape.height != 1 || shape.depth != 1)
+            {
+                printe("ERROR: Expected h=1 d=1 for tile shape on DXGI Format %u (%ls) (%08X) for 1D\n", f, GetName(DXGI_FORMAT(f)), static_cast<unsigned int>(hr));
+                success = false;
+            }
+        }
+
+        TileShape shape = {};
+        HRESULT hr = ComputeTileShape(static_cast<DXGI_FORMAT>(f), TEX_DIMENSION_TEXTURE2D, shape);
+        if (FAILED(hr))
+        {
+            printe("ERROR: Failed calling ComputeTileShape on DXGI Format %u (%ls) (%08X) for 2D\n", f, GetName(DXGI_FORMAT(f)), static_cast<unsigned int>(hr));
+            success = false;
+        }
+        else if (shape.width == 0 || shape.height == 0 || shape.depth != 1)
+        {
+            printe("ERROR: Expected d=1 for tile shape on DXGI Format %u (%ls) (%08X) for 2D\n", f, GetName(DXGI_FORMAT(f)), static_cast<unsigned int>(hr));
+            success = false;
+        }
+
+        shape = {};
+        hr = ComputeTileShape(static_cast<DXGI_FORMAT>(f), TEX_DIMENSION_TEXTURE3D, shape);
+        if (FAILED(hr))
+        {
+            printe("ERROR: Failed calling ComputeTileShape on DXGI Format %u (%ls) (%08X) for 3D\n", f, GetName(DXGI_FORMAT(f)), static_cast<unsigned int>(hr));
+            success = false;
+        }
+        else if (shape.width == 0 || shape.height == 0 || shape.depth == 0)
+        {
+            printe("ERROR: Expected w, h, d for tile shape on DXGI Format %u (%ls) (%08X) for 3D\n", f, GetName(DXGI_FORMAT(f)), static_cast<unsigned int>(hr));
+            success = false;
+        }
+    }
+
+    // invalid args
+    TileShape shape = {};
+    HRESULT hr = ComputeTileShape(DXGI_FORMAT_R8G8B8A8_UNORM, static_cast<TEX_DIMENSION>(0), shape);
+    if (SUCCEEDED(hr))
+    {
+        printe("ERROR: Expected failure for invalid dimension (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    hr = ComputeTileShape(DXGI_FORMAT_BC5_UNORM, TEX_DIMENSION_TEXTURE1D, shape);
+    if (SUCCEEDED(hr))
+    {
+        printe("ERROR: Expected failure for BC format for 1D (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    hr = ComputeTileShape(DXGI_FORMAT_R8G8_B8G8_UNORM, TEX_DIMENSION_TEXTURE1D, shape);
+    if (SUCCEEDED(hr))
+    {
+        printe("ERROR: Expected failure for packed format for 1D (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    hr = ComputeTileShape(DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE1D, shape);
+    if (SUCCEEDED(hr))
+    {
+        printe("ERROR: Expected failure for video format for 1D (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    hr = ComputeTileShape(DXGI_FORMAT_R8G8_B8G8_UNORM, TEX_DIMENSION_TEXTURE2D, shape);
+    if (SUCCEEDED(hr))
+    {
+        printe("ERROR: Expected failure for packed format for 2D (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    hr = ComputeTileShape(DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE2D, shape);
+    if (SUCCEEDED(hr))
+    {
+        printe("ERROR: Expected failure for video format for 2D (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    hr = ComputeTileShape(DXGI_FORMAT_R8G8_B8G8_UNORM, TEX_DIMENSION_TEXTURE3D, shape);
+    if (SUCCEEDED(hr))
+    {
+        printe("ERROR: Expected failure for packed format for 3D (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    hr = ComputeTileShape(DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE3D, shape);
+    if (SUCCEEDED(hr))
+    {
+        printe("ERROR: Expected failure for video format for 3D (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    return success;
+}

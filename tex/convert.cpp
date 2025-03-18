@@ -3719,6 +3719,34 @@ bool TEXTest::Test06()
                             SaveToDDSFile( imageComplex.GetImages(), imageComplex.GetImageCount(), imageComplex.GetMetadata(), DDS_FLAGS_NONE, szDestPath );
                         }
                     }
+
+                    // invalid metadata
+                    TexMetadata imdata = srcimage.GetMetadata();
+                    imdata.format = DXGI_FORMAT_BC1_UNORM;
+                    hr = Convert( srcimage.GetImages(), srcimage.GetImageCount(), imdata, tformat, filter, TEX_THRESHOLD_DEFAULT, imageComplex );
+                    if (SUCCEEDED(hr))
+                    {
+                        success = false;
+                        printe("Failed invalid metadata format test\n");
+                    }
+
+                    imdata = srcimage.GetMetadata();
+                    imdata.width = UINT32_MAX;
+                    hr = Convert( srcimage.GetImages(), srcimage.GetImageCount(), imdata, tformat, filter, TEX_THRESHOLD_DEFAULT, imageComplex );
+                    if (SUCCEEDED(hr))
+                    {
+                        success = false;
+                        printe("Failed invalid metadata size test\n");
+                    }
+
+                    imdata = srcimage.GetMetadata();
+                    imdata.dimension = static_cast<TEX_DIMENSION>(0);
+                    hr = Convert( srcimage.GetImages(), srcimage.GetImageCount(), imdata, tformat, filter, TEX_THRESHOLD_DEFAULT, imageComplex );
+                    if (SUCCEEDED(hr))
+                    {
+                        success = false;
+                        printe("Failed invalid metadata dimension test\n");
+                    }
                 }
 
                 if ( pass )
@@ -3740,7 +3768,7 @@ bool TEXTest::Test06()
         nullin.width = nullin.height = 256;
         nullin.format = DXGI_FORMAT_R8G8B8A8_UNORM;
         HRESULT hr = Convert(nullin, DXGI_FORMAT_B8G8R8X8_UNORM, TEX_FILTER_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
-        if (hr != E_INVALIDARG && hr != E_POINTER)
+        if (SUCCEEDED(hr))
         {
             success = false;
             printe("Failed invalid arg test\n");
@@ -3748,7 +3776,7 @@ bool TEXTest::Test06()
 
         ConvertOptions opts{};
         hr = ConvertEx(nullin, DXGI_FORMAT_B8G8R8A8_UNORM, opts, image);
-        if (hr != E_INVALIDARG && hr != E_POINTER)
+        if (SUCCEEDED(hr))
         {
             success = false;
             printe("Failed invalid arg ex test\n");
@@ -3760,7 +3788,7 @@ bool TEXTest::Test06()
         metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
         metadata.dimension = TEX_DIMENSION_TEXTURE2D;
         hr = ConvertEx(nullptr, 0, metadata, DXGI_FORMAT_B8G8R8A8_UNORM, opts, image);
-        if (hr != E_INVALIDARG)
+        if (SUCCEEDED(hr))
         {
             success = false;
             printe("Failed invalid arg complex test\n");

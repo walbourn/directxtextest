@@ -294,6 +294,27 @@ bool TEXTest::Test18()
                 }
             }
         }
+
+        // invalid metadata
+        TexMetadata imdata = mdata;
+        imdata.dimension = static_cast<TEX_DIMENSION>(0);
+        if (imdata.ComputeIndex(0, 0, 0) != size_t(-1))
+        {
+            printe( "ERROR: ComputeIndex invalid dimension failed (%zu)\n", index );
+            success = false;
+        }
+
+        if (imdata.CalculateSubresource(0, 0) != uint32_t(-1))
+        {
+            printe( "ERROR: CalculateSubresource invalid dimension failed (%zu)\n", index );
+            success = false;
+        }
+
+        if (imdata.CalculateSubresource(0, 0, 0) != uint32_t(-1))
+        {
+            printe( "ERROR: CalculateSubresource 3 arg invalid dimension failed (%zu)\n", index );
+            success = false;
+        }
     }
 
     return success;
@@ -318,6 +339,38 @@ bool TEXTest::Test19()
         {
             printe( "ERROR: Initialize failed (%zu)\n", index );
             success = false;
+        }
+
+        image.Release();
+
+        // invalid args
+        {
+            TexMetadata imdata = image.GetMetadata();
+            imdata.dimension = static_cast<TEX_DIMENSION>(0);
+            hr = image.Initialize(imdata);
+            if (SUCCEEDED(hr))
+            {
+                printe( "Failed invalid metadata dimension test\n");
+                success = false;
+            }
+
+            imdata = image.GetMetadata();
+            imdata.format = DXGI_FORMAT_UNKNOWN;
+            hr = image.Initialize(imdata);
+            if (SUCCEEDED(hr))
+            {
+                printe( "Failed invalid metadata format test\n");
+                success = false;
+            }
+
+            imdata = image.GetMetadata();
+            imdata.format = DXGI_FORMAT_P8;
+            hr = image.Initialize(imdata);
+            if (SUCCEEDED(hr))
+            {
+                printe( "Failed unsupported palettized format metadata test\n");
+                success = false;
+            }
         }
 
         image.Release();
@@ -357,6 +410,21 @@ bool TEXTest::Test19()
                 success = false;
             }
 
+            // invalid args
+            hr = image.Initialize2D(DXGI_FORMAT_UNKNOWN, mdata.width, mdata.height, mdata.arraySize, mdata.mipLevels);
+            if (SUCCEEDED(hr))
+            {
+                printe( "Failed invalid format 2D test\n");
+                success = false;
+            }
+
+            hr = image.Initialize2D(DXGI_FORMAT_P8, mdata.width, mdata.height, mdata.arraySize, mdata.mipLevels);
+            if (SUCCEEDED(hr))
+            {
+                printe( "Failed unsupported palettized format 2D test\n");
+                success = false;
+            }
+
             if (mdata.miscFlags & TEX_MISC_TEXTURECUBE)
             {
                 image.Release();
@@ -372,6 +440,14 @@ bool TEXTest::Test19()
                     || image.GetMetadata().dimension != TEX_DIMENSION_TEXTURE2D)
                 {
                     printe( "ERROR: InitializeCube failed (%zu)\n", index );
+                    success = false;
+                }
+
+                // invalid args
+                hr = image.InitializeCube(mdata.format, mdata.width, mdata.height, 0, mdata.mipLevels);
+                if (SUCCEEDED(hr))
+                {
+                    printe( "Failed invalid count cube test\n");
                     success = false;
                 }
             }
@@ -390,6 +466,28 @@ bool TEXTest::Test19()
                 || image.GetMetadata().dimension != TEX_DIMENSION_TEXTURE3D)
             {
                 printe( "ERROR: Initialize3D failed (%zu)\n", index );
+                success = false;
+            }
+
+            // invalid args
+            hr = image.Initialize3D(DXGI_FORMAT_UNKNOWN, mdata.width, mdata.height, mdata.depth, mdata.mipLevels);
+            if (SUCCEEDED(hr))
+            {
+                printe( "Failed invalid format 3D test\n");
+                success = false;
+            }
+
+            hr = image.Initialize3D(DXGI_FORMAT_P8, mdata.width, mdata.height, mdata.depth, mdata.mipLevels);
+            if (SUCCEEDED(hr))
+            {
+                printe( "Failed unsupported palettized format 3D test\n");
+                success = false;
+            }
+
+            hr = image.Initialize3D(mdata.format, mdata.width, mdata.height, UINT32_MAX, mdata.mipLevels);
+            if (SUCCEEDED(hr))
+            {
+                printe( "Failed invalid depth 3D test\n");
                 success = false;
             }
             break;

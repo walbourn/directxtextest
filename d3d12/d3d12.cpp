@@ -251,6 +251,47 @@ bool Test02()
                 }
             }
 
+            // invalid metadata
+            TexMetadata imdata = metadata;
+            imdata.format = DXGI_FORMAT_UNKNOWN;
+            if (IsSupportedTexture(device.Get(), imdata))
+            {
+                success = false;
+                printe("Failed testing invalid format metadata\n");
+            }
+
+            imdata = metadata;
+            imdata.dimension = static_cast<TEX_DIMENSION>(0);
+            if (IsSupportedTexture(device.Get(), imdata))
+            {
+                success = false;
+                printe("Failed testing invalid dimension metadata\n");
+            }
+
+            imdata = metadata;
+            imdata.mipLevels = UINT16_MAX;
+            if (IsSupportedTexture(device.Get(), imdata))
+            {
+                success = false;
+                printe("Failed testing invalid miplevels metadata\n");
+            }
+
+            imdata = metadata;
+            imdata.arraySize = UINT32_MAX;
+            if (IsSupportedTexture(device.Get(), imdata))
+            {
+                success = false;
+                printe("Failed testing invalid arraySize metadata\n");
+            }
+
+            imdata = metadata;
+            imdata.width = UINT32_MAX;
+            if (IsSupportedTexture(device.Get(), imdata))
+            {
+                success = false;
+                printe("Failed testing invalid size metadata\n");
+            }
+
             if (pass)
             {
                 ++npass;
@@ -261,6 +302,23 @@ bool Test02()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass);
+
+    // invalid args
+    {
+        #pragma warning(push)
+        #pragma warning(disable:6385 6387)
+            TexMetadata metadata = {};
+            metadata.width = metadata.height = 256;
+            metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+            metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
+            metadata.dimension = TEX_DIMENSION_TEXTURE2D;
+            if (IsSupportedTexture(static_cast<ID3D12Device*>(nullptr), metadata))
+            {
+                success = false;
+                printe("Failed invalid arg device test\n");
+            }
+        #pragma warning(pop)
+    }
 
     return success;
 }
@@ -370,7 +428,6 @@ bool Test03()
                 {
                     // CREATETEX_FORCE_SRGB
 
-
                     hr = CreateTextureEx(device.Get(), metadata, D3D12_RESOURCE_FLAG_NONE,
                         CREATETEX_FORCE_SRGB, pResource.ReleaseAndGetAddressOf());
                     if (FAILED(hr))
@@ -423,6 +480,45 @@ bool Test03()
                     }
                 }
 
+                // invalid arg
+            #pragma warning(push)
+            #pragma warning(disable:6385 6387)
+                hr = CreateTexture(device.Get(), metadata, nullptr);
+                if (SUCCEEDED(hr))
+                {
+                    success = false;
+                    printe("Failed testing invalid return arg\n");
+                }
+            #pragma warning(pop)
+
+                // invalid metadata
+                TexMetadata imdata = metadata;
+                imdata.mipLevels = 0;
+                hr = CreateTexture(device.Get(), imdata, pResource.ReleaseAndGetAddressOf());
+                if (SUCCEEDED(hr))
+                {
+                    success = false;
+                    printe("Failed testing zero mipLevel metadata\n");
+                }
+
+                imdata = metadata;
+                imdata.arraySize = UINT32_MAX;
+                hr = CreateTexture(device.Get(), imdata, pResource.ReleaseAndGetAddressOf());
+                if (SUCCEEDED(hr))
+                {
+                    success = false;
+                    printe("Failed testing invalid arraySize metadata\n");
+                }
+
+                imdata = metadata;
+                imdata.dimension = static_cast<TEX_DIMENSION>(0);
+                hr = CreateTexture(device.Get(), imdata, pResource.ReleaseAndGetAddressOf());
+                if (SUCCEEDED(hr))
+                {
+                    success = false;
+                    printe("Failed testing invalid dimension metadata\n");
+                }
+
                 if (pass)
                     ++npass;
             }
@@ -432,6 +528,25 @@ bool Test03()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass);
+
+    // invalid args
+    {
+        #pragma warning(push)
+        #pragma warning(disable:6385 6387)
+            TexMetadata metadata = {};
+            metadata.width = metadata.height = 256;
+            metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+            metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
+            metadata.dimension = TEX_DIMENSION_TEXTURE2D;
+            ComPtr<ID3D12Resource> res;
+            hr = CreateTexture(nullptr, metadata, res.GetAddressOf());
+            if (SUCCEEDED(hr))
+            {
+                success = false;
+                printe("Failed invalid arg device test\n");
+            }
+        #pragma warning(pop)
+    }
 
     return success;
 }
@@ -522,6 +637,34 @@ bool Test04()
                 }
                 else
                 {
+                    // invalid metadata
+                    TexMetadata imdata = metadata;
+                    imdata.mipLevels = 0;
+                    hr = PrepareUpload(device.Get(), image.GetImages(), image.GetImageCount(), imdata, subresources);
+                    if (SUCCEEDED(hr))
+                    {
+                        success = false;
+                        printe("Failed testing zero mipLevel metadata\n");
+                    }
+
+                    imdata = metadata;
+                    imdata.arraySize = UINT32_MAX;
+                    hr = PrepareUpload(device.Get(), image.GetImages(), image.GetImageCount(), imdata, subresources);
+                    if (SUCCEEDED(hr))
+                    {
+                        success = false;
+                        printe("Failed testing invalid arraySize metadata\n");
+                    }
+
+                    imdata = metadata;
+                    imdata.dimension = static_cast<TEX_DIMENSION>(0);
+                    hr = PrepareUpload(device.Get(), image.GetImages(), image.GetImageCount(), imdata, subresources);
+                    if (SUCCEEDED(hr))
+                    {
+                        success = false;
+                        printe("Failed testing invalid dimension metadata\n");
+                    }
+
                     ++npass;
                 }
             }
@@ -531,6 +674,26 @@ bool Test04()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass);
+
+    // invalid args
+    {
+        #pragma warning(push)
+        #pragma warning(disable:6385 6387)
+            TexMetadata metadata = {};
+            metadata.width = metadata.height = 256;
+            metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+            metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
+            metadata.dimension = TEX_DIMENSION_TEXTURE2D;
+
+            std::vector<D3D12_SUBRESOURCE_DATA> subresources;
+            hr = PrepareUpload(nullptr, nullptr, 0, metadata, subresources);
+            if (SUCCEEDED(hr))
+            {
+                success = false;
+                printe("Failed invalid args test\n");
+            }
+        #pragma warning(pop)
+    }
 
     return success;
 }
@@ -924,6 +1087,27 @@ bool Test06()
 
     print("%zu images tested, %zu images passed ", ncount, npass);
 
+    // invalid args
+    {
+        #pragma warning(push)
+        #pragma warning(disable:6385 6387)
+            TexMetadata metadata = {};
+            metadata.width = metadata.height = 256;
+            metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+            metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
+            metadata.dimension = TEX_DIMENSION_TEXTURE2D;
+            ScratchImage image2;
+            hr = CaptureTexture(nullptr, nullptr,
+                false,
+                image2);
+            if (SUCCEEDED(hr))
+            {
+                success = false;
+                printe("Failed invalid null args test\n");
+            }
+        #pragma warning(pop)
+    }
+
     queue.Reset();
     commandList.Reset();
     device.Reset();
@@ -1038,12 +1222,14 @@ bool Test08()
             || (f == XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT))
             continue;
 
-        const size_t bbp = BitsPerPixel(static_cast<DXGI_FORMAT>(f));
+        const size_t bpp = BitsPerPixel(static_cast<DXGI_FORMAT>(f));
         size_t d3dxbpu = D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetBitsPerUnit(static_cast<DXGI_FORMAT>(f));
+        bool supports_tiling = true;
         switch(f)
         {
             case DXGI_FORMAT_R8G8_B8G8_UNORM:
             case DXGI_FORMAT_G8R8_G8B8_UNORM:
+                supports_tiling = false;
                 d3dxbpu = 32;
                 break;
 
@@ -1078,39 +1264,60 @@ bool Test08()
             case DXGI_FORMAT_420_OPAQUE:
             case DXGI_FORMAT_NV11:
                 d3dxbpu = 12;
+                supports_tiling = false;
                 break;
 
             case WIN10_DXGI_FORMAT_P208:
             case WIN10_DXGI_FORMAT_V208:
                 d3dxbpu = 16;
+                supports_tiling = false;
                 break;
 
             case DXGI_FORMAT_P010:
             case DXGI_FORMAT_P016:
             case WIN10_DXGI_FORMAT_V408:
                 d3dxbpu = 24;
+                supports_tiling = false;
                 break;
 
             case DXGI_FORMAT_YUY2:
                 d3dxbpu = 32;
+                supports_tiling = false;
                 break;
 
             case DXGI_FORMAT_Y210:
             case DXGI_FORMAT_Y216:
                 d3dxbpu = 64;
+                supports_tiling = false;
+                break;
+
+            case DXGI_FORMAT_R32G32B32_TYPELESS:
+            case DXGI_FORMAT_R32G32B32_FLOAT:
+            case DXGI_FORMAT_R32G32B32_UINT:
+            case DXGI_FORMAT_R32G32B32_SINT:
+            case DXGI_FORMAT_R1_UNORM:
+            case DXGI_FORMAT_AYUV:
+            case DXGI_FORMAT_Y410:
+            case DXGI_FORMAT_Y416:
+            case DXGI_FORMAT_AI44:
+            case DXGI_FORMAT_IA44:
+            case DXGI_FORMAT_P8:
+            case DXGI_FORMAT_A8P8:
+                supports_tiling = false;
                 break;
 
             default:
                 break;
         }
 
-        if (bbp != d3dxbpu)
+        if (bpp != d3dxbpu)
         {
-            printe("ERROR: BitsPerPixel mismatch with D3DX12 on DXGI Format %u (%zu .. %zu)\n", f, bbp, d3dxbpu);
+            printe("ERROR: BitsPerPixel mismatch with D3DX12 on DXGI Format %u (%zu .. %zu)\n", f, bpp, d3dxbpu);
             success = false;
         }
 
-        if (IsCompressed(static_cast<DXGI_FORMAT>(f)) != D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::IsBlockCompressFormat(static_cast<DXGI_FORMAT>(f)))
+        const bool iscompressed = IsCompressed(static_cast<DXGI_FORMAT>(f));
+        if (iscompressed != D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::IsBlockCompressFormat(static_cast<DXGI_FORMAT>(f)))
         {
             printe("ERROR: IsCompressed mismatch with D3DX12 on DXGI Format %u\n", f);
             success = false;
@@ -1132,6 +1339,90 @@ bool Test08()
         {
             printe("ERROR: IsVideo mismatch with D3DX12 on DXGI Format %u\n", f);
             success = false;
+        }
+
+        if (supports_tiling && !iscompressed && bpp != 0)
+        {
+            TileShape shape = {};
+            HRESULT hr = ComputeTileShape(static_cast<DXGI_FORMAT>(f), TEX_DIMENSION_TEXTURE1D, shape);
+            if (FAILED(hr))
+            {
+                printe("ERROR: Failed calling ComputeTileShape on DXGI Format %u (%08X) for 1D\n", f, static_cast<unsigned int>(hr));
+                success = false;
+            }
+
+            D3D12_TILE_SHAPE d3dxtile = { 4, 5, 6 };
+            D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetTileShape(&d3dxtile, static_cast<DXGI_FORMAT>(f), D3D12_RESOURCE_DIMENSION_TEXTURE1D, 1);
+
+            if (shape.width != d3dxtile.WidthInTexels
+                || shape.height != d3dxtile.HeightInTexels
+                || shape.depth != d3dxtile.DepthInTexels)
+            {
+                printe("ERROR: ComputeTileShape mismatch with D3DX12 on DXGI Format %u for 1D\n", f);
+                success = false;
+            }
+        }
+
+        if (supports_tiling && bpp != 0)
+        {
+            TileShape shape = {};
+            HRESULT hr = ComputeTileShape(static_cast<DXGI_FORMAT>(f), TEX_DIMENSION_TEXTURE2D, shape);
+            if (FAILED(hr))
+            {
+                printe("ERROR: Failed calling ComputeTileShape on DXGI Format %u (%08X) for 2D\n", f, static_cast<unsigned int>(hr));
+                success = false;
+            }
+
+            D3D12_TILE_SHAPE d3dxtile = { 4, 5, 6 };
+            D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetTileShape(&d3dxtile, static_cast<DXGI_FORMAT>(f), D3D12_RESOURCE_DIMENSION_TEXTURE2D, 1);
+
+            if (shape.width != d3dxtile.WidthInTexels
+                || shape.height != d3dxtile.HeightInTexels
+                || shape.depth != d3dxtile.DepthInTexels)
+            {
+                printe("ERROR: ComputeTileShape mismatch with D3DX12 on DXGI Format %u for 2D\n", f);
+                success = false;
+            }
+
+            shape = {};
+            hr = ComputeTileShape(static_cast<DXGI_FORMAT>(f), TEX_DIMENSION_TEXTURE3D, shape);
+            if (FAILED(hr))
+            {
+                printe("ERROR: Failed calling ComputeTileShape on DXGI Format %u (%08X) for 3D\n", f, static_cast<unsigned int>(hr));
+                success = false;
+            }
+
+            d3dxtile = { 4, 5, 6 };
+            D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetTileShape(&d3dxtile, static_cast<DXGI_FORMAT>(f), D3D12_RESOURCE_DIMENSION_TEXTURE3D, 1);
+
+            if (shape.width != d3dxtile.WidthInTexels
+                || shape.height != d3dxtile.HeightInTexels
+                || shape.depth != d3dxtile.DepthInTexels)
+            {
+                printe("ERROR: ComputeTileShape mismatch with D3DX12 on DXGI Format %u for 3D\n", f);
+                success = false;
+            }
+            else
+            {
+                D3D12_TILE_SHAPE shape12;
+                shape.GetTileShape12(shape12);
+                if (shape.width != shape12.WidthInTexels
+                    || shape.height != shape12.HeightInTexels
+                    || shape.depth != shape12.DepthInTexels)
+                {
+                    printe("ERROR: Mismatch for D3D12_TILE_SHAPE operator on DXGI Format %u for 3D\n", f);
+                    success = false;
+                }
+
+                TileShape shape2 = shape12;
+                if (shape.width != shape2.width
+                    || shape.height != shape2.height
+                    || shape.depth != shape2.depth)
+                {
+                    printe("ERROR: Mismatch for D3D12_TILE_SHAPE ctor on DXGI Format %u for 3D\n", f);
+                    success = false;
+                }
+            }
         }
     }
 

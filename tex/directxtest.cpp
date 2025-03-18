@@ -27,6 +27,7 @@ TestInfo g_Tests[] =
     { "Internal", TEXTest::Test00},
     { "Is*/BP*/FDT", TEXTest::Test01 },
     { "ComputePitch/Scanlines", TEXTest::Test02 },
+    { "ComputeTileShape", TEXTest::Test20 },
     { "Make*", TEXTest::Test12 },
     { "TexMetadata", TEXTest::Test18 },
     { "ScratchImage", TEXTest::Test19 },
