@@ -308,6 +308,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
         bool usepfm = false;
         bool useppm = false;
         bool usetga = false;
+        bool usewic = false;
         if (dwOptions & (1 << OPT_DDS))
         {
             usedds = true;
@@ -328,13 +329,18 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
         {
             useppm = true;
         }
-        else if (!(dwOptions & (1 << OPT_WIC)))
+        else if (dwOptions & (1 << OPT_WIC))
         {
-            usedds = isdds;
-            usehdr = ishdr;
-            usepfm = ispfm;
-            useppm = isppm;
-            usetga = istga;
+            usewic = true;
+        }
+        else
+        {
+            usedds = true;
+            usehdr = true;
+            usepfm = true;
+            useppm = true;
+            usetga = true;
+            usewic = true;
         }
 
         // Load source image
@@ -354,7 +360,13 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
                 wprintf(L"ERROR: DDSTexture file not not found:\n%ls\n", pConv.szSrc.c_str());
                 return 1;
             }
-            else if (FAILED(hr) && hr != E_INVALIDARG && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != E_OUTOFMEMORY && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF) && (hr != E_FAIL || (hr == E_FAIL && isdds)))
+            else if (FAILED(hr)
+                && hr != E_INVALIDARG
+                && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED)
+                && hr != E_OUTOFMEMORY
+                && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF)
+                && hr != HRESULT_FROM_WIN32(ERROR_INVALID_DATA)
+                && (hr != E_FAIL || (hr == E_FAIL && isdds)))
             {
 #ifdef _DEBUG
                 char buff[128] = {};
@@ -390,7 +402,13 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
                 else
                 {
                     hr = DirectX::LoadFromDDSMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), c_ddsFlags, nullptr, result);
-                    if (FAILED(hr) && hr != E_INVALIDARG && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != E_OUTOFMEMORY && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF) && (hr != E_FAIL || (hr == E_FAIL && isdds)))
+                    if (FAILED(hr)
+                        && hr != E_INVALIDARG
+                        && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED)
+                        && hr != E_OUTOFMEMORY
+                        && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF)
+                        && hr != HRESULT_FROM_WIN32(ERROR_INVALID_DATA)
+                        && (hr != E_FAIL || (hr == E_FAIL && isdds)))
                     {
 #ifdef _DEBUG
                         char buff[128] = {};
@@ -406,7 +424,8 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
                 }
             }
         }
-        else if (usehdr)
+
+        if (usehdr)
         {
             hr = DirectX::LoadFromHDRFile(pConv.szSrc.c_str(), nullptr, result); // LoadFromHDRFile exercises LoadFromHDRMemory
             if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
@@ -414,7 +433,13 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
                 wprintf(L"ERROR: HDRTexture file not not found:\n%ls\n", pConv.szSrc.c_str());
                 return 1;
             }
-            else if (FAILED(hr) && hr != E_INVALIDARG && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != E_OUTOFMEMORY && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF) && (hr != E_FAIL || (hr == E_FAIL && ishdr)))
+            else if (FAILED(hr)
+                && hr != E_INVALIDARG
+                && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED)
+                && hr != E_OUTOFMEMORY
+                && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF)
+                && hr != HRESULT_FROM_WIN32(ERROR_INVALID_DATA)
+                && (hr != E_FAIL || (hr == E_FAIL && ishdr)))
             {
 #ifdef _DEBUG
                 char buff[128] = {};
@@ -428,7 +453,8 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
                 wprintf(L"%ls", SUCCEEDED(hr) ? L"*" : L".");
             }
         }
-        else if (usepfm)
+
+        if (usepfm)
         {
             hr = LoadFromPortablePixMapHDR(pConv.szSrc.c_str(), nullptr, result);
             if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
@@ -436,7 +462,13 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
                 wprintf(L"ERROR: PFMTexture file not not found:\n%ls\n", pConv.szSrc.c_str());
                 return 1;
             }
-            else if (FAILED(hr) && hr != E_INVALIDARG && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != E_OUTOFMEMORY && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF) && (hr != E_FAIL || (hr == E_FAIL && ispfm)))
+            else if (FAILED(hr)
+                && hr != E_INVALIDARG
+                && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED)
+                && hr != E_OUTOFMEMORY
+                && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF)
+                && hr != HRESULT_FROM_WIN32(ERROR_INVALID_DATA)
+                && (hr != E_FAIL || (hr == E_FAIL && ispfm)))
             {
 #ifdef _DEBUG
                 char buff[128] = {};
@@ -450,7 +482,8 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
                 wprintf(L"%ls", SUCCEEDED(hr) ? L"*" : L".");
             }
         }
-        else if (useppm)
+
+        if (useppm)
         {
             hr = LoadFromPortablePixMap(pConv.szSrc.c_str(), nullptr, result);
             if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
@@ -458,7 +491,13 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
                 wprintf(L"ERROR: PPMTexture file not not found:\n%ls\n", pConv.szSrc.c_str());
                 return 1;
             }
-            else if (FAILED(hr) && hr != E_INVALIDARG && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != E_OUTOFMEMORY && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF) && (hr != E_FAIL || (hr == E_FAIL && isppm)))
+            else if (FAILED(hr)
+                && hr != E_INVALIDARG
+                && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED)
+                && hr != E_OUTOFMEMORY
+                && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF)
+                && hr != HRESULT_FROM_WIN32(ERROR_INVALID_DATA)
+                && (hr != E_FAIL || (hr == E_FAIL && isppm)))
             {
 #ifdef _DEBUG
                 char buff[128] = {};
@@ -472,7 +511,8 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
                 wprintf(L"%ls", SUCCEEDED(hr) ? L"*" : L".");
             }
         }
-        else if (usetga)
+
+        if (usetga)
         {
             for (int j = 0; j < 2; ++j)
             {
@@ -485,7 +525,13 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
                     wprintf(L"ERROR: TGATexture file not not found:\n%ls\n", pConv.szSrc.c_str());
                     return 1;
                 }
-                else if (FAILED(hr) && hr != E_INVALIDARG && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != E_OUTOFMEMORY && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF) && (hr != E_FAIL || (hr == E_FAIL && istga)))
+                else if (FAILED(hr)
+                    && hr != E_INVALIDARG
+                    && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED)
+                    && hr != E_OUTOFMEMORY
+                    && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF)
+                    && hr != HRESULT_FROM_WIN32(ERROR_INVALID_DATA)
+                    && (hr != E_FAIL || (hr == E_FAIL && istga)))
                 {
 #ifdef _DEBUG
                     char buff[128] = {};
@@ -520,7 +566,13 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
                     else
                     {
                         hr = DirectX::LoadFromTGAMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), tgaFlags, nullptr, result);
-                        if (FAILED(hr) && hr != E_INVALIDARG && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) && hr != E_OUTOFMEMORY && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF) && (hr != E_FAIL || (hr == E_FAIL && istga)))
+                        if (FAILED(hr)
+                            && hr != E_INVALIDARG
+                            && hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED)
+                            && hr != E_OUTOFMEMORY
+                            && hr != HRESULT_FROM_WIN32(ERROR_HANDLE_EOF)
+                            && hr != HRESULT_FROM_WIN32(ERROR_INVALID_DATA)
+                            && (hr != E_FAIL || (hr == E_FAIL && istga)))
                         {
 #ifdef _DEBUG
                             char buff[128] = {};
@@ -537,7 +589,8 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
                 }
             }
         }
-        else
+
+        if (usewic)
         {
             hr = DirectX::LoadFromWICFile(pConv.szSrc.c_str(), DirectX::WIC_FLAGS_NONE, nullptr, result);
             if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
