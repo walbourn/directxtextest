@@ -10,7 +10,16 @@ project (DirectXTexTest
 
 option(BUILD_BVT "Build-verification test" OFF)
 
-if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
+if(CMAKE_VERSION VERSION_LESS 3.21)
+  get_property(not_top DIRECTORY PROPERTY PARENT_DIRECTORY)
+  if(not_top)
+    set(PROJECT_IS_TOP_LEVEL false)
+  else()
+    set(PROJECT_IS_TOP_LEVEL true)
+  endif()
+endif()
+
+if(PROJECT_IS_TOP_LEVEL)
   message(FATAL_ERROR "DirectXTex Test Suite should be built by the main CMakeLists")
 endif()
 
