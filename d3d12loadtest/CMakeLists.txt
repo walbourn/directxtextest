@@ -58,23 +58,18 @@ if(MINGW)
 endif()
 
 # Build HLSL shaders
-add_custom_target(shaders12)
-
 set_source_files_properties(VertexShader12.hlsl PROPERTIES ShaderType "vs")
 set_source_files_properties(PixelShader12.hlsl PROPERTIES ShaderType "ps")
 
 foreach(FILE VertexShader12.hlsl PixelShader12.hlsl)
   get_filename_component(FILE_WE ${FILE} NAME_WE)
   get_source_file_property(shadertype ${FILE} ShaderType)
-  add_custom_command(TARGET shaders12
+  add_custom_command(TARGET ${PROJECT_NAME} PRE_LINK
                      COMMAND fxc.exe /nologo /Emain /T${shadertype}_4_0 $<IF:$<CONFIG:DEBUG>,/Od,/O1> /Zi /Fo ${CMAKE_BINARY_DIR}/${FILE_WE}.cso /Fd ${CMAKE_BINARY_DIR}/${FILE_WE}.pdb ${FILE}
-                     MAIN_DEPENDENCY ${FILE}
                      COMMENT "HLSL ${FILE}"
                      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                      VERBATIM)
 endforeach(FILE)
-
-add_dependencies(${PROJECT_NAME} shaders12)
 
 add_custom_command(
   TARGET ${PROJECT_NAME} POST_BUILD
