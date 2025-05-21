@@ -20,10 +20,17 @@ struct TestMedia
 
 static const TestMedia g_TestMedia[] = 
 {
+#ifdef _USE_SCARLETT
+{ { 256, 256, 1, 1, 9, 0, 0x3, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, true, L"Media\\scarlettseafloor.dds" },
+{ { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_B8G8R8X8_UNORM, TEX_DIMENSION_TEXTURE2D }, true, L"Media\\scarletttiny_skin.dds" },
+{ { 256, 256, 1, 1, 9, 0, 0x3, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, true, L"Media\\scarlettwindowslogo.dds" },
+{ { 256, 256, 1, 1, 9, 0, 0x3, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, true, L"Media\\scarlettwindowslogoBC1.dds" },
+#else
 { { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, true, L"Media\\xboxseafloor.dds" },
 { { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_B8G8R8X8_UNORM, TEX_DIMENSION_TEXTURE2D }, true, L"Media\\xboxtiny_skin.dds" },
 { { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, true, L"Media\\xboxwindowslogo.dds" },
 { { 256, 256, 1, 1, 9, 0, 0x3, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, true, L"Media\\xboxwindowslogoBC1.dds" },
+#endif
 
 { { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, false, MEDIA_PATH L"reftexture.dds" },
 { { 200, 150, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_B5G5R5A1_UNORM, TEX_DIMENSION_TEXTURE2D }, false, MEDIA_PATH L"test555.dds" },
@@ -81,11 +88,6 @@ bool Test01()
             TexMetadata metadata;
             bool isXbox;
             hr = Xbox::GetMetadataFromDDSMemory(blob.GetBufferPointer(), blob.GetBufferSize(), metadata, isXbox);
-#ifdef _USE_SCARLETT
-            if (hr == HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
-                continue;
-#endif
-
             const TexMetadata* check = &g_TestMedia[index].metadata;
             if ( FAILED(hr) )
             {
@@ -141,10 +143,6 @@ bool Test02()
         TexMetadata metadata;
         bool isXbox;
         HRESULT hr = Xbox::GetMetadataFromDDSFile( szPath, metadata, isXbox );
-#ifdef _USE_SCARLETT
-        if (hr == HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
-            continue;
-#endif
         const TexMetadata* check = &g_TestMedia[index].metadata;
         if ( FAILED(hr) )
         {
@@ -211,11 +209,6 @@ bool Test03()
             TexMetadata metadata;
             Xbox::XboxImage image;
             hr = Xbox::LoadFromDDSMemory( blob.GetBufferPointer(), blob.GetBufferSize(), &metadata, image );
-#ifdef _USE_SCARLETT
-            if (hr == HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
-                continue;
-#endif
-
             const TexMetadata* check = &g_TestMedia[index].metadata;
             if ( FAILED(hr) )
             {
@@ -274,11 +267,6 @@ bool Test04()
         TexMetadata metadata;
         Xbox::XboxImage image;
         HRESULT hr = Xbox::LoadFromDDSFile( szPath, &metadata, image );
-#ifdef _USE_SCARLETT
-        if (hr == HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
-            continue;
-#endif
-
         const TexMetadata* check = &g_TestMedia[index].metadata;
         if ( FAILED(hr) )
         {
@@ -336,11 +324,6 @@ bool Test05()
         TexMetadata metadata;
         Xbox::XboxImage image;
         HRESULT hr = Xbox::LoadFromDDSFile(szPath, &metadata, image);
-#ifdef _USE_SCARLETT
-        if (hr == HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
-            continue;
-#endif
-
         if ( FAILED(hr) )
         {
             success = false;
@@ -441,11 +424,6 @@ bool Test06()
         TexMetadata metadata;
         Xbox::XboxImage image;
         HRESULT hr = Xbox::LoadFromDDSFile(szPath, &metadata, image);
-#ifdef _USE_SCARLETT
-        if (hr == HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
-            continue;
-#endif
-
         if (FAILED(hr))
         {
             success = false;
