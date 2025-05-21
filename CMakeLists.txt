@@ -225,6 +225,14 @@ if(BUILD_DX12)
   set_tests_properties(d3d12 PROPERTIES TIMEOUT 120)
 endif()
 
+# xbox
+if(BUILD_XBOX_EXTS_XBOXONE OR BUILD_XBOX_EXTS_SCARLETT)
+  add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/xbox)
+  add_test(NAME "xbox" COMMAND xtxbox -ctest WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/xbox)
+  set_tests_properties(xbox PROPERTIES LABELS "Xbox")
+  set_tests_properties(xbox PROPERTIES TIMEOUT 120)
+endif()
+
 message(STATUS "Enabled tests: ${TEST_EXES}")
 foreach(t IN LISTS TEST_EXES)
   target_link_libraries(${t} PRIVATE DirectXTex bcrypt.lib)

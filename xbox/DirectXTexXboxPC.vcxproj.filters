@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="dds.cpp" />
+    <ClCompile Include="directxtest.cpp" />
+    <ClCompile Include="testutils.cpp" />
+    <ClCompile Include="tiling.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Common">
+      <UniqueIdentifier>{3b80d589-cb4d-432d-bbe4-7cd3ae889467}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Media">
+      <UniqueIdentifier>{93a4d88f-7204-4279-af18-6b46b997507c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Media\xboxseafloor.dds">
+      <Filter>Media</Filter>
+    </Image>
+    <Image Include="Media\xboxTiny_skin.dds">
+      <Filter>Media</Filter>
+    </Image>
+    <Image Include="Media\xboxwindowslogo.dds">
+      <Filter>Media</Filter>
+    </Image>
+    <Image Include="Media\xboxwindowslogoBC1.dds">
+      <Filter>Media</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\inc\directxtest.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
