@@ -72,7 +72,7 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
-    <MGCCompile Include="MicrosoftGame.Config" />
+    <MGCCompile Include="MicrosoftGameConfig.mgc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(DirectXTexMedia)*">

@@ -346,7 +346,7 @@
     <CopyFileToFolders Include="Assets\LargeLogo.png" />
   </ItemGroup>
   <ItemGroup>
-    <MGCCompile Include="MicrosoftGame.Config" />
+    <MGCCompile Include="MicrosoftGameConfig.mgc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(DirectXTexMedia)*" Exclude="$(DirectXTexMedia).git*;$(DirectXTexMedia)*.db">
