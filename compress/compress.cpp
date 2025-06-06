@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------
 // compress.cpp
-//  
+//
 // Copyright (c) Microsoft Corporation.
 //-------------------------------------------------------------------------------------
 
@@ -216,7 +216,7 @@ namespace
 //-------------------------------------------------------------------------------------
 
 extern HRESULT CreateDevice( ID3D11Device** pDev, ID3D11DeviceContext** pContext );
-extern HRESULT CreateWideImage( _In_count_(nimages) const Image* images, size_t nimages, _In_ const TexMetadata& metadata, _Out_ ScratchImage& result ); 
+extern HRESULT CreateWideImage( _In_count_(nimages) const Image* images, size_t nimages, _In_ const TexMetadata& metadata, _Out_ ScratchImage& result );
 extern HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DirectX::DDS_FLAGS flags, _In_ const ScratchImage& image );
 
 //-------------------------------------------------------------------------------------
@@ -451,7 +451,7 @@ bool Test01()
 
                     // Wide image test
                     ScratchImage imageWide;
-                    hr = CreateWideImage( srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), imageWide ); 
+                    hr = CreateWideImage( srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), imageWide );
                     if ( FAILED(hr) )
                     {
                         success = false;
@@ -1019,7 +1019,7 @@ bool Test02()
                         if ( !(g_CompressMedia[index].flags & FLAGS_SKIP_WIDE) )
                         {
                             ScratchImage imageWide;
-                            hr = CreateWideImage( srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), imageWide ); 
+                            hr = CreateWideImage( srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), imageWide );
                             if ( FAILED(hr) )
                             {
                                 success = false;
@@ -1598,7 +1598,7 @@ bool Test03()
                     if ( !(g_CompressMedia[index].flags & FLAGS_SKIP_WIDE) )
                     {
                         ScratchImage imageWide;
-                        hr = CreateWideImage( srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), imageWide ); 
+                        hr = CreateWideImage( srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), imageWide );
                         if ( FAILED(hr) )
                         {
                             success = false;

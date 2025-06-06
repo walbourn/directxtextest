@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------
 // dds.cpp
-//  
+//
 // Copyright (c) Microsoft Corporation.
 //-------------------------------------------------------------------------------------
 
@@ -18,7 +18,7 @@ struct TestMedia
     const wchar_t *fname;
 };
 
-static const TestMedia g_TestMedia[] = 
+static const TestMedia g_TestMedia[] =
 {
 #ifdef _USE_SCARLETT
 { { 256, 256, 1, 1, 9, 0, 0x3, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, true, L"Media\\scarlettseafloor.dds" },

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------
 // tiling.cpp
-//  
+//
 // Copyright (c) Microsoft Corporation.
 //-------------------------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ struct TestMedia
     bool mipsgen;
 };
 
-static const TestMedia g_TestMedia[] = 
+static const TestMedia g_TestMedia[] =
 {
 { MEDIA_PATH L"fishingboat.jpg" },
 { MEDIA_PATH L"lena.jpg" },

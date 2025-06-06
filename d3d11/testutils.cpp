@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------
 // testutils.cpp
-//  
+//
 // Copyright (c) Microsoft Corporation.
 //-------------------------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ using Microsoft::WRL::ComPtr;
 #define RENDER_TEST_MS_DELAY 5000
 
 #define RENDER_WIDTH 640
-#define RENDER_HEIGHT 480 
+#define RENDER_HEIGHT 480
 
 namespace
 {
