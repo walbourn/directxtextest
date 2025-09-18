@@ -30,6 +30,7 @@ TestInfo g_Tests[] =
     { "ComputeTileShape", TEXTest::Test20 },
     { "Make*", TEXTest::Test12 },
     { "TexMetadata", TEXTest::Test18 },
+    { "Blob", TEXTest::Test21 },
     { "ScratchImage", TEXTest::Test19 },
 #ifndef BUILD_BVT_ONLY
     { "ComputeMSE", TEXTest::Test10 },

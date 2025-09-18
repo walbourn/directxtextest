@@ -29,4 +29,5 @@ namespace TEXTest
     bool Test18();
     bool Test19();
     bool Test20();
+    bool Test21();
 }

@@ -10,6 +10,7 @@
 #include "tex.h"
 
 #include "DirectXTexP.h"
+#include "scoped.h"
 
 using namespace DirectX;
 
@@ -182,6 +183,12 @@ namespace
 
 //-------------------------------------------------------------------------------------
 // TexMetadata
+
+static_assert(std::is_copy_assignable<TexMetadata>::value, "Copy Assign.");
+static_assert(std::is_copy_constructible<TexMetadata>::value, "Copy Ctor.");
+static_assert(std::is_nothrow_move_constructible<TexMetadata>::value, "Move Ctor.");
+static_assert(std::is_nothrow_move_assignable<TexMetadata>::value, "Move Assign.");
+
 bool TEXTest::Test18()
 {
     bool success = true;
@@ -323,6 +330,12 @@ bool TEXTest::Test18()
 
 //-------------------------------------------------------------------------------------
 // ScratchImage
+
+static_assert(!std::is_copy_assignable<ScratchImage>::value, "Copy Assign.");
+static_assert(!std::is_copy_constructible<ScratchImage>::value, "Copy Ctor.");
+static_assert(std::is_nothrow_move_constructible<ScratchImage>::value, "Move Ctor.");
+static_assert(std::is_nothrow_move_assignable<ScratchImage>::value, "Move Assign.");
+
 bool TEXTest::Test19()
 {
     bool success = true;
@@ -529,6 +542,502 @@ bool TEXTest::Test19()
             printe( "ERROR: OverrideFormat empty failed (%zu)\n", index );
             success = false;
         }
+    }
+
+    // invalid args
+    TexMetadata mdata = { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D };
+    ScratchImage image;
+
+    mdata.format = DXGI_FORMAT_UNKNOWN;
+    HRESULT hr = image.Initialize(mdata);
+    if (hr != E_INVALIDARG)
+    {
+        printe( "ERROR: Expected failure for invalid format (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    mdata.format = DXGI_FORMAT_P8;
+    hr = image.Initialize(mdata);
+    if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+    {
+        printe( "ERROR: Expected failure for paletted format (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    hr = image.Initialize2D(DXGI_FORMAT_P8, 256, 256, 1, 9);
+    if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+    {
+        printe( "ERROR: Expected failure for paletted format init2D (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    hr = image.Initialize3D(DXGI_FORMAT_P8, 256, 256, 4, 1);
+    if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+    {
+        printe( "ERROR: Expected failure for paletted format init3D (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    mdata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    mdata.dimension = static_cast<TEX_DIMENSION>(0);
+    hr = image.Initialize(mdata);
+    if (SUCCEEDED(hr))
+    {
+        printe( "ERROR: Failed invalid metadata dimension test (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    {
+        TexMetadata mdata2 = { 0, 1, 1, 1, 9, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE1D };
+        hr = image.Initialize(mdata2);
+        if (hr != E_INVALIDARG)
+        {
+            printe( "ERROR: Expected failure for invalid width 1D (%08X)\n", static_cast<unsigned int>(hr));
+            success = false;
+        }
+
+        hr = image.Initialize1D(DXGI_FORMAT_B8G8R8A8_UNORM, 0, 1, 9);
+        if (hr != E_INVALIDARG)
+        {
+            printe( "ERROR: Expected failure for invalid width init1D (%08X)\n", static_cast<unsigned int>(hr));
+            success = false;
+        }
+
+        mdata2.width = 256;;
+        mdata2.mipLevels = 15;
+        hr = image.Initialize(mdata2);
+        if (hr != E_INVALIDARG)
+        {
+            printe( "ERROR: Expected failure for invalid mips 1D (%08X)\n", static_cast<unsigned int>(hr));
+            success = false;
+        }
+
+        hr = image.Initialize1D(DXGI_FORMAT_B8G8R8A8_UNORM, 256, 1, 15);
+        if (hr != E_INVALIDARG)
+        {
+            printe( "ERROR: Expected failure for invalid mipsinit1D (%08X)\n", static_cast<unsigned int>(hr));
+            success = false;
+        }
+    }
+
+    {
+        TexMetadata mdata2 = { 256, 0, 1, 1, 9, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D };
+        hr = image.Initialize(mdata2);
+        if (hr != E_INVALIDARG)
+        {
+            printe( "ERROR: Expected failure for invalid height 2D (%08X)\n", static_cast<unsigned int>(hr));
+            success = false;
+        }
+
+        hr = image.Initialize2D(DXGI_FORMAT_B8G8R8A8_UNORM, 256, 0, 1, 9);
+        if (hr != E_INVALIDARG)
+        {
+            printe( "ERROR: Expected failure for invalid height init2D (%08X)\n", static_cast<unsigned int>(hr));
+            success = false;
+        }
+
+        mdata2.height = 256;
+        mdata2.mipLevels = 15;
+        hr = image.Initialize(mdata2);
+        if (hr != E_INVALIDARG)
+        {
+            printe( "ERROR: Expected failure for invalid mips 2D (%08X)\n", static_cast<unsigned int>(hr));
+            success = false;
+        }
+
+        hr = image.Initialize2D(DXGI_FORMAT_B8G8R8A8_UNORM, 256, 256, 1, 15);
+        if (hr != E_INVALIDARG)
+        {
+            printe( "ERROR: Expected failure for invalid mips init2D (%08X)\n", static_cast<unsigned int>(hr));
+            success = false;
+        }
+    }
+
+    {
+        TexMetadata mdata2 = { 256, 256, 0, 1, 9, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D };
+        hr = image.Initialize(mdata2);
+        if (hr != E_INVALIDARG)
+        {
+            printe( "ERROR: Expected failure for invalid depth 3D (%08X)\n", static_cast<unsigned int>(hr));
+            success = false;
+        }
+
+        hr = image.Initialize3D(DXGI_FORMAT_B8G8R8A8_UNORM, 256, 256, 0, 9);
+        if (hr != E_INVALIDARG)
+        {
+            printe( "ERROR: Expected failure for invalid depth init3D (%08X)\n", static_cast<unsigned int>(hr));
+            success = false;
+        }
+
+        mdata2.depth = 4;
+        mdata2.mipLevels = 15;
+        hr = image.Initialize(mdata2);
+        if (hr != E_INVALIDARG)
+        {
+            printe( "ERROR: Expected failure for invalid mips 3D (%08X)\n", static_cast<unsigned int>(hr));
+            success = false;
+        }
+
+        hr = image.Initialize3D(DXGI_FORMAT_B8G8R8A8_UNORM, 256, 256, 0, 15);
+        if (hr != E_INVALIDARG)
+        {
+            printe( "ERROR: Expected failure for invalid mips init3D (%08X)\n", static_cast<unsigned int>(hr));
+            success = false;
+        }
+    }
+
+    {
+        TexMetadata mdata2 = { 512, 512, 1, 9, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D };
+        hr = image.Initialize(mdata2);
+        if (hr != E_INVALIDARG)
+        {
+            printe( "ERROR: Expected failure for invalid cube face count (%08X)\n", static_cast<unsigned int>(hr));
+            success = false;
+        }
+    }
+
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+    hr = image.InitializeArrayFromImages(nullptr, 0);
+    if (hr != E_INVALIDARG)
+    {
+        printe( "ERROR: Expected failure for null array from images (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    hr = image.InitializeCubeFromImages(nullptr, 0);
+    if (hr != E_INVALIDARG)
+    {
+        printe( "ERROR: Expected failure for null cube from images (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    hr = image.Initialize3DFromImages(nullptr, 0);
+    if (hr != E_INVALIDARG)
+    {
+        printe( "ERROR: Expected failure for null 3D from images (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+    #pragma warning(pop)
+
+    // GetImage
+    image.Release();
+    if (image.GetImage(0, 0, 0) != nullptr)
+    {
+        printe( "ERROR: Failed empty GetImage test\n");
+        success = false;
+    }
+
+    hr = image.Initialize2D(DXGI_FORMAT_R8G8B8A8_UNORM, 256, 256, 1, 1);
+    if (FAILED(hr))
+    {
+        printe( "ERROR: Failed creating test 2D image (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    if (image.GetImage(0, 0, 0) == nullptr)
+    {
+        printe( "ERROR: Failed valid GetImage 2D test\n");
+        success = false;
+    }
+
+    if (image.GetImage(1, 0, 0) != nullptr
+        || image.GetImage(0, 1, 0) != nullptr
+        || image.GetImage(0, 0, 1) != nullptr
+        || image.GetImage(UINT32_MAX, 0, 0) != nullptr
+        || image.GetImage(0, UINT32_MAX, 0) != nullptr
+        || image.GetImage(0, 0, UINT32_MAX) != nullptr)
+    {
+        printe( "ERROR: Failed invalid GetImage 2D test\n");
+        success = false;
+    }
+
+    auto image2 = std::move(image);
+    if (image2.GetPixels() == nullptr || image.GetPixels() != nullptr)
+    {
+        printe( "ERROR: Failed move test image\n");
+        success = false;
+    }
+
+    hr = image.Initialize3D(DXGI_FORMAT_R8G8B8A8_UNORM, 256, 256, 4, 1);
+    if (FAILED(hr))
+    {
+        printe( "ERROR: Failed creating test 3D image (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    if (image.GetImage(0, 0, 0) == nullptr
+        || image.GetImage(0, 0, 1) == nullptr
+        || image.GetImage(0, 0, 2) == nullptr
+        || image.GetImage(0, 0, 3) == nullptr)
+    {
+        printe( "ERROR: Failed valid GetImage 3D test\n");
+        success = false;
+    }
+
+    if (image.GetImage(1, 0, 0) != nullptr
+        || image.GetImage(0, 1, 0) != nullptr
+        || image.GetImage(0, 0, 6) != nullptr
+        || image.GetImage(UINT32_MAX, 0, 0) != nullptr
+        || image.GetImage(0, UINT32_MAX, 0) != nullptr
+        || image.GetImage(0, 0, UINT32_MAX) != nullptr)
+    {
+        printe( "ERROR: Failed invalid GetImage 3D test\n");
+        success = false;
+    }
+
+    hr = image.Initialize2D(DXGI_FORMAT_R8G8B8A8_UNORM, 256, 256, 4, 4);
+    if (FAILED(hr))
+    {
+        printe( "ERROR: Failed creating test 2D mips image (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    if (image.GetImage(0, 0, 0) == nullptr
+        || image.GetImage(1, 0, 0) == nullptr
+        || image.GetImage(2, 0, 0) == nullptr
+        || image.GetImage(3, 0, 0) == nullptr)
+    {
+        printe( "ERROR: Failed valid GetImage 2D mips test\n");
+        success = false;
+    }
+
+    if (image.GetImage(4, 0, 0) != nullptr
+        || image.GetImage(0, 4, 0) != nullptr
+        || image.GetImage(0, 0, 4) != nullptr
+        || image.GetImage(UINT32_MAX, 0, 0) != nullptr
+        || image.GetImage(0, UINT32_MAX, 0) != nullptr
+        || image.GetImage(0, 0, UINT32_MAX) != nullptr)
+    {
+        printe( "ERROR: Failed invalid GetImage 2D mips test\n");
+        success = false;
+    }
+
+    hr = image.Initialize3D(DXGI_FORMAT_R8G8B8A8_UNORM, 256, 256, 4, 4);
+    if (FAILED(hr))
+    {
+        printe( "ERROR: Failed creating test 3D mips image (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    if (image.GetImage(0, 0, 0) == nullptr
+        || image.GetImage(0, 0, 1) == nullptr
+        || image.GetImage(0, 0, 2) == nullptr
+        || image.GetImage(0, 0, 3) == nullptr)
+    {
+        printe( "ERROR: Failed valid GetImage 3D mips test\n");
+        success = false;
+    }
+
+    if (image.GetImage(6, 0, 0) != nullptr
+        || image.GetImage(0, 6, 0) != nullptr
+        || image.GetImage(0, 0, 6) != nullptr
+        || image.GetImage(UINT32_MAX, 0, 0) != nullptr
+        || image.GetImage(0, UINT32_MAX, 0) != nullptr
+        || image.GetImage(0, 0, UINT32_MAX) != nullptr)
+    {
+        printe( "ERROR: Failed invalid GetImage 3D mips test\n");
+        success = false;
+    }
+
+
+    return success;
+}
+
+
+//-------------------------------------------------------------------------------------
+// Blob
+
+static_assert(!std::is_copy_assignable<Blob>::value, "Copy Assign.");
+static_assert(!std::is_copy_constructible<Blob>::value, "Copy Ctor.");
+static_assert(std::is_nothrow_move_constructible<Blob>::value, "Move Ctor.");
+static_assert(std::is_nothrow_move_assignable<Blob>::value, "Move Assign.");
+
+bool TEXTest::Test21()
+{
+    bool success = true;
+
+    static const wchar_t* s_TestMedia[] =
+    {
+        MEDIA_PATH L"reftexture.dds",
+        MEDIA_PATH L"test8888.dds",
+        MEDIA_PATH L"testvol8888.dds",
+        MEDIA_PATH L"testdxt1.dds",
+
+    #ifndef BUILD_BVT_ONLY
+        MEDIA_PATH L"test555.dds",
+        MEDIA_PATH L"test8888mip.dds",
+        MEDIA_PATH L"testcube8888.dds",
+        MEDIA_PATH L"testcube8888mip.dds",
+        MEDIA_PATH L"testcubedxt5.dds",
+        MEDIA_PATH L"testcubedxt5mip.dds",
+        MEDIA_PATH L"testdxt1mip.dds",
+        MEDIA_PATH L"testvol8888mip.dds",
+        MEDIA_PATH L"testvoldxt1mip.dds",
+        MEDIA_PATH L"earth_A2B10G10R10.dds",
+        MEDIA_PATH L"earth_A2R10G10B10.dds",
+        MEDIA_PATH L"bc7_unorm.dds",
+        MEDIA_PATH L"bc7_unorm_srgb.dds",
+        MEDIA_PATH L"windowslogo_A1R5G5B5.dds",
+        MEDIA_PATH L"windowslogo_DXT3.dds",
+        MEDIA_PATH L"windowslogo_R5G6B5.dds",
+        MEDIA_PATH L"windowslogo_X8B8G8R8.dds",
+        MEDIA_PATH L"windowslogo_A8R3G3B2.dds",
+        MEDIA_PATH L"windowslogo_rgba16.dds",
+        MEDIA_PATH L"windowslogo_rgba16f.dds",
+        MEDIA_PATH L"windowslogo_rgba32f.dds",
+        MEDIA_PATH L"alphaedge.dds",
+        MEDIA_PATH L"windowslogo_A4L4.dds",
+        MEDIA_PATH L"windowslogo_X4R4G4B4.dds",
+        MEDIA_PATH L"windowslogo_A4R4G4B4.dds",
+        MEDIA_PATH L"dx5_logo.dds",
+        MEDIA_PATH L"win95.dds",
+        MEDIA_PATH L"lobbycube.dds",
+        MEDIA_PATH L"world8192.dds",
+        MEDIA_PATH L"tree02S.dds",
+        MEDIA_PATH L"tree02S_pmalpha.dds",
+        MEDIA_PATH L"earthdiffuse.dds",
+        MEDIA_PATH L"SplashScreen2.dds",
+        MEDIA_PATH L"lena.dds",
+        MEDIA_PATH L"windowslogo_191.dds",
+    #endif
+    };
+
+    size_t ncount = 0;
+    size_t npass = 0;
+
+    for( size_t index=0; index < std::size(s_TestMedia); ++index, ++ncount )
+    {
+        wchar_t szPath[MAX_PATH] = {};
+        DWORD ret = ExpandEnvironmentStringsW(s_TestMedia[index], szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
+
+#if defined(_DEBUG) && defined(VERBOSE)
+        OutputDebugString(szPath);
+        OutputDebugStringA("\n");
+#endif
+
+        ScopedHandle hFile(safe_handle(CreateFile2(
+            szPath,
+            GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING,
+            nullptr)));
+        if (!hFile)
+        {
+            printe("ERROR: Failed opening test media (%zu) (HRESULT %08X)\n", index, GetLastError());
+            success = false;
+            continue;
+        }
+
+        LARGE_INTEGER fileSize = {};
+        if (!GetFileSizeEx( hFile.get(), &fileSize ) || fileSize.QuadPart > UINT32_MAX)
+        {
+            printe( "ERROR: Failed getting test media size (%zu) (HRESULT %08X)\n", index, GetLastError());
+            success = false;
+            continue;
+        }
+
+        Blob blob;
+        HRESULT hr = blob.Initialize( fileSize.LowPart );
+        if ( FAILED(hr) )
+        {
+            printe( "ERROR: Failed creating test media memory (%zu) (HRESULT %08X)\n", index, static_cast<unsigned int>(hr));
+            success = false;
+            continue;
+        }
+
+        DWORD bytesRead = 0;
+        if (!ReadFile(hFile.get(), blob.GetBufferPointer(), static_cast<DWORD>( blob.GetBufferSize() ), &bytesRead, nullptr)
+            || bytesRead != blob.GetBufferSize())
+        {
+            printe( "ERROR: Failed reading test media (%zu) (HRESULT %08X)\n", index, GetLastError());
+            success = false;
+            continue;
+        }
+
+        ++npass;
+    }
+
+    // invalid args
+    Blob blob;
+    HRESULT hr = blob.Initialize(0);
+    if (hr != E_INVALIDARG)
+    {
+        printe( "ERROR: Expected failure for invalid size (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    hr = blob.Trim(0);
+    if (hr != E_INVALIDARG)
+    {
+        printe( "ERROR: Expected failure for invalid trim size (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    hr = blob.Trim(2);
+    if (SUCCEEDED(hr))
+    {
+        printe( "ERROR: Expected failure for uninitialized trim (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    hr = blob.Resize(0);
+    if (hr != E_INVALIDARG)
+    {
+        printe( "ERROR: Expected failure for resize invalid size (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    hr = blob.Resize(2);
+    if (SUCCEEDED(hr))
+    {
+        printe( "ERROR: Expected failure for uninitialized resize (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    hr = blob.Initialize(16);
+    if (FAILED(hr))
+    {
+        printe( "ERROR: Failed creating test blob (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    hr = blob.Trim(32);
+    if (hr != E_INVALIDARG)
+    {
+        printe( "ERROR: Expected failure for trim invalid (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    hr = blob.Resize(64);
+    if (FAILED(hr))
+    {
+        printe( "ERROR: Failed resize 64 test blob (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    hr = blob.Resize(32);
+    if (FAILED(hr))
+    {
+        printe( "ERROR: Failed resize 32 test blob (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    hr = blob.Trim(16);
+    if (FAILED(hr))
+    {
+        printe( "ERROR: Failed trim test blob (%08X)\n", static_cast<unsigned int>(hr));
+        success = false;
+    }
+
+    auto blob2 = std::move(blob);
+    if (blob2.GetBufferSize() != 16 || blob.GetBufferSize() != 0)
+    {
+        printe( "ERROR: Failed move test blob\n");
+        success = false;
     }
 
     return success;

@@ -25,18 +25,6 @@ namespace
 }
 
 //-------------------------------------------------------------------------------------
-
-static_assert(!std::is_copy_assignable<ScratchImage>::value, "Copy Assign.");
-static_assert(!std::is_copy_constructible<ScratchImage>::value, "Copy Ctor.");
-static_assert(std::is_nothrow_move_constructible<ScratchImage>::value, "Move Ctor.");
-static_assert(std::is_nothrow_move_assignable<ScratchImage>::value, "Move Assign.");
-
-static_assert(!std::is_copy_assignable<Blob>::value, "Copy Assign.");
-static_assert(!std::is_copy_constructible<Blob>::value, "Copy Ctor.");
-static_assert(std::is_nothrow_move_constructible<Blob>::value, "Move Ctor.");
-static_assert(std::is_nothrow_move_assignable<Blob>::value, "Move Assign.");
-
-//-------------------------------------------------------------------------------------
 // IsValid
 // IsCompressed
 // IsPacked
