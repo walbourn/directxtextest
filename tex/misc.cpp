@@ -423,6 +423,14 @@ bool TEXTest::Test09()
             success = false;
             printe("Failed invalid arg test\n");
         }
+
+        // TODO - unsupported format (compressed, planar, or palette)
+
+        // TODO - invalid rectangle
+
+        // TODO - invalid offset
+
+        // TODO - R1 for source or destination
     }
 
     return success;
@@ -599,6 +607,16 @@ bool TEXTest::Test10()
             success = false;
             printe("Failed null mseV test\n");
         }
+
+        // TODO - mismatch widths/heights
+
+        // TODO - invalid format
+
+        // TODO - unsupprorted format (compressed, planar, or palette)
+
+        // TODO - image1 compressed, other uncompressed
+
+        // TODO - image2 compressed, other uncompresssed
     }
 
     return success;
@@ -843,6 +861,12 @@ bool TEXTest::Test16()
             success = false;
             printe("Failed invalid arg complex test\n");
         }
+
+        // TODO - invalid format
+
+        // TODO - unsupprorted format (planar or palette)
+
+        // TODO - complex with volume maps with depth exceeding UINT16_MAX
     #pragma warning(pop)
     }
 
@@ -1313,6 +1337,12 @@ bool TEXTest::Test17()
             success = false;
             printe("Failed invalid arg complex test\n");
         }
+
+        // TODO - invalid format
+
+        // TODO - unsupprorted format (planar or palette)
+
+        // TODO - complex with volume maps with depth exceeding UINT16_MAX
     #pragma warning(pop)
     }
 

@@ -502,6 +502,8 @@ namespace
         { WIC_CODEC_PNG, L".png", MEDIA_PATH L"test8888.dds" },
         { WIC_CODEC_TIFF, L".tiff", MEDIA_PATH L"test8888.dds" },
 
+        // TODO - .gif, .ico, .heif
+
     #ifndef BUILD_BVT_ONLY
         { WIC_CODEC_BMP, L".bmp", MEDIA_PATH L"windowslogo_R5G6B5.dds" },
         { WIC_CODEC_JPEG, L".jpeg", MEDIA_PATH L"windowslogo_R5G6B5.dds" },
