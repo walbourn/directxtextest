@@ -1027,7 +1027,7 @@ bool Test01()
         OutputDebugStringA("\n");
 #endif
 
-        const DDS_FLAGS flags = GetTestDDSFlags(g_TestMedia[index].options);
+        const auto flags = GetTestDDSFlags(g_TestMedia[index].options);
         bool pass = false;
 
         // FromMemory
@@ -1197,7 +1197,7 @@ bool Test07()
         OutputDebugStringA("\n");
     #endif
 
-        DDS_FLAGS flags = GetTestDDSFlags(g_TestMedia[index].options);
+        auto flags = GetTestDDSFlags(g_TestMedia[index].options);
         bool pass = false;
 
         // FromMemory
@@ -1382,7 +1382,7 @@ bool Test02()
         }
         else
         {
-            DDS_FLAGS flags = GetTestDDSFlags(g_TestMedia[index].options);
+            auto flags = GetTestDDSFlags(g_TestMedia[index].options);
             TexMetadata metadata;
             ScratchImage image;
             hr = LoadFromDDSMemory( blob.GetConstBufferPointer(), blob.GetBufferSize(), flags, &metadata, image );
@@ -1663,7 +1663,7 @@ bool Test08()
         }
         else
         {
-            DDS_FLAGS flags = GetTestDDSFlags(g_TestMedia[index].options);
+            auto flags = GetTestDDSFlags(g_TestMedia[index].options);
             TexMetadata metadata;
             ScratchImage image;
             DDSMetaData ddsPixelFormat;
@@ -1825,7 +1825,7 @@ bool Test03()
         OutputDebugStringA("\n");
 #endif
 
-        DDS_FLAGS flags = GetTestDDSFlags(g_TestMedia[index].options);
+        auto flags = GetTestDDSFlags(g_TestMedia[index].options);
         TexMetadata metadata;
         ScratchImage image;
         HRESULT hr = LoadFromDDSFile( szPath, flags, &metadata, image );
@@ -2097,7 +2097,7 @@ bool Test09()
         OutputDebugStringA("\n");
     #endif
 
-        DDS_FLAGS flags = GetTestDDSFlags(g_TestMedia[index].options);
+        auto flags = GetTestDDSFlags(g_TestMedia[index].options);
         TexMetadata metadata;
         ScratchImage image;
         DDSMetaData ddsPixelFormat;
@@ -3190,6 +3190,288 @@ bool Test06()
     }
 
     print(" %zu images tested ", ncount);
+
+    return success;
+}
+
+
+//-------------------------------------------------------------------------------------
+// EncodeDDSHeader
+
+#include <DDS.h>
+
+bool Test10()
+{
+    bool success = true;
+
+    for( size_t index=0; index < std::size(g_TestMedia); ++index )
+    {
+        uint8_t ddsHeader[256] = {};
+        size_t required = 0;
+        const auto flags = GetTestDDSFlags(g_TestMedia[index].options);
+        HRESULT hr = EncodeDDSHeader(g_TestMedia[index].metadata, flags,
+            ddsHeader, sizeof(ddsHeader), required);
+        if (FAILED(hr))
+        {
+            success = false;
+            printe("Failed encoding DDS header [%zu] (HRESULT %08X)\n", index, static_cast<unsigned int>(hr));
+        }
+        else if (!required)
+        {
+            success = false;
+            printe("Expected non-zero required size [%zu]\n", index);
+        }
+        else if (required > sizeof(ddsHeader))
+        {
+            success = false;
+            printe("Expected required size to fit in provided buffer [%zu]\n", index);
+        }
+        else if (required < DDS_MIN_HEADER_SIZE)
+        {
+            success = false;
+            printe("Expected required size to at least fit a standard DDS header [%zu] (%zu .. %zu)\n", index, DDS_MIN_HEADER_SIZE, required);
+        }
+        else if (reinterpret_cast<uint32_t*>(ddsHeader)[0] != DDS_MAGIC)
+        {
+            success = false;
+            printe("Expected standard DDS magic number [%zu] (0x%08X .. 0x%08X)\n", index, DDS_MAGIC, reinterpret_cast<uint32_t*>(ddsHeader)[0]);
+        }
+        else
+        {
+            auto hdr = reinterpret_cast<const DDS_HEADER*>(ddsHeader + sizeof(uint32_t));
+            if (hdr->size != sizeof(DDS_HEADER))
+            {
+                success = false;
+                printe("Expected standard DDS header size [%zu] (%zu .. %u)\n", index, sizeof(DDS_HEADER), hdr->size);
+            }
+        }
+
+        // Size only
+        hr = EncodeDDSHeader(g_TestMedia[index].metadata, flags, nullptr, 0, required);
+        if (FAILED(hr))
+        {
+            success = false;
+            printe("Failed determining DDS header size [%zu] (HRESULT %08X)\n", index, static_cast<unsigned int>(hr));
+        }
+        else if (!required)
+        {
+            success = false;
+            printe("Expected non-zero requested size [%zu]\n", index);
+        }
+        else if (required < DDS_MIN_HEADER_SIZE)
+        {
+            success = false;
+            printe("Expected requested size to at least fit a standard DDS header [%zu] (%zu .. %zu)\n", index, DDS_MIN_HEADER_SIZE, required);
+        }
+
+        // Force DX10
+        hr = EncodeDDSHeader(g_TestMedia[index].metadata, flags | DDS_FLAGS_FORCE_DX10_EXT,
+            ddsHeader, sizeof(ddsHeader), required);
+        if (FAILED(hr))
+        {
+            success = false;
+            printe("Failed encoding DDS DX10 header [%zu] (HRESULT %08X)\n", index, static_cast<unsigned int>(hr));
+        }
+        else if (!required)
+        {
+            success = false;
+            printe("Expected non-zero required size for DX10 [%zu]\n", index);
+        }
+        else if (required > sizeof(ddsHeader))
+        {
+            success = false;
+            printe("Expected required size to fit in provided buffer [%zu]\n", index);
+        }
+        else if (required < DDS_DX10_HEADER_SIZE)
+        {
+            success = false;
+            printe("Expected required size to at least fit a DDS DX10 header [%zu] (%zu .. %zu)\n", index, DDS_DX10_HEADER_SIZE, required);
+        }
+        else if (reinterpret_cast<uint32_t*>(ddsHeader)[0] != DDS_MAGIC)
+        {
+            success = false;
+            printe("Expected standard DDS magic number for DX10 [%zu] (0x%08X .. 0x%08X)\n", index, DDS_MAGIC, reinterpret_cast<uint32_t*>(ddsHeader)[0]);
+        }
+        else
+        {
+            auto hdr = reinterpret_cast<const DDS_HEADER*>(ddsHeader + sizeof(uint32_t));
+            if (hdr->size != sizeof(DDS_HEADER))
+            {
+                success = false;
+                printe("Expected standard DDS header size for DX10 [%zu] (%zu .. %u)\n", index, sizeof(DDS_HEADER), hdr->size);
+            }
+            else if (memcmp(&hdr->ddspf, &DDSPF_DX10, sizeof(DDS_PIXELFORMAT)) != 0)
+            {
+                success = false;
+                printe("Expected standard DDS DX10 pixel format [%zu]\n", index);
+            }
+            else
+            {
+                auto d3d10ext = reinterpret_cast<const DDS_HEADER_DXT10*>(ddsHeader + DDS_MIN_HEADER_SIZE);
+                if (d3d10ext->dxgiFormat != g_TestMedia[index].metadata.format)
+                {
+                    success = false;
+                    printe("Expected matching DXGI format in DDS DX10 header [%zu] (%u .. %u)\n", index, d3d10ext->dxgiFormat, g_TestMedia[index].metadata.format);
+                }
+                if (d3d10ext->resourceDimension != g_TestMedia[index].metadata.dimension)
+                {
+                    success = false;
+                    printe("Expected matching resource dimension in DDS DX10 header [%zu] (%u .. %u)\n", index, d3d10ext->resourceDimension, g_TestMedia[index].metadata.dimension);
+                }
+
+                if (d3d10ext->miscFlag & DDS_RESOURCE_MISC_TEXTURECUBE)
+                {
+                    if (!(g_TestMedia[index].metadata.miscFlags & TEX_MISC_TEXTURECUBE))
+                    {
+                        success = false;
+                        printe("Expected matching texture cube flag in DDS DX10 header [%zu]\n", index);
+                    }
+
+                    if ((d3d10ext->arraySize * 6) != g_TestMedia[index].metadata.arraySize)
+                    {
+                        success = false;
+                        printe("Expected matching array size in DDS DX10 header [%zu] (6*%u .. %zu)\n", index, d3d10ext->arraySize, g_TestMedia[index].metadata.arraySize);
+                    }
+                }
+                else if (g_TestMedia[index].metadata.miscFlags & TEX_MISC_TEXTURECUBE)
+                {
+                    success = false;
+                    printe("Expected matching texture cube flag in DDS DX10 header [%zu]\n", index);
+                }
+                else if (d3d10ext->arraySize != g_TestMedia[index].metadata.arraySize)
+                {
+                    success = false;
+                    printe("Expected matching array size in DDS DX10 header [%zu] (%u .. %zu)\n", index, d3d10ext->arraySize, g_TestMedia[index].metadata.arraySize);
+                }
+            }
+        }
+    }
+
+    // test force DX9 scenarios
+    static const TexMetadata s_dx9[] =
+    {
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R16G16_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R16_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R8_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_A8_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8_B8G8_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_G8R8_G8B8_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC2_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC3_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, TEX_ALPHA_MODE_PREMULTIPLIED, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, TEX_ALPHA_MODE_PREMULTIPLIED, DXGI_FORMAT_BC2_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, TEX_ALPHA_MODE_PREMULTIPLIED, DXGI_FORMAT_BC3_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC2_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC3_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC4_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC4_SNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC5_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC5_SNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_B5G6R5_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_B5G5R5A1_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8_SNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_SNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R16G16_SNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8X8_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8X8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_B4G4R4A4_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_YUY2, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R32G32B32A32_FLOAT, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R16G16B16A16_FLOAT, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R16G16B16A16_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R16G16B16A16_SNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R32G32_FLOAT, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R16G16_FLOAT, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R32_FLOAT, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R16_FLOAT, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_DIMENSION_TEXTURE2D },
+    };
+
+    for(size_t index = 0; index < std::size(s_dx9); ++index)
+    {
+        uint8_t ddsHeader[256] = {};
+        size_t required = 0;
+        HRESULT hr = EncodeDDSHeader(s_dx9[index], DDS_FLAGS_FORCE_DX9_LEGACY,
+            ddsHeader, sizeof(ddsHeader), required);
+        if (FAILED(hr))
+        {
+            success = false;
+            printe("Failed encoding DDS DX9 header [%zu] (HRESULT %08X)\n", index, static_cast<unsigned int>(hr));
+        }
+        else if (!required)
+        {
+            success = false;
+            printe("Expected non-zero required size for DX9 [%zu]\n", index);
+        }
+        else if (required > sizeof(ddsHeader))
+        {
+            success = false;
+            printe("Expected required size to fit in provided buffer [DX9, %zu]\n", index);
+        }
+        else if (required < DDS_MIN_HEADER_SIZE)
+        {
+            success = false;
+            printe("Expected required size to at least fit a standard DDS header [DX9 %zu] (%zu .. %zu)\n", index, DDS_MIN_HEADER_SIZE, required);
+        }
+        else if (reinterpret_cast<uint32_t*>(ddsHeader)[0] != DDS_MAGIC)
+        {
+            success = false;
+            printe("Expected standard DDS magic number [DX9, %zu] (0x%08X .. 0x%08X)\n", index, DDS_MAGIC, reinterpret_cast<uint32_t*>(ddsHeader)[0]);
+        }
+        else
+        {
+            auto hdr = reinterpret_cast<const DDS_HEADER*>(ddsHeader + sizeof(uint32_t));
+            if (hdr->size != sizeof(DDS_HEADER))
+            {
+                success = false;
+                printe("Expected standard DDS header size [DX9, %zu] (%zu .. %u)\n", index, sizeof(DDS_HEADER), hdr->size);
+            }
+            else if (memcmp(&hdr->ddspf, &DDSPF_DX10, sizeof(DDS_PIXELFORMAT)) == 0)
+            {
+                success = false;
+                printe("Did not expect DDS DX10 pixel format [DX9, %zu]\n", index);
+            }
+        }
+    }
+
+    // invalid args
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+    {
+        TexMetadata invalid = {};
+        invalid.format = DXGI_FORMAT_UNKNOWN;
+        size_t required = 0;
+        HRESULT hr = EncodeDDSHeader(invalid, DDS_FLAGS_NONE, nullptr, 0, required);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid dxgi format test (%08X)\n", static_cast<unsigned int>(hr));
+        }
+
+        invalid.format = DXGI_FORMAT_P8;
+        hr = EncodeDDSHeader(invalid, DDS_FLAGS_NONE, nullptr, 0, required);
+        if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+        {
+            success = false;
+            printe("Failed unsupported dxgi format test (%08X)\n", static_cast<unsigned int>(hr));
+        }
+
+        invalid = { 32, 32, 1, 12, 6, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D };
+        hr = EncodeDDSHeader(invalid, DDS_FLAGS_FORCE_DX9_LEGACY, nullptr, 0, required);
+        if (hr != HRESULT_FROM_WIN32(ERROR_CANNOT_MAKE))
+        {
+            success = false;
+            printe("Failed force DX9 unsupported case test (%08X)\n", static_cast<unsigned int>(hr));
+        }
+    }
+    #pragma warning(pop)
 
     return success;
 }

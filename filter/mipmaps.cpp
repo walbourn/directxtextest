@@ -476,6 +476,8 @@ bool FilterTest::Test02()
             {
                 bool pass = true;
 
+                print(".");
+
                 //--- Simple mipmaps 1D/2D ------------------------------------------------
                 ScratchImage mipChain;
                 hr = GenerateMipMaps( *srcimage.GetImage(0,0,0), TEX_FILTER_DEFAULT, 0, mipChain, false );
@@ -1623,27 +1625,112 @@ bool FilterTest::Test02()
                     }
                 }
 
+                //--- invalid args --------------------------------------------------------
+                if (!index)
+                {
+                    ScratchImage invalid;
+                    hr = GenerateMipMaps( *srcimage.GetImage(0,0,0), TEX_FILTER_DEFAULT, INT16_MAX, invalid );
+                    if ( hr != E_INVALIDARG )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Expected failure for out-of-range mip-levels! (%08X)\n", static_cast<unsigned int>(hr) );
+                    }
+
+                    auto img = *srcimage.GetImage(0, 0, 0);
+                    img.pixels = nullptr;
+                    hr = GenerateMipMaps(img, TEX_FILTER_DEFAULT, 0, invalid);
+                    if (hr != E_POINTER)
+                    {
+                        success = false;
+                        pass = false;
+                        printe("Expected failure for null pixels (%08X)\n", static_cast<unsigned int>(hr));
+                    }
+
+                    img = *srcimage.GetImage(0,0,0);
+                    img.format = DXGI_FORMAT_UNKNOWN;
+                    hr = GenerateMipMaps( img, TEX_FILTER_DEFAULT, 0, invalid );
+                    if ( hr != E_INVALIDARG )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Expected failure for invalid DXGI format (%08X)\n", static_cast<unsigned int>(hr) );
+                    }
+
+                    img.format = DXGI_FORMAT_BC5_UNORM;
+                    hr = GenerateMipMaps( img, TEX_FILTER_DEFAULT, 0, invalid );
+                    if ( hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Expected failure for BC format (%08X)\n", static_cast<unsigned int>(hr) );
+                    }
+
+                    hr = GenerateMipMaps( srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), TEX_FILTER_DEFAULT, INT16_MAX, invalid );
+                    if ( hr != E_INVALIDARG )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Expected failure for out-of-range mip-levels complex! (%08X)\n", static_cast<unsigned int>(hr) );
+                    }
+
+                    auto mdata2 = srcimage.GetMetadata();
+                    mdata2.format = DXGI_FORMAT_UNKNOWN;
+                    hr = GenerateMipMaps( srcimage.GetImages(), srcimage.GetImageCount(), mdata2, TEX_FILTER_DEFAULT, 0, invalid );
+                    if ( hr != E_INVALIDARG )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Expected failure for invalid DXGI format complex! (%08X)\n", static_cast<unsigned int>(hr) );
+                    }
+
+                    mdata2.format = DXGI_FORMAT_BC5_UNORM;
+                    hr = GenerateMipMaps( srcimage.GetImages(), srcimage.GetImageCount(), mdata2, TEX_FILTER_DEFAULT, 0, invalid );
+                    if ( hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Expected failure for BC format complex! (%08X)\n", static_cast<unsigned int>(hr) );
+                    }
+
+                    hr = GenerateMipMaps( srcimage.GetImages(), 0, srcimage.GetMetadata(), TEX_FILTER_DEFAULT, 0, invalid );
+                    if ( hr != E_INVALIDARG )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Expected failure for zero images complex! (%08X)\n", static_cast<unsigned int>(hr) );
+                    }
+                }
+
                 if ( pass )
                     ++npass;
             }
         }
     }
 
-    print("%zu images tested, %zu images passed ", ncount, npass );
+    print("\n%zu images tested, %zu images passed ", ncount, npass );
 
     // invalid args
-    {
     #pragma warning(push)
     #pragma warning(disable:6385 6387)
+    {
         ScratchImage image;
         Image nullin = {};
         nullin.width = nullin.height = 256;
         nullin.format = DXGI_FORMAT_R8G8B8A8_UNORM;
         HRESULT hr = GenerateMipMaps(nullin, TEX_FILTER_DEFAULT, 0, image);
-        if (hr != E_INVALIDARG && hr != E_POINTER)
+        if (hr != E_POINTER)
         {
             success = false;
-            printe("Failed invalid arg test\n");
+            printe("\nERROR: Failed invalid arg test (%08X)\n", static_cast<unsigned int>(hr));
+        }
+
+        nullin.format = DXGI_FORMAT_UNKNOWN;
+        hr = GenerateMipMaps(nullin, TEX_FILTER_DEFAULT, 0, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("\nERROR: Failed invalid format test (%08X)\n", static_cast<unsigned int>(hr));
         }
 
         TexMetadata metadata = {};
@@ -1655,7 +1742,15 @@ bool FilterTest::Test02()
         if (hr != E_INVALIDARG)
         {
             success = false;
-            printe("Failed invalid arg complex test\n");
+            printe("\nERROR: Failed invalid arg complex test (%08X)\n", static_cast<unsigned int>(hr));
+        }
+
+        metadata.format = DXGI_FORMAT_UNKNOWN;
+        hr = GenerateMipMaps(nullptr, 0, metadata, TEX_FILTER_DEFAULT, 0, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("\nERROR: Failed invalid format complex test (%08X)\n", static_cast<unsigned int>(hr));
         }
     #pragma warning(pop)
     }
@@ -1738,6 +1833,8 @@ bool FilterTest::Test03()
             else
             {
                 bool pass = true;
+
+                print(".");
 
                 //--- Simple mipmaps volume -----------------------------------------------
                 ScratchImage mipChain;
@@ -2199,6 +2296,99 @@ bool FilterTest::Test03()
                     }
                 }
 
+                //--- invalid args --------------------------------------------------------
+                if (!index)
+                {
+                    ScratchImage invalid;
+                    hr = GenerateMipMaps3D( srcimage.GetImages(), metadata.depth, TEX_FILTER_DEFAULT, INT16_MAX, invalid );
+                    if ( hr != E_INVALIDARG )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Expected failure for out-of-range mip-levels (%08X)\n", static_cast<unsigned int>(hr) );
+                    }
+
+                    hr = GenerateMipMaps3D( srcimage.GetImages(), 0, TEX_FILTER_DEFAULT, 0, invalid );
+                    if ( hr != E_INVALIDARG )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Expected failure for zero images (%08X)\n", static_cast<unsigned int>(hr) );
+                    }
+
+                    hr = GenerateMipMaps3D( srcimage.GetImages(), 0, TEX_FILTER_DEFAULT, 0, invalid );
+                    if ( hr != E_INVALIDARG )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Expected failure for zero images (%08X)\n", static_cast<unsigned int>(hr) );
+                    }
+
+                    std::vector<Image> images( srcimage.GetImages(), srcimage.GetImages() + srcimage.GetImageCount() );
+                    for (auto& it : images)
+                    {
+                        it.format = DXGI_FORMAT_UNKNOWN;
+                    }
+                    hr = GenerateMipMaps3D( images.data(), images.size(), TEX_FILTER_DEFAULT, 0, invalid );
+                    if ( hr != E_INVALIDARG )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Expected failure for invalid format (%08X)\n", static_cast<unsigned int>(hr) );
+                    }
+
+                    for (auto& it : images)
+                    {
+                        it.format = DXGI_FORMAT_BC5_UNORM;
+                    }
+                    hr = GenerateMipMaps3D( images.data(), images.size(), TEX_FILTER_DEFAULT, 0, invalid );
+                    if ( hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Expected failure for BC format (%08X)\n", static_cast<unsigned int>(hr) );
+                    }
+
+                    for (auto& it : images)
+                    {
+                        it.format = srcimage.GetMetadata().format;
+                        it.pixels = nullptr;
+                    }
+                    hr = GenerateMipMaps3D(images.data(), images.size(), TEX_FILTER_DEFAULT, 0, invalid);
+                    if (hr != E_POINTER)
+                    {
+                        success = false;
+                        pass = false;
+                        printe("Expected failure for null pixels (%08X)\n", static_cast<unsigned int>(hr));
+                    }
+
+                    hr = GenerateMipMaps3D( srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), TEX_FILTER_DEFAULT, INT16_MAX, invalid );
+                    if ( hr != E_INVALIDARG )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Expected failure for out-of-range mip-levels complex (%08X)\n", static_cast<unsigned int>(hr) );
+                    }
+
+                    auto mdata2 = srcimage.GetMetadata();
+                    mdata2.format = DXGI_FORMAT_BC5_UNORM;
+                    hr = GenerateMipMaps3D( srcimage.GetImages(), srcimage.GetImageCount(), mdata2, TEX_FILTER_DEFAULT, INT16_MAX, invalid );
+                    if ( hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED) )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Expected failure for BC format complex (%08X)\n", static_cast<unsigned int>(hr) );
+                    }
+
+                    hr = GenerateMipMaps3D( srcimage.GetImages(), 0, srcimage.GetMetadata(), TEX_FILTER_DEFAULT, 0, invalid );
+                    if ( hr != E_INVALIDARG )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Expected failure for zero image complex (%08X)\n", static_cast<unsigned int>(hr) );
+                    }
+                }
+
                 if ( pass )
                     ++npass;
             }
@@ -2207,7 +2397,7 @@ bool FilterTest::Test03()
         ++ncount;
     }
 
-    print("%zu images tested, %zu images passed ", ncount, npass );
+    print("\n%zu images tested, %zu images passed ", ncount, npass );
 
     // invalid args
     {
@@ -2215,10 +2405,10 @@ bool FilterTest::Test03()
     #pragma warning(disable:6385 6387)
         ScratchImage image;
         HRESULT hr = GenerateMipMaps3D(nullptr, 0, TEX_FILTER_DEFAULT, 0, image);
-        if (hr != E_INVALIDARG && hr != E_POINTER)
+        if (hr != E_INVALIDARG)
         {
             success = false;
-            printe("Failed invalid arg test\n");
+            printe("\nERROR: Failed invalid arg test (%08X)\n", static_cast<unsigned int>(hr));
         }
 
         TexMetadata metadata = {};
@@ -2231,7 +2421,15 @@ bool FilterTest::Test03()
         if (hr != E_INVALIDARG)
         {
             success = false;
-            printe("Failed invalid arg complex test\n");
+            printe("\nERROR: Failed invalid arg complex test (%08X)\n", static_cast<unsigned int>(hr));
+        }
+
+        metadata.format = DXGI_FORMAT_UNKNOWN;
+        hr = GenerateMipMaps3D(nullptr, 0, metadata, TEX_FILTER_DEFAULT, 0, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("\nERROR: Failed invalid arg complex test (%08X)\n", static_cast<unsigned int>(hr));
         }
     #pragma warning(pop)
     }

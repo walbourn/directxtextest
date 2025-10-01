@@ -30,6 +30,7 @@ extern bool Test06();
 extern bool Test07();
 extern bool Test08();
 extern bool Test09();
+extern bool Test10();
 
 TestInfo g_Tests[] =
 {
@@ -39,6 +40,7 @@ TestInfo g_Tests[] =
     { "GetMetadataFromDDSMemory/FileEx", Test07 },
     { "LoadFromDDSMemoryEx", Test08 },
     { "LoadFromDDSFileEx", Test09 },
+    { "EncodeDDSHeader", Test10 },
     { "SaveDDSToMemory", Test04 },
     { "SaveDDSToFile", Test05 },
     { "Fuzz", Test06 },
