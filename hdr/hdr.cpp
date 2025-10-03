@@ -167,14 +167,21 @@ bool Test01()
         if (hr != E_INVALIDARG)
         {
             success = false;
-            printe("Failed invalid arg mem test\n");
+            printe("Failed invalid arg mem test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
         }
 
         hr = GetMetadataFromHDRFile(nullptr, metadata);
         if (hr != E_INVALIDARG)
         {
             success = false;
-            printe("Failed invalid arg file test\n");
+            printe("Failed invalid arg file test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+        }
+
+        hr = GetMetadataFromHDRFile(L"TestFileDoesNotExist.HDR", metadata);
+        if (hr != HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
+        {
+            success = false;
+            printe("Failed missing file test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
         }
     #pragma warning(pop)
     }
@@ -272,7 +279,7 @@ bool Test02()
         if (hr != E_INVALIDARG)
         {
             success = false;
-            printe("Failed invalid arg test\n");
+            printe("Failed invalid arg test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
         }
     #pragma warning(pop)
     }
@@ -358,7 +365,14 @@ bool Test03()
         if (hr != E_INVALIDARG)
         {
             success = false;
-            printe("Failed invalid arg test\n");
+            printe("Failed invalid arg test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+        }
+
+        hr = LoadFromHDRFile(L"TestFileDoesNotExist.HDR", nullptr, image);
+        if (hr != HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
+        {
+            success = false;
+            printe("Failed missing file test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
         }
     #pragma warning(pop)
     }
@@ -623,7 +637,7 @@ bool Test04()
         if (hr != E_INVALIDARG && hr != E_POINTER)
         {
             success = false;
-            printe("Failed invalid arg test\n");
+            printe("Failed invalid arg test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
         }
     #pragma warning(pop)
     }
@@ -894,13 +908,44 @@ bool Test05()
                 }
             }
 
-            // Validate null parameter
-            hr = SaveToHDRFile(*image.GetImage(0, 0, 0), nullptr);
-            if (hr != E_INVALIDARG)
+            // invalid args
+            if (!index)
             {
-                success = false;
-                pass = false;
-                printe("Failed null fname test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath);
+                hr = SaveToHDRFile(*image.GetImage(0, 0, 0), nullptr);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    pass = false;
+                    printe("Failed null fname test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath);
+                }
+
+                auto img = *image.GetImage(0, 0, 0);
+                img.width = img.height = UINT32_MAX;
+                hr = SaveToHDRFile(img, L"TestFileInvalid.hdr");
+                if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                {
+                    success = false;
+                    pass = false;
+                    printe("Failed too large test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath);
+                }
+
+                img = *image.GetImage(0, 0, 0);
+                img.format = DXGI_FORMAT_UNKNOWN;
+                hr = SaveToHDRFile(img, L"TestFileInvalid.hdr");
+                if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                {
+                    success = false;
+                    pass = false;
+                    printe("Failed invalid format test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath);
+                }
+
+                img = *image.GetImage(0, 0, 0);
+                hr = SaveToHDRFile(img, L"A:\\NonExistingPath\\TestFileInvalid.hdr");
+                if (hr != HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND))
+                {
+                    success = false;
+                    printe("Failed invalid path name test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
             }
 
             if (pass)
@@ -923,7 +968,7 @@ bool Test05()
         if (hr != E_INVALIDARG && hr != E_POINTER)
         {
             success = false;
-            printe("Failed invalid arg test\n");
+            printe("Failed invalid arg test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         }
     #pragma warning(pop)
     }

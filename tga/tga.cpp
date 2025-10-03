@@ -427,7 +427,7 @@ bool Test00()
         if (hr != E_INVALIDARG)
         {
             success = false;
-            printe("Failed invalid arg mem test\n");
+            printe("Failed invalid arg mem test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
         }
     #pragma warning(pop)
     }
@@ -575,7 +575,14 @@ bool Test01()
         if (hr != E_INVALIDARG)
         {
             success = false;
-            printe("Failed invalid arg mem test\n");
+            printe("Failed invalid arg mem test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+        }
+
+        hr = GetMetadataFromTGAFile(L"TestFileDoesNotExist.TGA", TGA_FLAGS_NONE, metadata);
+        if (hr != HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
+        {
+            success = false;
+            printe("Failed missing file test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
         }
     #pragma warning(pop)
     }
@@ -782,7 +789,7 @@ bool Test02()
         if (hr != E_INVALIDARG)
         {
             success = false;
-            printe("Failed invalid arg test\n");
+            printe("Failed invalid arg test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
         }
     #pragma warning(pop)
     }
@@ -979,7 +986,14 @@ bool Test03()
         if (hr != E_INVALIDARG)
         {
             success = false;
-            printe("Failed invalid arg test\n");
+            printe("Failed invalid arg test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+        }
+
+        hr = LoadFromTGAFile(L"TestFileDoesNotExist.TGA", TGA_FLAGS_NONE, nullptr, image);
+        if (hr != HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
+        {
+            success = false;
+            printe("Failed missing file test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
         }
     #pragma warning(pop)
     }
@@ -1347,6 +1361,24 @@ bool Test04()
                     break;
                 }
 
+                // invalid args
+                if (!index)
+                {
+                    hr = SaveToTGAMemory(*image.GetImage(0, 0, 0), TGA_FLAGS_FORCE_LINEAR, blob, nullptr);
+                    if (hr != E_INVALIDARG)
+                    {
+                        success = false;
+                        printe("Failed invalid case of needing TGA 2.0 but no metadata (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                    }
+
+                    hr = SaveToTGAMemory(*image.GetImage(0, 0, 0), TGA_FLAGS_FORCE_SRGB, blob, nullptr);
+                    if (hr != E_INVALIDARG)
+                    {
+                        success = false;
+                        printe("Failed invalid case of needing TGA 2.0 but no metadata 2 (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                    }
+                }
+
                 if (pass)
                     ++npass;
             }
@@ -1369,7 +1401,7 @@ bool Test04()
         if (hr != E_INVALIDARG && hr != E_POINTER)
         {
             success = false;
-            printe("Failed invalid arg test\n");
+            printe("Failed invalid arg test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
         }
     #pragma warning(pop)
     }
@@ -1772,13 +1804,55 @@ bool Test05()
                     break;
                 }
 
-                // Validate null parameter
-                hr = SaveToTGAFile(*image.GetImage(0, 0, 0), TGA_FLAGS_NONE, nullptr);
-                if (hr != E_INVALIDARG)
+                // invalid args
+                if (!index)
                 {
-                    success = false;
-                    pass = false;
-                    printe("Failed null fname test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath);
+                    hr = SaveToTGAFile(*image.GetImage(0, 0, 0), TGA_FLAGS_NONE, nullptr);
+                    if (hr != E_INVALIDARG)
+                    {
+                        success = false;
+                        pass = false;
+                        printe("Failed null fname test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath);
+                    }
+
+                    auto img = *image.GetImage(0, 0, 0);
+                    img.width = UINT32_MAX;
+                    hr = SaveToTGAFile(img, TGA_FLAGS_NONE, L"TestFileInvalid.tga");
+                    if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                    {
+                        success = false;
+                        printe("Failed too large test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath);
+                    }
+
+                    img = *image.GetImage(0, 0, 0);
+                    img.format = DXGI_FORMAT_UNKNOWN;
+                    hr = SaveToTGAFile(img, TGA_FLAGS_NONE, L"TestFileInvalid.tga");
+                    if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                    {
+                        success = false;
+                        printe("Failed invalid format test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath);
+                    }
+
+                    hr = SaveToTGAFile(*image.GetImage(0, 0, 0), TGA_FLAGS_FORCE_LINEAR, L"TestFileInvalid.tga", nullptr);
+                    if (hr != E_INVALIDARG)
+                    {
+                        success = false;
+                        printe("Failed invalid case of needing TGA 2.0 but no metadata (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                    }
+
+                    hr = SaveToTGAFile(*image.GetImage(0, 0, 0), TGA_FLAGS_FORCE_SRGB, L"TestFileInvalid.tga", nullptr);
+                    if (hr != E_INVALIDARG)
+                    {
+                        success = false;
+                        printe("Failed invalid case of needing TGA 2.0 but no metadata 2 (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                    }
+
+                    hr = SaveToTGAFile(*image.GetImage(0, 0, 0), TGA_FLAGS_NONE, L"A:\\NonExistingPath\\TestFileInvalid.tga", nullptr);
+                    if (hr != HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND))
+                    {
+                        success = false;
+                        printe("Failed invalid path name test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                    }
                 }
 
                 if (pass)
@@ -1799,10 +1873,17 @@ bool Test05()
         nullin.width = nullin.height = 256;
         nullin.format = DXGI_FORMAT_B8G8R8A8_UNORM;
         HRESULT hr = SaveToTGAFile(nullin, TGA_FLAGS_NONE, nullptr, nullptr);
-        if (hr != E_INVALIDARG && hr != E_POINTER)
+        if (hr != E_INVALIDARG)
         {
             success = false;
-            printe("Failed invalid arg test\n");
+            printe("Failed invalid arg test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+        }
+
+        hr = SaveToTGAFile(nullin, TGA_FLAGS_NONE, L"TestFileInvalid.tga", nullptr);
+        if (hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid image test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
         }
     #pragma warning(pop)
     }

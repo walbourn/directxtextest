@@ -1168,6 +1168,13 @@ bool Test01()
             success = false;
             printe("Failed invalid arg file test\n");
         }
+
+        hr = GetMetadataFromDDSFile(L"TestFileDoesNotExist.DDS", DDS_FLAGS_NONE, metadata);
+        if (hr != HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
+        {
+            success = false;
+            printe("Failed missing file test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+        }
     #pragma warning(pop)
     }
 
@@ -1342,6 +1349,28 @@ bool Test07()
         {
             success = false;
             printe("Failed invalid arg file test\n");
+        }
+
+        DDSMetaData ddsPixelFormat;
+        hr = GetMetadataFromDDSMemoryEx(static_cast<const uint8_t*>(nullptr), 0, DDS_FLAGS_NONE, metadata, &ddsPixelFormat);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg mem test ex\n");
+        }
+
+        hr = GetMetadataFromDDSFileEx(nullptr, DDS_FLAGS_NONE, metadata, &ddsPixelFormat);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg file test ex\n");
+        }
+
+        hr = GetMetadataFromDDSFileEx(L"TestFileDoesNotExist.DDS", DDS_FLAGS_NONE, metadata, &ddsPixelFormat);
+        if (hr != HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
+        {
+            success = false;
+            printe("Failed missing file test ex (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
         }
     #pragma warning(pop)
     }
@@ -1605,6 +1634,17 @@ bool Test02()
                 default:
                     ++npass;
                     break;
+                }
+            }
+
+            // invalid args
+            if (!index)
+            {
+                hr = LoadFromDDSMemory( blob.GetConstBufferPointer(), 0, flags, &metadata, image );
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed invalid arg size test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
                 }
             }
         }
@@ -2068,6 +2108,13 @@ bool Test03()
             success = false;
             printe("Failed invalid arg test\n");
         }
+
+        hr = LoadFromDDSFile(L"TestFileDoesNotExist.DDS", DDS_FLAGS_NONE, nullptr, image);
+        if (hr != HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
+        {
+            success = false;
+            printe("Failed missing file test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+        }
     #pragma warning(pop)
     }
 
@@ -2227,6 +2274,13 @@ bool Test09()
         {
             success = false;
             printe("Failed invalid arg test\n");
+        }
+
+        hr = LoadFromDDSFileEx(L"TestFileDoesNotExist.DDS", DDS_FLAGS_NONE, nullptr, nullptr, image);
+        if (hr != HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
+        {
+            success = false;
+            printe("Failed missing file test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
         }
     #pragma warning(pop)
     }
@@ -2993,14 +3047,59 @@ bool Test05()
                     }
                 }
 
-                // Validate null parameter
-                hr = SaveToDDSFile(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DDS_FLAGS_NONE, nullptr);
-                if (hr != E_INVALIDARG)
+                // invalid args
+                #pragma warning(push)
+                #pragma warning(disable:6385 6387)
+                if (!index)
                 {
-                    success = false;
-                    pass = false;
-                    printe("Failed null fname test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath);
+                    hr = SaveToDDSFile(*image.GetImage(0, 0, 0), DDS_FLAGS_NONE, nullptr);
+                    if (hr != E_INVALIDARG)
+                    {
+                        success = false;
+                        printe("Failed null fname test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+                    }
+
+                    auto img = *image.GetImage(0, 0, 0);
+                    img.format = DXGI_FORMAT_UNKNOWN;
+                    hr = SaveToDDSFile(img, DDS_FLAGS_NONE, L"TestFileInvalid.dds");
+                    if (hr != E_INVALIDARG)
+                    {
+                        success = false;
+                        printe("Failed invalid format test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+                    }
+
+                    img = *image.GetImage(0, 0, 0);
+                    hr = SaveToDDSFile(img, DDS_FLAGS_NONE, L"A:\\NonExistingPath\\TestFileInvalid.dds");
+                    if (hr != HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND))
+                    {
+                        success = false;
+                        printe("Failed invalid path name test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                    }
+
+                    hr = SaveToDDSFile(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DDS_FLAGS_NONE, nullptr);
+                    if (hr != E_INVALIDARG)
+                    {
+                        success = false;
+                        printe("Failed null fname complex test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+                    }
+
+                    auto mdata2 = image.GetMetadata();
+                    mdata2.format = DXGI_FORMAT_UNKNOWN;
+                    hr = SaveToDDSFile(image.GetImages(), image.GetImageCount(), mdata2, DDS_FLAGS_NONE, L"TestFileInvalid.dds");
+                    if (hr != E_INVALIDARG)
+                    {
+                        success = false;
+                        printe("Failed invalid format complex test (HRESULT %08X)\n\n", static_cast<unsigned int>(hr));
+                    }
+
+                    hr = SaveToDDSFile(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DDS_FLAGS_NONE, L"A:\\NonExistingPath\\TestFileInvalid.dds");
+                    if (hr != HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND))
+                    {
+                        success = false;
+                        printe("Failed invalid path name complex test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                    }
                 }
+                #pragma warning(pop)
             }
 
             if ( pass )
@@ -3025,7 +3124,7 @@ bool Test05()
         if (hr != E_INVALIDARG && hr != E_POINTER)
         {
             success = false;
-            printe("Failed invalid arg test\n");
+            printe("Failed invalid arg test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         }
 
         TexMetadata metadata = {};
@@ -3037,7 +3136,7 @@ bool Test05()
         if (hr != E_INVALIDARG)
         {
             success = false;
-            printe("Failed invalid arg complex test\n");
+            printe("Failed invalid arg complex test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         }
     #pragma warning(pop)
     }
@@ -3347,6 +3446,121 @@ bool Test10()
         }
     }
 
+    // test specific scenarios
+    static const TexMetadata s_dx10[] =
+    {
+        { 32, 1, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE1D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 8, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE3D },
+        { 32, 4, 1, 1, 1, 0, 0, DXGI_FORMAT_BC3_UNORM, TEX_DIMENSION_TEXTURE1D },
+        { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC3_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 8, 1, 1, 0, 0, DXGI_FORMAT_BC3_UNORM, TEX_DIMENSION_TEXTURE3D },
+
+        // mips
+        { 32, 1, 1, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE1D },
+        { 32, 32, 1, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 8, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D },
+
+        // arrays
+        { 32, 1, 1, 6, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE1D },
+        { 32, 32, 1, 6, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 8, 6, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D },
+        { 32, 32, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 12, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D },
+
+        // arrays+mips
+        { 32, 1, 1, 6, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE1D },
+        { 32, 32, 1, 6, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 8, 6, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D },
+        { 32, 32, 1, 6, 6, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 12, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D },
+    };
+
+    for(size_t index = 0; index < std::size(s_dx10); ++index)
+    {
+        uint8_t ddsHeader[256] = {};
+        size_t required = 0;
+        HRESULT hr = EncodeDDSHeader(s_dx10[index], DDS_FLAGS_FORCE_DX10_EXT,
+            ddsHeader, sizeof(ddsHeader), required);
+        if (FAILED(hr))
+        {
+            success = false;
+            printe("Failed encoding DDS DX10 header [%zu] (HRESULT %08X)\n", index, static_cast<unsigned int>(hr));
+        }
+        else if (!required)
+        {
+            success = false;
+            printe("Expected non-zero required size for DX10 [%zu]\n", index);
+        }
+        else if (required > sizeof(ddsHeader))
+        {
+            success = false;
+            printe("Expected required size to fit in provided buffer [DX10, %zu]\n", index);
+        }
+        else if (required < DDS_DX10_HEADER_SIZE)
+        {
+            success = false;
+            printe("Expected required size to at least DDS DX10 extended header [DX10 %zu] (%zu .. %zu)\n", index, DDS_MIN_HEADER_SIZE, required);
+        }
+        else if (reinterpret_cast<uint32_t*>(ddsHeader)[0] != DDS_MAGIC)
+        {
+            success = false;
+            printe("Expected standard DDS magic number [DX10, %zu] (0x%08X .. 0x%08X)\n", index, DDS_MAGIC, reinterpret_cast<uint32_t*>(ddsHeader)[0]);
+        }
+        else
+        {
+            auto hdr = reinterpret_cast<const DDS_HEADER*>(ddsHeader + sizeof(uint32_t));
+            if (hdr->size != sizeof(DDS_HEADER))
+            {
+                success = false;
+                printe("Expected DDS header size [DX10, %zu] (%zu .. %u)\n", index, sizeof(DDS_HEADER), hdr->size);
+            }
+            else if (memcmp(&hdr->ddspf, &DDSPF_DX10, sizeof(DDS_PIXELFORMAT)) != 0)
+            {
+                success = false;
+                printe("Expect DDS DX10 pixel format [DX10, %zu]\n", index);
+            }
+            else
+            {
+                auto d3d10ext = reinterpret_cast<const DDS_HEADER_DXT10*>(ddsHeader + DDS_MIN_HEADER_SIZE);
+                if (d3d10ext->dxgiFormat != s_dx10[index].format
+                    || d3d10ext->resourceDimension != s_dx10[index].dimension
+                    || d3d10ext->miscFlag != s_dx10[index].miscFlags
+                    || d3d10ext->miscFlags2 != s_dx10[index].miscFlags2)
+                {
+                    success = false;
+                    printe("Expected matching metadata in DDS DX10 header [%zu] (%u,%u,%u,%u .. %u,%u,%u,%u)\n", index,
+                        d3d10ext->dxgiFormat, d3d10ext->resourceDimension, d3d10ext->miscFlag, d3d10ext->miscFlags2,
+                        s_dx10[index].format, s_dx10[index].dimension, s_dx10[index].miscFlags, s_dx10[index].miscFlags2);
+                }
+                else if (d3d10ext->miscFlag & DDS_RESOURCE_MISC_TEXTURECUBE)
+                {
+                    if (!(s_dx10[index].miscFlags & TEX_MISC_TEXTURECUBE))
+                    {
+                        success = false;
+                        printe("Expected matching texture cube flag in DDS DX10 header [%zu]\n", index);
+                    }
+
+                    if ((d3d10ext->arraySize * 6) != s_dx10[index].arraySize)
+                    {
+                        success = false;
+                        printe("Expected matching array size in DDS DX10 header [%zu] (6*%u .. %zu)\n", index, d3d10ext->arraySize, s_dx10[index].arraySize);
+                    }
+                }
+                else if (s_dx10[index].miscFlags & TEX_MISC_TEXTURECUBE)
+                {
+                    success = false;
+                    printe("Expected matching texture cube flag in DDS DX10 header [%zu]\n", index);
+                }
+                else if (d3d10ext->arraySize != s_dx10[index].arraySize)
+                {
+                    success = false;
+                    printe("Expected matching array size in DDS DX10 header [%zu] (%u .. %zu)\n", index, d3d10ext->arraySize, s_dx10[index].arraySize);
+                }
+            }
+        }
+    }
+
     // test force DX9 scenarios
     static const TexMetadata s_dx9[] =
     {
@@ -3368,6 +3582,9 @@ bool Test10()
         { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D },
         { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC2_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D },
         { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC3_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, TEX_ALPHA_MODE_PREMULTIPLIED, DXGI_FORMAT_BC1_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, TEX_ALPHA_MODE_PREMULTIPLIED, DXGI_FORMAT_BC2_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D },
+        { 32, 32, 1, 1, 1, 0, TEX_ALPHA_MODE_PREMULTIPLIED, DXGI_FORMAT_BC3_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D },
         { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC4_UNORM, TEX_DIMENSION_TEXTURE2D },
         { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC4_SNORM, TEX_DIMENSION_TEXTURE2D },
         { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC5_UNORM, TEX_DIMENSION_TEXTURE2D },
