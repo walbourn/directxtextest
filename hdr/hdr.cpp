@@ -616,6 +616,27 @@ bool Test04()
                 }
             }
 
+            if (!index)
+            {
+                auto img = *image.GetImage(0, 0, 0);
+                img.width = img.height = UINT16_MAX;
+                hr = SaveToHDRMemory(img, blob);
+                if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                {
+                    success = false;
+                    printe("Failed large image dimension test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                img = *image.GetImage(0, 0, 0);
+                img.format = DXGI_FORMAT_UNKNOWN;
+                hr = SaveToHDRMemory(img, blob);
+                if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                {
+                    success = false;
+                    printe("Failed invalid format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+            }
+
             if (pass)
                 ++npass;
         }
@@ -965,10 +986,17 @@ bool Test05()
         nullin.width = nullin.height = 256;
         nullin.format = DXGI_FORMAT_R32G32B32_FLOAT;
         HRESULT hr = SaveToHDRFile(nullin, nullptr);
-        if (hr != E_INVALIDARG && hr != E_POINTER)
+        if (hr != E_INVALIDARG)
         {
             success = false;
             printe("Failed invalid arg test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+        }
+
+        hr = SaveToHDRFile(nullin, L"TestFileInvalid.hdr");
+        if (hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid image arg test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         }
     #pragma warning(pop)
     }

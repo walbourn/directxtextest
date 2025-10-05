@@ -3656,6 +3656,22 @@ bool Test10()
                 printe("Did not expect DDS DX10 pixel format [DX9, %zu]\n", index);
             }
         }
+
+        if (s_dx9[index].format == DXGI_FORMAT_BC3_UNORM)
+        {
+            hr = EncodeDDSHeader(s_dx9[index], DDS_FLAGS_FORCE_DXT5_RXGB,
+                ddsHeader, sizeof(ddsHeader), required);
+            if (FAILED(hr))
+            {
+                success = false;
+                printe("Failed encoding DDS DX9 header [%zu, RXGB] (HRESULT %08X)\n", index, static_cast<unsigned int>(hr));
+            }
+            else if (required < DDS_MIN_HEADER_SIZE)
+            {
+                success = false;
+                printe("Expected required size to at least fit a standard DDS header [DX9 %zu, RXGB] (%zu .. %zu)\n", index, DDS_MIN_HEADER_SIZE, required);
+            }
+        }
     }
 
     // invalid args
@@ -3686,6 +3702,38 @@ bool Test10()
         {
             success = false;
             printe("Failed force DX9 unsupported case test (%08X)\n", static_cast<unsigned int>(hr));
+        }
+
+        uint8_t ddsHeader[256] = {};
+        hr = EncodeDDSHeader(invalid, DDS_FLAGS_NONE, ddsHeader, 1, required);
+        if (hr != HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER))
+        {
+            success = false;
+            printe("Failed not enough space test (%08X)\n", static_cast<unsigned int>(hr));
+        }
+
+        invalid.mipLevels = UINT16_MAX + 1;
+        hr = EncodeDDSHeader(invalid, DDS_FLAGS_NONE, ddsHeader, sizeof(ddsHeader), required);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed too large mips test (%08X)\n", static_cast<unsigned int>(hr));
+        }
+
+        invalid = { 32, 32, UINT16_MAX + 1, 6, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D };
+        hr = EncodeDDSHeader(invalid, DDS_FLAGS_NONE, ddsHeader, sizeof(ddsHeader), required);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed too large depth test (%08X)\n", static_cast<unsigned int>(hr));
+        }
+
+        invalid = { 32, 32, 1, 12, 6, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8A8_UNORM, static_cast<TEX_DIMENSION>(0) };
+        hr = EncodeDDSHeader(invalid, DDS_FLAGS_FORCE_DX9_LEGACY, ddsHeader, sizeof(ddsHeader), required);
+        if (hr != HRESULT_FROM_WIN32(ERROR_CANNOT_MAKE))
+        {
+            success = false;
+            printe("Failed invalid dimension test (%08X)\n", static_cast<unsigned int>(hr));
         }
     }
     #pragma warning(pop)
