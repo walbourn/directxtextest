@@ -989,7 +989,7 @@ bool Test05()
         if (hr != E_INVALIDARG)
         {
             success = false;
-            printe("Failed invalid arg test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+            printe("Failed invalid fname test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         }
 
         hr = SaveToHDRFile(nullin, L"TestFileInvalid.hdr");

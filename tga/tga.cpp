@@ -242,11 +242,13 @@ namespace
         { ALTMD5(2), DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_ALPHA_MODE_OPAQUE, MEDIA_PATH L"test8888.dds" },
 
     #ifndef BUILD_BVT_ONLY
+        { FLAGS_NONE, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_ALPHA_MODE_OPAQUE, MEDIA_PATH L"normalmap.dds" },
         { ALTMD5(3), DXGI_FORMAT_B8G8R8X8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_ALPHA_MODE_OPAQUE, MEDIA_PATH L"windowslogo_X8R8G8B8.dds" },
         { FLAGS_NONE, DXGI_FORMAT_B5G5R5A1_UNORM, DXGI_FORMAT_B5G5R5A1_UNORM, TEX_ALPHA_MODE_OPAQUE, MEDIA_PATH L"test555.dds" },
         { FLAGS_NONE, DXGI_FORMAT_R8_UNORM, DXGI_FORMAT_R8_UNORM, TEX_ALPHA_MODE_UNKNOWN, MEDIA_PATH L"windowslogo_L8.dds" },
         { FLAGS_NONE, DXGI_FORMAT_A8_UNORM, DXGI_FORMAT_R8_UNORM, TEX_ALPHA_MODE_UNKNOWN, MEDIA_PATH L"alphaedge.dds" },
         { ALTMD5(4), DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_ALPHA_MODE_UNKNOWN, MEDIA_PATH L"tree02S.dds" },
+        { FLAGS_NONE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_ALPHA_MODE_UNKNOWN, MEDIA_PATH L"io_R8G8B8A8_UNORM_SRGB_SRV_DIMENSION_TEXTURE2D_MipOff.DDS" },
     #endif
     };
 
@@ -666,7 +668,7 @@ bool Test02()
             image.Release();
 
             // BGR
-            if (check->format == DXGI_FORMAT_R8G8B8A8_UNORM)
+            if (check->format == DXGI_FORMAT_R8G8B8A8_UNORM || check->format == DXGI_FORMAT_R8G8B8A8_UNORM_SRGB)
             {
                 TexMetadata metadata2;
                 hr = LoadFromTGAMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), TGA_FLAGS_BGR, &metadata2, image);
@@ -688,13 +690,13 @@ bool Test02()
                     printmeta(&metadata2);
                     printmetachk(check);
                 }
-                else if ((g_TestMedia[index].options & FLAGS_24BPP) && (metadata2.format != DXGI_FORMAT_B8G8R8X8_UNORM))
+                else if ((g_TestMedia[index].options & FLAGS_24BPP) && (metadata2.format != DXGI_FORMAT_B8G8R8X8_UNORM) && (metadata2.format != DXGI_FORMAT_B8G8R8X8_UNORM_SRGB))
                 {
                     success = pass = false;
                     printe("Metadata error expected BGRX in:\n%ls\n", szPath);
                     printmeta(&metadata2);
                 }
-                else if (!(g_TestMedia[index].options & FLAGS_24BPP) && (metadata2.format != DXGI_FORMAT_B8G8R8A8_UNORM))
+                else if (!(g_TestMedia[index].options & FLAGS_24BPP) && (metadata2.format != DXGI_FORMAT_B8G8R8A8_UNORM) && (metadata2.format != DXGI_FORMAT_B8G8R8A8_UNORM_SRGB))
                 {
                     success = pass = false;
                     printe("Metadata error expected BGRA in:\n%ls\n", szPath);
@@ -885,13 +887,13 @@ bool Test03()
                     printmeta(&metadata2);
                     printmetachk(check);
                 }
-                else if ((g_TestMedia[index].options & FLAGS_24BPP) && (metadata2.format != DXGI_FORMAT_B8G8R8X8_UNORM))
+                else if ((g_TestMedia[index].options & FLAGS_24BPP) && (metadata2.format != DXGI_FORMAT_B8G8R8X8_UNORM) && (metadata2.format != DXGI_FORMAT_B8G8R8X8_UNORM_SRGB))
                 {
                     success = pass = false;
                     printe("Metadata error expected BGRX in:\n%ls\n", szPath);
                     printmeta(&metadata2);
                 }
-                else if (!(g_TestMedia[index].options & FLAGS_24BPP) && (metadata2.format != DXGI_FORMAT_B8G8R8A8_UNORM))
+                else if (!(g_TestMedia[index].options & FLAGS_24BPP) && (metadata2.format != DXGI_FORMAT_B8G8R8A8_UNORM) && (metadata2.format != DXGI_FORMAT_B8G8R8A8_UNORM_SRGB))
                 {
                     success = pass = false;
                     printe("Metadata error expected BGRA in:\n%ls\n", szPath);
@@ -1079,13 +1081,16 @@ bool Test04()
                               || metadata2.mipLevels != 1
                               || metadata.dimension != metadata2.dimension
                               || g_SaveMedia[index].save_alpha != metadata2.GetAlphaMode()
-                              || g_SaveMedia[index].sav_format != metadata2.format )
+                              || MakeLinear(g_SaveMedia[index].sav_format) != metadata2.format )
                     { // Formats can vary for readback, and miplevel is going to be 1 for TGA images
                         success = false;
                         pass = false;
                         printe( "Metadata error in tga memory readback:\n%ls\n", szPath );
                         printmeta( &metadata2 );
-                        printmetachk( &metadata );
+                        auto mtest = metadata;
+                        mtest.SetAlphaMode(g_SaveMedia[index].save_alpha);
+                        mtest.format = MakeLinear(g_SaveMedia[index].sav_format);
+                        printmetachk( &mtest );
                     }
                     else
                     {
@@ -1118,6 +1123,9 @@ bool Test04()
                 case DXGI_FORMAT_R8G8B8A8_UNORM:
                 case DXGI_FORMAT_B8G8R8A8_UNORM:
                 case DXGI_FORMAT_B8G8R8X8_UNORM:
+                case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
+                case DXGI_FORMAT_B8G8R8A8_UNORM_SRGB:
+                case DXGI_FORMAT_B8G8R8X8_UNORM_SRGB:
                     hr = SaveToTGAMemory(*image.GetImage(0, 0, 0), TGA_FLAGS_NONE, blob);
                     if (FAILED(hr))
                     {
@@ -1141,18 +1149,22 @@ bool Test04()
                             || metadata.arraySize != metadata2.arraySize
                             || metadata2.mipLevels != 1
                             || metadata.dimension != metadata2.dimension
-                            || metadata2.format != metadata.format)
+                            || !IsBGR(metadata2.format))
                         {
                             success = false;
                             pass = false;
                             printe("Metadata error in tga memory readback [bgr]:\n%ls\n", szPath);
                             printmeta(&metadata2);
+                            printmetachk( &metadata );
                         }
                     }
                 }
 
                 // TGA 2.0 tests
-                if (g_SaveMedia[index].save_alpha != TEX_ALPHA_MODE_OPAQUE)
+                if (g_SaveMedia[index].save_alpha != TEX_ALPHA_MODE_OPAQUE
+                    || g_SaveMedia[index].sav_format == DXGI_FORMAT_R8G8B8A8_UNORM_SRGB
+                    || g_SaveMedia[index].sav_format == DXGI_FORMAT_B8G8R8A8_UNORM_SRGB
+                    || g_SaveMedia[index].sav_format == DXGI_FORMAT_B8G8R8X8_UNORM_SRGB)
                 {
                     for (size_t j = 0; j < std::size(g_AlphaModes); ++j)
                     {
@@ -1189,7 +1201,10 @@ bool Test04()
                                 pass = false;
                                 printe("Metadata error in tga memory readback [tga20]:\n%ls\n", szPath);
                                 printmeta(&metadata2);
-                                printmetachk(&alphamdata);
+                                auto mtest = alphamdata;
+                                mtest.SetAlphaMode(g_AlphaModes[j]);
+                                mtest.format = g_SaveMedia[index].sav_format;
+                                printmetachk(&mtest);
                             }
                             else
                             {
@@ -1247,12 +1262,13 @@ bool Test04()
                             || metadata.arraySize != metadata2.arraySize
                             || metadata2.mipLevels != 1
                             || metadata.dimension != metadata2.dimension
-                            || metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM_SRGB)
+                            || !IsSRGB(metadata2.format))
                         {
                             success = false;
                             pass = false;
                             printe("Metadata error in tga memory readback [tga20 srgb]:\n%ls\n", szPath);
                             printmeta(&metadata2);
+                            printmetachk(&metadata);
                         }
                         else
                         {
@@ -1290,12 +1306,13 @@ bool Test04()
                                 || metadata.arraySize != metadata2.arraySize
                                 || metadata2.mipLevels != 1
                                 || metadata.dimension != metadata2.dimension
-                                || metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM)
+                                || IsSRGB(metadata2.format))
                             {
                                 success = false;
                                 pass = false;
                                 printe("Metadata error in tga memory readback [tga20 srgb ignore]:\n%ls\n", szPath);
                                 printmeta(&metadata2);
+                                printmetachk( &metadata );
                             }
                         }
                     }
@@ -1327,12 +1344,13 @@ bool Test04()
                             || metadata.arraySize != metadata2.arraySize
                             || metadata2.mipLevels != 1
                             || metadata.dimension != metadata2.dimension
-                            || metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM)
+                            || IsSRGB(metadata2.format))
                         {
                             success = false;
                             pass = false;
                             printe("Metadata error in tga memory readback [tga20 linear]:\n%ls\n", szPath);
                             printmeta(&metadata2);
+                            printmetachk( &metadata );
                         }
                         else
                         {
@@ -1520,13 +1538,16 @@ bool Test05()
                               || metadata2.mipLevels != 1
                               || metadata.dimension != metadata2.dimension
                               || g_SaveMedia[index].save_alpha != metadata2.GetAlphaMode()
-                              || g_SaveMedia[index].sav_format != metadata2.format  )
+                              || MakeLinear(g_SaveMedia[index].sav_format) != metadata2.format  )
                     {   // Formats can vary for readback, and miplevel is going to be 1 for TGA images
                         success = false;
                         pass = false;
                         printe( "Metadata error in tga readback:\n%ls\n", szDestPath );
                         printmeta( &metadata2 );
-                        printmetachk( &metadata );
+                        auto mtest = metadata;
+                        mtest.SetAlphaMode(g_SaveMedia[index].save_alpha);
+                        mtest.format = MakeLinear(g_SaveMedia[index].sav_format);
+                        printmetachk(&mtest);
                     }
                     else
                     {
@@ -1584,7 +1605,7 @@ bool Test05()
                             || metadata.arraySize != metadata2.arraySize
                             || metadata2.mipLevels != 1
                             || metadata.dimension != metadata2.dimension
-                            || metadata2.format != metadata.format)
+                            || !IsBGR(metadata2.format))
                         {
                             success = false;
                             pass = false;
@@ -1595,7 +1616,10 @@ bool Test05()
                 }
 
                 // TGA 2.0 tests
-                if (g_SaveMedia[index].save_alpha != TEX_ALPHA_MODE_OPAQUE)
+                if (g_SaveMedia[index].save_alpha != TEX_ALPHA_MODE_OPAQUE
+                    || g_SaveMedia[index].sav_format == DXGI_FORMAT_R8G8B8A8_UNORM_SRGB
+                    || g_SaveMedia[index].sav_format == DXGI_FORMAT_B8G8R8A8_UNORM_SRGB
+                    || g_SaveMedia[index].sav_format == DXGI_FORMAT_B8G8R8X8_UNORM_SRGB)
                 {
                     for (size_t j = 0; j < std::size(g_AlphaModes); ++j)
                     {
@@ -1632,7 +1656,10 @@ bool Test05()
                                 pass = false;
                                 printe("Metadata error in tga readback [tga20]:\n%ls\n", szDestPath2);
                                 printmeta(&metadata2);
-                                printmetachk(&metadata);
+                                auto mtest = alphamdata;
+                                mtest.SetAlphaMode(g_AlphaModes[j]);
+                                mtest.format = g_SaveMedia[index].sav_format;
+                                printmetachk(&mtest);
                             }
                             else
                             {
@@ -1690,7 +1717,7 @@ bool Test05()
                             || metadata.arraySize != metadata2.arraySize
                             || metadata2.mipLevels != 1
                             || metadata.dimension != metadata2.dimension
-                            || metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM_SRGB)
+                            || !IsSRGB(metadata2.format))
                         {
                             success = false;
                             pass = false;
@@ -1733,7 +1760,7 @@ bool Test05()
                                 || metadata.arraySize != metadata2.arraySize
                                 || metadata2.mipLevels != 1
                                 || metadata.dimension != metadata2.dimension
-                                || metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM)
+                                || IsSRGB(metadata2.format))
                             {
                                 success = false;
                                 pass = false;
@@ -1770,7 +1797,7 @@ bool Test05()
                             || metadata.arraySize != metadata2.arraySize
                             || metadata2.mipLevels != 1
                             || metadata.dimension != metadata2.dimension
-                            || metadata2.format != DXGI_FORMAT_R8G8B8A8_UNORM_SRGB)
+                            || IsSRGB(metadata2.format))
                         {
                             success = false;
                             pass = false;

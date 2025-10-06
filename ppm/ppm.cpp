@@ -414,12 +414,30 @@ bool Test02()
                     }
 
                     auto img = *image.GetImage(0, 0, 0);
+                    img.pixels = nullptr;
+                    hr = SaveToPortablePixMap(img, L"TestFileInvalid.ppm");
+                    if (hr != E_POINTER)
+                    {
+                        success = false;
+                        printe("Failed null image ppm test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath);
+                    }
+
+                    img = *image.GetImage(0, 0, 0);
                     img.format = DXGI_FORMAT_UNKNOWN;
-                    hr = SaveToPortablePixMap(img, nullptr);
-                    if (hr != E_INVALIDARG)
+                    hr = SaveToPortablePixMap(img, L"TestFileInvalid.ppm");
+                    if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
                     {
                         success = false;
                         printe("Failed invalid format ppm test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath);
+                    }
+
+                    img = *image.GetImage(0, 0, 0);
+                    img.width = UINT32_MAX;
+                    hr = SaveToPortablePixMap(img, L"TestFileInvalid.ppm");
+                    if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                    {
+                        success = false;
+                        printe("Failed too large ppm test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath);
                     }
 
                     hr = SaveToPortablePixMap(*image.GetImage(0, 0, 0), L"A:\\NonExistingPath\\TestFileInvalid.ppm");
@@ -428,7 +446,6 @@ bool Test02()
                         success = false;
                         printe("Failed invalid path name ppm test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
                     }
-
                 }
 
                 if (!invalidpfm && g_SaveMedia[index].pfm)
@@ -442,12 +459,30 @@ bool Test02()
                     }
 
                     auto img = *image.GetImage(0, 0, 0);
+                    img.pixels = nullptr;
+                    hr = SaveToPortablePixMapHDR(img, L"TestFileInvalid.pfm");
+                    if (hr != E_POINTER)
+                    {
+                        success = false;
+                        printe("Failed null image pfm test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath);
+                    }
+
+                    img = *image.GetImage(0, 0, 0);
                     img.format = DXGI_FORMAT_UNKNOWN;
-                    hr = SaveToPortablePixMapHDR(img, nullptr);
-                    if (hr != E_INVALIDARG)
+                    hr = SaveToPortablePixMapHDR(img, L"TestFileInvalid.pfm");
+                    if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
                     {
                         success = false;
                         printe("Failed invalid format pfm test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath);
+                    }
+
+                    img = *image.GetImage(0, 0, 0);
+                    img.width = UINT32_MAX;
+                    hr = SaveToPortablePixMapHDR(img, L"TestFileInvalid.pfm");
+                    if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                    {
+                        success = false;
+                        printe("Failed too large pfm test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath);
                     }
 
                     hr = SaveToPortablePixMapHDR(*image.GetImage(0, 0, 0), L"A:\\NonExistingPath\\TestFileInvalid.pfm");

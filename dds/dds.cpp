@@ -73,7 +73,7 @@ namespace
     const TestMedia g_TestMedia[] =
     {
         // test-options | width height depth arraySize mipLevels miscFlags miscFlags2 format dimension | filename | md5
-        { FLAGS_NONE, { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"reftexture.dds", { 0x9d,0xf2,0x92,0xf3,0x17,0x9f,0x43,0xad,0x47,0xbe,0x57,0x0c,0x10,0x14,0x6d,0xa7 } },
+        { FLAGS_BGR, { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"reftexture.dds", { 0x9d,0xf2,0x92,0xf3,0x17,0x9f,0x43,0xad,0x47,0xbe,0x57,0x0c,0x10,0x14,0x6d,0xa7 } },
         { FLAGS_BGR,{ 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test8888.dds",{ 0x38,0x9b,0x4e,0x56,0x4f,0xd1,0x5f,0x0d,0x63,0x05,0x44,0x35,0xba,0x66,0xdd,0x9b } },
         { FLAGS_BGR,{ 32, 32, 4, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888.dds",{ 0x4e,0xa9,0xb0,0x2b,0xfc,0x5f,0xbd,0x8a,0x0e,0x43,0x31,0x93,0xf5,0x82,0x19,0x87 } },
         { FLAGS_NONE,{ 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testdxt1.dds",{ 0x4c,0x3b,0x2f,0x57,0x91,0x1c,0x21,0xf0,0x0c,0x1a,0xd3,0x6b,0xb7,0x33,0xd0,0x55 } },
@@ -94,7 +94,7 @@ namespace
         { FLAGS_NONE, { 2048, 2048, 1, 1, 12, 0, 0, DXGI_FORMAT_BC7_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"EM2_d.dds", { 0x4b,0x94,0x8c,0xce,0x2f,0x73,0x6f,0x27,0x09,0xea,0x43,0x42,0x37,0x20,0x69,0xfa } },
         { FLAGS_NONE,{ 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_BC2_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_DXT3.dds",{ 0x74,0x8b,0xa9,0x1b,0xce,0xce,0x91,0xf4,0x65,0x3c,0x92,0x18,0x99,0x90,0xb7,0x27 } },
         { FLAGS_NONE,{ 256, 256, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_X8B8G8R8.dds",{ 0x8d,0x2c,0xc5,0xd3,0xb1,0x44,0x64,0x39,0x30,0xe0,0xca,0x36,0x1c,0xeb,0x17,0xaa } },
-        { FLAGS_NONE,{ 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8X8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_X8R8G8B8.dds",{ 0x38,0x8e,0x59,0xb8,0xd5,0x87,0xb9,0x60,0x07,0x48,0x75,0xac,0xa6,0x55,0x88,0x3d } },
+        { FLAGS_BGR,{ 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8X8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_X8R8G8B8.dds",{ 0x38,0x8e,0x59,0xb8,0xd5,0x87,0xb9,0x60,0x07,0x48,0x75,0xac,0xa6,0x55,0x88,0x3d } },
         { FLAGS_NONE,{ 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R16_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_r16f.dds",{ 0xca,0x0c,0xde,0x07,0x95,0x5a,0x11,0xd6,0x87,0xea,0xa4,0x66,0x78,0xdd,0x6c,0x6b } },
         { FLAGS_NONE,{ 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R32_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_r32f.dds",{ 0x0c,0x81,0xa0,0x29,0x86,0x69,0x14,0xab,0xc1,0x70,0x40,0x0d,0x60,0x67,0x49,0x59 } },
         { FLAGS_NONE,{ 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R16G16B16A16_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_rgba16.dds",{ 0xae,0x34,0xf6,0x78,0x01,0x82,0x08,0xb9,0x2a,0x41,0x26,0xcc,0x28,0x6a,0x6f,0xe6 } },
@@ -829,6 +829,8 @@ namespace
         { FLAGS_NONE, { 256, 256, 1, 1, 1, 0, 0, WIN11_DXGI_FORMAT_A4B4G4R4_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_191.dds",{ 0x12,0x68,0x2a,0xa4,0x07,0x24,0x35,0x8e,0x28,0xfa,0xba,0x10,0x37,0xb6,0xeb,0x52 } },
 
         { FLAGS_NONE, { 512, 512, 1, 6, 10, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"skybox.dds", { 0x3f,0x3a,0x3f,0xc4,0x27,0x6c,0xc4,0x6a,0xe9,0xa0,0x86,0xf5,0xf9,0x4e,0x1f,0x0b} },
+
+        // TODO: DXGI_FORMAT_B8G8R8A8_TYPELESS, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, DXGI_FORMAT_B8G8R8X8_TYPELESS, DXGI_FORMAT_B8G8R8X8_UNORM_SRGB
     #endif
     };
 
@@ -3410,7 +3412,7 @@ bool Test10()
                 if (d3d10ext->dxgiFormat != g_TestMedia[index].metadata.format)
                 {
                     success = false;
-                    printe("Expected matching DXGI format in DDS DX10 header [%zu] (%u .. %u)\n", index, d3d10ext->dxgiFormat, g_TestMedia[index].metadata.format);
+                    printe("Expected matching DXGI format in DDS DX10 header [%zu] (%d .. %d)\n", index, static_cast<int>(d3d10ext->dxgiFormat), static_cast<int>(g_TestMedia[index].metadata.format));
                 }
                 if (d3d10ext->resourceDimension != g_TestMedia[index].metadata.dimension)
                 {
@@ -3529,9 +3531,9 @@ bool Test10()
                     || d3d10ext->miscFlags2 != s_dx10[index].miscFlags2)
                 {
                     success = false;
-                    printe("Expected matching metadata in DDS DX10 header [%zu] (%u,%u,%u,%u .. %u,%u,%u,%u)\n", index,
-                        d3d10ext->dxgiFormat, d3d10ext->resourceDimension, d3d10ext->miscFlag, d3d10ext->miscFlags2,
-                        s_dx10[index].format, s_dx10[index].dimension, s_dx10[index].miscFlags, s_dx10[index].miscFlags2);
+                    printe("Expected matching metadata in DDS DX10 header [%zu] (%d,%u,%u,%u .. %d,%u,%u,%u)\n", index,
+                        static_cast<int>(d3d10ext->dxgiFormat), d3d10ext->resourceDimension, d3d10ext->miscFlag, d3d10ext->miscFlags2,
+                        static_cast<int>(s_dx10[index].format), s_dx10[index].dimension, s_dx10[index].miscFlags, s_dx10[index].miscFlags2);
                 }
                 else if (d3d10ext->miscFlag & DDS_RESOURCE_MISC_TEXTURECUBE)
                 {
