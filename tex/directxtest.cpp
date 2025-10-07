@@ -45,8 +45,8 @@ TestInfo g_Tests[] =
 #endif
     { "Convert", TEXTest::Test06 },
     { "CopyRectangle", TEXTest::Test09 },
-#ifndef BUILD_BVT_ONLY
     { "ConvertToSinglePlane", TEXTest::Test15 },
+#ifndef BUILD_BVT_ONLY
     { "ComputeNormalMap", TEXTest::Test11 },
     { "PremultiplyAlpha", TEXTest::Test13 },
 #endif
