@@ -499,7 +499,7 @@ bool TEXTest::Test09()
             img = *image.GetImage(0, 0, 0);
             img.format = DXGI_FORMAT_P8;
             hr = CopyRectangle(*imageTest.GetImage(0, 0, 0), rct, img, TEX_FILTER_DEFAULT, 0, 0);
-            if (hr != E_INVALIDARG)
+            if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
             {
                 success = false;
                 printe("Failed unsupported dest format test (%08X)\n", static_cast<unsigned int>(hr));
