@@ -24,14 +24,17 @@ namespace
     const TestMedia g_TestMedia[] =
     {
         // width height depth arraySize mipLevels miscFlags miscFlags2 format dimension | filename
-        { { 1024, 1024, 1, 1, 11, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH "heightmap.dds" },
         { { 128, 128, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"bump_NM_height.DDS" },
+
+#ifndef BUILD_BVT_ONLY
+        { { 1024, 1024, 1, 1, 11, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH "heightmap.dds" },
         { { 128, 128, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"dent_NM_height.DDS" },
         { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"four_NM_height.DDS" },
         { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"rocks_NM_height.dds" },
         { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"saint_NM_height.DDS" },
         { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"stones_NM_height.dds" },
         { { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"wall_NM_height.DDS" },
+#endif // !BUILD_BVT_ONLY
     };
 }
 
@@ -163,6 +166,75 @@ bool TEXTest::Test11()
 
             if (pass)
                 ++npass;
+
+            // invalid args
+            if (!index)
+            {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+                ScratchImage normalMap;
+                auto img = *imagehmap.GetImage(0, 0, 0);
+                img.format = DXGI_FORMAT_UNKNOWN;
+                hr = ComputeNormalMap(img, CNMAP_DEFAULT, 2.f, DXGI_FORMAT_R8G8B8A8_UNORM, normalMap);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed invalid format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                hr = ComputeNormalMap(imagehmap.GetImages(), 0, imagehmap.GetMetadata(), CNMAP_DEFAULT, 2.f, DXGI_FORMAT_R8G8B8A8_UNORM, normalMap);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed zero image complex test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                auto mdata = imagehmap.GetMetadata();
+                mdata.format = DXGI_FORMAT_UNKNOWN;
+                hr = ComputeNormalMap(imagehmap.GetImages(), imagehmap.GetImageCount(), mdata, CNMAP_DEFAULT, 2.f, DXGI_FORMAT_R8G8B8A8_UNORM, normalMap);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed invalid format complex test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                auto invalidFlags = static_cast<CNMAP_FLAGS>(0xffffffff);
+                hr = ComputeNormalMap(*imagehmap.GetImage(0, 0, 0), invalidFlags, 2.f, DXGI_FORMAT_R8G8B8A8_UNORM, normalMap);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed invalid flags test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                hr = ComputeNormalMap(imagehmap.GetImages(), imagehmap.GetImageCount(), imagehmap.GetMetadata(), invalidFlags, 2.f, DXGI_FORMAT_R8G8B8A8_UNORM, normalMap);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed invalid flags test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                hr = ComputeNormalMap(*imagehmap.GetImage(0, 0, 0), CNMAP_DEFAULT, 2.f, DXGI_FORMAT_UNKNOWN, normalMap);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed invalid target format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                hr = ComputeNormalMap(*imagehmap.GetImage(0, 0, 0), CNMAP_DEFAULT, 2.f, DXGI_FORMAT_UNKNOWN, normalMap);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed invalid target format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                hr = ComputeNormalMap(imagehmap.GetImages(), imagehmap.GetImageCount(), imagehmap.GetMetadata(), CNMAP_DEFAULT, 2.f, DXGI_FORMAT_BC3_UNORM, normalMap);
+                if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                {
+                    success = false;
+                    printe("Failed unsupported target format complex test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+    #pragma warning(pop)
+            }
         }
 
         ++ncount;
@@ -179,10 +251,10 @@ bool TEXTest::Test11()
         nullin.width = nullin.height = 256;
         nullin.format = DXGI_FORMAT_R8G8B8A8_UNORM;
         HRESULT hr = ComputeNormalMap(nullin, CNMAP_DEFAULT, 1.f, DXGI_FORMAT_R8G8_SNORM, image);
-        if (hr != E_INVALIDARG && hr != E_POINTER)
+        if (hr != E_POINTER)
         {
             success = false;
-            printe("Failed invalid arg test\n");
+            printe("Failed invalid arg test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
         }
 
         TexMetadata metadata = {};
@@ -194,7 +266,7 @@ bool TEXTest::Test11()
         if (hr != E_INVALIDARG)
         {
             success = false;
-            printe("Failed invalid arg complex test\n");
+            printe("Failed invalid arg complex test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
         }
     #pragma warning(pop)
     }
