@@ -217,6 +217,7 @@ bool TEXTest::Test09()
         return false;
     }
 
+#ifndef BUILD_BVT_ONLY
     // Earth
     ret = ExpandEnvironmentStringsW(MEDIA_PATH L"earth_A2B10G10R10.dds", szPath, MAX_PATH);
     if ( !ret || ret > MAX_PATH )
@@ -246,6 +247,7 @@ bool TEXTest::Test09()
         printmetachk( &checkEarth );
         return false;
     }
+#endif // !BUILD_BVT_ONLY
 
     // Copy (same format)
     assert( imageLogo.GetMetadata().format == imageTest.GetMetadata().format );
@@ -323,6 +325,7 @@ bool TEXTest::Test09()
         }
     }
 
+#ifndef BUILD_BVT_ONLY
     // Copy (with conversion)
     assert( imageLogo.GetMetadata().format != imageEarth.GetMetadata().format );
     for( size_t x=0; x < 16; ++x )
@@ -398,39 +401,128 @@ bool TEXTest::Test09()
             }
         }
     }
+#endif // !BUILD_BVT_ONLY
 
     // invalid args
     {
-        ScratchImage image;
         Image nullin = {};
         nullin.width = nullin.height = 256;
         nullin.format = DXGI_FORMAT_R8G8B8A8_UNORM;
-        Rect rct = { 16, 16, 128, 128 };
+        Rect rct = { 2, 2, 8, 8 };
 
         Image nullout = {};
         nullout.width = nullout.height = 256;
         nullout.format = DXGI_FORMAT_R8G8B8A8_UNORM;
         hr = CopyRectangle(nullin, rct, nullout, TEX_FILTER_DEFAULT, 0, 0);
-        if (hr != E_INVALIDARG && hr != E_POINTER)
+        if (hr != E_POINTER)
         {
             success = false;
-            printe("Failed invalid arg test\n");
+            printe("Failed invalid arg src test (%08X)\n", static_cast<unsigned int>(hr));
         }
 
-        hr = CopyRectangle(*imageEarth.GetImage(0, 0, 0), rct, nullout, TEX_FILTER_DEFAULT, 0, 0);
-        if (hr != E_INVALIDARG && hr != E_POINTER)
+        hr = CopyRectangle(*imageTest.GetImage(0, 0, 0), rct, nullout, TEX_FILTER_DEFAULT, 0, 0);
+        if (hr != E_POINTER)
         {
             success = false;
-            printe("Failed invalid arg test\n");
+            printe("Failed invalid arg dest test (%08X)\n", static_cast<unsigned int>(hr));
         }
 
-        // TODO - unsupported format (compressed, planar, or palette)
+        ScratchImage image;
+        hr = image.InitializeFromImage( *imageTest.GetImage(0,0,0) );
+        if ( FAILED(hr) )
+        {
+            success = false;
+            printe( "Failed making copy of earth image (HRESULT %08X)\n", static_cast<unsigned int>(hr) );
+        }
+        else
+        {
+            hr = CopyRectangle(*imageTest.GetImage(0, 0, 0), rct, *image.GetImage(0, 0, 0), TEX_FILTER_DEFAULT, INT32_MAX, INT32_MAX);
+            if (hr != E_INVALIDARG)
+            {
+                success = false;
+                printe("Failed invalid arg offset test (%08X)\n", static_cast<unsigned int>(hr));
+            }
 
-        // TODO - invalid rectangle
+            Rect rct2 = {};
+            hr = CopyRectangle(*imageTest.GetImage(0, 0, 0), rct2, *image.GetImage(0, 0, 0), TEX_FILTER_DEFAULT, 0, 0);
+            if (hr != E_INVALIDARG)
+            {
+                success = false;
+                printe("Failed invalid arg rect test (%08X)\n", static_cast<unsigned int>(hr));
+            }
 
-        // TODO - invalid offset
+            auto img = *imageTest.GetImage(0, 0, 0);
+            img.pixels = nullptr;
+            hr = CopyRectangle(img, rct, *image.GetImage(0, 0, 0), TEX_FILTER_DEFAULT, 0, 0);
+            if (hr != E_POINTER)
+            {
+                success = false;
+                printe("Failed invalid src image test (%08X)\n", static_cast<unsigned int>(hr));
+            }
 
-        // TODO - R1 for source or destination
+            img = *image.GetImage(0, 0, 0);
+            img.pixels = nullptr;
+            hr = CopyRectangle(*imageTest.GetImage(0, 0, 0), rct, img, TEX_FILTER_DEFAULT, 0, 0);
+            if (hr != E_POINTER)
+            {
+                success = false;
+                printe("Failed invalid dest image test (%08X)\n", static_cast<unsigned int>(hr));
+            }
+
+            img = *imageTest.GetImage(0, 0, 0);
+            img.format = DXGI_FORMAT_UNKNOWN;
+            hr = CopyRectangle(img, rct, *image.GetImage(0, 0, 0), TEX_FILTER_DEFAULT, 0, 0);
+            if (hr != E_INVALIDARG)
+            {
+                success = false;
+                printe("Failed invalid src format test (%08X)\n", static_cast<unsigned int>(hr));
+            }
+
+            img = *image.GetImage(0, 0, 0);
+            img.format = DXGI_FORMAT_UNKNOWN;
+            hr = CopyRectangle(*imageTest.GetImage(0, 0, 0), rct, img, TEX_FILTER_DEFAULT, 0, 0);
+            if (hr != E_INVALIDARG)
+            {
+                success = false;
+                printe("Failed invalid dest format test (%08X)\n", static_cast<unsigned int>(hr));
+            }
+
+            img = *imageTest.GetImage(0, 0, 0);
+            img.format = DXGI_FORMAT_P8;
+            hr = CopyRectangle(img, rct, *image.GetImage(0, 0, 0), TEX_FILTER_DEFAULT, 0, 0);
+            if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+            {
+                success = false;
+                printe("Failed unsupported src format test (%08X)\n", static_cast<unsigned int>(hr));
+            }
+
+            img = *image.GetImage(0, 0, 0);
+            img.format = DXGI_FORMAT_P8;
+            hr = CopyRectangle(*imageTest.GetImage(0, 0, 0), rct, img, TEX_FILTER_DEFAULT, 0, 0);
+            if (hr != E_INVALIDARG)
+            {
+                success = false;
+                printe("Failed unsupported dest format test (%08X)\n", static_cast<unsigned int>(hr));
+            }
+
+            img = *imageTest.GetImage(0, 0, 0);
+            img.format = DXGI_FORMAT_R1_UNORM;
+            hr = CopyRectangle(img, rct, *image.GetImage(0, 0, 0), TEX_FILTER_DEFAULT, 0, 0);
+            if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+            {
+                success = false;
+                printe("Failed mono src format test (%08X)\n", static_cast<unsigned int>(hr));
+            }
+
+            img = *image.GetImage(0, 0, 0);
+            img.format = DXGI_FORMAT_R1_UNORM;
+            hr = CopyRectangle(*imageTest.GetImage(0, 0, 0), rct, img, TEX_FILTER_DEFAULT, 0, 0);
+            if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+            {
+                success = false;
+                printe("Failed mono dest format test (%08X)\n", static_cast<unsigned int>(hr));
+            }
+        }
     }
 
     return success;
@@ -467,6 +559,21 @@ bool TEXTest::Test10()
         return false;
     }
 
+    // First MSE
+    float mse, mseV[4];
+    hr = ComputeMSE( *imageLogo.GetImage(0,0,0), *imageLogo.GetImage(0,0,0), mse, mseV );
+    if ( FAILED(hr) )
+    {
+        success = false;
+        printe( "Failed computing first MSE (HRESULT %08X):\n", static_cast<unsigned int>(hr) );
+    }
+    else if ( !IsEqual( mse, 0.f ) )
+    {
+        success = false;
+        printe( "MSE = %f (%f %f %f %f)... 0.f\n", mse, mseV[0], mseV[1], mseV[2], mseV[3] );
+    }
+
+#ifndef BUILD_BVT_ONLY
     // Windows 95 Logo
     ret = ExpandEnvironmentStringsW(MEDIA_PATH L"win95.dds", szPath, MAX_PATH);
     if ( !ret || ret > MAX_PATH )
@@ -532,20 +639,6 @@ bool TEXTest::Test10()
 
     // Compute MSE between various images
 
-    // First MSE
-    float mse, mseV[4];
-    hr = ComputeMSE( *imageLogo.GetImage(0,0,0), *imageLogo.GetImage(0,0,0), mse, mseV );
-    if ( FAILED(hr) )
-    {
-        success = false;
-        printe( "Failed computing first MSE (HRESULT %08X):\n", static_cast<unsigned int>(hr) );
-    }
-    else if ( !IsEqual( mse, 0.f ) )
-    {
-        success = false;
-        printe( "MSE = %f (%f %f %f %f)... 0.f\n", mse, mseV[0], mseV[1], mseV[2], mseV[3] );
-    }
-
     // Second MSE
     hr = ComputeMSE( *imageLogo.GetImage(0,0,0), *imageWin95.GetImage(0,0,0), mse, mseV );
     if ( FAILED(hr) )
@@ -571,6 +664,7 @@ bool TEXTest::Test10()
         success = false;
         printe( "MSE = %f (%f %f %f %f)... 0.728756\n", mse, mseV[0], mseV[1], mseV[2], mseV[3] );
     }
+#endif // !BUILD_BVT_ONLY
 
     // invalid args
     {
@@ -625,6 +719,14 @@ bool TEXTest::Test10()
 
 //-------------------------------------------------------------------------------------
 // EvaluateImage
+
+namespace
+{
+    void eval_noop(const XMVECTOR*, size_t, size_t)
+    {
+    }
+}
+
 bool TEXTest::Test16()
 {
     struct TestMedia
@@ -808,25 +910,111 @@ bool TEXTest::Test16()
                 }
             }
 
-            // invalid arg
-            hr = EvaluateImage(*image.GetImage(0, 0, 0), nullptr);
-            if (hr != E_INVALIDARG)
-            {
-                success = false;
-                pass = false;
-                printe("ERROR: EvaluateImage null func failed (%08X)\n%ls\n", static_cast<unsigned int>(hr), szPath);
-            }
-
-            hr = EvaluateImage(image.GetImages(), image.GetImageCount(), metadata, nullptr);
-            if (hr != E_INVALIDARG)
-            {
-                success = false;
-                pass = false;
-                printe("ERROR: EvaluateImage [complex] null func failed (%08X)\n%ls\n", static_cast<unsigned int>(hr), szPath);
-            }
-
             if (pass)
                 ++npass;
+
+            // invalid arg
+            if (!index)
+            {
+                ScratchImage result;
+                hr = EvaluateImage(*image.GetImage(0, 0, 0), nullptr);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("ERROR: EvaluateImage null func failed (%08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                auto img = *image.GetImage(0, 0, 0);
+                img.pixels = nullptr;
+                hr = EvaluateImage(img, eval_noop);
+                if (hr != E_POINTER)
+                {
+                    success = false;
+                    printe("ERROR: EvaluateImage null pixels failed (%08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                img = *image.GetImage(0, 0, 0);
+                img.format = DXGI_FORMAT_UNKNOWN;
+                hr = EvaluateImage(img, eval_noop);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("ERROR: EvaluateImage invalid format failed (%08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                img = *image.GetImage(0, 0, 0);
+                img.format = DXGI_FORMAT_P8;
+                hr = EvaluateImage(img, eval_noop);
+                if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                {
+                    success = false;
+                    printe("ERROR: EvaluateImage unsupported format failed (%08X)\n", static_cast<unsigned int>(hr));
+                }
+
+            #if defined(_M_X64) || defined(_M_ARM64)
+                img = *image.GetImage(0, 0, 0);
+                img.width = INT64_MAX;
+                hr = EvaluateImage(img, eval_noop);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("ERROR: EvaluateImage too large failed (%08X)\n", static_cast<unsigned int>(hr));
+                }
+            #endif
+
+                hr = EvaluateImage(image.GetImages(), image.GetImageCount(), metadata, nullptr);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("ERROR: EvaluateImage [complex] null func failed (%08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                hr = EvaluateImage(image.GetImages(), 0, metadata, eval_noop);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("ERROR: EvaluateImage [complex] zero images failed (%08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                auto mdata = metadata;
+                mdata.format = DXGI_FORMAT_UNKNOWN;
+                hr = EvaluateImage(image.GetImages(), image.GetImageCount(), mdata, eval_noop);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("ERROR: EvaluateImage [complex] invalid format failed (%08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                mdata = metadata;
+                mdata.format = DXGI_FORMAT_P8;
+                hr = EvaluateImage(image.GetImages(), image.GetImageCount(), mdata, eval_noop);
+                if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                {
+                    success = false;
+                    printe("ERROR: EvaluateImage [complex] unsupported format failed (%08X)\n", static_cast<unsigned int>(hr));
+                }
+
+            #if defined(_M_X64) || defined(_M_ARM64)
+                mdata = metadata;
+                mdata.width = INT64_MAX;
+                hr = EvaluateImage(image.GetImages(), image.GetImageCount(), mdata, eval_noop);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("ERROR: EvaluateImage [complex] too large failed (%08X)\n", static_cast<unsigned int>(hr));
+                }
+            #endif
+
+                mdata = metadata;
+                mdata.depth = UINT16_MAX + 1;
+                mdata.dimension = TEX_DIMENSION_TEXTURE3D;
+                hr = EvaluateImage(image.GetImages(), image.GetImageCount(), mdata, eval_noop);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("ERROR: EvaluateImage [complex] too many slices failed (%08X)\n", static_cast<unsigned int>(hr));
+                }
+            }
 
             ++ncount;
         }
@@ -847,7 +1035,7 @@ bool TEXTest::Test16()
         if (hr != E_INVALIDARG && hr != E_POINTER)
         {
             success = false;
-            printe("Failed invalid arg test\n");
+            printe("Failed invalid arg test (%08X)\n", static_cast<unsigned int>(hr));
         }
 
         TexMetadata metadata = {};
@@ -859,14 +1047,8 @@ bool TEXTest::Test16()
         if (hr != E_INVALIDARG)
         {
             success = false;
-            printe("Failed invalid arg complex test\n");
+            printe("Failed invalid arg complex test (%08X)\n", static_cast<unsigned int>(hr));
         }
-
-        // TODO - invalid format
-
-        // TODO - unsupprorted format (planar or palette)
-
-        // TODO - complex with volume maps with depth exceeding UINT16_MAX
     #pragma warning(pop)
     }
 
@@ -879,6 +1061,10 @@ bool TEXTest::Test16()
 
 namespace
 {
+    void xform_noop(XMVECTOR*, const XMVECTOR*, size_t, size_t)
+    {
+    }
+
     void xform_copy(_Out_writes_(width) XMVECTOR* outPixels, _In_reads_(width) const XMVECTOR* inPixels, size_t width, size_t y)
     {
         UNREFERENCED_PARAMETER(y);
@@ -1280,28 +1466,111 @@ bool TEXTest::Test17()
                 }
             }
 
+            if (pass)
+                ++npass;
+
             // invalid arg
+            if (!index)
             {
                 ScratchImage result;
                 hr = TransformImage(*srcimage.GetImage(0, 0, 0), nullptr, result);
                 if (hr != E_INVALIDARG)
                 {
                     success = false;
-                    pass = false;
-                    printe("ERROR: TransformImage null func failed (%08X)\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                    printe("ERROR: TransformImage null func failed (%08X)\n", static_cast<unsigned int>(hr));
                 }
+
+                auto img = *srcimage.GetImage(0, 0, 0);
+                img.pixels = nullptr;
+                hr = TransformImage(img, xform_noop, result);
+                if (hr != E_POINTER)
+                {
+                    success = false;
+                    printe("ERROR: TransformImage null pixels failed (%08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                img = *srcimage.GetImage(0, 0, 0);
+                img.format = DXGI_FORMAT_UNKNOWN;
+                hr = TransformImage(img, xform_noop, result);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("ERROR: TransformImage invalid format failed (%08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                img = *srcimage.GetImage(0, 0, 0);
+                img.format = DXGI_FORMAT_BC3_UNORM;
+                hr = TransformImage(img, xform_noop, result);
+                if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                {
+                    success = false;
+                    printe("ERROR: TransformImage unsupported format failed (%08X)\n", static_cast<unsigned int>(hr));
+                }
+
+            #if defined(_M_X64) || defined(_M_ARM64)
+                img = *srcimage.GetImage(0, 0, 0);
+                img.width = INT64_MAX;
+                hr = TransformImage(img, xform_noop, result);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("ERROR: TransformImage too large failed (%08X)\n", static_cast<unsigned int>(hr));
+                }
+            #endif
 
                 hr = TransformImage(srcimage.GetImages(), srcimage.GetImageCount(), metadata, nullptr, result);
                 if (hr != E_INVALIDARG)
                 {
                     success = false;
-                    pass = false;
-                    printe("ERROR: TransformImage [complex] null func failed (%08X)\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                    printe("ERROR: TransformImage [complex] null func failed (%08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                hr = TransformImage(srcimage.GetImages(), 0, metadata, xform_noop, result);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("ERROR: TransformImage [complex] zero images failed (%08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                auto mdata = metadata;
+                mdata.format = DXGI_FORMAT_UNKNOWN;
+                hr = TransformImage(srcimage.GetImages(), srcimage.GetImageCount(), mdata, xform_noop, result);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("ERROR: TransformImage [complex] invalid format failed (%08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                mdata = metadata;
+                mdata.format = DXGI_FORMAT_BC3_UNORM;
+                hr = TransformImage(srcimage.GetImages(), srcimage.GetImageCount(), mdata, xform_noop, result);
+                if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                {
+                    success = false;
+                    printe("ERROR: TransformImage [complex] unsupported format failed (%08X)\n", static_cast<unsigned int>(hr));
+                }
+
+            #if defined(_M_X64) || defined(_M_ARM64)
+                mdata = metadata;
+                mdata.width = INT64_MAX;
+                hr = TransformImage(srcimage.GetImages(), srcimage.GetImageCount(), mdata, xform_noop, result);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("ERROR: TransformImage [complex] too large failed (%08X)\n", static_cast<unsigned int>(hr));
+                }
+            #endif
+
+                mdata = metadata;
+                mdata.depth = UINT16_MAX + 1;
+                mdata.dimension = TEX_DIMENSION_TEXTURE3D;
+                hr = TransformImage(srcimage.GetImages(), srcimage.GetImageCount(), mdata, xform_noop, result);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("ERROR: TransformImage [complex] too many slices failed (%08X)\n", static_cast<unsigned int>(hr));
                 }
             }
-
-            if (pass)
-                ++npass;
 
             ++ncount;
         }
@@ -1313,17 +1582,15 @@ bool TEXTest::Test17()
     {
     #pragma warning(push)
     #pragma warning(disable:6385 6387)
-        auto test = [](XMVECTOR*, const XMVECTOR*, size_t, size_t) {};
-
         ScratchImage image;
         Image nullin = {};
         nullin.width = nullin.height = 256;
         nullin.format = DXGI_FORMAT_R8G8B8A8_UNORM;
-        HRESULT hr = TransformImage(nullin, test, image);
-        if (hr != E_INVALIDARG && hr != E_POINTER)
+        HRESULT hr = TransformImage(nullin, xform_noop, image);
+        if (hr != E_POINTER)
         {
             success = false;
-            printe("Failed invalid arg test\n");
+            printe("Failed invalid arg test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
         }
 
         TexMetadata metadata = {};
@@ -1331,18 +1598,12 @@ bool TEXTest::Test17()
         metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
         metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
         metadata.dimension = TEX_DIMENSION_TEXTURE2D;
-        hr = TransformImage(nullptr, 0, metadata, test, image);
+        hr = TransformImage(nullptr, 0, metadata, xform_noop, image);
         if (hr != E_INVALIDARG)
         {
             success = false;
-            printe("Failed invalid arg complex test\n");
+            printe("Failed invalid arg [complex] test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
         }
-
-        // TODO - invalid format
-
-        // TODO - unsupprorted format (planar or palette)
-
-        // TODO - complex with volume maps with depth exceeding UINT16_MAX
     #pragma warning(pop)
     }
 

@@ -32,9 +32,7 @@ TestInfo g_Tests[] =
     { "TexMetadata", TEXTest::Test18 },
     { "Blob", TEXTest::Test21 },
     { "ScratchImage", TEXTest::Test19 },
-#ifndef BUILD_BVT_ONLY
     { "ComputeMSE", TEXTest::Test10 },
-#endif
     { "EvaluateImage", TEXTest::Test16 },
     { "TransformImage", TEXTest::Test17 },
     { "IsAlphaAllOpaque", TEXTest::Test14 },
@@ -46,9 +44,9 @@ TestInfo g_Tests[] =
     { "Convert (internalD)", TEXTest::Test05D },
 #endif
     { "Convert", TEXTest::Test06 },
+    { "CopyRectangle", TEXTest::Test09 },
 #ifndef BUILD_BVT_ONLY
     { "ConvertToSinglePlane", TEXTest::Test15 },
-    { "CopyRectangle", TEXTest::Test09 },
     { "ComputeNormalMap", TEXTest::Test11 },
     { "PremultiplyAlpha", TEXTest::Test13 },
 #endif
