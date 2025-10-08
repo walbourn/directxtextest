@@ -675,43 +675,55 @@ bool TEXTest::Test10()
         null1.format = null2.format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
         hr = ComputeMSE(null1, null2, mse, nullptr);
-        if (hr != E_INVALIDARG && hr != E_POINTER)
+        if (hr != E_POINTER)
         {
             success = false;
-            printe("Failed invalid arg test\n");
+            printe("Failed invalid arg test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         }
 
         hr = ComputeMSE(*imageLogo.GetImage(0, 0, 0), null2, mse, nullptr);
-        if (hr != E_INVALIDARG && hr != E_POINTER)
+        if (hr != E_POINTER)
         {
             success = false;
-            printe("Failed invalid arg test B\n");
+            printe("Failed invalid arg test B (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         }
 
         hr = ComputeMSE(null1, *imageLogo.GetImage(0, 0, 0), mse, nullptr);
-        if (hr != E_INVALIDARG && hr != E_POINTER)
+        if (hr != E_POINTER)
         {
             success = false;
-            printe("Failed invalid arg test C\n");
+            printe("Failed invalid arg test C (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         }
 
         hr = ComputeMSE(*imageLogo.GetImage(0, 0, 0), *imageLogo.GetImage(0, 0, 0), mse, nullptr);
         if (FAILED(hr))
         {
             success = false;
-            printe("Failed null mseV test\n");
+            printe("Failed null mseV test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         }
 
-        // TODO - mismatch widths/heights
+        auto img = *imageLogo.GetImage(0, 0, 0);
+        img.width = img.height = 4;
+        hr = ComputeMSE(img, *imageLogo.GetImage(0, 0, 0), mse, nullptr);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed mismatch size test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+        }
 
-        // TODO - invalid format
-
-        // TODO - unsupprorted format (compressed, planar, or palette)
-
-        // TODO - image1 compressed, other uncompressed
-
-        // TODO - image2 compressed, other uncompresssed
+        img = *imageLogo.GetImage(0, 0, 0);
+        img.format = DXGI_FORMAT_P8;
+        hr = ComputeMSE(img, *imageLogo.GetImage(0, 0, 0), mse, nullptr);
+        if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+        {
+            success = false;
+            printe("Failed unsupported format test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+        }
     }
+
+    // TODO - image1 compressed, other uncompressed
+
+    // TODO - image2 compressed, other uncompresssed
 
     return success;
 }
