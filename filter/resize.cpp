@@ -1494,26 +1494,102 @@ bool FilterTest::Test01()
                 }
             }
 
-            // invalid/zero args
-            ScratchImage result;
-            hr = Resize(*srcimage.GetImage(0, 0, 0), 0, 0, TEX_FILTER_DEFAULT, result);
-            if (hr != E_INVALIDARG)
-            {
-                success = false;
-                pass = false;
-                printe("Failed invalid zero arg test\n");
-            }
-
-            hr = Resize(srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), 0, 0, TEX_FILTER_DEFAULT, result);
-            if (hr != E_INVALIDARG)
-            {
-                success = false;
-                pass = false;
-                printe("Failed invalid zero complex test\n");
-            }
-
             if ( pass )
                 ++npass;
+
+            // invalid args
+            if (!index)
+            {
+                ScratchImage result;
+                hr = Resize(*srcimage.GetImage(0, 0, 0), 0, 0, TEX_FILTER_DEFAULT, result);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed invalid zero arg test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                }
+
+                auto img = *srcimage.GetImage(0, 0, 0);
+                img.format = DXGI_FORMAT_UNKNOWN;
+                hr = Resize(img, 128, 128, TEX_FILTER_DEFAULT, result);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed unknown format test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                }
+
+                img.format = DXGI_FORMAT_BC3_UNORM;
+                hr = Resize(img, 128, 128, TEX_FILTER_DEFAULT, result);
+                if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                {
+                    success = false;
+                    printe("Failed unsupported format test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                }
+
+                hr = Resize(srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), 0, 0, TEX_FILTER_DEFAULT, result);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed invalid zero complex test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                }
+
+                hr = Resize(srcimage.GetImages(), 0, srcimage.GetMetadata(), 128, 128, TEX_FILTER_DEFAULT, result);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed zero images complex test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                }
+
+                auto mdata = srcimage.GetMetadata();
+                mdata.format = DXGI_FORMAT_UNKNOWN;
+                hr = Resize(srcimage.GetImages(), srcimage.GetImageCount(), mdata, 0, 0, TEX_FILTER_DEFAULT, result);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed unknown format complex test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                }
+
+                mdata.format = DXGI_FORMAT_BC3_UNORM;
+                hr = Resize(srcimage.GetImages(), srcimage.GetImageCount(), mdata, 0, 0, TEX_FILTER_DEFAULT, result);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed unsupported format complex test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                }
+
+            #if defined(_M_X64) || defined(_M_ARM64)
+                img = *srcimage.GetImage(0, 0, 0);
+                img.width = INT64_MAX;
+                hr = Resize(img, 128, 128, TEX_FILTER_DEFAULT, result);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed image too large test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                }
+
+                mdata = srcimage.GetMetadata();
+                mdata.width = INT64_MAX;
+                hr = Resize(srcimage.GetImages(), srcimage.GetImageCount(), mdata, 128, 128, TEX_FILTER_DEFAULT, result);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                   printe("Failed image too large complex test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                }
+
+                hr = Resize(*srcimage.GetImage(0, 0, 0), INT64_MAX, INT64_MAX, TEX_FILTER_DEFAULT, result);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed resize too large arg test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                }
+
+                hr = Resize(srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), INT64_MAX, INT64_MAX, TEX_FILTER_DEFAULT, result);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                   printe("Failed resize too large complex test (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath);
+                }
+            #endif // _M_X64 || _M_ARM64
+            }
         }
 
         ++ncount;
@@ -1530,10 +1606,10 @@ bool FilterTest::Test01()
         nullin.width = nullin.height = 256;
         nullin.format = DXGI_FORMAT_R8G8B8A8_UNORM;
         HRESULT hr = Resize(nullin, 128, 128, TEX_FILTER_DEFAULT, image);
-        if (hr != E_INVALIDARG && hr != E_POINTER)
+        if (hr != E_POINTER)
         {
             success = false;
-            printe("Failed invalid arg test\n");
+            printe("Failed invalid arg test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         }
 
         TexMetadata metadata = {};
@@ -1545,7 +1621,7 @@ bool FilterTest::Test01()
         if (hr != E_INVALIDARG)
         {
             success = false;
-            printe("Failed invalid arg complex test\n");
+            printe("Failed invalid arg complex test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         }
     #pragma warning(pop)
     }
