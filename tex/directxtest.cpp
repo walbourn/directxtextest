@@ -47,9 +47,7 @@ TestInfo g_Tests[] =
     { "CopyRectangle", TEXTest::Test09 },
     { "ConvertToSinglePlane", TEXTest::Test15 },
     { "ComputeNormalMap", TEXTest::Test11 },
-#ifndef BUILD_BVT_ONLY
     { "PremultiplyAlpha", TEXTest::Test13 },
-#endif
 };
 
 extern int __cdecl DescribeException(PEXCEPTION_POINTERS pData);

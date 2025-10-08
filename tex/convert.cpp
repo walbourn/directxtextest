@@ -3719,38 +3719,109 @@ bool TEXTest::Test06()
                             SaveToDDSFile( imageComplex.GetImages(), imageComplex.GetImageCount(), imageComplex.GetMetadata(), DDS_FLAGS_NONE, szDestPath );
                         }
                     }
-
-                    // invalid metadata
-                    TexMetadata imdata = srcimage.GetMetadata();
-                    imdata.format = DXGI_FORMAT_BC1_UNORM;
-                    hr = Convert( srcimage.GetImages(), srcimage.GetImageCount(), imdata, tformat, filter, TEX_THRESHOLD_DEFAULT, imageComplex );
-                    if (SUCCEEDED(hr))
-                    {
-                        success = false;
-                        printe("Failed invalid metadata format test\n");
-                    }
-
-                    imdata = srcimage.GetMetadata();
-                    imdata.width = UINT32_MAX;
-                    hr = Convert( srcimage.GetImages(), srcimage.GetImageCount(), imdata, tformat, filter, TEX_THRESHOLD_DEFAULT, imageComplex );
-                    if (SUCCEEDED(hr))
-                    {
-                        success = false;
-                        printe("Failed invalid metadata size test\n");
-                    }
-
-                    imdata = srcimage.GetMetadata();
-                    imdata.dimension = static_cast<TEX_DIMENSION>(0);
-                    hr = Convert( srcimage.GetImages(), srcimage.GetImageCount(), imdata, tformat, filter, TEX_THRESHOLD_DEFAULT, imageComplex );
-                    if (SUCCEEDED(hr))
-                    {
-                        success = false;
-                        printe("Failed invalid metadata dimension test\n");
-                    }
                 }
 
                 if ( pass )
                     ++npass;
+
+                if (!index)
+                {
+                #pragma warning(push)
+                #pragma warning(disable:6385 6387)
+                    // ConvertEx is called by Convert, so these test both paths.
+                    auto img = *srcimage.GetImage(0,0,0);
+                    img.format = DXGI_FORMAT_UNKNOWN;
+                    hr = Convert(img, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_FILTER_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+                    if (hr != E_INVALIDARG)
+                    {
+                        success = false;
+                        printe("Failed invalid src format test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+                    }
+
+                    hr = Convert(*srcimage.GetImage(0,0,0), DXGI_FORMAT_UNKNOWN, TEX_FILTER_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+                    if (hr != E_INVALIDARG)
+                    {
+                        success = false;
+                        printe("Failed invalid dest format test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+                    }
+
+                    img = *srcimage.GetImage(0,0,0);
+                    hr = Convert(img, img.format, TEX_FILTER_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+                    if (hr != E_INVALIDARG)
+                    {
+                        success = false;
+                        printe("Failed no-change format test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+                    }
+
+                    img.format = DXGI_FORMAT_BC3_UNORM;
+                    hr = Convert(img, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_FILTER_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+                    if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                    {
+                        success = false;
+                        printe("Failed unsupported format test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+                    }
+
+                    hr = Convert(srcimage.GetImages(), 0, srcimage.GetMetadata(), DXGI_FORMAT_R10G10B10A2_UNORM, TEX_FILTER_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+                    if (hr != E_INVALIDARG)
+                    {
+                        success = false;
+                        printe("Failed zero images complex test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+                    }
+
+                    auto mdata = srcimage.GetMetadata();
+                    mdata.format = DXGI_FORMAT_UNKNOWN;
+                    hr = Convert( srcimage.GetImages(), srcimage.GetImageCount(), mdata, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_FILTER_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+                    if (hr != E_INVALIDARG)
+                    {
+                        success = false;
+                        printe("Failed invalid src format complex test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+                    }
+
+                    mdata = srcimage.GetMetadata();
+                    hr = Convert( srcimage.GetImages(), srcimage.GetImageCount(), mdata, DXGI_FORMAT_UNKNOWN, TEX_FILTER_DEFAULT, TEX_THRESHOLD_DEFAULT, image );
+                    if (hr != E_INVALIDARG)
+                    {
+                        success = false;
+                        printe("Failed invalid dest format complex test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+                    }
+
+                    mdata.format = DXGI_FORMAT_BC1_UNORM;
+                    hr = Convert( srcimage.GetImages(), srcimage.GetImageCount(), mdata, DXGI_FORMAT_R10G10B10A2_UNORM, TEX_FILTER_DEFAULT, TEX_THRESHOLD_DEFAULT, image );
+                    if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                    {
+                        success = false;
+                        printe("Failed invalid format complex test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+                    }
+
+                    mdata = srcimage.GetMetadata();
+                    hr = Convert( srcimage.GetImages(), srcimage.GetImageCount(), mdata, mdata.format, TEX_FILTER_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+                    if (hr != E_INVALIDARG)
+                    {
+                        success = false;
+                        printe("Failed no-change format complex test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+                    }
+
+                    mdata = srcimage.GetMetadata();
+                    mdata.dimension = static_cast<TEX_DIMENSION>(0);
+                    hr = Convert( srcimage.GetImages(), srcimage.GetImageCount(), mdata, mdata.format, TEX_FILTER_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+                    if (hr != E_INVALIDARG)
+                    {
+                        success = false;
+                        printe("Failed invalid metadata dimension test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+                    }
+
+                #if defined(_M_X64) || defined(_M_ARM64)
+                    mdata = srcimage.GetMetadata();
+                    mdata.width = INT64_MAX;
+                    hr = Convert( srcimage.GetImages(), srcimage.GetImageCount(), mdata, mdata.format, TEX_FILTER_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+                    if (hr != E_INVALIDARG)
+                    {
+                        success = false;
+                        printe("Failed too large image test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+                    }
+                #endif
+                #pragma warning(pop)
+                }
 
                 ++ncount;
             }
@@ -3768,18 +3839,18 @@ bool TEXTest::Test06()
         nullin.width = nullin.height = 256;
         nullin.format = DXGI_FORMAT_R8G8B8A8_UNORM;
         HRESULT hr = Convert(nullin, DXGI_FORMAT_B8G8R8X8_UNORM, TEX_FILTER_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
-        if (SUCCEEDED(hr))
+        if (hr != E_POINTER)
         {
             success = false;
-            printe("Failed invalid arg test\n");
+            printe("Failed null image test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         }
 
         ConvertOptions opts{};
         hr = ConvertEx(nullin, DXGI_FORMAT_B8G8R8A8_UNORM, opts, image);
-        if (SUCCEEDED(hr))
+        if (hr != E_POINTER)
         {
             success = false;
-            printe("Failed invalid arg ex test\n");
+            printe("Failed null image ex test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         }
 
         TexMetadata metadata = {};
@@ -3787,11 +3858,18 @@ bool TEXTest::Test06()
         metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
         metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
         metadata.dimension = TEX_DIMENSION_TEXTURE2D;
-        hr = ConvertEx(nullptr, 0, metadata, DXGI_FORMAT_B8G8R8A8_UNORM, opts, image);
-        if (SUCCEEDED(hr))
+        hr = Convert(nullptr, 0, metadata, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_FILTER_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+        if (hr != E_INVALIDARG)
         {
             success = false;
-            printe("Failed invalid arg complex test\n");
+            printe("Failed invalid arg complex test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+        }
+
+        hr = ConvertEx(nullptr, 0, metadata, DXGI_FORMAT_B8G8R8A8_UNORM, opts, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg complex ex test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         }
     #pragma warning(pop)
     }

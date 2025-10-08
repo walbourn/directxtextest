@@ -442,18 +442,27 @@ bool TEXTest::Test13()
         nullin.width = nullin.height = 256;
         nullin.format = DXGI_FORMAT_R8G8B8A8_UNORM;
         hr = PremultiplyAlpha(nullin, TEX_PMALPHA_DEFAULT, image);
-        if (hr != E_INVALIDARG && hr != E_POINTER)
+        if (hr != E_POINTER)
         {
             success = false;
-            printe("Failed invalid arg test\n");
+            printe("Failed invalid image test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         }
 
-        nullin.format = DXGI_FORMAT_NV11;
-        hr = PremultiplyAlpha(nullin, TEX_PMALPHA_DEFAULT, image);
-        if (hr != E_INVALIDARG && hr != E_POINTER)
+        auto img = *imagealpha.GetImage(0,0,0);
+        img.format = DXGI_FORMAT_UNKNOWN;
+        hr = PremultiplyAlpha(img, TEX_PMALPHA_DEFAULT, image);
+        if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
         {
             success = false;
-            printe("Failed invalid format arg test\n");
+            printe("Failed invalid format arg test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+        }
+
+        img.format = DXGI_FORMAT_NV11;
+        hr = PremultiplyAlpha(img, TEX_PMALPHA_DEFAULT, image);
+        if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+        {
+            success = false;
+            printe("Failed unsupported format arg test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         }
 
         metadata = {};
@@ -465,16 +474,61 @@ bool TEXTest::Test13()
         if (hr != E_INVALIDARG)
         {
             success = false;
-            printe("Failed invalid arg complex test\n");
+            printe("Failed invalid arg complex test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         }
 
-        metadata.format = DXGI_FORMAT_NV11;
-        hr = PremultiplyAlpha(nullptr, 0, metadata, TEX_PMALPHA_DEFAULT, image);
+        hr = PremultiplyAlpha(imagealpha.GetImages(), 0, imagealpha.GetMetadata(), TEX_PMALPHA_DEFAULT, image);
         if (hr != E_INVALIDARG)
         {
             success = false;
-            printe("Failed invalid format arg complex test\n");
+            printe("Failed zero images complex test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
         }
+
+        auto mdata = imagealpha.GetMetadata();
+        mdata.format = DXGI_FORMAT_UNKNOWN;
+        hr = PremultiplyAlpha(imagealpha.GetImages(), imagealpha.GetImageCount(), mdata, TEX_PMALPHA_DEFAULT, image);
+        if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+        {
+            success = false;
+            printe("Failed invalid format complex test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+        }
+
+        mdata.format = DXGI_FORMAT_NV11;
+        hr = PremultiplyAlpha(imagealpha.GetImages(), imagealpha.GetImageCount(), mdata, TEX_PMALPHA_DEFAULT, image);
+        if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+        {
+            success = false;
+            printe("Failed unsupported format complex test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+        }
+
+        mdata = imagealpha.GetMetadata();
+        mdata.SetAlphaMode(TEX_ALPHA_MODE_PREMULTIPLIED);
+        hr = PremultiplyAlpha(imagealpha.GetImages(), imagealpha.GetImageCount(), mdata, TEX_PMALPHA_DEFAULT, image);
+        if (hr != E_FAIL)
+        {
+            success = false;
+            printe("Failed already premultiplied complex test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+        }
+
+    #if defined(_M_X64) || defined(_M_ARM64)
+        img.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        img.width = INT64_MAX;
+        hr = PremultiplyAlpha(img, TEX_PMALPHA_DEFAULT, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed too large image test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+        }
+
+        mdata = imagealpha.GetMetadata();
+        mdata.width = INT64_MAX;
+        hr = PremultiplyAlpha(imagealpha.GetImages(), imagealpha.GetImageCount(), mdata, TEX_PMALPHA_DEFAULT, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed too large image complex test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+        }
+    #endif
     #pragma warning(pop)
     }
 

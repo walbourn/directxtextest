@@ -182,6 +182,14 @@ bool TEXTest::Test11()
                     printe("Failed invalid format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
                 }
 
+                img.format = DXGI_FORMAT_BC3_UNORM;
+                hr = ComputeNormalMap(img, CNMAP_DEFAULT, 2.f, DXGI_FORMAT_R8G8B8A8_UNORM, normalMap);
+                if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                {
+                    success = false;
+                    printe("Failed unsupported format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
                 hr = ComputeNormalMap(imagehmap.GetImages(), 0, imagehmap.GetMetadata(), CNMAP_DEFAULT, 2.f, DXGI_FORMAT_R8G8B8A8_UNORM, normalMap);
                 if (hr != E_INVALIDARG)
                 {
@@ -196,6 +204,14 @@ bool TEXTest::Test11()
                 {
                     success = false;
                     printe("Failed invalid format complex test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                mdata.format = DXGI_FORMAT_BC3_UNORM;
+                hr = ComputeNormalMap(imagehmap.GetImages(), imagehmap.GetImageCount(), mdata, CNMAP_DEFAULT, 2.f, DXGI_FORMAT_R8G8B8A8_UNORM, normalMap);
+                if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                {
+                    success = false;
+                    printe("Failed unsupported format complex test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
                 }
 
                 auto invalidFlags = static_cast<CNMAP_FLAGS>(0xffffffff);
