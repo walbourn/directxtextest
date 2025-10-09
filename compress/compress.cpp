@@ -508,6 +508,81 @@ bool Test01()
 
             if (pass)
                 ++npass;
+
+            // invalid args
+            if (!index)
+            {
+                auto img = *srcimage.GetImage(0, 0, 0);
+                img.format = DXGI_FORMAT_UNKNOWN;
+                hr = Decompress(img, DXGI_FORMAT_UNKNOWN, image);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed invalid source format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                img = *srcimage.GetImage(0, 0, 0);
+                img.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+                hr = Decompress(img, DXGI_FORMAT_UNKNOWN, image);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed non-compressed source format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                hr = Decompress(*srcimage.GetImage(0, 0, 0), DXGI_FORMAT_BC7_UNORM, image);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed BC target format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                hr = Decompress(*srcimage.GetImage(0, 0, 0), DXGI_FORMAT_P8, image);
+                if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                {
+                    success = false;
+                    printe("Failed unsupported target format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                hr = Decompress(srcimage.GetImages(), 0, srcimage.GetMetadata(), DXGI_FORMAT_UNKNOWN, image);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed zero images test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                auto mdata = srcimage.GetMetadata();
+                mdata.format = DXGI_FORMAT_UNKNOWN;
+                hr = Decompress(srcimage.GetImages(), srcimage.GetImageCount(), mdata, DXGI_FORMAT_UNKNOWN, image);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed invalid source format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                mdata = srcimage.GetMetadata();
+                mdata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+                    hr = Decompress(srcimage.GetImages(), srcimage.GetImageCount(), mdata, DXGI_FORMAT_UNKNOWN, image);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed non-compressed source format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                hr = Decompress(srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), DXGI_FORMAT_BC7_UNORM, image);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed BC target format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                hr = Decompress(srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), DXGI_FORMAT_P8, image);
+                if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                {
+                    success = false;
+                    printe("Failed unsupported target format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+            }
         }
 
         ++ncount;
@@ -524,10 +599,10 @@ bool Test01()
         nullin.width = nullin.height = 256;
         nullin.format = DXGI_FORMAT_BC1_UNORM;
         HRESULT hr = Decompress(nullin, DXGI_FORMAT_UNKNOWN, image);
-        if (hr != E_INVALIDARG && hr != E_POINTER)
+        if (hr != E_POINTER)
         {
             success = false;
-            printe("Failed invalid arg test\n");
+            printe("Failed invalid arg test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
         }
 
         TexMetadata metadata = {};
@@ -539,7 +614,7 @@ bool Test01()
         if (hr != E_INVALIDARG)
         {
             success = false;
-            printe("Failed invalid arg complex test\n");
+            printe("Failed invalid arg complex test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
         }
     #pragma warning(pop)
     }
@@ -1153,6 +1228,76 @@ bool Test02()
             if (pass)
                 ++npass;
 
+            // invalid args
+            if (!index)
+            {
+                // Compress calls CompressEx so we can test both at the same time.
+                ScratchImage image;
+                auto img = *srcimage.GetImage(0, 0, 0);
+                img.format = DXGI_FORMAT_UNKNOWN;
+                hr = Compress(img, DXGI_FORMAT_BC3_UNORM, TEX_COMPRESS_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed invalid source format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                hr = Compress(*srcimage.GetImage(0, 0, 0), DXGI_FORMAT_UNKNOWN, TEX_COMPRESS_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed invalid target format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                img = *srcimage.GetImage(0, 0, 0);
+                img.format = DXGI_FORMAT_BC7_UNORM;
+                hr = Compress(img, DXGI_FORMAT_BC3_UNORM, TEX_COMPRESS_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed compressed source format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                hr = Compress(*srcimage.GetImage(0, 0, 0), DXGI_FORMAT_R8G8B8A8_UNORM, TEX_COMPRESS_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed non-BC target format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                hr = Compress(srcimage.GetImages(), 0, srcimage.GetMetadata(), DXGI_FORMAT_BC3_UNORM, TEX_COMPRESS_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed zero images test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                auto mdata = srcimage.GetMetadata();
+                mdata.format = DXGI_FORMAT_UNKNOWN;
+                hr = Compress(srcimage.GetImages(), srcimage.GetImageCount(), mdata, DXGI_FORMAT_BC3_UNORM, TEX_COMPRESS_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed invalid source format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                mdata = srcimage.GetMetadata();
+                mdata.format = DXGI_FORMAT_BC7_UNORM;
+                hr = Compress(srcimage.GetImages(), srcimage.GetImageCount(), mdata, DXGI_FORMAT_BC3_UNORM, TEX_COMPRESS_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed compressed source format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                hr = Compress(srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), DXGI_FORMAT_P8, TEX_COMPRESS_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed unsupported target format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+            }
+
             ++ncount;
         }
     }
@@ -1171,7 +1316,7 @@ bool Test02()
         if (hr != E_INVALIDARG && hr != E_POINTER)
         {
             success = false;
-            printe("Failed invalid arg test\n");
+            printe("Failed invalid arg test (HRESULT:%08X)\n", static_cast<unsigned int>(hr));
         }
 
         CompressOptions opts = {};
@@ -1181,7 +1326,7 @@ bool Test02()
         if (hr != E_INVALIDARG && hr != E_POINTER)
         {
             success = false;
-            printe("Failed invalid arg ex test\n");
+            printe("Failed invalid arg ex test (HRESULT:%08X)\n", static_cast<unsigned int>(hr));
         }
 
         TexMetadata metadata = {};
@@ -1193,14 +1338,7 @@ bool Test02()
         if (hr != E_INVALIDARG)
         {
             success = false;
-            printe("Failed invalid arg complex test\n");
-        }
-
-        hr = CompressEx(nullptr, 0, metadata, DXGI_FORMAT_BC1_UNORM, opts, image);
-        if (hr != E_INVALIDARG)
-        {
-            success = false;
-            printe("Failed invalid arg ex complex test\n");
+            printe("Failed invalid arg complex test (HRESULT:%08X)\n", static_cast<unsigned int>(hr));
         }
     #pragma warning(pop)
     }
@@ -1653,49 +1791,115 @@ bool Test03()
                         }
                     }
                 }
+            }
 
-                // invalid device arg cases
+            if (pass)
+                ++npass;
+
+            // invalid args
+            if (!index)
+            {
             #pragma warning(push)
             #pragma warning(disable:6385 6387)
-                hr = Compress(static_cast<ID3D11Device*>(nullptr), *srcimage.GetImage(0, 0, 0), cformat, TEX_COMPRESS_DEFAULT, TEX_ALPHA_WEIGHT_DEFAULT, image);
-                if (hr != E_INVALIDARG && hr != E_POINTER)
+                // Compress calls CompressEx so we can test both at the same time.
+                ScratchImage image;
+                auto img = *srcimage.GetImage(0, 0, 0);
+                img.format = DXGI_FORMAT_UNKNOWN;
+                hr = Compress(device.Get(), img, DXGI_FORMAT_BC7_UNORM, TEX_COMPRESS_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+                if (hr != E_INVALIDARG)
                 {
                     success = false;
-                    pass = false;
-                    printe("Failed invalid device test\n");
+                    printe("Failed invalid source format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
                 }
 
-                hr = Compress(static_cast<ID3D11Device*>(nullptr), srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), cformat, TEX_COMPRESS_DEFAULT, TEX_ALPHA_WEIGHT_DEFAULT, image);
-                if (hr != E_INVALIDARG && hr != E_POINTER)
+                hr = Compress(device.Get(), *srcimage.GetImage(0, 0, 0), DXGI_FORMAT_UNKNOWN, TEX_COMPRESS_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+                if (hr != E_INVALIDARG)
                 {
                     success = false;
-                    pass = false;
-                    printe("Failed invalid device complex test\n");
+                    printe("Failed invalid target format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                img = *srcimage.GetImage(0, 0, 0);
+                img.format = DXGI_FORMAT_BC3_UNORM;
+                hr = Compress(device.Get(), img, DXGI_FORMAT_BC7_UNORM, TEX_COMPRESS_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed compressed source format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                hr = Compress(device.Get(), *srcimage.GetImage(0, 0, 0), DXGI_FORMAT_R8G8B8A8_UNORM, TEX_COMPRESS_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed non-BC target format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                hr = Compress(device.Get(), srcimage.GetImages(), 0, srcimage.GetMetadata(), DXGI_FORMAT_BC7_UNORM, TEX_COMPRESS_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed zero images test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                auto mdata = srcimage.GetMetadata();
+                mdata.format = DXGI_FORMAT_UNKNOWN;
+                hr = Compress(device.Get(), srcimage.GetImages(), srcimage.GetImageCount(), mdata, DXGI_FORMAT_BC7_UNORM, TEX_COMPRESS_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed invalid source format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                mdata = srcimage.GetMetadata();
+                mdata.format = DXGI_FORMAT_BC7_UNORM;
+                hr = Compress(device.Get(), srcimage.GetImages(), srcimage.GetImageCount(), mdata, DXGI_FORMAT_BC7_UNORM, TEX_COMPRESS_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed compressed source format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                hr = Compress(device.Get(), srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), DXGI_FORMAT_P8, TEX_COMPRESS_DEFAULT, TEX_THRESHOLD_DEFAULT, image);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed unsupported target format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                ID3D11Device* nulldevice = nullptr;
+                hr = Compress(nulldevice, *srcimage.GetImage(0, 0, 0), DXGI_FORMAT_BC7_UNORM, TEX_COMPRESS_DEFAULT, TEX_ALPHA_WEIGHT_DEFAULT, image);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed invalid device test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                hr = Compress(nulldevice, srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), DXGI_FORMAT_BC7_UNORM, TEX_COMPRESS_DEFAULT, TEX_ALPHA_WEIGHT_DEFAULT, image);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed invalid device complex test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
                 }
 
                 CompressOptions opts = {};
                 opts.flags = TEX_COMPRESS_DEFAULT;
                 opts.alphaWeight = TEX_ALPHA_WEIGHT_DEFAULT;
-                hr = CompressEx(static_cast<ID3D11Device*>(nullptr), *srcimage.GetImage(0, 0, 0), cformat, opts, image);
-                if (hr != E_INVALIDARG && hr != E_POINTER)
+                hr = CompressEx(nulldevice, *srcimage.GetImage(0, 0, 0), DXGI_FORMAT_BC3_UNORM, opts, image);
+                if (hr != E_INVALIDARG)
                 {
                     success = false;
-                    pass = false;
-                    printe("Failed invalid device ex test\n");
+                    printe("Failed invalid device ex test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
                 }
 
-                hr = CompressEx(static_cast<ID3D11Device*>(nullptr), srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), cformat, opts, image);
-                if (hr != E_INVALIDARG && hr != E_POINTER)
+                hr = CompressEx(nulldevice, srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), DXGI_FORMAT_BC7_UNORM, opts, image);
+                if (hr != E_INVALIDARG)
                 {
                     success = false;
-                    pass = false;
-                    printe("Failed invalid device complex ex test\n");
+                    printe("Failed invalid device complex ex test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
                 }
             #pragma warning(pop)
             }
-
-            if (pass)
-                ++npass;
 
             ++ncount;
         }
@@ -1711,21 +1915,21 @@ bool Test03()
         Image nullin = {};
         nullin.width = nullin.height = 256;
         nullin.format = DXGI_FORMAT_R8G8B8A8_UNORM;
-        hr = Compress(device.Get(), nullin, DXGI_FORMAT_BC1_UNORM, TEX_COMPRESS_DEFAULT, TEX_ALPHA_WEIGHT_DEFAULT, image);
-        if (hr != E_INVALIDARG && hr != E_POINTER)
+        hr = Compress(device.Get(), nullin, DXGI_FORMAT_BC7_UNORM, TEX_COMPRESS_DEFAULT, TEX_ALPHA_WEIGHT_DEFAULT, image);
+        if (hr != E_POINTER)
         {
             success = false;
-            printe("Failed invalid arg test\n");
+            printe("Failed invalid arg test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
         }
 
         CompressOptions opts = {};
         opts.flags = TEX_COMPRESS_DEFAULT;
         opts.alphaWeight = TEX_ALPHA_WEIGHT_DEFAULT;
-        hr = CompressEx(device.Get(), nullin, DXGI_FORMAT_BC1_UNORM, opts, image);
-        if (hr != E_INVALIDARG && hr != E_POINTER)
+        hr = CompressEx(device.Get(), nullin, DXGI_FORMAT_BC7_UNORM, opts, image);
+        if (hr != E_POINTER)
         {
             success = false;
-            printe("Failed invalid arg ex test\n");
+            printe("Failed invalid arg ex test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
         }
 
         TexMetadata metadata = {};
@@ -1733,18 +1937,18 @@ bool Test03()
         metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
         metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
         metadata.dimension = TEX_DIMENSION_TEXTURE2D;
-        hr = Compress(device.Get(), nullptr, 0, metadata, DXGI_FORMAT_BC1_UNORM, TEX_COMPRESS_DEFAULT, TEX_ALPHA_WEIGHT_DEFAULT, image);
+        hr = Compress(device.Get(), nullptr, 0, metadata, DXGI_FORMAT_BC7_UNORM, TEX_COMPRESS_DEFAULT, TEX_ALPHA_WEIGHT_DEFAULT, image);
         if (hr != E_INVALIDARG)
         {
             success = false;
-            printe("Failed invalid arg complex test\n");
+            printe("Failed invalid arg complex test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
         }
 
-        hr = CompressEx(device.Get(), nullptr, 0, metadata, DXGI_FORMAT_BC1_UNORM, opts, image);
+        hr = CompressEx(device.Get(), nullptr, 0, metadata, DXGI_FORMAT_BC7_UNORM, opts, image);
         if (hr != E_INVALIDARG)
         {
             success = false;
-            printe("Failed invalid arg ex complex test\n");
+            printe("Failed invalid arg ex complex test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
         }
     #pragma warning(pop)
     }
