@@ -1,4 +1,4 @@
-//-------------------------------------------------------=------------------------------
+//-------------------------------------------------------------------------------------
 // d3d12.cpp
 //
 // Copyright (c) Microsoft Corporation.
@@ -251,50 +251,123 @@ bool Test02()
                 }
             }
 
-            // invalid metadata
-            TexMetadata imdata = metadata;
-            imdata.format = DXGI_FORMAT_UNKNOWN;
-            if (IsSupportedTexture(device.Get(), imdata))
-            {
-                success = false;
-                printe("Failed testing invalid format metadata\n");
-            }
-
-            imdata = metadata;
-            imdata.dimension = static_cast<TEX_DIMENSION>(0);
-            if (IsSupportedTexture(device.Get(), imdata))
-            {
-                success = false;
-                printe("Failed testing invalid dimension metadata\n");
-            }
-
-            imdata = metadata;
-            imdata.mipLevels = UINT16_MAX;
-            if (IsSupportedTexture(device.Get(), imdata))
-            {
-                success = false;
-                printe("Failed testing invalid miplevels metadata\n");
-            }
-
-            imdata = metadata;
-            imdata.arraySize = UINT32_MAX;
-            if (IsSupportedTexture(device.Get(), imdata))
-            {
-                success = false;
-                printe("Failed testing invalid arraySize metadata\n");
-            }
-
-            imdata = metadata;
-            imdata.width = UINT32_MAX;
-            if (IsSupportedTexture(device.Get(), imdata))
-            {
-                success = false;
-                printe("Failed testing invalid size metadata\n");
-            }
-
             if (pass)
-            {
                 ++npass;
+
+            // invalid args
+            if (!index)
+            {
+                TexMetadata imdata = metadata;
+                imdata.format = DXGI_FORMAT_UNKNOWN;
+                if (IsSupportedTexture(device.Get(), imdata))
+                {
+                    success = false;
+                    printe("Failed testing invalid format metadata\n");
+                }
+
+                imdata = metadata;
+                imdata.dimension = static_cast<TEX_DIMENSION>(0);
+                if (IsSupportedTexture(device.Get(), imdata))
+                {
+                    success = false;
+                    printe("Failed testing invalid dimension metadata\n");
+                }
+
+                imdata = metadata;
+                imdata.format = DXGI_FORMAT_P8;
+                if (IsSupportedTexture(device.Get(), imdata))
+                {
+                    success = false;
+                    printe("Failed testing unsupported format size metadata\n");
+                }
+
+                imdata = metadata;
+                imdata.format = DXGI_FORMAT_NV12;
+                imdata.height = imdata.width = 63;
+                if (IsSupportedTexture(device.Get(), imdata))
+                {
+                    success = false;
+                    printe("Failed testing NV12 format size metadata\n");
+                }
+
+                imdata.format = DXGI_FORMAT_NV11;
+                imdata.width = 63;
+                if (IsSupportedTexture(device.Get(), imdata))
+                {
+                    success = false;
+                    printe("Failed testing NV11 format size metadata\n");
+                }
+
+                imdata.format = DXGI_FORMAT_YUY2;
+                imdata.height = 63;
+                if (IsSupportedTexture(device.Get(), imdata))
+                {
+                    success = false;
+                    printe("Failed testing YUY2 format size metadata\n");
+                }
+
+            #if (_WIN32_WINNT >= _WIN32_WINNT_WIN10)
+                imdata.format = DXGI_FORMAT_V208;
+                imdata.height = 63;
+                if (IsSupportedTexture(device.Get(), imdata))
+                {
+                    success = false;
+                    printe("Failed testing V208 format size metadata\n");
+                }
+            #endif
+
+                imdata = metadata;
+                imdata.dimension = TEX_DIMENSION_TEXTURE3D;
+                imdata.depth = 4;
+                imdata.arraySize = INT16_MAX;
+                if (IsSupportedTexture(device.Get(), imdata))
+                {
+                    success = false;
+                    printe("Failed testing invalid volume/array metadata\n");
+                }
+
+                imdata = metadata;
+                imdata.mipLevels = UINT16_MAX;
+                if (IsSupportedTexture(device.Get(), imdata))
+                {
+                    success = false;
+                    printe("Failed testing invalid miplevels metadata\n");
+                }
+
+                imdata = metadata;
+                imdata.arraySize = UINT32_MAX;
+                if (IsSupportedTexture(device.Get(), imdata))
+                {
+                    success = false;
+                    printe("Failed testing invalid arraySize metadata\n");
+                }
+
+                imdata = metadata;
+                imdata.width = UINT32_MAX;
+                imdata.dimension = TEX_DIMENSION_TEXTURE1D;
+                if (IsSupportedTexture(device.Get(), imdata))
+                {
+                    success = false;
+                    printe("Failed testing invalid width metadata\n");
+                }
+
+                imdata = metadata;
+                imdata.dimension = TEX_DIMENSION_TEXTURE2D;
+                imdata.height = UINT32_MAX;
+                if (IsSupportedTexture(device.Get(), imdata))
+                {
+                    success = false;
+                    printe("Failed testing invalid height metadata\n");
+                }
+
+                imdata = metadata;
+                imdata.dimension = TEX_DIMENSION_TEXTURE3D;
+                imdata.depth = UINT32_MAX;
+                if (IsSupportedTexture(device.Get(), imdata))
+                {
+                    success = false;
+                    printe("Failed testing invalid depth metadata\n");
+                }
             }
         }
 
@@ -305,19 +378,20 @@ bool Test02()
 
     // invalid args
     {
-        #pragma warning(push)
-        #pragma warning(disable:6385 6387)
-            TexMetadata metadata = {};
-            metadata.width = metadata.height = 256;
-            metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
-            metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
-            metadata.dimension = TEX_DIMENSION_TEXTURE2D;
-            if (IsSupportedTexture(static_cast<ID3D12Device*>(nullptr), metadata))
-            {
-                success = false;
-                printe("Failed invalid arg device test\n");
-            }
-        #pragma warning(pop)
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        ID3D12Device* nulldevice = nullptr;
+        TexMetadata metadata = {};
+        metadata.width = metadata.height = 256;
+        metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
+        metadata.dimension = TEX_DIMENSION_TEXTURE2D;
+        if (IsSupportedTexture(nulldevice, metadata))
+        {
+            success = false;
+            printe("Failed invalid arg device test\n");
+        }
+    #pragma warning(pop)
     }
 
     return success;
@@ -480,47 +554,50 @@ bool Test03()
                     }
                 }
 
-                // invalid arg
-            #pragma warning(push)
-            #pragma warning(disable:6385 6387)
-                hr = CreateTexture(device.Get(), metadata, nullptr);
-                if (SUCCEEDED(hr))
-                {
-                    success = false;
-                    printe("Failed testing invalid return arg\n");
-                }
-            #pragma warning(pop)
-
-                // invalid metadata
-                TexMetadata imdata = metadata;
-                imdata.mipLevels = 0;
-                hr = CreateTexture(device.Get(), imdata, pResource.ReleaseAndGetAddressOf());
-                if (SUCCEEDED(hr))
-                {
-                    success = false;
-                    printe("Failed testing zero mipLevel metadata\n");
-                }
-
-                imdata = metadata;
-                imdata.arraySize = UINT32_MAX;
-                hr = CreateTexture(device.Get(), imdata, pResource.ReleaseAndGetAddressOf());
-                if (SUCCEEDED(hr))
-                {
-                    success = false;
-                    printe("Failed testing invalid arraySize metadata\n");
-                }
-
-                imdata = metadata;
-                imdata.dimension = static_cast<TEX_DIMENSION>(0);
-                hr = CreateTexture(device.Get(), imdata, pResource.ReleaseAndGetAddressOf());
-                if (SUCCEEDED(hr))
-                {
-                    success = false;
-                    printe("Failed testing invalid dimension metadata\n");
-                }
-
                 if (pass)
                     ++npass;
+
+                // invalid arg
+                if (!index)
+                {
+                #pragma warning(push)
+                #pragma warning(disable:6385 6387)
+                    hr = CreateTexture(device.Get(), metadata, nullptr);
+                    if (hr != E_INVALIDARG)
+                    {
+                        success = false;
+                        printe("Failed testing invalid return arg (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                    }
+
+                    TexMetadata imdata = metadata;
+                    imdata.mipLevels = 0;
+                    hr = CreateTexture(device.Get(), imdata, pResource.ReleaseAndGetAddressOf());
+                    if (hr != E_INVALIDARG)
+                    {
+                        success = false;
+                        printe("Failed testing zero mipLevel metadata (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                    }
+
+                    imdata = metadata;
+                    imdata.arraySize = UINT32_MAX;
+                    hr = CreateTexture(device.Get(), imdata, pResource.ReleaseAndGetAddressOf());
+                    if (hr != E_INVALIDARG)
+                    {
+                        success = false;
+                        printe("Failed testing invalid arraySize metadata (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                    }
+
+                    imdata = metadata;
+                    imdata.dimension = static_cast<TEX_DIMENSION>(0);
+                    hr = CreateTexture(device.Get(), imdata, pResource.ReleaseAndGetAddressOf());
+                    if (hr != E_INVALIDARG)
+                    {
+                        success = false;
+                        printe("Failed testing invalid dimension metadata (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                    }
+                #pragma warning(pop)
+                }
+
             }
         }
 
@@ -530,23 +607,24 @@ bool Test03()
     print("%zu images tested, %zu images passed ", ncount, npass);
 
     // invalid args
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
     {
-        #pragma warning(push)
-        #pragma warning(disable:6385 6387)
-            TexMetadata metadata = {};
-            metadata.width = metadata.height = 256;
-            metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
-            metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
-            metadata.dimension = TEX_DIMENSION_TEXTURE2D;
-            ComPtr<ID3D12Resource> res;
-            hr = CreateTexture(nullptr, metadata, res.GetAddressOf());
-            if (SUCCEEDED(hr))
-            {
-                success = false;
-                printe("Failed invalid arg device test\n");
-            }
-        #pragma warning(pop)
+        ID3D12Device* nulldevice = nullptr;
+        TexMetadata metadata = {};
+        metadata.width = metadata.height = 256;
+        metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
+        metadata.dimension = TEX_DIMENSION_TEXTURE2D;
+        ComPtr<ID3D12Resource> res;
+        hr = CreateTexture(nulldevice, metadata, res.GetAddressOf());
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg device test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+        }
     }
+    #pragma warning(pop)
 
     return success;
 }
@@ -637,35 +715,95 @@ bool Test04()
                 }
                 else
                 {
-                    // invalid metadata
-                    TexMetadata imdata = metadata;
-                    imdata.mipLevels = 0;
-                    hr = PrepareUpload(device.Get(), image.GetImages(), image.GetImageCount(), imdata, subresources);
-                    if (SUCCEEDED(hr))
-                    {
-                        success = false;
-                        printe("Failed testing zero mipLevel metadata\n");
-                    }
-
-                    imdata = metadata;
-                    imdata.arraySize = UINT32_MAX;
-                    hr = PrepareUpload(device.Get(), image.GetImages(), image.GetImageCount(), imdata, subresources);
-                    if (SUCCEEDED(hr))
-                    {
-                        success = false;
-                        printe("Failed testing invalid arraySize metadata\n");
-                    }
-
-                    imdata = metadata;
-                    imdata.dimension = static_cast<TEX_DIMENSION>(0);
-                    hr = PrepareUpload(device.Get(), image.GetImages(), image.GetImageCount(), imdata, subresources);
-                    if (SUCCEEDED(hr))
-                    {
-                        success = false;
-                        printe("Failed testing invalid dimension metadata\n");
-                    }
-
                     ++npass;
+                }
+            }
+
+            // invalid args
+            if (!index)
+            {
+                hr = PrepareUpload(device.Get(), image.GetImages(), 0, image.GetMetadata(), subresources);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed testing zero image count (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                auto imdata = metadata;
+                imdata.mipLevels = imdata.arraySize = 1;
+                imdata.dimension = TEX_DIMENSION_TEXTURE2D;
+                auto img = *image.GetImage(0,0,0);
+                img.pixels = nullptr;
+                hr = PrepareUpload(device.Get(), &img, 1, imdata, subresources);
+                if (hr != E_POINTER)
+                {
+                    success = false;
+                    printe("Failed testing nullptr pixels (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                imdata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+                img = *image.GetImage(0,0,0);
+                img.pixels = nullptr;
+                img.format = DXGI_FORMAT_B8G8R8A8_UNORM;
+                hr = PrepareUpload(device.Get(), &img, 1, imdata, subresources);
+                if (hr != E_FAIL)
+                {
+                    success = false;
+                    printe("Failed testing mismatch format (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                imdata = metadata;
+                imdata.mipLevels = 0;
+                hr = PrepareUpload(device.Get(), image.GetImages(), image.GetImageCount(), imdata, subresources);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed testing zero mipLevel metadata (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                imdata = metadata;
+                imdata.arraySize = UINT32_MAX;
+                hr = PrepareUpload(device.Get(), image.GetImages(), image.GetImageCount(), imdata, subresources);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed testing invalid arraySize metadata (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                imdata = metadata;
+                imdata.dimension = static_cast<TEX_DIMENSION>(0);
+                hr = PrepareUpload(device.Get(), image.GetImages(), image.GetImageCount(), imdata, subresources);
+                if (hr != E_FAIL)
+                {
+                    success = false;
+                    printe("Failed testing invalid dimension metadata (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                imdata = metadata;
+                imdata.depth = 0;
+                imdata.dimension = TEX_DIMENSION_TEXTURE3D;
+                hr = PrepareUpload(device.Get(), image.GetImages(), image.GetImageCount(), imdata, subresources);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed testing invalid depth metadata (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                imdata.depth = UINT32_MAX;
+                hr = PrepareUpload(device.Get(), image.GetImages(), image.GetImageCount(), imdata, subresources);
+                if (hr != E_INVALIDARG)
+                {
+                    success = false;
+                    printe("Failed testing too large depth metadata (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                imdata = metadata;
+                imdata.format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+                hr = PrepareUpload(device.Get(), image.GetImages(), image.GetImageCount(), imdata, subresources);
+                if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+                {
+                    success = false;
+                    printe("Failed testing unsupported planar format metadata (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
                 }
             }
         }
@@ -679,6 +817,7 @@ bool Test04()
     {
         #pragma warning(push)
         #pragma warning(disable:6385 6387)
+            ID3D12Device* nulldevice = nullptr;
             TexMetadata metadata = {};
             metadata.width = metadata.height = 256;
             metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -686,11 +825,11 @@ bool Test04()
             metadata.dimension = TEX_DIMENSION_TEXTURE2D;
 
             std::vector<D3D12_SUBRESOURCE_DATA> subresources;
-            hr = PrepareUpload(nullptr, nullptr, 0, metadata, subresources);
-            if (SUCCEEDED(hr))
+            hr = PrepareUpload(nulldevice, nullptr, 0, metadata, subresources);
+            if (hr != E_INVALIDARG)
             {
                 success = false;
-                printe("Failed invalid args test\n");
+                printe("Failed invalid args test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
             }
         #pragma warning(pop)
     }
@@ -1089,23 +1228,29 @@ bool Test06()
 
     // invalid args
     {
-        #pragma warning(push)
-        #pragma warning(disable:6385 6387)
-            TexMetadata metadata = {};
-            metadata.width = metadata.height = 256;
-            metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
-            metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
-            metadata.dimension = TEX_DIMENSION_TEXTURE2D;
-            ScratchImage image2;
-            hr = CaptureTexture(nullptr, nullptr,
-                false,
-                image2);
-            if (SUCCEEDED(hr))
-            {
-                success = false;
-                printe("Failed invalid null args test\n");
-            }
-        #pragma warning(pop)
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        ID3D12CommandQueue* nullqueue = nullptr;
+        TexMetadata metadata = {};
+        metadata.width = metadata.height = 256;
+        metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
+        metadata.dimension = TEX_DIMENSION_TEXTURE2D;
+        ScratchImage image2;
+        hr = CaptureTexture(nullqueue, nullptr, false, image2);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid null queue test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+        }
+
+        hr = CaptureTexture(queue.Get(), nullptr, false, image2);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid null resource test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+        }
+    #pragma warning(pop)
     }
 
     queue.Reset();
