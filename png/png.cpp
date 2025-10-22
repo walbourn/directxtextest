@@ -44,42 +44,44 @@ namespace
         { { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R16G16B16A16_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"BASN4A16.PNG", { 0xc2,0x3b,0x9f,0x38,0x27,0x48,0x7d,0xc2,0xfc,0x40,0x86,0xa4,0x80,0x6e,0x4a,0xe9 } },
         { { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"BASN6A08.PNG", { 0xbd,0xf3,0x18,0xd2,0xe7,0xd0,0xd7,0x85,0xf0,0xd0,0x08,0x15,0x01,0xb3,0x08,0xa5 } },
         { { 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_R16G16B16A16_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"BASN6A16.PNG", { 0xc2,0x25,0x74,0x83,0x53,0xf3,0xce,0xf8,0xb0,0x0b,0xa3,0x95,0x1a,0x4a,0xe2,0xc2 } },
-// TODO -
-//g04n0g16.png
-//g04n2c08.png
-//g04n3p04.png
-//s01n3p01.png
-//s02n3p01.png
-//s03n3p01.png
-//s04n3p01.png
-//s05n3p02.png
-//s06n3p02.png
-//s07n3p02.png
-//s08n3p02.png
-//s09n3p02.png
-//s32n3p04.png
-//s33n3p04.png
-//s34n3p04.png
-//s35n3p04.png
-//s36n3p04.png
-//s37n3p04.png
-//s38n3p04.png
-//s39n3p04.png
-//s40n3p04.png
-//tbbn0g04.png
-//tbbn2c16.png
-//tbbn3p08.png
-//tbgn2c16.png
-//tbgn3p08.png
-//tbrn2c08.png
-//tbwn0g16.png
-//tbwn3p08.png
-//tbyn3p08.png
-//tm3n3p02.png
-//tp0n0g08.png
-//tp0n2c08.png
-//tp0n3p08.png
-//tp1n3p08.png
+
+    #ifndef BUILD_BVT_ONLY
+        // TODO -
+        //g04n0g16.png
+        //g04n2c08.png
+        //g04n3p04.png
+        //s01n3p01.png
+        //s02n3p01.png
+        //s03n3p01.png
+        //s04n3p01.png
+        //s05n3p02.png
+        //s06n3p02.png
+        //s07n3p02.png
+        //s08n3p02.png
+        //s09n3p02.png
+        //s32n3p04.png
+        //s33n3p04.png
+        //s34n3p04.png
+        //s35n3p04.png
+        //s36n3p04.png
+        //s37n3p04.png
+        //s38n3p04.png
+        //s39n3p04.png
+        //s40n3p04.png
+        //tbbn0g04.png
+        //tbbn2c16.png
+        //tbbn3p08.png
+        //tbgn2c16.png
+        //tbgn3p08.png
+        //tbrn2c08.png
+        //tbwn0g16.png
+        //tbwn3p08.png
+        //tbyn3p08.png
+        //tm3n3p02.png
+        //tp0n0g08.png
+        //tp0n2c08.png
+        //tp0n3p08.png
+        //tp1n3p08.png
 
         // Kodak Lossless True Color Image Suite
         { { 768, 512, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"kodim01.png", { 0xf9,0xd7,0x19,0x28,0x40,0x2a,0x30,0x99,0x4c,0xcc,0x5a,0xa8,0xbd,0x9c,0x97,0xad } },
@@ -107,6 +109,11 @@ namespace
         { { 768, 512, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"kodim23.png", { 0x09,0xab,0xbe,0x0f,0x38,0xed,0xe4,0xec,0x2f,0xa5,0x0d,0xad,0x4d,0x1c,0x2a,0x45 } },
         { { 768, 512, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"kodim24.png", { 0x63,0x63,0xa5,0xe0,0x1d,0xcf,0x36,0x78,0x89,0xb8,0x3b,0x28,0x6b,0x5f,0x8b,0x49 } },
 
+        #if defined(_M_X64) || defined(_M_ARM64)
+        // Very large images
+        { { 16384, 16384, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth16kby16k.png", { 0x8d,0xdc,0xe3,0x00,0x00,0x7a,0x3f,0x02,0xce,0xdc,0x50,0x57,0xc4,0x43,0x9d,0xb0 } },
+        #endif
+    #endif // !BUILD_BVT_ONLY
     };
 
     //-------------------------------------------------------------------------------------
@@ -121,17 +128,26 @@ namespace
     const SaveMedia g_SaveMedia[] =
     {
         // source-dxgi-format save-dxgi-format | source-filename
-        { DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, MEDIA_PATH L"lena.dds" },
-
         { DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, MEDIA_PATH L"test8888.dds" },
         { DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, MEDIA_PATH L"reftexture.dds" },
+        { DXGI_FORMAT_B8G8R8X8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, MEDIA_PATH L"windowslogo_X8R8G8B8.dds" },
 
+    #ifndef BUILD_BVT_ONLY
+        { DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, MEDIA_PATH L"lena.dds" },
         { DXGI_FORMAT_B8G8R8X8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, MEDIA_PATH L"cookie.dds" },
 
         { DXGI_FORMAT_R8_UNORM, DXGI_FORMAT_R8_UNORM, MEDIA_PATH L"windowslogo_L8.dds" },
         { DXGI_FORMAT_R16_UNORM, DXGI_FORMAT_R16_UNORM, MEDIA_PATH L"windowslogo_L16.dds" },
 
-        // TODO: DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, DXGI_FORMAT_R16G16B16A16_UNORM, DXGI_FORMAT_B8G8R8X8_UNORM_SRGB, DXGI_FORMAT_B8G8R8X8_UNORM
+        { DXGI_FORMAT_R16G16B16A16_UNORM, DXGI_FORMAT_R16G16B16A16_UNORM, MEDIA_PATH L"windowslogo_rgba16.dds" },
+
+        // TODO: DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, DXGI_FORMAT_B8G8R8X8_UNORM_SRGB
+
+        #if defined(_M_X64) || defined(_M_ARM64)
+        // Very large images
+        { DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, MEDIA_PATH L"earth16kby16k.dds" },
+        #endif
+    #endif // !BUILD_BVT_ONLY
     };
 
     inline bool IsErrorTooLarge(float f, float threshold)
@@ -332,7 +348,7 @@ bool Test03()
         _wsplitpath_s( szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
         wchar_t tempDir[MAX_PATH] = {};
-        ret = ExpandEnvironmentStringsW(TEMP_PATH L"ppm", tempDir, MAX_PATH);
+        ret = ExpandEnvironmentStringsW(TEMP_PATH L"png", tempDir, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
             printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
@@ -397,7 +413,7 @@ bool Test03()
                               || metadata2.mipLevels != 1
                               || metadata.dimension != metadata2.dimension
                               || g_SaveMedia[index].sav_format != metadata2.format  )
-                    {   // Formats can vary for readback, and miplevel is going to be 1 for ppm images
+                    {   // Formats can vary for readback, and miplevel is going to be 1 for png images
                         success = false;
                         pass = false;
                         printe( "Metadata error in png readback:\n%ls\n", szDestPath );

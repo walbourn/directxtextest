@@ -806,7 +806,7 @@ namespace
         { FLAGS_IGNORE_MIPS, { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"reftexture.dds", { 0x29,0x26,0xa3,0x35,0x71,0x2f,0x3c,0x08,0x02,0xcf,0xde,0x38,0x22,0x73,0xd2,0xeb } },
         { FLAGS_IGNORE_MIPS, { 512, 512, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"_decal_202.dds",{ 0x30,0x79,0xa0,0x55,0x05,0xdf,0x21,0x44,0x3d,0x88,0x6b,0x51,0xa4,0xc5,0xd2,0xfe } },
 
-        #ifdef _M_X64
+        #if defined(_M_X64) || defined(_M_ARM64)
         // Very large images
         { FLAGS_NONE, { 16384, 16384, 1, 1, 15, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth16kby16k.dds", { 0x8a,0xde,0x0f,0xaf,0xd6,0xab,0x6d,0x2a,0x3a,0x83,0x9f,0x59,0x4d,0xdd,0xd3,0x2c } },
         { FLAGS_NONE, { 16384, 16384, 1, 1, 1, 0, 0, DXGI_FORMAT_R8G8B8A8_SNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earth16kby16k_snorm.dds", { 0x23,0x15,0xd7,0xae,0x75,0xe1,0xc8,0x7b,0x5a,0x28,0xce,0xd9,0x67,0x9a,0xba,0x0c } }, // D3DFMT_Q8W8V8U8
@@ -831,7 +831,7 @@ namespace
         { FLAGS_NONE, { 512, 512, 1, 6, 10, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"skybox.dds", { 0x3f,0x3a,0x3f,0xc4,0x27,0x6c,0xc4,0x6a,0xe9,0xa0,0x86,0xf5,0xf9,0x4e,0x1f,0x0b} },
 
         // TODO: DXGI_FORMAT_B8G8R8A8_TYPELESS, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, DXGI_FORMAT_B8G8R8X8_TYPELESS, DXGI_FORMAT_B8G8R8X8_UNORM_SRGB
-    #endif
+    #endif // !BUILD_BVT_ONLY
     };
 
     //-------------------------------------------------------------------------------------
@@ -918,7 +918,7 @@ namespace
 
         { DDS_FLAGS_NONE, MEDIA_PATH L"lenaCubeYUY2.dds" },
         { DDS_FLAGS_NONE, MEDIA_PATH L"lenaVolYUY2.dds" },
-    #endif
+    #endif // !BUILD_BVT_ONLY
     };
 
     bool IsCorrectMetadata(const TexMetadata& metadata, const TexMetadata& check, DWORD options) noexcept
