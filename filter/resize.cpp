@@ -13,12 +13,15 @@ using namespace DirectX;
 
 #pragma warning(disable:6262) // test code doesn't need conservative stack size
 
-#define ALTMD5(n) (n << 4)
-#define ALTMD5B(n) (n << 12)
+#define ALTMD5(n) (n << 8)
+#define ALTMD5B(n) (n << 16)
 
 namespace
 {
-    enum
+    constexpr int ALTMD5_SHIFT = 8;
+    constexpr int ALTMD5B_SHIFT = 16;
+
+    enum : DWORD
     {
         FLAGS_NONE = 0x0,
         FLAGS_SEPALPHA = 0x1,
@@ -26,8 +29,8 @@ namespace
         FLAGS_SKIP_SRGB = 0x4,
         FLAGS_NAMECONFLICT = 0x8,
         FLAGS_SKIP_EXHAUSTIVE = 0x10,
-        FLAGS_ALTMD5_MASK = 0xff0,
-        FLAGS_ALTMD5_MASKB = 0xff000,
+        FLAGS_ALTMD5_MASK = 0xff00,
+        FLAGS_ALTMD5_MASKB = 0xff0000,
     };
 
     struct ResizeMedia
@@ -305,12 +308,12 @@ namespace
             {0x05,0xd9,0x77,0xee,0x63,0xf9,0x3c,0x8e,0x21,0x56,0x92,0xb2,0x2e,0xdd,0xa8,0x58},{0} },
 
         #if defined(_M_X64) && !defined(_M_ARM64EC)
-        { FLAGS_NAMECONFLICT | FLAGS_SKIP_EXHAUSTIVE, 16384, 8192, { 21600, 10800, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthdiffuse.png",
+        { FLAGS_NAMECONFLICT | FLAGS_SKIP_EXHAUSTIVE | ALTMD5(15), 16384, 8192, { 21600, 10800, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthdiffuse.png",
         // Very large images
             {0xca,0x0f,0xb6,0x59,0x97,0xe5,0xe3,0x9d,0xea,0xe9,0x6e,0x7b,0xaa,0x4f,0xaa,0x4d},{0},{0},
             {0},{0},{0},
             {0},{0} },
-        { FLAGS_SKIP_EXHAUSTIVE, 16384, 8192, { 8192, 4096, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"callisto.png",
+        { FLAGS_SKIP_EXHAUSTIVE | ALTMD5(16), 16384, 8192, { 8192, 4096, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"callisto.png",
             {0x29,0x4b,0xed,0x4e,0x0e,0xdf,0x10,0xe2,0x8d,0x78,0x32,0x45,0x77,0xe9,0xff,0x85},{0},{0},
             {0},{0},{0},
             {0},{0} },
@@ -361,7 +364,7 @@ namespace
         { {0x29,0xe8,0xc5,0x1f,0x1c,0x6f,0xef,0xbb,0xa3,0x98,0xf3,0x64,0x19,0xbd,0x29,0x81}, {0}, {0},
           {0}, {0},
           {0}, {0} }, // ALTMD5(8)
-        { { 0x74,0xc2,0xea,0x7f,0x41,0x3d,0x38,0x3f,0x8f,0xc5,0x36,0xfb,0x96,0xc7,0xd6,0xda }, {0}, {0},
+        { { 0x74,0xc2,0xea,0x7f,0x41,0x3d,0x38,0x3f,0x8f,0xc5,0x36,0xfb,0x96,0xc7,0xd6,0xda }, {0x08,0x32,0x5a,0xe5,0x8f,0xfe,0x3c,0x10,0xea,0x05,0xc9,0x32,0x1b,0xc5,0x53,0x38}, {0},
           {0}, {0},
           {0}, {0} }, // ALTMD5(9)
         { { 0x21,0x06,0x9b,0x6c,0x21,0xa3,0x83,0x7f,0x03,0x22,0xbd,0x82,0xbe,0x84,0xe3,0x84 }, {0}, {0},
@@ -375,6 +378,12 @@ namespace
         { { 0x4d,0x17,0x0c,0xc9,0x21,0x08,0x6a,0xd4,0xae,0x73,0xda,0x30,0xcc,0x14,0xd5,0x4e }, { 0xe9,0xb1,0x7b,0x3c,0x02,0x02,0x65,0x99,0x92,0xe6,0x31,0x92,0x62,0x2c,0x23,0xd8 }, {0},
           {0}, {0},
           {0}, { 0x4d,0x17,0x0c,0xc9,0x21,0x08,0x6a,0xd4,0xae,0x73,0xda,0x30,0xcc,0x14,0xd5,0x4e } }, // ALTMD5(14)
+        { { 0xd9,0x24,0x9b,0x13,0x1a,0x1e,0x0c,0xf3,0xa0,0xbd,0xa0,0x7b,0x58,0x6e,0x32,0x25 }, {0}, {0},
+          {0}, {0},
+          {0}, {0} }, // ALTMD5(15)
+        { { 0xe0,0xb2,0xce,0xf0,0x52,0xee,0x2d,0xe0,0x0d,0x7f,0x74,0x62,0x18,0xa3,0x0a,0xbd}, {0}, {0},
+          {0}, {0},
+          {0}, {0} }, // ALTMD5(16)
     };
 
     inline bool IsErrorTooSmall(float f, float threshold)
@@ -498,13 +507,13 @@ bool FilterTest::Test01()
                 const uint8_t* expected2 = nullptr;
                 if ( g_ResizeMedia[index].options & FLAGS_ALTMD5_MASK )
                 {
-                    expected2 = g_AltMD5[ ((g_ResizeMedia[index].options & FLAGS_ALTMD5_MASK) >> 4) - 1 ].md5;
+                    expected2 = g_AltMD5[ ((g_ResizeMedia[index].options & FLAGS_ALTMD5_MASK) >> ALTMD5_SHIFT) - 1 ].md5;
                 }
 
                 const uint8_t* expected3 = nullptr;
                 if ( g_ResizeMedia[index].options & FLAGS_ALTMD5_MASKB )
                 {
-                    expected3 = g_AltMD5[ ((g_ResizeMedia[index].options & FLAGS_ALTMD5_MASKB) >> 12) - 1 ].md5;
+                    expected3 = g_AltMD5[ ((g_ResizeMedia[index].options & FLAGS_ALTMD5_MASKB) >> ALTMD5B_SHIFT) - 1 ].md5;
                 }
 
                 uint8_t digest[16];
@@ -577,13 +586,13 @@ bool FilterTest::Test01()
                     const uint8_t* expected2 = nullptr;
                     if ( g_ResizeMedia[index].options & FLAGS_ALTMD5_MASK )
                     {
-                        expected2 = g_AltMD5[ ((g_ResizeMedia[index].options & FLAGS_ALTMD5_MASK) >> 4) - 1 ].md5_point;
+                        expected2 = g_AltMD5[ ((g_ResizeMedia[index].options & FLAGS_ALTMD5_MASK) >> ALTMD5_SHIFT) - 1 ].md5_point;
                     }
 
                     const uint8_t* expected3 = nullptr;
                     if (g_ResizeMedia[index].options & FLAGS_ALTMD5_MASKB)
                     {
-                        expected3 = g_AltMD5[((g_ResizeMedia[index].options & FLAGS_ALTMD5_MASKB) >> 12) - 1].md5_point;
+                        expected3 = g_AltMD5[((g_ResizeMedia[index].options & FLAGS_ALTMD5_MASKB) >> ALTMD5B_SHIFT) - 1].md5_point;
                     }
 
                     uint8_t digest[16];
@@ -650,7 +659,7 @@ bool FilterTest::Test01()
                     const uint8_t* expected2 = nullptr;
                     if ( g_ResizeMedia[index].options & FLAGS_ALTMD5_MASK )
                     {
-                        expected2 = g_AltMD5[ ((g_ResizeMedia[index].options & FLAGS_ALTMD5_MASK) >> 4) - 1 ].md5_linear;
+                        expected2 = g_AltMD5[ ((g_ResizeMedia[index].options & FLAGS_ALTMD5_MASK) >> ALTMD5_SHIFT) - 1 ].md5_linear;
                     }
 
                     uint8_t digest[16];
@@ -728,7 +737,7 @@ bool FilterTest::Test01()
                     const uint8_t* expected2 = nullptr;
                     if ( g_ResizeMedia[index].options & FLAGS_ALTMD5_MASK )
                     {
-                        expected2 = g_AltMD5[ ((g_ResizeMedia[index].options & FLAGS_ALTMD5_MASK) >> 4) - 1 ].md5_cubic;
+                        expected2 = g_AltMD5[ ((g_ResizeMedia[index].options & FLAGS_ALTMD5_MASK) >> ALTMD5_SHIFT) - 1 ].md5_cubic;
                     }
 
                     uint8_t digest[16];
@@ -821,7 +830,7 @@ bool FilterTest::Test01()
                     const uint8_t* expected2 = nullptr;
                     if ( g_ResizeMedia[index].options & FLAGS_ALTMD5_MASK )
                     {
-                        expected2 = g_AltMD5[ ((g_ResizeMedia[index].options & FLAGS_ALTMD5_MASK) >> 4) - 1 ].md5_tri;
+                        expected2 = g_AltMD5[ ((g_ResizeMedia[index].options & FLAGS_ALTMD5_MASK) >> ALTMD5_SHIFT) - 1 ].md5_tri;
                     }
 
                     uint8_t digest[16];
@@ -887,13 +896,13 @@ bool FilterTest::Test01()
                     const uint8_t* expected2 = nullptr;
                     if ( g_ResizeMedia[index].options & FLAGS_ALTMD5_MASK )
                     {
-                        expected2 = g_AltMD5[ ((g_ResizeMedia[index].options & FLAGS_ALTMD5_MASK) >> 4) - 1 ].md5_sepalpha;
+                        expected2 = g_AltMD5[ ((g_ResizeMedia[index].options & FLAGS_ALTMD5_MASK) >> ALTMD5_SHIFT) - 1 ].md5_sepalpha;
                     }
 
                     const uint8_t* expected3 = nullptr;
                     if (g_ResizeMedia[index].options & FLAGS_ALTMD5_MASKB)
                     {
-                        expected3 = g_AltMD5[((g_ResizeMedia[index].options & FLAGS_ALTMD5_MASKB) >> 12) - 1].md5_sepalpha;
+                        expected3 = g_AltMD5[((g_ResizeMedia[index].options & FLAGS_ALTMD5_MASKB) >> ALTMD5B_SHIFT) - 1].md5_sepalpha;
                     }
 
                     uint8_t digest[16];
@@ -1456,7 +1465,7 @@ bool FilterTest::Test01()
                         const uint8_t* expected2 = nullptr;
                         if ( g_ResizeMedia[index].options & FLAGS_ALTMD5_MASK )
                         {
-                            expected2 = g_AltMD5[ ((g_ResizeMedia[index].options & FLAGS_ALTMD5_MASK) >> 4) - 1 ].md5_c;
+                            expected2 = g_AltMD5[ ((g_ResizeMedia[index].options & FLAGS_ALTMD5_MASK) >> ALTMD5_SHIFT) - 1 ].md5_c;
                         }
 
                         // Verify the image data
