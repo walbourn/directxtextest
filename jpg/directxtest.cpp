@@ -28,9 +28,9 @@ extern bool Test04();
 
 TestInfo g_Tests[] =
 {
-    { "GetMetadataFromPNGFile", Test01 },
-    { "LoadFromPNGFile", Test02 },
-    { "SaveToPNGFile", Test03 },
+    { "GetMetadataFromJPEGFile", Test01 },
+    { "LoadFromJPEGFile", Test02 },
+    { "SaveToJPEGFile", Test03 },
     { "Fuzz", Test04 },
 };
 

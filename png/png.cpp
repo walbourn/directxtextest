@@ -132,12 +132,12 @@ namespace
         { DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, MEDIA_PATH L"test8888.dds" },
         { DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, MEDIA_PATH L"reftexture.dds" },
         { DXGI_FORMAT_B8G8R8X8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, MEDIA_PATH L"windowslogo_X8R8G8B8.dds" },
+        { DXGI_FORMAT_R8_UNORM, DXGI_FORMAT_R8_UNORM, MEDIA_PATH L"windowslogo_L8.dds" },
 
     #ifndef BUILD_BVT_ONLY
         { DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, MEDIA_PATH L"lena.dds" },
         { DXGI_FORMAT_B8G8R8X8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, MEDIA_PATH L"cookie.dds" },
 
-        { DXGI_FORMAT_R8_UNORM, DXGI_FORMAT_R8_UNORM, MEDIA_PATH L"windowslogo_L8.dds" },
         { DXGI_FORMAT_R16_UNORM, DXGI_FORMAT_R16_UNORM, MEDIA_PATH L"windowslogo_L16.dds" },
 
         { DXGI_FORMAT_R16G16B16A16_UNORM, DXGI_FORMAT_R16G16B16A16_UNORM, MEDIA_PATH L"windowslogo_rgba16.dds" },
@@ -507,7 +507,7 @@ bool Test04()
     wcscat_s(szPath, L"*.*");
 
     WIN32_FIND_DATA findData = {};
-    ScopedFindHandle hFile(safe_handle(FindFirstFileEx(szPath,
+    ScopedFindHandle hFile(safe_handle(FindFirstFileExW(szPath,
         FindExInfoBasic, &findData,
         FindExSearchNameMatch, nullptr,
         FIND_FIRST_EX_LARGE_FETCH)));
@@ -566,12 +566,12 @@ bool Test04()
             }
         }
 
-        if (!FindNextFile(hFile.get(), &findData))
+        if (!FindNextFileW(hFile.get(), &findData))
         {
             if (second)
                 break;
 
-            hFile.reset(safe_handle(FindFirstFileEx(L"*.png",
+            hFile.reset(safe_handle(FindFirstFileExW(L"*.png",
                 FindExInfoBasic, &findData,
                 FindExSearchNameMatch, nullptr,
                 FIND_FIRST_EX_LARGE_FETCH)));

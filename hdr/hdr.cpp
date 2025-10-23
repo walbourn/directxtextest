@@ -1026,7 +1026,7 @@ bool Test06()
     wcscat_s(szPath, L"*.*");
 
     WIN32_FIND_DATA findData = {};
-    ScopedFindHandle hFile(safe_handle(FindFirstFileEx(szPath,
+    ScopedFindHandle hFile(safe_handle(FindFirstFileExW(szPath,
         FindExInfoBasic, &findData,
         FindExSearchNameMatch, nullptr,
         FIND_FIRST_EX_LARGE_FETCH)));
@@ -1120,12 +1120,12 @@ bool Test06()
             }
         }
 
-        if (!FindNextFile(hFile.get(), &findData))
+        if (!FindNextFileW(hFile.get(), &findData))
         {
             if (second)
                 break;
 
-            hFile.reset(safe_handle(FindFirstFileEx(L"*.hdr",
+            hFile.reset(safe_handle(FindFirstFileExW(L"*.hdr",
                 FindExInfoBasic, &findData,
                 FindExSearchNameMatch, nullptr,
                 FIND_FIRST_EX_LARGE_FETCH)));

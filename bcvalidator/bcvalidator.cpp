@@ -208,7 +208,7 @@ namespace
                     files.push_back(conv);
                 }
 
-                if (!FindNextFile(hFile.get(), &findData))
+                if (!FindNextFileW(hFile.get(), &findData))
                     break;
             }
         }
@@ -253,7 +253,7 @@ namespace
                     }
                 }
 
-                if (!FindNextFile(hFile.get(), &findData))
+                if (!FindNextFileW(hFile.get(), &findData))
                     break;
             }
         }
