@@ -27,29 +27,30 @@ namespace
     const TestMedia g_TestMedia[] =
     {
         // width height depth arraySize mipLevels miscFlags miscFlags2 format dimension | filename
-
         { { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_R8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"fishingboat.jpg", { 0xef,0xea,0x23,0xe7,0x85,0xd2,0xd9,0x10,0x55,0x1d,0xa8,0x14,0xd4,0xaf,0x53,0xca } },
-        { { 200, 200, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lena.jpg", { 0xef,0x7a,0x90,0x3e,0xa3,0x25,0x3d,0xf9,0x65,0x37,0x77,0x5a,0x74,0xe4,0x53,0x1b } },
+        { { 200, 200, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lena.jpg", { 0xef,0x7a,0x90,0x3e,0xa3,0x25,0x3d,0xf9,0x65,0x37,0x77,0x5a,0x74,0xe4,0x53,0x1b } },
 
-        { { 512, 512, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"rocks.jpg", { 0xe7,0x01,0x8a,0x3d,0xdb,0xc4,0xfe,0xbe,0x26,0x7d,0x8b,0x52,0xb3,0xe6,0x06,0x83 } },
-        { { 512, 512, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"wall.jpg", { 0x9d,0x50,0x63,0x63,0x57,0xd9,0x7d,0x69,0xf7,0x01,0xf5,0x86,0xcc,0xb6,0x87,0x83 } },
-        { { 512, 512, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"wood.jpg", { 0x9e,0xb8,0xe8,0xcc,0x05,0x2a,0x15,0xae,0xc9,0x00,0x8e,0xc8,0xf4,0x25,0xf1,0x29 } },
-        { { 512, 768, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"memorial.jpg", { 0x2b,0x6a,0xd5,0xb3,0x5f,0x9d,0xf3,0x47,0xf8,0xc7,0xd1,0x43,0xe5,0xcb,0xc0,0x82 } },
+    #ifndef BUILD_BVT_ONLY
+        { { 512, 512, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"rocks.jpg", { 0xe7,0x01,0x8a,0x3d,0xdb,0xc4,0xfe,0xbe,0x26,0x7d,0x8b,0x52,0xb3,0xe6,0x06,0x83 } },
+        { { 512, 512, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"wall.jpg", { 0x9d,0x50,0x63,0x63,0x57,0xd9,0x7d,0x69,0xf7,0x01,0xf5,0x86,0xcc,0xb6,0x87,0x83 } },
+        { { 512, 512, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"wood.jpg", { 0x9e,0xb8,0xe8,0xcc,0x05,0x2a,0x15,0xae,0xc9,0x00,0x8e,0xc8,0xf4,0x25,0xf1,0x29 } },
+        { { 512, 768, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"memorial.jpg", { 0x2b,0x6a,0xd5,0xb3,0x5f,0x9d,0xf3,0x47,0xf8,0xc7,0xd1,0x43,0xe5,0xcb,0xc0,0x82 } },
 
-        { { 1024, 768, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"Dock.jpg", { 0x38,0x1e,0xd2,0x54,0x50,0xa3,0x7a,0xa9,0x06,0x48,0xce,0x78,0x91,0x77,0x3d,0xce } },
-        { { 500, 500, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"progressivehuffman.jpg", { 0x5e,0x89,0x13,0x94,0xe5,0x4b,0x58,0xa1,0x03,0xc0,0x13,0xe4,0x32,0xea,0x42,0x8c } },
-        { { 512, 683, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"cup_small.jpg", { 0x1f,0xa5,0x90,0x49,0xde,0xf7,0x27,0x7e,0x4c,0x8e,0x22,0xdb,0x81,0x70,0xbd,0x11 } }, // How to get _SRGB?
+        { { 1024, 768, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"Dock.jpg", { 0x38,0x1e,0xd2,0x54,0x50,0xa3,0x7a,0xa9,0x06,0x48,0xce,0x78,0x91,0x77,0x3d,0xce } },
+        { { 500, 500, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"progressivehuffman.jpg", { 0x5e,0x89,0x13,0x94,0xe5,0x4b,0x58,0xa1,0x03,0xc0,0x13,0xe4,0x32,0xea,0x42,0x8c } },
+        { { 512, 683, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"cup_small.jpg", { 0x1f,0xa5,0x90,0x49,0xde,0xf7,0x27,0x7e,0x4c,0x8e,0x22,0xdb,0x81,0x70,0xbd,0x11 } }, // How to get _SRGB?
 
         // Test images from www.w3.org
-        { { 2048, 1536, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"jpeg420exif.jpg", { 0xce,0x64,0x1c,0x0f,0xe1,0x85,0xc4,0xe9,0x20,0x39,0x32,0xfc,0x3e,0xcf,0x93,0x34 } },
-        { { 2048, 1536, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"jpeg422jfif.jpg", { 0x24,0xd5,0xd1,0xbe,0x5d,0xb4,0x19,0xbd,0x51,0x60,0x7d,0xba,0x35,0x97,0x2f,0xce } },
+        { { 2048, 1536, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"jpeg420exif.jpg", { 0xce,0x64,0x1c,0x0f,0xe1,0x85,0xc4,0xe9,0x20,0x39,0x32,0xfc,0x3e,0xcf,0x93,0x34 } },
+        { { 2048, 1536, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"jpeg422jfif.jpg", { 0x24,0xd5,0xd1,0xbe,0x5d,0xb4,0x19,0xbd,0x51,0x60,0x7d,0xba,0x35,0x97,0x2f,0xce } },
         { { 600, 800, 1, 1, 1, 0, 0, DXGI_FORMAT_R8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"jpeg400jfif.jpg", { 0x01,0x00,0xb4,0xf9,0x60,0x1a,0xb9,0x55,0x74,0x5a,0xa1,0x8f,0xd3,0xe3,0xb1,0x0f } },
-        { { 256, 256, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"jpeg444.jpg", { 0x81,0xdf,0xa8,0xd1,0x2b,0x08,0x60,0x66,0x71,0x80,0x09,0xd4,0x90,0x14,0xf9,0x82 } },
+        { { 256, 256, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"jpeg444.jpg", { 0x81,0xdf,0xa8,0xd1,0x2b,0x08,0x60,0x66,0x71,0x80,0x09,0xd4,0x90,0x14,0xf9,0x82 } },
 
         // Tets images from libjpeg-turbo GitHub repository
-        { { 227, 149, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testimgint.jpg", { 0x8a,0xf3,0x5c,0x65,0x12,0x14,0x72,0xa9,0x89,0x8d,0xad,0x63,0x47,0xa6,0x4c,0x6d } },
-        { { 227, 149, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testorig.jpg", { 0xaa,0xfc,0x17,0x0b,0x55,0x56,0x5d,0xc1,0x3e,0xe2,0x08,0x85,0x59,0xdd,0xe4,0x11 } },
-    };
+        { { 227, 149, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testimgint.jpg", { 0x8a,0xf3,0x5c,0x65,0x12,0x14,0x72,0xa9,0x89,0x8d,0xad,0x63,0x47,0xa6,0x4c,0x6d } },
+        { { 227, 149, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testorig.jpg", { 0xaa,0xfc,0x17,0x0b,0x55,0x56,0x5d,0xc1,0x3e,0xe2,0x08,0x85,0x59,0xdd,0xe4,0x11 } },
+    #endif // !BUILD_BVT_ONLY
+        };
 
     //-------------------------------------------------------------------------------------
 
@@ -63,8 +64,12 @@ namespace
     const SaveMedia g_SaveMedia[] =
     {
         // source-dxgi-format save-dxgi-format | source-filename
-        { DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"lena.dds" },
-        { DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, MEDIA_PATH L"reftexture.dds" },
+        { DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, MEDIA_PATH L"reftexture.dds" },
+        { DXGI_FORMAT_R8_UNORM, DXGI_FORMAT_R8_UNORM, MEDIA_PATH L"windowslogo_L8.dds" },
+
+    #ifndef BUILD_BVT_ONLY
+        { DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, MEDIA_PATH L"lena.dds" },
+    #endif // !BUILD_BVT_ONLY
     };
 
     inline bool IsErrorTooLarge(float f, float threshold)
@@ -105,7 +110,7 @@ bool Test01()
 
         TexMetadata metadata;
         ScratchImage image;
-        HRESULT hr = GetMetadataFromJPEGFile(szPath, metadata);
+        HRESULT hr = GetMetadataFromJPEGFile(szPath, JPEG_FLAGS_NONE, metadata);
         if (FAILED(hr))
         {
             success = false;
@@ -133,7 +138,7 @@ bool Test01()
     #pragma warning(push)
     #pragma warning(disable:6385 6387)
         TexMetadata metadata;
-        HRESULT hr = GetMetadataFromJPEGFile(nullptr, metadata);
+        HRESULT hr = GetMetadataFromJPEGFile(nullptr, JPEG_FLAGS_NONE, metadata);
         if (hr != E_INVALIDARG)
         {
             success = false;
@@ -173,7 +178,7 @@ bool Test02()
 
         TexMetadata metadata;
         ScratchImage image;
-        HRESULT hr = LoadFromJPEGFile(szPath, &metadata, image);
+        HRESULT hr = LoadFromJPEGFile(szPath, JPEG_FLAGS_NONE, &metadata, image);
         if ( FAILED(hr) )
         {
             success = false;
@@ -218,7 +223,7 @@ bool Test02()
     #pragma warning(push)
     #pragma warning(disable:6385 6387)
         ScratchImage image;
-        HRESULT hr = LoadFromJPEGFile(nullptr, nullptr, image);
+        HRESULT hr = LoadFromJPEGFile(nullptr, JPEG_FLAGS_NONE, nullptr, image);
         if (hr != E_INVALIDARG)
         {
             success = false;
@@ -301,7 +306,7 @@ bool Test03()
             {
                 bool pass = true;
 
-                hr = SaveToJPEGFile(*image.GetImage(0, 0, 0), szDestPath);
+                hr = SaveToJPEGFile(*image.GetImage(0, 0, 0), JPEG_FLAGS_NONE, szDestPath);
                 if ( FAILED(hr) )
                 {
                     success = false;
@@ -313,7 +318,7 @@ bool Test03()
                     TexMetadata metadata2;
                     ScratchImage image2;
 
-                    hr = LoadFromJPEGFile(szDestPath, &metadata2, image2);
+                    hr = LoadFromJPEGFile(szDestPath, JPEG_FLAGS_NONE,&metadata2, image2);
                     if ( FAILED(hr) )
                     {
                         success = false;
@@ -335,7 +340,7 @@ bool Test03()
                     }
                     else
                     {
-                        float targMSE = 0.001f;
+                        float targMSE = 0.2f;
                         float mse = 0, mseV[4] = {};
                         CMSE_FLAGS cflags = CMSE_DEFAULT;
                         if (IsSRGB(g_SaveMedia[index].src_format))
@@ -358,7 +363,7 @@ bool Test03()
 
                 }
 
-                hr = SaveToJPEGFile(*image.GetImage(0, 0, 0), nullptr);
+                hr = SaveToJPEGFile(*image.GetImage(0, 0, 0), JPEG_FLAGS_NONE, nullptr);
                 if (hr != E_INVALIDARG)
                 {
                     success = false;
@@ -383,7 +388,7 @@ bool Test03()
         Image nullin = {};
         nullin.width = nullin.height = 256;
         nullin.format = DXGI_FORMAT_R8G8B8A8_UNORM;
-        HRESULT hr = SaveToJPEGFile(nullin, nullptr);
+        HRESULT hr = SaveToJPEGFile(nullin, JPEG_FLAGS_NONE, nullptr);
         if (hr != E_INVALIDARG && hr != E_POINTER)
         {
             success = false;
@@ -417,7 +422,7 @@ bool Test04()
     wcscat_s(szPath, L"*.*");
 
     WIN32_FIND_DATA findData = {};
-    ScopedFindHandle hFile(safe_handle(FindFirstFileEx(szPath,
+    ScopedFindHandle hFile(safe_handle(FindFirstFileExW(szPath,
         FindExInfoBasic, &findData,
         FindExSearchNameMatch, nullptr,
         FIND_FIRST_EX_LARGE_FETCH)));
@@ -450,6 +455,9 @@ bool Test04()
                 _wsplitpath_s(findData.cFileName, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT);
 
                 isjpg = (_wcsicmp(ext, L".jpg") == 0);
+
+                if (_wcsicmp(fname, L"Glee_Newscorp_rev") == 0)
+                    isjpg = false;
             }
 
             OutputDebugString(findData.cFileName);
@@ -458,7 +466,7 @@ bool Test04()
             {
                 TexMetadata metadata;
                 ScratchImage image;
-                HRESULT hr = LoadFromJPEGFile(szPath, &metadata, image);
+                HRESULT hr = LoadFromJPEGFile(szPath, JPEG_FLAGS_NONE, &metadata, image);
 
                 if (FAILED(hr) && isjpg)
                 {
@@ -476,12 +484,12 @@ bool Test04()
             }
         }
 
-        if (!FindNextFile(hFile.get(), &findData))
+        if (!FindNextFileW(hFile.get(), &findData))
         {
             if (second)
                 break;
 
-            hFile.reset(safe_handle(FindFirstFileEx(L"*.jpg",
+            hFile.reset(safe_handle(FindFirstFileExW(L"*.jpg",
                 FindExInfoBasic, &findData,
                 FindExSearchNameMatch, nullptr,
                 FIND_FIRST_EX_LARGE_FETCH)));

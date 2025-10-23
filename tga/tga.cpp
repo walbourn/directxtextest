@@ -240,12 +240,12 @@ namespace
     {
         // flags | source-dxgi-format save-dxgi-format | source-filename
         { ALTMD5(2), DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_ALPHA_MODE_OPAQUE, MEDIA_PATH L"test8888.dds" },
+        { FLAGS_NONE, DXGI_FORMAT_R8_UNORM, DXGI_FORMAT_R8_UNORM, TEX_ALPHA_MODE_UNKNOWN, MEDIA_PATH L"windowslogo_L8.dds" },
 
     #ifndef BUILD_BVT_ONLY
         { FLAGS_NONE, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_ALPHA_MODE_OPAQUE, MEDIA_PATH L"normalmap.dds" },
         { ALTMD5(3), DXGI_FORMAT_B8G8R8X8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_ALPHA_MODE_OPAQUE, MEDIA_PATH L"windowslogo_X8R8G8B8.dds" },
         { FLAGS_NONE, DXGI_FORMAT_B5G5R5A1_UNORM, DXGI_FORMAT_B5G5R5A1_UNORM, TEX_ALPHA_MODE_OPAQUE, MEDIA_PATH L"test555.dds" },
-        { FLAGS_NONE, DXGI_FORMAT_R8_UNORM, DXGI_FORMAT_R8_UNORM, TEX_ALPHA_MODE_UNKNOWN, MEDIA_PATH L"windowslogo_L8.dds" },
         { FLAGS_NONE, DXGI_FORMAT_A8_UNORM, DXGI_FORMAT_R8_UNORM, TEX_ALPHA_MODE_UNKNOWN, MEDIA_PATH L"alphaedge.dds" },
         { ALTMD5(4), DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_ALPHA_MODE_UNKNOWN, MEDIA_PATH L"tree02S.dds" },
         { FLAGS_NONE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_ALPHA_MODE_UNKNOWN, MEDIA_PATH L"io_R8G8B8A8_UNORM_SRGB_SRV_DIMENSION_TEXTURE2D_MipOff.DDS" },
@@ -1940,7 +1940,7 @@ bool Test06()
     wcscat_s(szPath, L"*.*");
 
     WIN32_FIND_DATA findData = {};
-    ScopedFindHandle hFile(safe_handle(FindFirstFileEx(szPath,
+    ScopedFindHandle hFile(safe_handle(FindFirstFileExW(szPath,
         FindExInfoBasic, &findData,
         FindExSearchNameMatch, nullptr,
         FIND_FIRST_EX_LARGE_FETCH)));
@@ -2037,12 +2037,12 @@ bool Test06()
             }
         }
 
-        if (!FindNextFile(hFile.get(), &findData))
+        if (!FindNextFileW(hFile.get(), &findData))
         {
             if (second)
                 break;
 
-            hFile.reset(safe_handle(FindFirstFileEx(L"*.tga",
+            hFile.reset(safe_handle(FindFirstFileExW(L"*.tga",
                 FindExInfoBasic, &findData,
                 FindExSearchNameMatch, nullptr,
                 FIND_FIRST_EX_LARGE_FETCH)));

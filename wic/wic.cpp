@@ -505,6 +505,7 @@ namespace
         { WIC_CODEC_JPEG, L".jpeg", MEDIA_PATH L"test8888.dds" },
         { WIC_CODEC_PNG, L".png", MEDIA_PATH L"test8888.dds" },
         { WIC_CODEC_TIFF, L".tiff", MEDIA_PATH L"test8888.dds" },
+        { WIC_CODEC_JPEG, L".jpeg", MEDIA_PATH L"windowslogo_L8.dds" },
 
         // TODO - .gif, .ico, .heif
 
@@ -519,7 +520,6 @@ namespace
         { WIC_CODEC_JPEG, L".jpeg", MEDIA_PATH L"windowslogo_X8R8G8B8.dds" },
         { WIC_CODEC_PNG, L".png", MEDIA_PATH L"windowslogo_X8R8G8B8.dds" },
         { WIC_CODEC_TIFF, L".tiff", MEDIA_PATH L"windowslogo_X8R8G8B8.dds" },
-        { WIC_CODEC_JPEG, L".jpeg", MEDIA_PATH L"windowslogo_L8.dds" },
         { WIC_CODEC_PNG, L".png", MEDIA_PATH L"windowslogo_L8.dds" },
         { WIC_CODEC_TIFF, L".tiff", MEDIA_PATH L"windowslogo_L8.dds" },
         { WIC_CODEC_JPEG, L".jpeg", MEDIA_PATH L"Maui-BlackWhite.dds" },
@@ -2319,7 +2319,7 @@ bool WICTest::Test07()
     wcscat_s(szPath, L"*.*");
 
     WIN32_FIND_DATA findData = {};
-    ScopedFindHandle hFile(safe_handle(FindFirstFileEx(szPath,
+    ScopedFindHandle hFile(safe_handle(FindFirstFileExW(szPath,
         FindExInfoBasic, &findData,
         FindExSearchNameMatch, nullptr,
         FIND_FIRST_EX_LARGE_FETCH)));
@@ -2343,7 +2343,7 @@ bool WICTest::Test07()
                 || _wcsicmp(findData.cFileName, L"texture3.dds") == 0
                 || _wcsicmp(findData.cFileName, L"extended_dxt3.bmp") == 0)
             {
-                if (!FindNextFile(hFile.get(), &findData))
+                if (!FindNextFileW(hFile.get(), &findData))
                     break;
 
                 continue;
@@ -2363,7 +2363,7 @@ bool WICTest::Test07()
 
             if (*fname == 0 || *ext == 0)
             {
-                if (!FindNextFile(hFile.get(), &findData))
+                if (!FindNextFileW(hFile.get(), &findData))
                     break;
 
                 continue;
@@ -2372,7 +2372,7 @@ bool WICTest::Test07()
 #ifdef NO_WMP
             if (_wcsicmp(ext, L".wdp") == 0 || _wcsicmp(ext, L".jxr") == 0)
             {
-                if (!FindNextFile(hFile.get(), &findData))
+                if (!FindNextFileW(hFile.get(), &findData))
                     break;
 
                 continue;
@@ -2382,7 +2382,7 @@ bool WICTest::Test07()
 #ifdef NO_CMYK
             if (wcsstr(fname, L"CMYK") != nullptr)
             {
-                if (!FindNextFile(hFile.get(), &findData))
+                if (!FindNextFileW(hFile.get(), &findData))
                     break;
 
                 continue;
@@ -2419,7 +2419,7 @@ bool WICTest::Test07()
             {
                 notemissingopt = true;
 
-                if (!FindNextFile(hFile.get(), &findData))
+                if (!FindNextFileW(hFile.get(), &findData))
                     break;
 
                 continue;
@@ -2440,7 +2440,7 @@ bool WICTest::Test07()
                 || hr == E_UNEXPECTED
                 || metadata.width >= 8192)
             {
-                if (!FindNextFile(hFile.get(), &findData))
+                if (!FindNextFileW(hFile.get(), &findData))
                     break;
 
                 continue;
@@ -2479,7 +2479,7 @@ bool WICTest::Test07()
             }
         }
 
-        if (!FindNextFile(hFile.get(), &findData))
+        if (!FindNextFileW(hFile.get(), &findData))
             break;
     }
 
@@ -2521,7 +2521,7 @@ bool WICTest::Test08()
     wcscat_s(szPath, L"*.*");
 
     WIN32_FIND_DATA findData = {};
-    ScopedFindHandle hFile(safe_handle(FindFirstFileEx(szPath,
+    ScopedFindHandle hFile(safe_handle(FindFirstFileExW(szPath,
         FindExInfoBasic, &findData,
         FindExSearchNameMatch, nullptr,
         FIND_FIRST_EX_LARGE_FETCH)));
@@ -2580,7 +2580,7 @@ bool WICTest::Test08()
             }
         }
 
-        if (!FindNextFile(hFile.get(), &findData))
+        if (!FindNextFileW(hFile.get(), &findData))
             break;
     }
 
