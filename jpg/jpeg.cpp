@@ -266,7 +266,7 @@ bool Test03()
         _wsplitpath_s( szPath, nullptr, 0, nullptr, 0, fname, _MAX_FNAME, ext, _MAX_EXT );
 
         wchar_t tempDir[MAX_PATH] = {};
-        ret = ExpandEnvironmentStringsW(TEMP_PATH L"ppm", tempDir, MAX_PATH);
+        ret = ExpandEnvironmentStringsW(TEMP_PATH L"jpeg", tempDir, MAX_PATH);
         if ( !ret || ret > MAX_PATH )
         {
             printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
@@ -331,7 +331,7 @@ bool Test03()
                               || metadata2.mipLevels != 1
                               || metadata.dimension != metadata2.dimension
                               || g_SaveMedia[index].sav_format != metadata2.format  )
-                    {   // Formats can vary for readback, and miplevel is going to be 1 for ppm images
+                    {   // Formats can vary for readback, and miplevel is going to be 1 for jpeg images
                         success = false;
                         pass = false;
                         printe( "Metadata error in jpg readback:\n%ls\n", szDestPath );
