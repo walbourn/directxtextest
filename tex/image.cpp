@@ -863,8 +863,6 @@ bool TEXTest::Test21()
         MEDIA_PATH L"test8888.dds",
         MEDIA_PATH L"testvol8888.dds",
         MEDIA_PATH L"testdxt1.dds",
-
-    #ifndef BUILD_BVT_ONLY
         MEDIA_PATH L"test555.dds",
         MEDIA_PATH L"test8888mip.dds",
         MEDIA_PATH L"testcube8888.dds",
@@ -874,6 +872,8 @@ bool TEXTest::Test21()
         MEDIA_PATH L"testdxt1mip.dds",
         MEDIA_PATH L"testvol8888mip.dds",
         MEDIA_PATH L"testvoldxt1mip.dds",
+
+    #ifndef BUILD_BVT_ONLY
         MEDIA_PATH L"earth_A2B10G10R10.dds",
         MEDIA_PATH L"earth_A2R10G10B10.dds",
         MEDIA_PATH L"bc7_unorm.dds",
