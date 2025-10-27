@@ -75,19 +75,24 @@ namespace
         // test-options | width height depth arraySize mipLevels miscFlags miscFlags2 format dimension | filename | md5
         { FLAGS_BGR, { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"reftexture.dds", { 0x9d,0xf2,0x92,0xf3,0x17,0x9f,0x43,0xad,0x47,0xbe,0x57,0x0c,0x10,0x14,0x6d,0xa7 } },
         { FLAGS_BGR,{ 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test8888.dds",{ 0x38,0x9b,0x4e,0x56,0x4f,0xd1,0x5f,0x0d,0x63,0x05,0x44,0x35,0xba,0x66,0xdd,0x9b } },
-        { FLAGS_BGR,{ 32, 32, 4, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888.dds",{ 0x4e,0xa9,0xb0,0x2b,0xfc,0x5f,0xbd,0x8a,0x0e,0x43,0x31,0x93,0xf5,0x82,0x19,0x87 } },
-        { FLAGS_NONE,{ 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testdxt1.dds",{ 0x4c,0x3b,0x2f,0x57,0x91,0x1c,0x21,0xf0,0x0c,0x1a,0xd3,0x6b,0xb7,0x33,0xd0,0x55 } },
-        { FLAGS_LUMINANCE | ALTMD5(7),{ 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_L8.dds",{ 0xa3,0x85,0x0e,0x9d,0x94,0xfc,0xb7,0x5c,0xc4,0x49,0xb8,0x10,0x82,0xc6,0x05,0x8c } }, // D3DFMT_L8
-
-    #ifndef BUILD_BVT_ONLY
         { FLAGS_BGR,{ 32, 32, 1, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test8888mip.dds",{ 0x4c,0xe7,0x4a,0xd7,0x0f,0xee,0xfb,0x6e,0x5b,0x27,0xd1,0x5b,0x45,0xb9,0xd5,0x5a } },
         { FLAGS_BGR,{ 32, 32, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcube8888.dds",{ 0x38,0x39,0x63,0x45,0x9a,0x28,0x85,0x96,0xcd,0x57,0x3e,0x38,0x60,0xcc,0xdc,0x99 } },
         { FLAGS_BGR,{ 32, 32, 1, 6, 6, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcube8888mip.dds",{ 0xa6,0xd9,0xb8,0xcd,0x81,0x3c,0x30,0xd6,0xcd,0x57,0x81,0xd0,0x4a,0x87,0xdf,0x9f } },
         { FLAGS_NONE,{ 32, 32, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_BC3_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcubedxt5.dds",{ 0xfe,0xae,0xad,0x97,0xda,0xab,0xf7,0x15,0x5c,0xb3,0x93,0xf6,0xcf,0xb7,0x8c,0x69 } },
         { FLAGS_NONE,{ 32, 32, 1, 6, 6, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_BC3_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testcubedxt5mip.dds",{ 0x40,0x70,0xe0,0xb0,0x22,0x2b,0xd5,0x65,0x8a,0x16,0x12,0x9f,0xb8,0xda,0x5d,0xfe } },
+        { FLAGS_NONE,{ 32, 32, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testdxt1.dds",{ 0x4c,0x3b,0x2f,0x57,0x91,0x1c,0x21,0xf0,0x0c,0x1a,0xd3,0x6b,0xb7,0x33,0xd0,0x55 } },
         { FLAGS_NONE,{ 32, 32, 1, 1, 6, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"testdxt1mip.dds",{ 0x89,0xd9,0x1a,0xa2,0x7a,0x3c,0x29,0x27,0x00,0xaf,0x6d,0x53,0x4c,0x64,0xf1,0xe5 } },
+        { FLAGS_BGR,{ 32, 32, 4, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888.dds",{ 0x4e,0xa9,0xb0,0x2b,0xfc,0x5f,0xbd,0x8a,0x0e,0x43,0x31,0x93,0xf5,0x82,0x19,0x87 } },
         { FLAGS_BGR,{ 32, 32, 4, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol8888mip.dds",{ 0x4e,0x65,0xb5,0xc5,0x85,0x1f,0x1a,0x2e,0x2f,0x29,0xf2,0x9e,0x48,0x20,0xb7,0x87 } },
+        { FLAGS_BGR,{ 32, 32, 4, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8X8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol888x.dds",{ 0x82,0x4e,0x17,0xf5,0x14,0x34,0x0c,0x52,0x09,0x2a,0x02,0x07,0x07,0x1c,0xbf,0x8c } },
+        { FLAGS_BGR,{ 32, 32, 4, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8X8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol888xmip.dds",{ 0x63,0xad,0xf1,0x29,0xe5,0x73,0x54,0x32,0x35,0x72,0xde,0xc1,0x2f,0xc2,0x10,0x06 } },
         { FLAGS_NONE,{ 32, 32, 4, 1, 6, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvoldxt1mip.dds",{ 0xc9,0x99,0x74,0x0b,0x8f,0x4d,0x95,0x53,0xc6,0x88,0x92,0xe9,0xbc,0xae,0x23,0x6f } },
+
+        { FLAGS_NONE,{ 200, 150, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_B5G5R5A1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test555.dds",{ 0x00,0x5c,0x5d,0x42,0x6c,0xed,0x64,0xc4,0xfd,0x2d,0xc5,0x67,0x89,0x2f,0x34,0x8c } }, // D3DFMT_X1R5G5B5
+
+        { FLAGS_LUMINANCE | ALTMD5(7),{ 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_R8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_L8.dds",{ 0xa3,0x85,0x0e,0x9d,0x94,0xfc,0xb7,0x5c,0xc4,0x49,0xb8,0x10,0x82,0xc6,0x05,0x8c } }, // D3DFMT_L8
+
+    #ifndef BUILD_BVT_ONLY
         { FLAGS_NONE,{ 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_BC6H_SF16, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"bc6h_sf16.dds",{ 0xc3,0x3f,0x79,0x6f,0xdf,0xb4,0x79,0x32,0x6f,0xfa,0xbb,0x3e,0x86,0x12,0x2b,0x5c } },
         { FLAGS_NONE,{ 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_BC6H_UF16, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"bc6h_uf16.dds",{ 0x94,0xd0,0x3c,0x65,0xf5,0x15,0x06,0x11,0x38,0x07,0xe6,0x8f,0x4a,0xe5,0xde,0xce } },
         { FLAGS_NONE,{ 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_BC7_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"bc7_unorm.dds",{ 0x52,0xec,0x1b,0x9c,0x30,0x96,0x46,0x4d,0x85,0x03,0xf6,0x14,0x0e,0xb7,0xda,0x29 } },
@@ -123,7 +128,6 @@ namespace
         { FLAGS_NONE,{ 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B5G6R5_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_R5G6B5.dds",{ 0x4b,0xd8,0x79,0xe8,0x89,0x39,0x86,0x4f,0x6b,0xd8,0xc0,0xb0,0xbf,0x17,0x0d,0x82 } }, // D3DFMT_R5G6B5
         { FLAGS_NONE,{ 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B5G6R5_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_rgb565.dds",{ 0x1a,0x58,0x28,0xdd,0x73,0xf0,0x48,0x4b,0x45,0x58,0xe2,0xb8,0xaa,0xff,0x2a,0xbd } }, // D3DFMT_R5G6B5
         { FLAGS_NONE,{ 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B5G5R5A1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_A1R5G5B5.dds",{ 0x5c,0x8a,0x2f,0x21,0xbd,0xdc,0x93,0x42,0x18,0x0b,0x16,0x8f,0xad,0x8c,0x37,0x51 } }, // D3DFMT_A1R5G5B5
-        { FLAGS_NONE,{ 200, 150, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_B5G5R5A1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test555.dds",{ 0x00,0x5c,0x5d,0x42,0x6c,0xed,0x64,0xc4,0xfd,0x2d,0xc5,0x67,0x89,0x2f,0x34,0x8c } }, // D3DFMT_X1R5G5B5
         { FLAGS_NONE,{ 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B4G4R4A4_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_A4R4G4B4.dds",{ 0xc6,0x75,0x37,0xc8,0x78,0x43,0xcc,0xee,0x21,0xa2,0x3e,0xc5,0x50,0x4c,0xd2,0x51 } }, // D3DFMT_A4R4G4B4
         { FLAGS_NONE,{ 256, 256, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_B4G4R4A4_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"windowslogo_X4R4G4B4.dds",{ 0xc6,0x75,0x37,0xc8,0x78,0x43,0xcc,0xee,0x21,0xa2,0x3e,0xc5,0x50,0x4c,0xd2,0x51 } }, // D3DFMT_X4R4G4B4
 
@@ -204,6 +208,11 @@ namespace
         { FLAGS_NONE,{ 64, 64, 1, 1, 7, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"ramp.dds",{ 0xac,0x77,0xf8,0x9e,0x19,0xe2,0x3f,0xf4,0x70,0xd2,0x3a,0x9c,0x6a,0xb2,0x22,0xe7 } },
         { FLAGS_NONE,{ 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"seafloor.dds",{ 0x30,0x5e,0x0d,0xce,0xb9,0xfa,0x4d,0xec,0xda,0xa0,0xea,0x8f,0x8e,0xff,0x97,0xf2 } },
         { FLAGS_NONE,{ 32, 32, 32, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"smallnoise3d.dds",{ 0x57,0x17,0x9b,0x9e,0x0f,0x57,0x1b,0x24,0x7c,0x3a,0x61,0xc5,0x60,0x15,0x9a,0xbe } },
+        { FLAGS_NONE,{ 64, 64, 64, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"Noise3D.dds",{ 0x0d,0x52,0x03,0x74,0x3f,0x44,0x6b,0x6a,0x5e,0xbe,0x8e,0x8b,0x76,0xd7,0xe4,0xfb } },
+        { FLAGS_NONE,{ 256, 256, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"seafloor_rgbx.dds",{ 0x04,0xf1,0x89,0x11,0xe3,0x0b,0x7f,0x9a,0xbf,0xa0,0xad,0x23,0x88,0x3f,0x83,0x4e } },
+        { FLAGS_NONE,{ 256, 256, 1, 6, 1, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_B8G8R8X8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"skybox02.dds",{ 0x80,0x39,0xd1,0x55,0x37,0xb1,0x09,0x57,0xde,0x89,0x1f,0x96,0xee,0xd2,0x00,0xdf } },
+        { FLAGS_NONE,{ 128, 128, 64, 1, 1, 0, 0, DXGI_FORMAT_BC3_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"smokevol1.dds",{ 0xba,0xa0,0xbc,0x7d,0x83,0x0f,0x2e,0xfa,0x6c,0x62,0xdb,0xb5,0xc5,0x3c,0xc1,0x11 } },
+        { FLAGS_NONE,{ 256, 256, 1, 6, 9, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_R16G16B16A16_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"rnl_cross_mip.dds",{ 0x51,0xec,0x51,0x41,0x56,0x52,0x7a,0x2e,0x8d,0x6e,0x78,0x4e,0x0b,0x56,0x2a,0xdc } },
 
         // Alternate pixel format varaints
         { FLAGS_LUMINANCE | ALTMD5(9),{ 256, 256, 64, 1, 1, 0, 0, DXGI_FORMAT_R8G8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"orange.dds",{ 0x2d,0xb6,0x35,0xe5,0x8f,0x93,0xeb,0x43,0xd8,0x78,0x84,0xbb,0xa1,0xfe,0x35,0x9c } }, // D3DFMT_A8L8
@@ -871,16 +880,18 @@ namespace
         // dds-flags-for-loader | source-filename | dest-filename
         { DDS_FLAGS_NONE, MEDIA_PATH L"test8888.dds" },
         { DDS_FLAGS_NONE, MEDIA_PATH L"testvol8888.dds" },
+        { DDS_FLAGS_NONE, MEDIA_PATH L"testvol888x.dds" },
         { DDS_FLAGS_NONE, MEDIA_PATH L"testdxt1.dds" },
+        { DDS_FLAGS_NONE, MEDIA_PATH L"test8888mip.dds" },
+        { DDS_FLAGS_NONE, MEDIA_PATH L"testvol8888mip.dds" },
+        { DDS_FLAGS_NONE, MEDIA_PATH L"testvol888xmip.dds" },
 
     #ifndef BUILD_BVT_ONLY
-        { DDS_FLAGS_NONE, MEDIA_PATH L"test8888mip.dds" },
         { DDS_FLAGS_NONE, MEDIA_PATH L"testcube8888.dds" },
         { DDS_FLAGS_NONE, MEDIA_PATH L"testcube8888mip.dds" },
         { DDS_FLAGS_NONE, MEDIA_PATH L"testcubedxt5.dds" },
         { DDS_FLAGS_NONE, MEDIA_PATH L"testcubedxt5mip.dds" },
         { DDS_FLAGS_NONE, MEDIA_PATH L"testdxt1mip.dds" },
-        { DDS_FLAGS_NONE, MEDIA_PATH L"testvol8888mip.dds" },
         { DDS_FLAGS_NONE, MEDIA_PATH L"test555.dds" },
         { DDS_FLAGS_LEGACY_DWORD, MEDIA_PATH L"test8_DWORD.dds" },
         { DDS_FLAGS_NONE, MEDIA_PATH L"windowslogo_A1R5G5B5.dds" },
@@ -894,6 +905,8 @@ namespace
         { DDS_FLAGS_NONE, MEDIA_PATH L"earth_A2B10G10R10.dds" },
         { DDS_FLAGS_NONE, MEDIA_PATH L"earth_A2R10G10B10.dds" },
         { DDS_FLAGS_NONE, MEDIA_PATH L"tree02S.dds" },
+
+        { DDS_FLAGS_NONE, MEDIA_PATH L"skybox02.dds" },
 
         { DDS_FLAGS_NONE, MEDIA_PATH L"io_R8G8B8A8_UNORM_SRV_DIMENSION_TEXTURE1DArray_MipOff.DDS" },
         { DDS_FLAGS_NONE, MEDIA_PATH L"io_R8G8B8A8_UNORM_SRV_DIMENSION_TEXTURE1DArray_MipOn.DDS" },
@@ -2631,6 +2644,56 @@ bool Test04()
                         }
                     }
                 }
+
+                // Test 24bpp write
+                if (metadata.format == DXGI_FORMAT_B8G8R8X8_UNORM)
+                {
+                    blob2.Release();
+                    hr = SaveToDDSMemory( image.GetImages(), image.GetImageCount(), image.GetMetadata(), DDS_FLAGS_FORCE_24BPP_RGB, blob2 );
+                    if ( FAILED(hr) )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Failed writing DDS with DDS_FLAGS_FORCE_24BPP_RGB to memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
+                    }
+                    else
+                    {
+                        TexMetadata metadata2;
+                        ScratchImage image2;
+                        DDSMetaData ddsPixelFormat = {};
+                        hr = LoadFromDDSMemoryEx( blob2.GetConstBufferPointer(), blob2.GetBufferSize(), DDS_FLAGS_NONE, &metadata2, &ddsPixelFormat, image2 );
+                        if ( FAILED(hr) )
+                        {
+                            success = false;
+                            pass = false;
+                            printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_24BPP_RGB to memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
+                        }
+                        else if ( metadata.width != metadata2.width
+                                || metadata.height != metadata2.height
+                                || metadata.arraySize != metadata2.arraySize
+                                || metadata.mipLevels != metadata2.mipLevels
+                                || metadata.dimension != metadata2.dimension )
+                        {
+                            success = false;
+                            pass = false;
+                            printe( "Metadata error in dds with DDS_FLAGS_FORCE_24BPP_RGB readback from memory:\n%ls\n", szPath );
+                            printmeta( &metadata2 );
+                            printmetachk( &metadata );
+                        }
+                        else
+                        {
+                            const DDSMetaData s_R8G8B8 = { 32, 0x00000040, 0, 24, 0xff0000, 0x00ff00, 0x0000ff, 0 };
+
+                            if (memcmp(&ddsPixelFormat, &s_R8G8B8, sizeof(DDSMetaData)) != 0)
+                            {
+                                success = false;
+                                pass = false;
+                                printe("DDS pixel format error in DDS_FLAGS_FORCE_24BPP_RGB readback not 24bpp:\n%ls\n", szPath);
+                                printdds(ddsPixelFormat);
+                            }
+                        }
+                    }
+                }
             }
 
             if ( pass )
@@ -2742,6 +2805,12 @@ bool Test05()
 
         wchar_t szDestPathWide[MAX_PATH] = {};
         _wmakepath_s( szDestPathWide, MAX_PATH, nullptr, tempDir, fname2, L".dds" );
+
+        // Form fifth dest path
+        wcscpy_s( fname2, fname );
+        wcscat_s( fname2, L"_24bpp" );
+        wchar_t szDestPath24bpp[MAX_PATH] = {};
+        _wmakepath_s( szDestPath24bpp, MAX_PATH, nullptr, tempDir, fname2, L".dds" );
 
         TexMetadata metadata;
         ScratchImage image;
@@ -3044,6 +3113,55 @@ bool Test05()
                                     pass = false;
                                     printe( "MD5 checksum of wide image reloaded data doesn't match original:\n%ls\n", szDestPathWide );
                                 }
+                            }
+                        }
+                    }
+                }
+
+                // Test 24bpp write
+                if (metadata.format == DXGI_FORMAT_B8G8R8X8_UNORM)
+                {
+                    hr = SaveToDDSFile( image.GetImages(), image.GetImageCount(), image.GetMetadata(), DDS_FLAGS_FORCE_24BPP_RGB, szDestPath24bpp );
+                    if ( FAILED(hr) )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Failed writing DDS with DDS_FLAGS_FORCE_24BPP_RGB to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath24bpp );
+                    }
+                    else
+                    {
+                        TexMetadata metadata2;
+                        ScratchImage image2;
+                        DDSMetaData ddsPixelFormat = {};
+                        hr = LoadFromDDSFileEx( szDestPath24bpp, DDS_FLAGS_NONE, &metadata2, &ddsPixelFormat, image2 );
+                        if ( FAILED(hr) )
+                        {
+                            success = false;
+                            pass = false;
+                            printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_24BPP_RGB to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath24bpp );
+                        }
+                        else if ( metadata.width != metadata2.width
+                                || metadata.height != metadata2.height
+                                || metadata.arraySize != metadata2.arraySize
+                                || metadata.mipLevels != metadata2.mipLevels
+                                || metadata.dimension != metadata2.dimension )
+                        {
+                            success = false;
+                            pass = false;
+                            printe( "Metadata error in dds with DDS_FLAGS_FORCE_24BPP_RGB readback:\n%ls\n", szDestPath24bpp );
+                            printmeta( &metadata2 );
+                            printmetachk( &metadata );
+                        }
+                        else
+                        {
+                            const DDSMetaData s_R8G8B8 = { 32, 0x00000040, 0, 24, 0xff0000, 0x00ff00, 0x0000ff, 0 };
+
+                            if (memcmp(&ddsPixelFormat, &s_R8G8B8, sizeof(DDSMetaData)) != 0)
+                            {
+                                success = false;
+                                pass = false;
+                                printe("DDS pixel format error in DDS_FLAGS_FORCE_24BPP_RGB readback not 24bpp:\n%ls\n", szPath);
+                                printdds(ddsPixelFormat);
                             }
                         }
                     }
@@ -3672,6 +3790,47 @@ bool Test10()
             {
                 success = false;
                 printe("Expected required size to at least fit a standard DDS header [DX9 %zu, RXGB] (%zu .. %zu)\n", index, DDS_MIN_HEADER_SIZE, required);
+            }
+            else if (reinterpret_cast<uint32_t*>(ddsHeader)[0] != DDS_MAGIC)
+            {
+                success = false;
+                printe("Expected standard DDS magic number [DX9 %zu, RXGB] (0x%08X .. 0x%08X)\n", index, DDS_MAGIC, reinterpret_cast<uint32_t*>(ddsHeader)[0]);
+            }
+        }
+
+        if (s_dx9[index].format == DXGI_FORMAT_B8G8R8X8_UNORM
+            && s_dx9[index].arraySize == 1)
+        {
+            hr = EncodeDDSHeader(s_dx9[index], DDS_FLAGS_FORCE_24BPP_RGB,
+                ddsHeader, sizeof(ddsHeader), required);
+            if (FAILED(hr))
+            {
+                success = false;
+                printe("Failed encoding DDS DX9 header [%zu, 24BPP] (HRESULT %08X)\n", index, static_cast<unsigned int>(hr));
+            }
+            else if (required < DDS_MIN_HEADER_SIZE)
+            {
+                success = false;
+                printe("Expected required size to at least fit a standard DDS header [DX9 %zu, 24BPP] (%zu .. %zu)\n", index, DDS_MIN_HEADER_SIZE, required);
+            }
+            else if (reinterpret_cast<uint32_t*>(ddsHeader)[0] != DDS_MAGIC)
+            {
+                success = false;
+                printe("Expected standard DDS magic number [DX9 %zu, 24BPP] (0x%08X .. 0x%08X)\n", index, DDS_MAGIC, reinterpret_cast<uint32_t*>(ddsHeader)[0]);
+            }
+            else
+            {
+                auto hdr = reinterpret_cast<const DDS_HEADER*>(ddsHeader + sizeof(uint32_t));
+                if (hdr->size != sizeof(DDS_HEADER))
+                {
+                    success = false;
+                    printe("Expected standard DDS header size [DX9 %zu, 24BPP] (%zu .. %u)\n", index, sizeof(DDS_HEADER), hdr->size);
+                }
+                else if (memcmp(&hdr->ddspf, &DDSPF_DX10, sizeof(DDS_PIXELFORMAT)) == 0)
+                {
+                    success = false;
+                    printe("Did not expect DDS DX10 pixel format [DX9 %zu, 24BPP]\n", index);
+                }
             }
         }
     }
