@@ -2631,6 +2631,57 @@ bool Test04()
                         }
                     }
                 }
+
+                // Test 24bpp write
+                if (metadata.format == DXGI_FORMAT_B8G8R8X8_UNORM
+                    && metadata.arraySize == 1)
+                {
+                    blob2.Release();
+                    hr = SaveToDDSMemory( image.GetImages(), image.GetImageCount(), image.GetMetadata(), DDS_FLAGS_FORCE_24BPP_RGB, blob2 );
+                    if ( FAILED(hr) )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Failed writing DDS with DDS_FLAGS_FORCE_24BPP_RGB to memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
+                    }
+                    else
+                    {
+                        TexMetadata metadata2;
+                        ScratchImage image2;
+                        DDSMetaData ddsPixelFormat = {};
+                        hr = LoadFromDDSMemoryEx( blob2.GetConstBufferPointer(), blob2.GetBufferSize(), DDS_FLAGS_NONE, &metadata2, &ddsPixelFormat, image2 );
+                        if ( FAILED(hr) )
+                        {
+                            success = false;
+                            pass = false;
+                            printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_24BPP_RGB to memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
+                        }
+                        else if ( metadata.width != metadata2.width
+                                || metadata.height != metadata2.height
+                                || metadata.arraySize != metadata2.arraySize
+                                || metadata.mipLevels != metadata2.mipLevels
+                                || metadata.dimension != metadata2.dimension )
+                        {
+                            success = false;
+                            pass = false;
+                            printe( "Metadata error in dds with DDS_FLAGS_FORCE_24BPP_RGB readback from memory:\n%ls\n", szPath );
+                            printmeta( &metadata2 );
+                            printmetachk( &metadata );
+                        }
+                        else
+                        {
+                            const DDSMetaData s_R8G8B8 = { 32, 0x00000040, 0, 24, 0xff0000, 0x00ff00, 0x0000ff, 0 };
+
+                            if (memcmp(&ddsPixelFormat, &s_R8G8B8, sizeof(DDSMetaData)) != 0)
+                            {
+                                success = false;
+                                pass = false;
+                                printe("DDS pixel format error in DDS_FLAGS_FORCE_24BPP_RGB readback not 24bpp:\n%ls\n", szPath);
+                                printdds(ddsPixelFormat);
+                            }
+                        }
+                    }
+                }
             }
 
             if ( pass )
@@ -2742,6 +2793,12 @@ bool Test05()
 
         wchar_t szDestPathWide[MAX_PATH] = {};
         _wmakepath_s( szDestPathWide, MAX_PATH, nullptr, tempDir, fname2, L".dds" );
+
+        // Form fifth dest path
+        wcscpy_s( fname2, fname );
+        wcscat_s( fname2, L"_24bpp" );
+        wchar_t szDestPath24bpp[MAX_PATH] = {};
+        _wmakepath_s( szDestPath24bpp, MAX_PATH, nullptr, tempDir, fname2, L".dds" );
 
         TexMetadata metadata;
         ScratchImage image;
@@ -3044,6 +3101,56 @@ bool Test05()
                                     pass = false;
                                     printe( "MD5 checksum of wide image reloaded data doesn't match original:\n%ls\n", szDestPathWide );
                                 }
+                            }
+                        }
+                    }
+                }
+
+                // Test 24bpp write
+                if (metadata.format == DXGI_FORMAT_B8G8R8X8_UNORM
+                    && metadata.arraySize == 1)
+                {
+                    hr = SaveToDDSFile( image.GetImages(), image.GetImageCount(), image.GetMetadata(), DDS_FLAGS_FORCE_24BPP_RGB, szDestPath24bpp );
+                    if ( FAILED(hr) )
+                    {
+                        success = false;
+                        pass = false;
+                        printe( "Failed writing DDS with DDS_FLAGS_FORCE_24BPP_RGB to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath24bpp );
+                    }
+                    else
+                    {
+                        TexMetadata metadata2;
+                        ScratchImage image2;
+                        DDSMetaData ddsPixelFormat = {};
+                        hr = LoadFromDDSFileEx( szDestPath24bpp, DDS_FLAGS_NONE, &metadata2, &ddsPixelFormat, image2 );
+                        if ( FAILED(hr) )
+                        {
+                            success = false;
+                            pass = false;
+                            printe( "Failed reading back written DDS with DDS_FLAGS_FORCE_24BPP_RGB to (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szDestPath24bpp );
+                        }
+                        else if ( metadata.width != metadata2.width
+                                || metadata.height != metadata2.height
+                                || metadata.arraySize != metadata2.arraySize
+                                || metadata.mipLevels != metadata2.mipLevels
+                                || metadata.dimension != metadata2.dimension )
+                        {
+                            success = false;
+                            pass = false;
+                            printe( "Metadata error in dds with DDS_FLAGS_FORCE_24BPP_RGB readback:\n%ls\n", szDestPath24bpp );
+                            printmeta( &metadata2 );
+                            printmetachk( &metadata );
+                        }
+                        else
+                        {
+                            const DDSMetaData s_R8G8B8 = { 32, 0x00000040, 0, 24, 0xff0000, 0x00ff00, 0x0000ff, 0 };
+
+                            if (memcmp(&ddsPixelFormat, &s_R8G8B8, sizeof(DDSMetaData)) != 0)
+                            {
+                                success = false;
+                                pass = false;
+                                printe("DDS pixel format error in DDS_FLAGS_FORCE_24BPP_RGB readback not 24bpp:\n%ls\n", szPath);
+                                printdds(ddsPixelFormat);
                             }
                         }
                     }
@@ -3672,6 +3779,47 @@ bool Test10()
             {
                 success = false;
                 printe("Expected required size to at least fit a standard DDS header [DX9 %zu, RXGB] (%zu .. %zu)\n", index, DDS_MIN_HEADER_SIZE, required);
+            }
+            else if (reinterpret_cast<uint32_t*>(ddsHeader)[0] != DDS_MAGIC)
+            {
+                success = false;
+                printe("Expected standard DDS magic number [DX9 %zu, RXGB] (0x%08X .. 0x%08X)\n", index, DDS_MAGIC, reinterpret_cast<uint32_t*>(ddsHeader)[0]);
+            }
+        }
+
+        if (s_dx9[index].format == DXGI_FORMAT_B8G8R8X8_UNORM
+            && s_dx9[index].arraySize == 1)
+        {
+            hr = EncodeDDSHeader(s_dx9[index], DDS_FLAGS_FORCE_24BPP_RGB,
+                ddsHeader, sizeof(ddsHeader), required);
+            if (FAILED(hr))
+            {
+                success = false;
+                printe("Failed encoding DDS DX9 header [%zu, 24BPP] (HRESULT %08X)\n", index, static_cast<unsigned int>(hr));
+            }
+            else if (required < DDS_MIN_HEADER_SIZE)
+            {
+                success = false;
+                printe("Expected required size to at least fit a standard DDS header [DX9 %zu, 24BPP] (%zu .. %zu)\n", index, DDS_MIN_HEADER_SIZE, required);
+            }
+            else if (reinterpret_cast<uint32_t*>(ddsHeader)[0] != DDS_MAGIC)
+            {
+                success = false;
+                printe("Expected standard DDS magic number [DX9 %zu, 24BPP] (0x%08X .. 0x%08X)\n", index, DDS_MAGIC, reinterpret_cast<uint32_t*>(ddsHeader)[0]);
+            }
+            else
+            {
+                auto hdr = reinterpret_cast<const DDS_HEADER*>(ddsHeader + sizeof(uint32_t));
+                if (hdr->size != sizeof(DDS_HEADER))
+                {
+                    success = false;
+                    printe("Expected standard DDS header size [DX9 %zu, 24BPP] (%zu .. %u)\n", index, sizeof(DDS_HEADER), hdr->size);
+                }
+                else if (memcmp(&hdr->ddspf, &DDSPF_DX10, sizeof(DDS_PIXELFORMAT)) == 0)
+                {
+                    success = false;
+                    printe("Did not expect DDS DX10 pixel format [DX9 %zu, 24BPP]\n", index);
+                }
             }
         }
     }
