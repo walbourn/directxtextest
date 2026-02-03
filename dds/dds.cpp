@@ -32,9 +32,9 @@ namespace
         FLAGS_XBOX = 0x40,
         FLAGS_BAD_TAILS = 0x80,
         FLAGS_ALTMD5_MASK = 0xf00,
-        FLAGS_UT_2004 = 0x10000,
+        FLAGS_KNOWN_VARIANT = 0x10000,
         FLAGS_OFF_BY_ONE_MIPS = 0x20000,
-        FLAGS_STALKER_24 = 0x40000,
+        FLAGS_UT_2004 = 0x40000,
         FLAGS_DARK_SOULS_3 = 0x80000,
         FLAGS_IGNORE_MIPS = 0x100000,
         FLAGS_SKIP_1010102_FIXUP = 0x200000,
@@ -59,7 +59,7 @@ namespace
         {
             flags |= DDS_FLAGS_BAD_DXTN_TAILS;
         }
-        if (options & (FLAGS_UT_2004 | FLAGS_OFF_BY_ONE_MIPS | FLAGS_STALKER_24 | FLAGS_DARK_SOULS_3))
+        if (options & (FLAGS_KNOWN_VARIANT | FLAGS_OFF_BY_ONE_MIPS | FLAGS_UT_2004 | FLAGS_DARK_SOULS_3))
         {
             flags |= DDS_FLAGS_PERMISSIVE;
         }
@@ -214,7 +214,7 @@ namespace
         { FLAGS_NONE,{ 128, 128, 64, 1, 1, 0, 0, DXGI_FORMAT_BC3_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"smokevol1.dds",{ 0xba,0xa0,0xbc,0x7d,0x83,0x0f,0x2e,0xfa,0x6c,0x62,0xdb,0xb5,0xc5,0x3c,0xc1,0x11 } },
         { FLAGS_NONE,{ 256, 256, 1, 6, 9, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_R16G16B16A16_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"rnl_cross_mip.dds",{ 0x51,0xec,0x51,0x41,0x56,0x52,0x7a,0x2e,0x8d,0x6e,0x78,0x4e,0x0b,0x56,0x2a,0xdc } },
 
-        // Alternate pixel format varaints
+        // Alternate pixel format variants
         { FLAGS_LUMINANCE | ALTMD5(9),{ 256, 256, 64, 1, 1, 0, 0, DXGI_FORMAT_R8G8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"orange.dds",{ 0x2d,0xb6,0x35,0xe5,0x8f,0x93,0xeb,0x43,0xd8,0x78,0x84,0xbb,0xa1,0xfe,0x35,0x9c } }, // D3DFMT_A8L8
 
         // D3DX test files
@@ -806,10 +806,13 @@ namespace
         { FLAGS_OFF_BY_ONE_MIPS, { 256, 256, 1, 1, 9, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"beam_lo.dds",{ 0x1d,0xc9,0x2a,0x3c,0xee,0x90,0x07,0x0b,0x1b,0x00,0xcc,0x2a,0x1f,0x8c,0x2e,0x87 } }, // D3DFMT_R8G8B8
 
         // STALKER DDS variant (DDS_HEADER size is set to 24 instead of 124)
-        { FLAGS_STALKER_24, { 256, 512, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"DDSHeaderSize24.dds",{ 0x58,0xf4,0x8a,0xdf,0xf0,0xce,0xeb,0x5f,0x08,0x4d,0xea,0xae,0xef,0xf0,0xb6,0x72 } },
+        { FLAGS_KNOWN_VARIANT, { 256, 512, 1, 1, 1, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"DDSHeaderSize24.dds",{ 0x58,0xf4,0x8a,0xdf,0xf0,0xce,0xeb,0x5f,0x08,0x4d,0xea,0xae,0xef,0xf0,0xb6,0x72 } },
 
         // DARK SOULS 3 DDS variant (does not set DDS_HEADER_DXT10.arraySize to numCubes for cubemap/cubemapArrays)
         { FLAGS_DARK_SOULS_3, { 128, 128, 1, 6, 7, TEX_MISC_TEXTURECUBE, 0, DXGI_FORMAT_BC6H_UF16, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH "GILM0010.dds", { 0x35,0x92,0x82,0x95,0x38,0xe4,0x71,0xa1,0x6d,0xac,0x80,0xa8,0x20,0x8c,0xbc,0xcd } },
+
+        // WORLD OF TANKS DDS variant (DDS_HEADER_DX10.resourceDimension value 0 is treated as if it was 2D)
+        { FLAGS_KNOWN_VARIANT, { 256, 256, 1, 1, 9, 0, 0, DXGI_FORMAT_BC3_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"A05_M4_105BD_track_BC.dx11.dds", { 0xc8,0x2f,0x83,0xcf,0xfe,0x19,0x4f,0x1f,0x09,0xf9,0x53,0x58,0x54,0xde,0x77,0xe6 } },
 
         // Test for ignoring mip tails due to missing data
         { FLAGS_IGNORE_MIPS, { 256, 256, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"reftexture.dds", { 0x29,0x26,0xa3,0x35,0x71,0x2f,0x3c,0x08,0x02,0xcf,0xde,0x38,0x22,0x73,0xd2,0xeb } },
@@ -1077,6 +1080,18 @@ bool Test01()
             }
         }
 
+        if ((flags & DDS_FLAGS_PERMISSIVE)
+            && !(g_TestMedia[index].options & (FLAGS_OFF_BY_ONE_MIPS | FLAGS_DARK_SOULS_3)))
+        {
+            TexMetadata metadata;
+            hr = GetMetadataFromDDSMemory(blob.GetConstBufferPointer(), blob.GetBufferSize(), flags & ~DDS_FLAGS_PERMISSIVE, metadata);
+            if (SUCCEEDED(hr))
+            {
+                success = false;
+                printe("Expected to fail without permissive from memory:\n%ls\n", szPath);
+            }
+        }
+
         // FromFile
         TexMetadata metadata;
         hr = GetMetadataFromDDSFile(szPath, flags, metadata);
@@ -1156,6 +1171,18 @@ bool Test01()
                 break;
             }
         }
+
+        if ((flags & DDS_FLAGS_PERMISSIVE)
+            && !(g_TestMedia[index].options & (FLAGS_OFF_BY_ONE_MIPS | FLAGS_DARK_SOULS_3)))
+        {
+            hr = GetMetadataFromDDSFile(szPath, flags & ~DDS_FLAGS_PERMISSIVE, metadata);
+            if (SUCCEEDED(hr))
+            {
+                success = false;
+                printe("Expected to fail without permissive from file:\n%ls\n", szPath);
+            }
+        }
+
 
         if (pass)
             ++npass;
