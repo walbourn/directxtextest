@@ -557,9 +557,9 @@ namespace
         { DXGI_FORMAT_R16_SINT, XMFLOAT4(-1.0f, 0.0f, 0.0f, 1.0f), 2, { 0xFF,0xFF } },
         // DXGI_FORMAT_R8_UNORM
         { DXGI_FORMAT_R8_UNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f), 1, { 0x0 } },
-        { DXGI_FORMAT_R8_UNORM, XMFLOAT4(0.5f, 0.0f, 0.0f, 1.0f), 1, { 0x7F } },
+        { DXGI_FORMAT_R8_UNORM, XMFLOAT4(0.5f, 0.0f, 0.0f, 1.0f), 1, { 0x80 } },
         { DXGI_FORMAT_R8_UNORM, XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f), 1, { 0xFF } },
-        { DXGI_FORMAT_R8_UNORM, XMFLOAT4(0.25f, 0.0f, 0.0f, 1.0f), 1, { 0x3F } },
+        { DXGI_FORMAT_R8_UNORM, XMFLOAT4(0.25f, 0.0f, 0.0f, 1.0f), 1, { 0x40 } },
         // DXGI_FORMAT_R8_UINT
         { DXGI_FORMAT_R8_UINT, XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f), 1, { 0x0 } },
         { DXGI_FORMAT_R8_UINT, XMFLOAT4(255.f, 0.0f, 0.0f, 1.0f), 1, { 0xFF } },
@@ -578,9 +578,9 @@ namespace
         { DXGI_FORMAT_R8_SINT, XMFLOAT4(-1.0f, 0.0f, 0.0f, 1.0f), 1, { 0xFF } },
         // DXGI_FORMAT_A8_UNORM
         { DXGI_FORMAT_A8_UNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 1, { 0x0 } },
-        { DXGI_FORMAT_A8_UNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.5f), 1, { 0x7F } },
+        { DXGI_FORMAT_A8_UNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.5f), 1, { 0x80 } },
         { DXGI_FORMAT_A8_UNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f), 1, { 0xFF } },
-        { DXGI_FORMAT_A8_UNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.25f), 1, { 0x3F } },
+        { DXGI_FORMAT_A8_UNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.25f), 1, { 0x40 } },
         // DXGI_FORMAT_R1_UNORM
         { DXGI_FORMAT_R1_UNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 1.f), 1, { 0x0 } },
         { DXGI_FORMAT_R1_UNORM, XMFLOAT4(1.0f, 0.0f, 0.0f, 1.f), 1, { 0x80 } },
