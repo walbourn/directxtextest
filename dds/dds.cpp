@@ -3306,6 +3306,8 @@ bool Test06()
         return false;
     }
 
+    bool second = false;
+
     wchar_t szPath[MAX_PATH] = {};
     wcscpy_s(szPath, szMediaPath);
     wcscat_s(szPath, L"*.*");
@@ -3334,7 +3336,7 @@ bool Test06()
                 print(".");
             }
 
-            wcscpy_s(szPath, szMediaPath);
+            wcscpy_s(szPath, (second) ? L"" : szMediaPath);
             wcscat_s(szPath, findData.cFileName);
 
             bool isdds = false;
@@ -3380,6 +3382,7 @@ bool Test06()
 #ifndef _M_X64
                                 && (hr != E_OUTOFMEMORY)
 #endif
+                                && !second
                                 )
                             {
                                 success = false;
@@ -3411,6 +3414,7 @@ bool Test06()
 #ifndef _M_X64
                         && (hr != E_OUTOFMEMORY)
 #endif
+                        && !second
                         )
                     {
                         success = false;
@@ -3426,7 +3430,19 @@ bool Test06()
         }
 
         if (!FindNextFileW(hFile.get(), &findData))
-            break;
+        {
+            if (second)
+                break;
+
+            hFile.reset(safe_handle(FindFirstFileExW(L"*.dds",
+                FindExInfoBasic, &findData,
+                FindExSearchNameMatch, nullptr,
+                FIND_FIRST_EX_LARGE_FETCH)));
+            if (!hFile)
+                break;
+
+            second = true;
+        }
     }
 
     if (!ncount)
