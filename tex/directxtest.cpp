@@ -28,6 +28,7 @@ TestInfo g_Tests[] =
     { "Is*/BP*/FDT", TEXTest::Test01 },
     { "ComputePitch/Scanlines", TEXTest::Test02 },
     { "ComputeTileShape", TEXTest::Test20 },
+    { "CalculateMipLevels", TEXTest::Test22 },
     { "Make*", TEXTest::Test12 },
     { "TexMetadata", TEXTest::Test18 },
     { "Blob", TEXTest::Test21 },
