@@ -1621,3 +1621,117 @@ bool TEXTest::Test17()
 
     return success;
 }
+
+//-------------------------------------------------------------------------------------
+// Test coverage for CalculateMipLevels functions
+bool TEXTest::Test22()
+{
+    bool success = true;
+
+    // Test CalculateMipLevels function
+    {
+        // Test full mip chain calculation (mipLevels = 0)
+        size_t mipLevels = 0;
+        bool result = CalculateMipLevels(256, 256, mipLevels);
+        if (!result || mipLevels != 9)
+        {
+            printe("ERROR: CalculateMipLevels failed for 256x256 full chain (expected 9, got %zu)\n", mipLevels);
+            success = false;
+        }
+
+        // Test single level (mipLevels = 1)
+        mipLevels = 1;
+        result = CalculateMipLevels(256, 256, mipLevels);
+        if (!result || mipLevels != 1)
+        {
+            printe("ERROR: CalculateMipLevels failed for single level (expected 1, got %zu)\n", mipLevels);
+            success = false;
+        }
+
+        // Test valid partial mip chain
+        mipLevels = 5;
+        result = CalculateMipLevels(256, 256, mipLevels);
+        if (!result || mipLevels != 5)
+        {
+            printe("ERROR: CalculateMipLevels failed for partial chain (expected 5, got %zu)\n", mipLevels);
+            success = false;
+        }
+
+        // Test invalid mip count (too many levels)
+        mipLevels = 20;
+        result = CalculateMipLevels(256, 256, mipLevels);
+        if (result)
+        {
+            printe("ERROR: CalculateMipLevels should have failed for too many mip levels\n");
+            success = false;
+        }
+
+        // Test non-power-of-2 dimensions
+        mipLevels = 0;
+        result = CalculateMipLevels(100, 50, mipLevels);
+        if (!result || mipLevels != 7)
+        {
+            printe("ERROR: CalculateMipLevels failed for non-power-of-2 dimensions\n");
+            success = false;
+        }
+
+        // Test 1x1 texture
+        mipLevels = 0;
+        result = CalculateMipLevels(1, 1, mipLevels);
+        if (!result || mipLevels != 1)
+        {
+            printe("ERROR: CalculateMipLevels failed for 1x1 texture (expected 1, got %zu)\n", mipLevels);
+            success = false;
+        }
+    }
+
+    // Test CalculateMipLevels3D function
+    {
+        // Test full 3D mip chain calculation
+        size_t mipLevels = 0;
+        bool result = CalculateMipLevels3D(64, 64, 64, mipLevels);
+        if (!result || mipLevels != 7)
+        {
+            printe("ERROR: CalculateMipLevels3D failed for 64x64x64 full chain (expected 7, got %zu)\n", mipLevels);
+            success = false;
+        }
+
+        // Test 3D single level
+        mipLevels = 1;
+        result = CalculateMipLevels3D(128, 128, 32, mipLevels);
+        if (!result || mipLevels != 1)
+        {
+            printe("ERROR: CalculateMipLevels3D failed for single level (expected 1, got %zu)\n", mipLevels);
+            success = false;
+        }
+
+        // Test 3D partial mip chain
+        mipLevels = 4;
+        result = CalculateMipLevels3D(32, 32, 16, mipLevels);
+        if (!result || mipLevels != 4)
+        {
+            printe("ERROR: CalculateMipLevels3D failed for partial chain (expected 4, got %zu)\n", mipLevels);
+            success = false;
+        }
+
+        // Test 3D invalid mip count
+        mipLevels = 50;
+        result = CalculateMipLevels3D(16, 16, 16, mipLevels);
+        if (result)
+        {
+            printe("ERROR: CalculateMipLevels3D should have failed for too many mip levels\n");
+            success = false;
+        }
+
+        // Test asymmetric 3D dimensions
+        mipLevels = 0;
+        result = CalculateMipLevels3D(256, 64, 32, mipLevels);
+        if (!result || mipLevels != 9)
+        {
+            printe("ERROR: CalculateMipLevels3D failed for asymmetric dimensions\n");
+            success = false;
+        }
+    }
+
+    return success;
+}
