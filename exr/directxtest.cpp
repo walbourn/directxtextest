@@ -25,13 +25,15 @@ extern bool Test01();
 extern bool Test02();
 extern bool Test03();
 extern bool Test04();
+extern bool Test05();
 
 TestInfo g_Tests[] =
 {
     { "GetMetadataFromEXRFile", Test01 },
-    { "LoadFromEXRFile", Test02 },
-    { "SaveToEXRFile", Test03 },
-    { "Fuzz", Test04 },
+    { "LoadFromEXRMemory", Test02 },
+    { "LoadFromEXRFile", Test03 },
+    { "SaveToEXRFile", Test04 },
+    { "Fuzz", Test05 },
 };
 
 

@@ -14,6 +14,61 @@
 using namespace DirectX;
 
 //-------------------------------------------------------------------------------------
+HRESULT LoadBlobFromFile( _In_z_ const wchar_t* szFile, Blob& blob )
+{
+    if ( szFile == nullptr )
+        return E_INVALIDARG;
+
+    ScopedHandle hFile( safe_handle( CreateFile( szFile, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING,
+                                                 FILE_FLAG_SEQUENTIAL_SCAN, nullptr ) ) );
+    if ( !hFile )
+    {
+        return HRESULT_FROM_WIN32( GetLastError() );
+    }
+
+    // Get the file size
+    LARGE_INTEGER fileSize = {};
+    if ( !GetFileSizeEx( hFile.get(), &fileSize ) )
+    {
+        return HRESULT_FROM_WIN32( GetLastError() );
+    }
+
+    // File is too big for 32-bit allocation, so reject read (4 GB should be plenty large enough for our test images)
+    if ( fileSize.HighPart > 0 )
+    {
+        return HRESULT_FROM_WIN32( ERROR_FILE_TOO_LARGE );
+    }
+
+    // Need at least 1 byte of data
+    if ( !fileSize.LowPart  )
+    {
+        return E_FAIL;
+    }
+
+    // Create blob memory
+    HRESULT hr = blob.Initialize( fileSize.LowPart );
+    if ( FAILED(hr) )
+        return hr;
+
+    // Load entire file into blob memory
+    DWORD bytesRead = 0;
+    if ( !ReadFile( hFile.get(), blob.GetBufferPointer(), static_cast<DWORD>( blob.GetBufferSize() ), &bytesRead, nullptr ) )
+    {
+        blob.Release();
+        return HRESULT_FROM_WIN32( GetLastError() );
+    }
+
+    // Verify we got the whole blob loaded
+    if ( bytesRead != blob.GetBufferSize() )
+    {
+        blob.Release();
+        return E_FAIL;
+    }
+
+    return S_OK;
+}
+
+//-------------------------------------------------------------------------------------
 #include <bcrypt.h>
 
 #ifndef NT_SUCCESS

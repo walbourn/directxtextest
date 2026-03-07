@@ -82,10 +82,12 @@ namespace
 
 //-------------------------------------------------------------------------------------
 
+extern HRESULT LoadBlobFromFile( _In_z_ const wchar_t* szFile, Blob& blob );
 extern HRESULT MD5Checksum( _In_ const ScratchImage& image, _Out_bytecap_x_(16) uint8_t *digest );
 extern HRESULT SaveScratchImage( _In_z_ const wchar_t* szFile, _In_ DirectX::DDS_FLAGS flags, _In_ const ScratchImage& image );
 
 //-------------------------------------------------------------------------------------
+// GetMetadataFromEXRFile
 bool Test01()
 {
     bool success = true;
@@ -153,8 +155,105 @@ bool Test01()
 }
 
 //-------------------------------------------------------------------------------------
-// LoadFromEXRFile
+// LoadFromEXRMemory
 bool Test02()
+{
+    bool success = true;
+
+    size_t ncount = 0;
+    size_t npass = 0;
+
+    for( size_t index=0; index < std::size(g_TestMedia); ++index )
+    {
+        wchar_t szPath[MAX_PATH] = {};
+        DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
+        {
+            printe( "ERROR: ExpandEnvironmentStrings FAILED\n" );
+            return false;
+        }
+
+#ifdef _DEBUG
+        OutputDebugString(szPath);
+        OutputDebugStringA("\n");
+#endif
+
+        Blob blob;
+        HRESULT hr = LoadBlobFromFile( szPath, blob );
+        if ( FAILED(hr) )
+        {
+            success = false;
+            printe( "Failed getting raw file data from (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
+        }
+        else
+        {
+            TexMetadata metadata;
+            ScratchImage image;
+            hr = LoadFromEXRMemory(blob.GetBufferPointer(), blob.GetBufferSize(), &metadata, image);
+
+            const TexMetadata* check = &g_TestMedia[index].metadata;
+            if ( FAILED(hr) )
+            {
+                success = false;
+                printe( "Failed loading exr from memory (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
+            }
+            else if ( memcmp( &metadata, check, sizeof(TexMetadata) ) != 0 )
+            {
+                success = false;
+                printe( "Metadata error in:\n%ls\n", szPath );
+                printmeta( &metadata );
+                printmetachk( check );
+            }
+            else
+            {
+                uint8_t digest[16];
+                hr = MD5Checksum( image, digest );
+                if ( FAILED(hr) )
+                {
+                    success = false;
+                    printe( "Failed computing MD5 checksum of image data (HRESULT %08X):\n%ls\n", static_cast<unsigned int>(hr), szPath );
+                }
+                else if ( memcmp( digest, g_TestMedia[index].md5, 16 ) != 0 )
+                {
+                    success = false;
+                    printe( "Failed comparing MD5 checksum:\n%ls\n", szPath );
+                    printdigest( "computed", digest );
+                    printdigest( "expected", g_TestMedia[index].md5 );
+                }
+                else
+                    ++npass;
+
+                // TESTTEST- SaveScratchImage( L"C:\\Temp\\XXX.DDS", DDS_FLAGS_NONE, image );
+            }
+
+            image.Release();
+        }
+
+        ++ncount;
+    }
+
+    print("%zu images tested, %zu images passed ", ncount, npass );
+
+    // invalid args
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        ScratchImage image;
+        HRESULT hr = LoadFromEXRMemory(static_cast<const uint8_t*>(nullptr), 0, nullptr, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+    #pragma warning(pop)
+    }
+
+    return success;
+}
+
+//-------------------------------------------------------------------------------------
+// LoadFromEXRFile
+bool Test03()
 {
     bool success = true;
 
@@ -212,8 +311,7 @@ bool Test02()
             else
                 ++npass;
 
-            // TESTTEST-
-            SaveScratchImage( L"C:\\Temp\\XXX.DDS", DDS_FLAGS_NONE, image );
+            // TESTTEST- SaveScratchImage( L"C:\\Temp\\XXX.DDS", DDS_FLAGS_NONE, image );
         }
 
         ++ncount;
@@ -232,6 +330,13 @@ bool Test02()
             success = false;
             printe("Failed invalid arg test\n");
         }
+
+        hr = LoadFromEXRFile(L"TestFileDoesNotExist.EXR", nullptr, image);
+        if (hr != HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
+        {
+            success = false;
+            printe("Failed missing file test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+        }
     #pragma warning(pop)
     }
 
@@ -241,7 +346,7 @@ bool Test02()
 
 //-------------------------------------------------------------------------------------
 // SaveToEXRFile
-bool Test03()
+bool Test04()
 {
     bool success = true;
 
@@ -395,6 +500,13 @@ bool Test03()
             success = false;
             printe("Failed invalid arg test\n");
         }
+
+        hr = SaveToEXRFile(nullin, L"TestFileInvalid.exr");
+        if (hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid image arg test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+        }
     #pragma warning(pop)
     }
 
@@ -404,7 +516,7 @@ bool Test03()
 
 //-------------------------------------------------------------------------------------
 // Fuzz
-bool Test04()
+bool Test05()
 {
     bool success = true;
 
