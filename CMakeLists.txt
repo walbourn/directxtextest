@@ -78,6 +78,19 @@ if(BUILD_BVT)
   set_tests_properties(dds PROPERTIES ENVIRONMENT "DIRECTXTEX_MEDIA_PATH=${BVT_MEDIA_PATH}")
 endif()
 
+# EXR
+if(ENABLE_OPENEXR_SUPPORT)
+  list(APPEND TEST_EXES xtexr)
+  add_executable(xtexr exr/exr.cpp exr/directxtest.cpp exr/testutils.cpp)
+  target_include_directories(xtexr PRIVATE ./inc ../Auxiliary)
+  add_test(NAME "exr" COMMAND xtexr)
+  set_tests_properties(exr PROPERTIES LABELS "ImageFormats;EXR")
+  set_tests_properties(exr PROPERTIES TIMEOUT 120)
+  if(BUILD_BVT)
+    set_tests_properties(exr PROPERTIES ENVIRONMENT "DIRECTXTEX_MEDIA_PATH=${BVT_MEDIA_PATH}")
+  endif()
+endif()
+
 # HDR
 list(APPEND TEST_EXES xthdr)
 add_executable(xthdr hdr/hdr.cpp hdr/directxtest.cpp hdr/testutils.cpp)

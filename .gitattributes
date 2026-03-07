@@ -28,3 +28,4 @@
 *.tga binary
 *.tiff binary
 *.wdp binary
+*.exr binary
