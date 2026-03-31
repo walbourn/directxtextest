@@ -5,7 +5,7 @@ cmake_minimum_required (VERSION 3.21)
 
 project (standalonetest
   DESCRIPTION "DirectXTex Standalone Module Test"
-  HOMEPAGE_URL "http://go.microsoft.com/fwlink/?LinkId=248926"
+  HOMEPAGE_URL "https://go.microsoft.com/fwlink/?LinkId=248926"
   LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
