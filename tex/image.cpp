@@ -927,7 +927,7 @@ bool TEXTest::Test21()
             nullptr)));
         if (!hFile)
         {
-            printe("ERROR: Failed opening test media (%zu) (HRESULT %08X)\n", index, GetLastError());
+            printe("ERROR: Failed opening test media (%zu) (HRESULT %08X)\n", index, static_cast<unsigned int>(GetLastError()));
             success = false;
             continue;
         }
@@ -935,7 +935,7 @@ bool TEXTest::Test21()
         LARGE_INTEGER fileSize = {};
         if (!GetFileSizeEx( hFile.get(), &fileSize ) || fileSize.QuadPart > UINT32_MAX)
         {
-            printe( "ERROR: Failed getting test media size (%zu) (HRESULT %08X)\n", index, GetLastError());
+            printe( "ERROR: Failed getting test media size (%zu) (HRESULT %08X)\n", index, static_cast<unsigned int>(GetLastError()));
             success = false;
             continue;
         }
@@ -953,13 +953,15 @@ bool TEXTest::Test21()
         if (!ReadFile(hFile.get(), blob.GetBufferPointer(), static_cast<DWORD>( blob.GetBufferSize() ), &bytesRead, nullptr)
             || bytesRead != blob.GetBufferSize())
         {
-            printe( "ERROR: Failed reading test media (%zu) (HRESULT %08X)\n", index, GetLastError());
+            printe( "ERROR: Failed reading test media (%zu) (HRESULT %08X)\n", index, static_cast<unsigned int>(GetLastError()));
             success = false;
             continue;
         }
 
         ++npass;
     }
+
+    print("%zu images tested, %zu images passed ", ncount, npass );
 
     // invalid args
     Blob blob;
