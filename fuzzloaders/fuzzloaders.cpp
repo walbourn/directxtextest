@@ -254,7 +254,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
                         | (1 << OPT_PPM)
                         | (1 << OPT_TGA)
                         | (1 << OPT_WIC);
-                    mask &= ~(1 << dwOption);
+                    mask &= ~(1u << dwOption);
                     if (dwOptions & mask)
                     {
                         wprintf(L"-dds, -hdr, -pfm, -ppm, -tga, and -wic are mutually exclusive options\n");
