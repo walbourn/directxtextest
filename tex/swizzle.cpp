@@ -50,7 +50,34 @@ namespace
         return S_OK;
     }
 
-    // TODO: Need a 128bpp FillTexture since there's no native 128bpp type
+    template <DXGI_FORMAT F> HRESULT FillTexture128(size_t w, size_t h, size_t d, ScratchImage& result)
+    {
+        if (d != 1)
+            return E_NOTIMPL; // TODO: Need a FillTexture for 3D textures
+
+        HRESULT hr = result.Initialize2D(F, w, h, 1, 1);
+        if (FAILED(hr))
+            return hr;
+
+        auto img = result.GetImage(0, 0, 0);
+        uint8_t val = 1;
+        uint8_t* ptr = img->pixels;
+        if (!ptr)
+            return E_POINTER;
+
+        for (size_t y = 0; y < h; ++y)
+        {
+            uint32_t* p = reinterpret_cast<uint32_t*>(ptr);
+            for (size_t x = 0; x < w; ++x)
+            {
+                *(p++) = val++;
+                *(p++) = val++;
+            }
+            ptr += img->rowPitch;
+        }
+
+        return S_OK;
+    }
 
     // TODO: Need a FillBCTexture for compressed formats
 
@@ -143,7 +170,7 @@ bool TEXTest::Test23()
             success = false;
         }
 
-        // TODO: Mips/other formats, 1D, 3D, Cube
+        // TODO: Mips/other formats, 3D, Cube
     }
 
     // 16bpp
@@ -160,7 +187,7 @@ bool TEXTest::Test23()
             success = false;
         }
 
-        // TODO: Mips/other formats, 1D, 3D, Cube
+        // TODO: Mips/other formats, 3D, Cube
     }
 
     // 32bpp
@@ -177,7 +204,7 @@ bool TEXTest::Test23()
             success = false;
         }
 
-        // TODO: Mips/other formats, 1D, 3D, Cube
+        // TODO: Mips/other formats, 3D, Cube
     }
 
     // 64bpp
@@ -194,17 +221,141 @@ bool TEXTest::Test23()
             success = false;
         }
 
-        // TODO: Mips/other formats, 1D, 3D, Cube
+        // TODO: Mips/other formats, 3D, Cube
     }
 
     // 128bpp
-    // TODO - 64x64
+    {
+        ScratchImage test;
+        HRESULT hr = FillTexture128<DXGI_FORMAT_R32G32_UINT>(64, 64, 1, test);
+        if (FAILED(hr))
+        {
+            printe("ERROR: Failed creating 2D 128bpp test texture (%08X)\n", static_cast<unsigned int>(hr));
+            success = false;
+        }
+        else if (!TestSwizzleUnswizzle(test, 5))
+        {
+            success = false;
+        }
+
+        // TODO: Mips/other formats, 3D, Cube
+    }
 
     // TODO: Non-tile sized images
 
-    // TODO: Unsupported formats
+    // invalid args
+    {
+        ScratchImage test;
+        HRESULT hr = FillTexture<DXGI_FORMAT_R8_UNORM, uint8_t>(256, 256, 1, test);
+        if (FAILED(hr))
+        {
+            printe("ERROR: Failed creating 2D 8bpp test texture (%08X)\n", static_cast<unsigned int>(hr));
+            success = false;
+        }
+        else
+        {
+            ScratchImage swizzle;
+            Image img = *test.GetImage(0, 0, 0);
+            img.format = DXGI_FORMAT_R32G32B32_FLOAT;
+            hr = StandardSwizzle(img, true, swizzle);
+            if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+            {
+                success = false;
+                printe("Failed invalid arg test for unsupported format\n");
+            }
 
-    // TODO: Invalid args
+            TexMetadata mdata = test.GetMetadata();
+            mdata.format = DXGI_FORMAT_R32G32B32_FLOAT;
+            hr = StandardSwizzle(test.GetImages(), test.GetImageCount(), mdata, true, swizzle);
+            if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+            {
+                success = false;
+                printe("Failed invalid arg test for unsupported format [complex]\n");
+            }
+
+            img = *test.GetImage(0, 0, 0);
+            img.width = UINT32_MAX;
+            hr = StandardSwizzle(img, true, swizzle);
+            if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+            {
+                success = false;
+                printe("Failed invalid arg test for image too large\n");
+            }
+
+            mdata = test.GetMetadata();
+            mdata.width = UINT32_MAX;
+            hr = StandardSwizzle(test.GetImages(), test.GetImageCount(), mdata, true, swizzle);
+            if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+            {
+                success = false;
+                printe("Failed invalid arg test for image too large [complex]\n");
+            }
+
+            img = *test.GetImage(0, 0, 0);
+            img.height = 1;
+            hr = StandardSwizzle(img, true, swizzle);
+            if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+            {
+                success = false;
+                printe("Failed invalid arg test for 1D image\n");
+            }
+
+            mdata = test.GetMetadata();
+            mdata.dimension = TEX_DIMENSION_TEXTURE1D;
+            hr = StandardSwizzle(test.GetImages(), test.GetImageCount(), mdata, true, swizzle);
+            if (hr != HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED))
+            {
+                success = false;
+                printe("Failed invalid arg test for 1D image [complex]\n");
+            }
+
+            img = *test.GetImage(0, 0, 0);
+            img.format = DXGI_FORMAT_UNKNOWN;
+            hr = StandardSwizzle(img, true, swizzle);
+            if (hr != E_INVALIDARG)
+            {
+                success = false;
+                printe("Failed invalid arg test for invalid format\n");
+            }
+
+            mdata = test.GetMetadata();
+            mdata.format = DXGI_FORMAT_UNKNOWN;
+            hr = StandardSwizzle(test.GetImages(), test.GetImageCount(), mdata, true, swizzle);
+            if (hr != E_INVALIDARG)
+            {
+                success = false;
+                printe("Failed invalid arg test for invalid format [complex]\n");
+            }
+        }
+    }
+
+    {
+    #pragma warning(push)
+    #pragma warning(disable:6385 6387)
+        ScratchImage image;
+        Image nullin = {};
+        nullin.width = nullin.height = 256;
+        nullin.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        HRESULT hr = StandardSwizzle(nullin, true, image);
+        if (hr != E_INVALIDARG && hr != E_POINTER)
+        {
+            success = false;
+            printe("Failed invalid arg test\n");
+        }
+
+        TexMetadata metadata = {};
+        metadata.width = metadata.height = 256;
+        metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        metadata.depth = metadata.arraySize = metadata.mipLevels = 1;
+        metadata.dimension = TEX_DIMENSION_TEXTURE2D;
+        hr = StandardSwizzle(nullptr, 0, metadata, true, image);
+        if (hr != E_INVALIDARG)
+        {
+            success = false;
+            printe("Failed invalid arg complex test\n");
+        }
+    #pragma warning(pop)
+    }
 
     return success;
 }
