@@ -23,7 +23,7 @@ using namespace DirectX;
 using Microsoft::WRL::ComPtr;
 
 #define ALTMD5(n) (n << 4)
-
+#define ALTMD5_2(n) (n << 16)
 DEFINE_GUID(GUID_WICPixelFormat24bppBGR, 0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x0c);
 
 namespace
@@ -34,6 +34,7 @@ namespace
         FLAGS_WIC2 = 0x1, // Requires WIC factory 2 to function
         FLAGS_GDI = 0x2, // Requires GDI to load
         FLAGS_ALTMD5_MASK = 0xff0,
+        FLAGS_ALTMD5_2_MASK = 0xff0000,
         FLAGS_MQR_ORIENT = 0x1000,
     };
 
@@ -351,7 +352,7 @@ namespace
           { 0x2c,0x79,0x80,0x35,0xc9,0xc0,0x3f,0x12,0x50,0xad,0x6f,0x60,0xa3,0xbb,0xb8,0x0f } },
         { ALTMD5(30), { 512, 512, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"wood.jpg",
           { 0x31,0xc0,0xd2,0x6e,0x8d,0xdc,0x3a,0x60,0xf8,0xda,0x86,0x3d,0x05,0x1a,0x10,0x1b } },
-        { ALTMD5(24),{ 512, 768, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"memorial.jpg",
+        { ALTMD5(24) | ALTMD5_2(35),{ 512, 768, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"memorial.jpg",
           { 0x2b,0x6a,0xd5,0xb3,0x5f,0x9d,0xf3,0x47,0xf8,0xc7,0xd1,0x43,0xe5,0xcb,0xc0,0x82 } },
 
         // Multi-frame example files
@@ -372,11 +373,11 @@ namespace
         { FLAGS_GDI, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8X8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"rgb32table888td.bmp", { 0x7e,0xfe,0x6a,0x59,0xbc,0xdd,0xb4,0xd4,0x35,0x56,0x60,0xab,0x71,0x3b,0x39,0xb9 } },
 
         #ifdef _M_X64
-        { FLAGS_MQR_ORIENT | ALTMD5(8), { 1024, 768, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"Dock.jpg", { 0x38,0x1e,0xd2,0x54,0x50,0xa3,0x7a,0xa9,0x06,0x48,0xce,0x78,0x91,0x77,0x3d,0xce } },
+        { FLAGS_MQR_ORIENT | ALTMD5(8) | ALTMD5_2(36), { 1024, 768, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"Dock.jpg", { 0x38,0x1e,0xd2,0x54,0x50,0xa3,0x7a,0xa9,0x06,0x48,0xce,0x78,0x91,0x77,0x3d,0xce } },
         { ALTMD5(10), { 640, 480, 1, 1, 1, 0, 0, DXGI_FORMAT_R8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"image.127839287370267572.jpg", { 0xde,0xff,0x04,0x06,0x82,0xdc,0x05,0x76,0x66,0x56,0xd0,0x8d,0xfd,0xc3,0x1b,0xaa } },
         { FLAGS_MQR_ORIENT | ALTMD5(11), { 500, 500, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"progressivehuffman.jpg", { 0x5e,0x89,0x13,0x94,0xe5,0x4b,0x58,0xa1,0x03,0xc0,0x13,0xe4,0x32,0xea,0x42,0x8c } },
         #else
-        { FLAGS_MQR_ORIENT | ALTMD5(8), { 1024, 768, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"Dock.jpg", { 0x71,0x31,0x34,0x10,0x14,0xa6,0x7a,0x44,0xc4,0x4c,0xc2,0x52,0x9a,0xcb,0xad,0x08 } },
+        { FLAGS_MQR_ORIENT | ALTMD5(8) | ALTMD5_2(36), { 1024, 768, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"Dock.jpg", { 0x71,0x31,0x34,0x10,0x14,0xa6,0x7a,0x44,0xc4,0x4c,0xc2,0x52,0x9a,0xcb,0xad,0x08 } },
         { ALTMD5(10), { 640, 480, 1, 1, 1, 0, 0, DXGI_FORMAT_R8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"image.127839287370267572.jpg", { 0xa6,0xfb,0x0c,0xae,0x75,0xeb,0xca,0xce,0xed,0x6d,0x88,0x6b,0x2c,0x62,0xb7,0xc4 } },
         { FLAGS_MQR_ORIENT | ALTMD5(11), { 500, 500, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"progressivehuffman.jpg", { 0x57,0x72,0x29,0x57,0x51,0x49,0xf3,0xdc,0xa1,0x4d,0x3b,0x23,0x42,0x49,0x2a,0xf8 } },
         #endif
@@ -415,7 +416,7 @@ namespace
         { FLAGS_NONE, { 1280, 1024, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D  }, MEDIA_PATH L"testpattern.png", { 0x1e,0x85,0xd6,0xef,0xe1,0xa9,0x24,0x58,0xb4,0x00,0x6d,0x12,0xf8,0x1c,0xf6,0x44 } },
         { FLAGS_NONE, { 64, 24, 1, 1, 1, 0, 0, DXGI_FORMAT_R8_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"p99sr.png", {0x32,0xd0,0xe2,0x92,0x5d,0x00,0x43,0xbb,0xaa,0xbd,0xa2,0x52,0xc4,0xcf,0x9f,0xdd} },
         { FLAGS_NONE, { 976, 800, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"chip_lagrange_o3_400_sigm_6p5x50.png", {0x24,0x02,0xa9,0x6b,0x21,0x17,0x30,0xbc,0x65,0x8c,0x3e,0x1d,0x29,0x8d,0x52,0x73} },
-        { FLAGS_MQR_ORIENT | ALTMD5(27), { 512, 683, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"cup_small.jpg", {0x1f,0xa5,0x90,0x49,0xde,0xf7,0x27,0x7e,0x4c,0x8e,0x22,0xdb,0x81,0x70,0xbd,0x11} },
+        { FLAGS_MQR_ORIENT | ALTMD5(27) | ALTMD5_2(37), { 512, 683, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"cup_small.jpg", {0x1f,0xa5,0x90,0x49,0xde,0xf7,0x27,0x7e,0x4c,0x8e,0x22,0xdb,0x81,0x70,0xbd,0x11} },
         { FLAGS_NONE, { 800, 600, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"livingrobot-rear.tiff", {0xf0,0xa0,0x56,0xc3,0xda,0x17,0x4e,0x8a,0x79,0x44,0xa3,0xa1,0x5f,0x96,0x84,0xc2} },
         { FLAGS_NONE, { 2048, 2048, 1, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"tex4.png", {0x37,0x6c,0x85,0xd5,0x20,0x4e,0xab,0xbd,0xf1,0x98,0xa3,0x07,0xde,0x7b,0x2d,0xb1} },
         { FLAGS_NONE, { 21600, 10800, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"earthdiffuse.png", {0x26,0x00,0xa1,0x94,0x33,0xe7,0x36,0x46,0x03,0xb6,0xe0,0xf8,0x1c,0xfb,0x56,0x6c} },
@@ -487,6 +488,9 @@ namespace
         { 0xb3,0x2d,0x7c,0xad,0x16,0x91,0x8f,0x3b,0x41,0xa7,0x7d,0x30,0xfd,0x02,0xe1,0x8f }, // ALTMD5(32)
         { 0x29,0xf8,0x62,0x1a,0xff,0x48,0x83,0x71,0xb7,0xc0,0x66,0x15,0x9e,0x6a,0x1f,0xc0 }, // ALTMD5(33)
         { 0x37,0xf4,0x90,0x1e,0x98,0x53,0x78,0xfa,0x17,0x25,0x9d,0xe5,0xbe,0xc2,0x6c,0xa0 }, // ALTMD5(34)
+        { 0x05,0x4e,0x13,0x9f,0xe8,0xb8,0x38,0xc3,0xd0,0x34,0x64,0x3d,0xa3,0x5b,0x95,0xde }, // ALTMD5_2(35)
+        { 0x71,0x31,0x34,0x10,0x14,0xa6,0x7a,0x44,0xc4,0x4c,0xc2,0x52,0x9a,0xcb,0xad,0x08 }, // ALTMD5_2(36)
+        { 0x2f,0x7c,0x2d,0xa6,0x8e,0x25,0x10,0x26,0xcc,0x05,0xb6,0x70,0x63,0xd2,0x44,0x7b }, // ALTMD5_2(37)
 	};
 
     //-------------------------------------------------------------------------------------
@@ -1133,10 +1137,16 @@ bool WICTest::Test03()
                 bool pass = true;
 
                 const uint8_t* expected2 = nullptr;
-                if ( g_TestMedia[index].options & FLAGS_ALTMD5_MASK )
+                const uint8_t* expected3 = nullptr;
+
+                if (g_TestMedia[index].options & FLAGS_ALTMD5_MASK)
                 {
-                    // Some MD5s are different on WIC2
                     expected2 = g_AltMD5[ ((g_TestMedia[index].options & FLAGS_ALTMD5_MASK) >> 4) - 1 ].md5;
+                }
+
+                if (g_TestMedia[index].options & FLAGS_ALTMD5_2_MASK)
+                {
+                    expected3 = g_AltMD5[ ((g_TestMedia[index].options & FLAGS_ALTMD5_2_MASK) >> 16) - 1 ].md5;
                 }
 
                 uint8_t digest[16];
@@ -1149,6 +1159,7 @@ bool WICTest::Test03()
                 }
                 else if ( memcmp( digest, g_TestMedia[index].md5, 16 ) != 0
                           && (!expected2 || memcmp( digest, expected2, 16 ) != 0 )
+                          && (!expected3 || memcmp( digest, expected3, 16 ) != 0 )
                           && (index != 60))
                 {
                     success = false;
@@ -1159,6 +1170,10 @@ bool WICTest::Test03()
                     if ( expected2 )
                     {
                         printdigest( "expected2", expected2 );
+                    }
+                    if ( expected3 )
+                    {
+                        printdigest( "expected3", expected3 );
                     }
                 }
 
@@ -1272,10 +1287,16 @@ bool WICTest::Test04()
             bool pass = true;
 
             const uint8_t* expected2 = nullptr;
-            if ( g_TestMedia[index].options & FLAGS_ALTMD5_MASK )
+            const uint8_t* expected3 = nullptr;
+
+            if (g_TestMedia[index].options & FLAGS_ALTMD5_MASK)
             {
-                // Some MD5s are different on WIC2
                 expected2 = g_AltMD5[ ((g_TestMedia[index].options & FLAGS_ALTMD5_MASK) >> 4) - 1 ].md5;
+            }
+
+            if (g_TestMedia[index].options & FLAGS_ALTMD5_2_MASK)
+            {
+                expected3 = g_AltMD5[ ((g_TestMedia[index].options & FLAGS_ALTMD5_2_MASK) >> 16) - 1 ].md5;
             }
 
             uint8_t digest[16];
@@ -1288,6 +1309,7 @@ bool WICTest::Test04()
             }
             else if ( memcmp( digest, g_TestMedia[index].md5, 16 ) != 0
                       && (!expected2 || memcmp( digest, expected2, 16 ) != 0 )
+                      && (!expected3 || memcmp( digest, expected3, 16 ) != 0 )
                       && (index != 60) )
             {
                 success = false;
@@ -1298,6 +1320,10 @@ bool WICTest::Test04()
                 if ( expected2 )
                 {
                     printdigest( "expected2", expected2 );
+                }
+                if ( expected3 )
+                {
+                    printdigest( "expected3", expected3 );
                 }
             }
 
