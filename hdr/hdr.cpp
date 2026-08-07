@@ -163,7 +163,24 @@ bool Test01()
     #pragma warning(push)
     #pragma warning(disable:6385 6387)
         TexMetadata metadata;
-        HRESULT hr = GetMetadataFromHDRMemory(static_cast<const uint8_t*>(nullptr), 0, metadata);
+
+        const char* hdrInvalidOrientation1 = "#?RADIANCE\nFORMAT=32-bit_rle_rgbe\n\n+Y 16 -X 16\n- 1 - 1 1 1";
+        HRESULT hr = GetMetadataFromHDRMemory(reinterpret_cast<const uint8_t*>(hdrInvalidOrientation1), strlen(hdrInvalidOrientation1), metadata);
+        if (SUCCEEDED(hr))
+        {
+            success = false;
+            printe("Failed HDR +Y -X orientation test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+        }
+
+        const char* hdrInvalidOrientation2 = "#?RADIANCE\nFORMAT=32-bit_rle_rgbe\n\n-X 16 +Y 16\n- 1 - 1 1 1";
+        hr = GetMetadataFromHDRMemory(reinterpret_cast<const uint8_t*>(hdrInvalidOrientation2), strlen(hdrInvalidOrientation2), metadata);
+        if (SUCCEEDED(hr))
+        {
+            success = false;
+            printe("Failed HDR -X +Y orientation test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+        }
+
+        hr = GetMetadataFromHDRMemory(static_cast<const uint8_t*>(nullptr), 0, metadata);
         if (hr != E_INVALIDARG)
         {
             success = false;

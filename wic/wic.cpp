@@ -1323,6 +1323,28 @@ bool WICTest::Test04()
             success = false;
             printe("Failed invalid fname test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
         }
+
+        // Test extra flags with a valid file
+        hr = LoadFromWICFile(MEDIA_PATH L"fishingboat.jpg", WIC_FLAGS_NO_16BPP, nullptr, image);
+        if (FAILED(hr))
+        {
+            success = false;
+            printe("Failed LoadFromWICFile with WIC_FLAGS_NO_16BPP (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+        }
+        
+        hr = LoadFromWICFile(MEDIA_PATH L"fishingboat.jpg", WIC_FLAGS_IGNORE_SRGB, nullptr, image);
+        if (FAILED(hr))
+        {
+            success = false;
+            printe("Failed LoadFromWICFile with WIC_FLAGS_IGNORE_SRGB (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+        }
+
+        hr = LoadFromWICFile(MEDIA_PATH L"fishingboat.jpg", WIC_FLAGS_NO_X2_BIAS, nullptr, image);
+        if (FAILED(hr))
+        {
+            success = false;
+            printe("Failed LoadFromWICFile with WIC_FLAGS_NO_X2_BIAS (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+        }
     #pragma warning(pop)
     }
 
@@ -1684,6 +1706,25 @@ bool WICTest::Test05()
                 {
                     ++npass;
                 }
+            }
+
+            // Custom properties for MF
+            std::function<void(IPropertyBag2*)> customProps = [](IPropertyBag2* props)
+            {
+                PROPBAG2 options = { 0 };
+                options.pstrName = const_cast<LPOLESTR>(L"TiffCompressionMethod");
+                VARIANT varValue;
+                VariantInit(&varValue);
+                varValue.vt = VT_UI1;
+                varValue.bVal = WICTiffCompressionNone;
+                (void)props->Write(1, &options, &varValue);
+            };
+
+            hr = SaveToWICMemory(image.GetImages(), image.GetImageCount(), WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_TIFF), blob, customProps);
+            if (FAILED(hr))
+            {
+                success = false;
+                printe("Failed writing mf wic with custom props to memory (HRESULT %08X)\n", static_cast<unsigned int>(hr));
             }
 
             // First frame only

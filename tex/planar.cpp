@@ -305,5 +305,25 @@ bool TEXTest::Test15()
     #pragma warning(pop)
     }
 
+    // Test complex ConvertToSinglePlane
+    {
+        ScratchImage srcimage;
+        if (SUCCEEDED(srcimage.Initialize2D(DXGI_FORMAT_NV12, 16, 16, 4, 1)))
+        {
+            ScratchImage dstimage;
+            HRESULT hr = ConvertToSinglePlane(srcimage.GetImages(), srcimage.GetImageCount(), srcimage.GetMetadata(), dstimage);
+            if (FAILED(hr))
+            {
+                success = false;
+                printe("Failed ConvertToSinglePlane complex (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+            }
+            else if (dstimage.GetImageCount() != 4)
+            {
+                success = false;
+                printe("Failed ConvertToSinglePlane complex array size mismatch\n");
+            }
+        }
+    }
+
     return success;
 }

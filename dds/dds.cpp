@@ -87,6 +87,7 @@ namespace
         { FLAGS_BGR,{ 32, 32, 4, 1, 1, 0, 0, DXGI_FORMAT_B8G8R8X8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol888x.dds",{ 0x82,0x4e,0x17,0xf5,0x14,0x34,0x0c,0x52,0x09,0x2a,0x02,0x07,0x07,0x1c,0xbf,0x8c } },
         { FLAGS_BGR,{ 32, 32, 4, 1, 6, 0, 0, DXGI_FORMAT_B8G8R8X8_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvol888xmip.dds",{ 0x63,0xad,0xf1,0x29,0xe5,0x73,0x54,0x32,0x35,0x72,0xde,0xc1,0x2f,0xc2,0x10,0x06 } },
         { FLAGS_NONE,{ 32, 32, 4, 1, 6, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvoldxt1mip.dds",{ 0xc9,0x99,0x74,0x0b,0x8f,0x4d,0x95,0x53,0xc6,0x88,0x92,0xe9,0xbc,0xae,0x23,0x6f } },
+        { FLAGS_BAD_TAILS,{ 32, 32, 4, 1, 6, 0, 0, DXGI_FORMAT_BC1_UNORM, TEX_DIMENSION_TEXTURE3D }, MEDIA_PATH L"testvoldxt1mip.dds",{ 0xc9,0x99,0x74,0x0b,0x8f,0x4d,0x95,0x53,0xc6,0x88,0x92,0xe9,0xbc,0xae,0x23,0x6f } },
 
         { FLAGS_NONE,{ 200, 150, 1, 1, 1, 0, TEX_ALPHA_MODE_OPAQUE, DXGI_FORMAT_B5G5R5A1_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"test555.dds",{ 0x00,0x5c,0x5d,0x42,0x6c,0xed,0x64,0xc4,0xfd,0x2d,0xc5,0x67,0x89,0x2f,0x34,0x8c } }, // D3DFMT_X1R5G5B5
 
@@ -2160,6 +2161,42 @@ bool Test03()
     #pragma warning(pop)
     }
 
+    // Test Force RGB for BGR Typeless and SRGB formats
+    {
+        ScratchImage simg;
+        if (SUCCEEDED(simg.Initialize2D(DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, 16, 16, 1, 1)))
+        {
+            Blob blob;
+            if (SUCCEEDED(SaveToDDSMemory(simg.GetImages(), simg.GetImageCount(), simg.GetMetadata(), DDS_FLAGS_FORCE_DX10_EXT, blob)))
+            {
+                TexMetadata meta;
+                ScratchImage simg2;
+                HRESULT hr = LoadFromDDSMemory(blob.GetBufferPointer(), blob.GetBufferSize(), DDS_FLAGS_FORCE_RGB, &meta, simg2);
+                if (FAILED(hr) || meta.format != DXGI_FORMAT_R8G8B8A8_UNORM_SRGB)
+                {
+                    success = false;
+                    printe("Failed LoadFromDDSMemory FORCE_RGB for B8G8R8A8_UNORM_SRGB\n");
+                }
+            }
+        }
+        
+        if (SUCCEEDED(simg.Initialize2D(DXGI_FORMAT_B8G8R8X8_TYPELESS, 16, 16, 1, 1)))
+        {
+            Blob blob;
+            if (SUCCEEDED(SaveToDDSMemory(simg.GetImages(), simg.GetImageCount(), simg.GetMetadata(), DDS_FLAGS_FORCE_DX10_EXT, blob)))
+            {
+                TexMetadata meta;
+                ScratchImage simg2;
+                HRESULT hr = LoadFromDDSMemory(blob.GetBufferPointer(), blob.GetBufferSize(), DDS_FLAGS_FORCE_RGB, &meta, simg2);
+                if (FAILED(hr) || meta.format != DXGI_FORMAT_R8G8B8A8_TYPELESS)
+                {
+                    success = false;
+                    printe("Failed LoadFromDDSMemory FORCE_RGB for B8G8R8X8_TYPELESS\n");
+                }
+            }
+        }
+    }
+
     return success;
 }
 
@@ -2763,6 +2800,70 @@ bool Test04()
 
         metadata.format = DXGI_FORMAT_R8G8B8A8_UNORM;
     #pragma warning(pop)
+    }
+
+    // Test 3D 16-bit (5:6:5, 5:5:5:1, 4:4:4:4)
+    {
+        DXGI_FORMAT formats[] = { DXGI_FORMAT_B5G6R5_UNORM, DXGI_FORMAT_B5G5R5A1_UNORM, DXGI_FORMAT_B4G4R4A4_UNORM };
+        for (auto fmt : formats)
+        {
+            ScratchImage simg;
+            if (SUCCEEDED(simg.Initialize3D(fmt, 16, 16, 4, 1, 1)))
+            {
+                Blob blob;
+                if (SUCCEEDED(SaveToDDSMemory(simg.GetImages(), simg.GetImageCount(), simg.GetMetadata(), DDS_FLAGS_NONE, blob)))
+                {
+                    TexMetadata meta;
+                    ScratchImage simg2;
+                    HRESULT hr = LoadFromDDSMemory(blob.GetBufferPointer(), blob.GetBufferSize(), DDS_FLAGS_NONE, &meta, simg2);
+                    if (FAILED(hr) || meta.format != fmt || meta.dimension != TEX_DIMENSION_TEXTURE3D)
+                    {
+                        success = false;
+                        printe("Failed 3D 16-bit test for format %d\n", fmt);
+                    }
+                }
+            }
+        }
+    }
+
+    // Test DDS_FLAGS_FORCE_DXT5_RXGB
+    {
+        ScratchImage simg;
+        if (SUCCEEDED(simg.Initialize2D(DXGI_FORMAT_BC3_UNORM, 16, 16, 1, 1)))
+        {
+            Blob blob;
+            if (SUCCEEDED(SaveToDDSMemory(simg.GetImages(), simg.GetImageCount(), simg.GetMetadata(), DDS_FLAGS_FORCE_DXT5_RXGB, blob)))
+            {
+                TexMetadata meta;
+                ScratchImage simg2;
+                HRESULT hr = LoadFromDDSMemory(blob.GetBufferPointer(), blob.GetBufferSize(), DDS_FLAGS_NONE, &meta, simg2);
+                if (FAILED(hr))
+                {
+                    success = false;
+                    printe("Failed LoadFromDDSMemory for FORCE_DXT5_RXGB\n");
+                }
+            }
+        }
+    }
+
+    // Test DDS_FLAGS_FORCE_DX9_LEGACY
+    {
+        ScratchImage simg;
+        if (SUCCEEDED(simg.Initialize2D(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 16, 16, 1, 1)))
+        {
+            Blob blob;
+            if (SUCCEEDED(SaveToDDSMemory(simg.GetImages(), simg.GetImageCount(), simg.GetMetadata(), DDS_FLAGS_FORCE_DX9_LEGACY, blob)))
+            {
+                TexMetadata meta;
+                ScratchImage simg2;
+                HRESULT hr = LoadFromDDSMemory(blob.GetBufferPointer(), blob.GetBufferSize(), DDS_FLAGS_NONE, &meta, simg2);
+                if (FAILED(hr))
+                {
+                    success = false;
+                    printe("Failed LoadFromDDSMemory for FORCE_DX9_LEGACY\n");
+                }
+            }
+        }
     }
 
     return success;

@@ -1425,6 +1425,31 @@ bool Test04()
     #pragma warning(pop)
     }
 
+    // Test Write RGBA, SRGB
+    {
+        ScratchImage simg;
+        if (SUCCEEDED(simg.Initialize2D(DXGI_FORMAT_R8G8B8A8_UNORM, 16, 16, 1, 1)))
+        {
+            Blob blob;
+            HRESULT hr = SaveToTGAMemory(*simg.GetImage(0, 0, 0), TGA_FLAGS_NONE, blob, &simg.GetMetadata());
+            if (FAILED(hr))
+            {
+                success = false;
+                printe("Failed Write RGBA to TGA (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+            }
+        }
+        if (SUCCEEDED(simg.Initialize2D(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 16, 16, 1, 1)))
+        {
+            Blob blob;
+            HRESULT hr = SaveToTGAMemory(*simg.GetImage(0, 0, 0), TGA_FLAGS_NONE, blob, &simg.GetMetadata());
+            if (FAILED(hr))
+            {
+                success = false;
+                printe("Failed Write SRGB to TGA (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+            }
+        }
+    }
+
     return success;
 }
 
