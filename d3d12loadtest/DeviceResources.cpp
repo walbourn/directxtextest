@@ -12,6 +12,9 @@ using namespace DX;
 
 using Microsoft::WRL::ComPtr;
 
+extern bool g_useWarp;
+extern bool g_headless;
+
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"
 #pragma clang diagnostic ignored "-Wswitch-enum"
@@ -279,7 +282,7 @@ void DeviceResources::CreateDeviceResources()
 // These resources need to be recreated every time the window size is changed.
 void DeviceResources::CreateWindowSizeDependentResources()
 {
-    if (!m_window)
+    if (!m_window && !g_headless)
     {
         throw std::logic_error("Call SetWindow with a valid Win32 window handle");
     }
@@ -307,7 +310,7 @@ void DeviceResources::CreateWindowSizeDependentResources()
             m_backBufferCount,
             backBufferWidth,
             backBufferHeight,
-            backBufferFormat,
+            m_backBufferFormat,
             (m_options & c_AllowTearing) ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0u
             );
 
@@ -331,13 +334,13 @@ void DeviceResources::CreateWindowSizeDependentResources()
             ThrowIfFailed(hr);
         }
     }
-    else
+    else if (!g_headless)
     {
         // Create a descriptor for the swap chain.
         DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
         swapChainDesc.Width = backBufferWidth;
         swapChainDesc.Height = backBufferHeight;
-        swapChainDesc.Format = backBufferFormat;
+        swapChainDesc.Format = m_backBufferFormat;
         swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
         swapChainDesc.BufferCount = m_backBufferCount;
         swapChainDesc.SampleDesc.Count = 1;
@@ -366,6 +369,28 @@ void DeviceResources::CreateWindowSizeDependentResources()
         // This class does not support exclusive full-screen mode and prevents DXGI from responding to the ALT+ENTER shortcut
         ThrowIfFailed(m_dxgiFactory->MakeWindowAssociation(m_window, DXGI_MWA_NO_ALT_ENTER));
     }
+    else
+    {
+        // Headless mode: Create standalone render targets
+        D3D12_RESOURCE_DESC desc = {};
+        desc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+        desc.Width = backBufferWidth;
+        desc.Height = backBufferHeight;
+        desc.DepthOrArraySize = 1;
+        desc.MipLevels = 1;
+        desc.Format = m_backBufferFormat;
+        desc.SampleDesc.Count = 1;
+        desc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+        desc.Flags = D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
+
+        D3D12_HEAP_PROPERTIES heapProps = {};
+        heapProps.Type = D3D12_HEAP_TYPE_DEFAULT;
+
+        for (UINT n = 0; n < m_backBufferCount; ++n)
+        {
+            ThrowIfFailed(m_d3dDevice->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATE_RENDER_TARGET, nullptr, IID_PPV_ARGS(&m_renderTargets[n])));
+        }
+    }
 
     // Handle color space settings for HDR
     UpdateColorSpace();
@@ -374,7 +399,10 @@ void DeviceResources::CreateWindowSizeDependentResources()
     // and create render target views for each of them.
     for (UINT n = 0; n < m_backBufferCount; n++)
     {
-        ThrowIfFailed(m_swapChain->GetBuffer(n, IID_PPV_ARGS(m_renderTargets[n].GetAddressOf())));
+        if (m_swapChain)
+        {
+            ThrowIfFailed(m_swapChain->GetBuffer(n, IID_PPV_ARGS(m_renderTargets[n].GetAddressOf())));
+        }
 
         wchar_t name[25] = {};
         swprintf_s(name, L"Render target %u", n);
@@ -396,7 +424,14 @@ void DeviceResources::CreateWindowSizeDependentResources()
     }
 
     // Reset the index to the current back buffer.
-    m_backBufferIndex = m_swapChain->GetCurrentBackBufferIndex();
+    if (m_swapChain)
+    {
+        m_backBufferIndex = m_swapChain->GetCurrentBackBufferIndex();
+    }
+    else
+    {
+        m_backBufferIndex = 0;
+    }
 
     if (m_depthBufferFormat != DXGI_FORMAT_UNKNOWN)
     {
@@ -468,7 +503,7 @@ void DeviceResources::SetWindow(HWND window, int width, int height) noexcept
 // This method is called when the Win32 window changes size.
 bool DeviceResources::WindowSizeChanged(int width, int height)
 {
-    if (!m_window)
+    if (!m_window && !g_headless)
         return false;
 
     RECT newRc;
@@ -564,19 +599,27 @@ void DeviceResources::Present(D3D12_RESOURCE_STATES beforeState)
     ThrowIfFailed(m_commandList->Close());
     m_commandQueue->ExecuteCommandLists(1, CommandListCast(m_commandList.GetAddressOf()));
 
-    HRESULT hr;
-    if (m_options & c_AllowTearing)
+    if (g_headless)
     {
-        // Recommended to always use tearing if supported when using a sync interval of 0.
-        // Note this will fail if in true 'fullscreen' mode.
-        hr = m_swapChain->Present(0, DXGI_PRESENT_ALLOW_TEARING);
+        MoveToNextFrame();
+        return;
     }
-    else
+
+    HRESULT hr = E_FAIL;
+    if (m_swapChain)
     {
-        // The first argument instructs DXGI to block until VSync, putting the application
-        // to sleep until the next VSync. This ensures we don't waste any cycles rendering
-        // frames that will never be displayed to the screen.
-        hr = m_swapChain->Present(1, 0);
+        if (m_options & c_AllowTearing)
+        {
+            // Recommended to always use tearing if supported when using a sync interval of 0.
+            hr = m_swapChain->Present(0, DXGI_PRESENT_ALLOW_TEARING);
+        }
+        else
+        {
+            // The first argument instructs DXGI to block until VSync, putting the application
+            // to sleep until the next VSync. This ensures we don't waste any cycles rendering
+            // frames that will never be displayed to the screen.
+            hr = m_swapChain->Present(1, 0);
+        }
     }
 
     // If the device was reset we must completely reinitialize the renderer.
@@ -632,7 +675,14 @@ void DeviceResources::MoveToNextFrame()
     ThrowIfFailed(m_commandQueue->Signal(m_fence.Get(), currentFenceValue));
 
     // Update the back buffer index.
-    m_backBufferIndex = m_swapChain->GetCurrentBackBufferIndex();
+    if (m_swapChain)
+    {
+        m_backBufferIndex = m_swapChain->GetCurrentBackBufferIndex();
+    }
+    else
+    {
+        m_backBufferIndex = (m_backBufferIndex + 1) % m_backBufferCount;
+    }
 
     // If the next frame is not ready to be rendered yet, wait until it is ready.
     if (m_fence->GetCompletedValue() < m_fenceValues[m_backBufferIndex])
@@ -653,41 +703,6 @@ void DeviceResources::GetAdapter(IDXGIAdapter1** ppAdapter)
 
     ComPtr<IDXGIAdapter1> adapter;
 
-    ComPtr<IDXGIFactory6> factory6;
-    HRESULT hr = m_dxgiFactory.As(&factory6);
-    if (SUCCEEDED(hr))
-    {
-        for (UINT adapterIndex = 0;
-            SUCCEEDED(factory6->EnumAdapterByGpuPreference(
-                adapterIndex,
-                DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE,
-                IID_PPV_ARGS(adapter.ReleaseAndGetAddressOf())));
-            adapterIndex++)
-        {
-            DXGI_ADAPTER_DESC1 desc;
-            ThrowIfFailed(adapter->GetDesc1(&desc));
-
-            if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
-            {
-                // Don't select the Basic Render Driver adapter.
-                continue;
-            }
-
-            // Check to see if the adapter supports Direct3D 12, but don't create the actual device yet.
-            if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), m_d3dMinFeatureLevel, __uuidof(ID3D12Device), nullptr)))
-            {
-#ifdef _DEBUG
-                wchar_t buff[256] = {};
-                swprintf_s(buff, L"Direct3D Adapter (%u): VID:%04X, PID:%04X - %ls\n", adapterIndex, desc.VendorId, desc.DeviceId, desc.Description);
-                OutputDebugStringW(buff);
-#endif
-                break;
-            }
-        }
-    }
-
-    if (!adapter)
-    {
         for (UINT adapterIndex = 0;
             SUCCEEDED(m_dxgiFactory->EnumAdapters1(
                 adapterIndex,

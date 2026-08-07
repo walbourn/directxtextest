@@ -24,6 +24,8 @@ namespace
     std::unique_ptr<Game> g_game;
     bool g_testTimer = false;
 }
+bool g_useWarp = false;
+bool g_headless = false;
 
 LPCWSTR g_szAppName = L"D3D11LoadTest";
 
@@ -326,6 +328,14 @@ void ParseCommandLine(_In_ LPWSTR lpCmdLine)
             if (!_wcsicmp(pArg, L"ctest"))
             {
                 g_testTimer = true;
+            }
+            else if (!_wcsicmp(pArg, L"warp"))
+            {
+                g_useWarp = true;
+            }
+            else if (!_wcsicmp(pArg, L"headless"))
+            {
+                g_headless = true;
             }
         }
     }
