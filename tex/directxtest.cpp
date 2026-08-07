@@ -25,7 +25,7 @@ struct TestInfo
 TestInfo g_Tests[] =
 {
 #if 1
-    { "StandardSwizzle", TEXTest::Test20 },
+    { "StandardSwizzle", TEXTest::Test23 },
 #else
     { "Internal", TEXTest::Test00},
     { "Is*/BP*/FDT", TEXTest::Test01 },
@@ -52,8 +52,7 @@ TestInfo g_Tests[] =
     { "ConvertToSinglePlane", TEXTest::Test15 },
     { "ComputeNormalMap", TEXTest::Test11 },
     { "PremultiplyAlpha", TEXTest::Test13 },
-    { "StandardSwizzle", TEXTest::Test20 },
-#endif
+    { "StandardSwizzle", TEXTest::Test23 },
 #endif // #if 1
 };
 

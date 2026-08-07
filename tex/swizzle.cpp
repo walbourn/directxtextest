@@ -25,7 +25,7 @@ namespace
     template <DXGI_FORMAT F, typename T> HRESULT FillTexture(size_t w, size_t h, size_t d, ScratchImage& result)
     {
         if (d != 1)
-            return E_NOTIMPL;
+            return E_NOTIMPL; // TODO: Need a FillTexture for 3D textures
 
         HRESULT hr = result.Initialize2D(F, w, h, 1, 1);
         if (FAILED(hr))
@@ -50,13 +50,17 @@ namespace
         return S_OK;
     }
 
-    bool TestSwizzleUnswizzle(const ScratchImage& image)
+    // TODO: Need a 128bpp FillTexture since there's no native 128bpp type
+
+    // TODO: Need a FillBCTexture for compressed formats
+
+    bool TestSwizzleUnswizzle(const ScratchImage& image, int instance)
     {
         uint8_t digest[16];
         HRESULT hr = MD5Checksum(image, digest, 1);
         if (FAILED(hr))
         {
-            printe("ERROR: Failed creating original digest (%08X)\n", static_cast<unsigned int>(hr));
+            printe("ERROR: Failed creating original digest %d (%08X)\n", instance, static_cast<unsigned int>(hr));
             return false;
         }
         else
@@ -65,7 +69,7 @@ namespace
             hr = StandardSwizzle(*image.GetImage(0, 0, 0), true, swizzle);
             if (FAILED(hr))
             {
-                printe("ERROR: Failed testing swizzle (%08X)\n", static_cast<unsigned int>(hr));
+                printe("ERROR: Failed testing swizzle %d (%08X)\n", instance, static_cast<unsigned int>(hr));
                 return false;
             }
             else
@@ -74,12 +78,12 @@ namespace
                 hr = MD5Checksum(swizzle, sdigest, 1);
                 if (FAILED(hr))
                 {
-                    printe("ERROR: Failed creating swizzle digest (%08X)\n", static_cast<unsigned int>(hr));
+                    printe("ERROR: Failed creating swizzle digest %d (%08X)\n", instance, static_cast<unsigned int>(hr));
                     return false;
                 }
                 else if (memcmp(digest, sdigest, 16) == 0)
                 {
-                    printe("ERROR: Swizzle operation failed (%08X)\n", static_cast<unsigned int>(hr));
+                    printe("ERROR: Swizzle operation failed %d (%08X)\n", instance, static_cast<unsigned int>(hr));
                     return false;
                 }
                 else
@@ -88,7 +92,7 @@ namespace
                     hr = StandardSwizzle(*swizzle.GetImage(0, 0, 0), false, unswizzle);
                     if (FAILED(hr))
                     {
-                        printe("ERROR: Failed testing unswizzle (%08X)\n", static_cast<unsigned int>(hr));
+                        printe("ERROR: Failed testing unswizzle %d (%08X)\n", instance, static_cast<unsigned int>(hr));
                         return false;
                     }
                     else
@@ -97,17 +101,17 @@ namespace
                         hr = MD5Checksum(unswizzle, usdigest, 1);
                         if (FAILED(hr))
                         {
-                            printe("ERROR: Failed creating unswizzle digest (%08X)\n", static_cast<unsigned int>(hr));
+                            printe("ERROR: Failed creating unswizzle digest %d (%08X)\n", instance, static_cast<unsigned int>(hr));
                             return false;
                         }
                         else if (memcmp(sdigest, usdigest, 16) == 0)
                         {
-                            printe("ERROR: Deswizzle operation failed (%08X)\n", static_cast<unsigned int>(hr));
+                            printe("ERROR: Deswizzle operation failed %d (%08X)\n", instance, static_cast<unsigned int>(hr));
                             return false;
                         }
                         else if (memcmp(digest, usdigest, 16) != 0)
                         {
-                            printe("ERROR: Swizzle->Deswizzle operation failed (%08X)\n", static_cast<unsigned int>(hr));
+                            printe("ERROR: Swizzle->Deswizzle operation failed %d (%08X)\n", instance, static_cast<unsigned int>(hr));
                             return false;
                         }
                     }
@@ -121,36 +125,86 @@ namespace
 
 //-------------------------------------------------------------------------------------
 // StandardSwizzle
-bool TEXTest::Test20()
+bool TEXTest::Test23()
 {
     bool success = true;
 
     // 8bpp
     {
         ScratchImage test;
-        HRESULT hr = FillTexture<DXGI_FORMAT_R8_UNORM,uint8_t>(32, 32, 1, test);
+        HRESULT hr = FillTexture<DXGI_FORMAT_R8_UNORM,uint8_t>(256, 256, 1, test);
         if (FAILED(hr))
         {
-            printe("ERROR: Failed creating 2D 8bp test texture (%08X)\n", static_cast<unsigned int>(hr));
+            printe("ERROR: Failed creating 2D 8bpp test texture (%08X)\n", static_cast<unsigned int>(hr));
             success = false;
         }
-        else if (!TestSwizzleUnswizzle(test))
+        else if (!TestSwizzleUnswizzle(test, 1))
         {
             success = false;
         }
+
+        // TODO: Mips/other formats, 1D, 3D, Cube
     }
 
     // 16bpp
-    // TODO -
+    {
+        ScratchImage test;
+        HRESULT hr = FillTexture<DXGI_FORMAT_R16_UNORM, uint16_t>(256, 128, 1, test);
+        if (FAILED(hr))
+        {
+            printe("ERROR: Failed creating 2D 16bpp test texture (%08X)\n", static_cast<unsigned int>(hr));
+            success = false;
+        }
+        else if (!TestSwizzleUnswizzle(test, 2))
+        {
+            success = false;
+        }
+
+        // TODO: Mips/other formats, 1D, 3D, Cube
+    }
 
     // 32bpp
-    // TODO -
+    {
+        ScratchImage test;
+        HRESULT hr = FillTexture<DXGI_FORMAT_R32_UINT, uint32_t>(128, 128, 1, test);
+        if (FAILED(hr))
+        {
+            printe("ERROR: Failed creating 2D 32bpp test texture (%08X)\n", static_cast<unsigned int>(hr));
+            success = false;
+        }
+        else if (!TestSwizzleUnswizzle(test, 3))
+        {
+            success = false;
+        }
+
+        // TODO: Mips/other formats, 1D, 3D, Cube
+    }
 
     // 64bpp
-    // TODO -
+    {
+        ScratchImage test;
+        HRESULT hr = FillTexture<DXGI_FORMAT_R32G32_UINT, uint64_t>(128, 64, 1, test);
+        if (FAILED(hr))
+        {
+            printe("ERROR: Failed creating 2D 64bpp test texture (%08X)\n", static_cast<unsigned int>(hr));
+            success = false;
+        }
+        else if (!TestSwizzleUnswizzle(test, 4))
+        {
+            success = false;
+        }
+
+        // TODO: Mips/other formats, 1D, 3D, Cube
+    }
 
     // 128bpp
-    // TODO -
+    // TODO - 64x64
+
+    // TODO: Non-tile sized images
+
+    // TODO: Unsupported formats
+
+    // TODO: Invalid args
 
     return success;
 }
