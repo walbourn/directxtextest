@@ -79,7 +79,61 @@ namespace
         return S_OK;
     }
 
-    // TODO: Need a FillBCTexture for compressed formats
+    template <DXGI_FORMAT F, bool is128bpp> HRESULT FillBCTextureBC(size_t w, size_t h, size_t d, ScratchImage& result)
+    {
+        if (d != 1)
+            return E_NOTIMPL; // TODO: Need a FillTexture for 3D textures
+
+        HRESULT hr = result.Initialize2D(F, w, h, 1, 1);
+        if (FAILED(hr))
+            return hr;
+
+        auto img = result.GetImage(0, 0, 0);
+        uint8_t val = 1;
+        uint8_t* ptr = img->pixels;
+        if (!ptr)
+            return E_POINTER;
+
+        size_t blocks = (w + 3) / 4;
+        size_t rows = (h + 3) / 4;
+
+    #if (__cplusplus >= 201703L)
+        if constexpr (is128bpp)
+    #else
+        if (is128bpp)
+        #endif
+        {
+            for (size_t y = 0; y < rows; ++y)
+            {
+                uint8_t* p = ptr;
+                for (size_t x = 0; x < blocks; ++x)
+                {
+                    for (size_t j = 0; j < 16; ++j)
+                    {
+                        *(p++) = val++;
+                    }
+                }
+                ptr += img->rowPitch;
+            }
+        }
+        else
+        {
+            for (size_t y = 0; y < rows; ++y)
+            {
+                uint8_t* p = ptr;
+                for (size_t x = 0; x < blocks; ++x)
+                {
+                    for (size_t j = 0; j < 8; ++j)
+                    {
+                        *(p++) = val++;
+                    }
+                }
+                ptr += img->rowPitch;
+            }
+        }
+
+        return S_OK;
+    }
 
     bool TestSwizzleUnswizzle(const ScratchImage& image, int instance)
     {
@@ -224,16 +278,48 @@ bool TEXTest::Test23()
         // TODO: Mips/other formats, 3D, Cube
     }
 
+    {
+        ScratchImage test;
+        HRESULT hr = FillBCTextureBC<DXGI_FORMAT_BC1_UNORM, false>(128, 64, 1, test);
+        if (FAILED(hr))
+        {
+            printe("ERROR: Failed creating 2D 64bpp bc test texture (%08X)\n", static_cast<unsigned int>(hr));
+            success = false;
+        }
+        else if (!TestSwizzleUnswizzle(test, 5))
+        {
+            success = false;
+        }
+
+        // TODO: Mips/other formats, 3D, Cube
+    }
+
     // 128bpp
     {
         ScratchImage test;
-        HRESULT hr = FillTexture128<DXGI_FORMAT_R32G32_UINT>(64, 64, 1, test);
+        HRESULT hr = FillTexture128<DXGI_FORMAT_R32G32B32A32_UINT>(64, 64, 1, test);
         if (FAILED(hr))
         {
             printe("ERROR: Failed creating 2D 128bpp test texture (%08X)\n", static_cast<unsigned int>(hr));
             success = false;
         }
-        else if (!TestSwizzleUnswizzle(test, 5))
+        else if (!TestSwizzleUnswizzle(test, 6))
+        {
+            success = false;
+        }
+
+        // TODO: Mips/other formats, 3D, Cube
+    }
+
+    {
+        ScratchImage test;
+        HRESULT hr = FillBCTextureBC<DXGI_FORMAT_BC3_UNORM, true>(64, 64, 1, test);
+        if (FAILED(hr))
+        {
+            printe("ERROR: Failed creating 2D 128bpp bc test texture (%08X)\n", static_cast<unsigned int>(hr));
+            success = false;
+        }
+        else if (!TestSwizzleUnswizzle(test, 7))
         {
             success = false;
         }
