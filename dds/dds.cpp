@@ -2808,7 +2808,7 @@ bool Test04()
         for (auto fmt : formats)
         {
             ScratchImage simg;
-            if (SUCCEEDED(simg.Initialize3D(fmt, 16, 16, 4, 1, 1)))
+            if (SUCCEEDED(simg.Initialize3D(fmt, 16, 16, 4, 1, CP_FLAGS_NONE)))
             {
                 Blob blob;
                 if (SUCCEEDED(SaveToDDSMemory(simg.GetImages(), simg.GetImageCount(), simg.GetMetadata(), DDS_FLAGS_NONE, blob)))
