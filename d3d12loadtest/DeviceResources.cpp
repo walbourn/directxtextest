@@ -703,38 +703,8 @@ void DeviceResources::GetAdapter(IDXGIAdapter1** ppAdapter)
 
     ComPtr<IDXGIAdapter1> adapter;
 
-        for (UINT adapterIndex = 0;
-            SUCCEEDED(m_dxgiFactory->EnumAdapters1(
-                adapterIndex,
-                adapter.ReleaseAndGetAddressOf()));
-            ++adapterIndex)
-        {
-            DXGI_ADAPTER_DESC1 desc;
-            ThrowIfFailed(adapter->GetDesc1(&desc));
-
-            if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
-            {
-                // Don't select the Basic Render Driver adapter.
-                continue;
-            }
-
-            // Check to see if the adapter supports Direct3D 12, but don't create the actual device yet.
-            if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), m_d3dMinFeatureLevel, __uuidof(ID3D12Device), nullptr)))
-            {
-#ifdef _DEBUG
-                wchar_t buff[256] = {};
-                swprintf_s(buff, L"Direct3D Adapter (%u): VID:%04X, PID:%04X - %ls\n", adapterIndex, desc.VendorId, desc.DeviceId, desc.Description);
-                OutputDebugStringW(buff);
-#endif
-                break;
-            }
-        }
-    }
-
-#if !defined(NDEBUG)
-    if (!adapter)
+    if (g_useWarp)
     {
-        // Try WARP12 instead
         if (FAILED(m_dxgiFactory->EnumWarpAdapter(IID_PPV_ARGS(adapter.ReleaseAndGetAddressOf()))))
         {
             throw std::runtime_error("WARP12 not available. Enable the 'Graphics Tools' optional feature");
@@ -742,7 +712,84 @@ void DeviceResources::GetAdapter(IDXGIAdapter1** ppAdapter)
 
         OutputDebugStringA("Direct3D Adapter - WARP12\n");
     }
+    else
+    {
+        ComPtr<IDXGIFactory6> factory6;
+        HRESULT hr = m_dxgiFactory.As(&factory6);
+        if (SUCCEEDED(hr))
+        {
+            for (UINT adapterIndex = 0;
+                SUCCEEDED(factory6->EnumAdapterByGpuPreference(
+                    adapterIndex,
+                    DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE,
+                    IID_PPV_ARGS(adapter.ReleaseAndGetAddressOf())));
+                adapterIndex++)
+            {
+                DXGI_ADAPTER_DESC1 desc;
+                ThrowIfFailed(adapter->GetDesc1(&desc));
+
+                if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
+                {
+                    // Don't select the Basic Render Driver adapter.
+                    continue;
+                }
+
+                // Check to see if the adapter supports Direct3D 12, but don't create the actual device yet.
+                if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), m_d3dMinFeatureLevel, __uuidof(ID3D12Device), nullptr)))
+                {
+#ifdef _DEBUG
+                    wchar_t buff[256] = {};
+                    swprintf_s(buff, L"Direct3D Adapter (%u): VID:%04X, PID:%04X - %ls\n", adapterIndex, desc.VendorId, desc.DeviceId, desc.Description);
+                    OutputDebugStringW(buff);
 #endif
+                    break;
+                }
+            }
+        }
+
+        if (!adapter)
+        {
+            for (UINT adapterIndex = 0;
+                SUCCEEDED(m_dxgiFactory->EnumAdapters1(
+                    adapterIndex,
+                    adapter.ReleaseAndGetAddressOf()));
+                ++adapterIndex)
+            {
+                DXGI_ADAPTER_DESC1 desc;
+                ThrowIfFailed(adapter->GetDesc1(&desc));
+
+                if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
+                {
+                    // Don't select the Basic Render Driver adapter.
+                    continue;
+                }
+
+                // Check to see if the adapter supports Direct3D 12, but don't create the actual device yet.
+                if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), m_d3dMinFeatureLevel, __uuidof(ID3D12Device), nullptr)))
+                {
+#ifdef _DEBUG
+                    wchar_t buff[256] = {};
+                    swprintf_s(buff, L"Direct3D Adapter (%u): VID:%04X, PID:%04X - %ls\n", adapterIndex, desc.VendorId, desc.DeviceId, desc.Description);
+                    OutputDebugStringW(buff);
+#endif
+                    break;
+                }
+            }
+        }
+
+#if !defined(NDEBUG)
+        if (!adapter)
+        {
+            // Try WARP12 instead
+            if (FAILED(m_dxgiFactory->EnumWarpAdapter(IID_PPV_ARGS(adapter.ReleaseAndGetAddressOf()))))
+            {
+                throw std::runtime_error("WARP12 not available. Enable the 'Graphics Tools' optional feature");
+            }
+
+            OutputDebugStringA("Direct3D Adapter - WARP12\n");
+        }
+#endif
+    }
 
     if (!adapter)
     {
