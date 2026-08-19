@@ -28,6 +28,9 @@ using Microsoft::WRL::ComPtr;
 
 #define RENDER_TEST_MS_DELAY 5000
 
+extern bool g_headless;
+extern bool g_useWarp;
+
 #define RENDER_WIDTH 640
 #define RENDER_HEIGHT 480
 
@@ -187,11 +190,16 @@ HRESULT SetupRenderTest(ID3D11Device** pDev, ID3D11DeviceContext** pContext)
     RECT rc = { 0, 0, RENDER_WIDTH, RENDER_HEIGHT };
     AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
     g_hWnd = CreateWindowW(L"DirectXTexClass", L"DirectXTex (D3D11)", WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, nullptr, nullptr);
-    if (!g_hWnd)
-        return E_FAIL;
+                           CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, nullptr,
+                           nullptr);
 
-    ShowWindow(g_hWnd, SW_SHOWDEFAULT);
+    if (!g_headless)
+    {
+        if (!g_hWnd)
+            return E_FAIL;
+
+        ShowWindow(g_hWnd, SW_SHOWDEFAULT);
+    }
 
     //--- Setup device ----------------------------------------------------------------
     HRESULT hr = E_FAIL;
@@ -203,7 +211,7 @@ HRESULT SetupRenderTest(ID3D11Device** pDev, ID3D11DeviceContext** pContext)
 
     ComPtr<ID3D11Device> device;
     ComPtr<ID3D11DeviceContext> context;
-    for (UINT driverTypeIndex = 0; driverTypeIndex < std::size(g_driverTypes); driverTypeIndex++)
+    for (UINT driverTypeIndex = (g_useWarp ? 1 : 0); driverTypeIndex < std::size(g_driverTypes); driverTypeIndex++)
     {
         hr = D3D11CreateDevice(nullptr, g_driverTypes[driverTypeIndex], nullptr, createDeviceFlags,
             g_featureLevels, static_cast<UINT>(std::size(g_featureLevels)),
@@ -223,55 +231,73 @@ HRESULT SetupRenderTest(ID3D11Device** pDev, ID3D11DeviceContext** pContext)
         return hr;
 
     // Create swapchain
+    ComPtr<ID3D11Texture2D> pBackBuffer;
+
+    if (!g_headless)
     {
-        ComPtr<IDXGIDevice1> dxgiDevice;
-        hr = device.As(&dxgiDevice);
-        if (FAILED(hr))
-            return hr;
+        {
+            ComPtr<IDXGIDevice1> dxgiDevice;
+            hr = device.As(&dxgiDevice);
+            if (FAILED(hr))
+                return hr;
 
-        ComPtr<IDXGIAdapter> dxgiAdapter;
-        hr = dxgiDevice->GetAdapter(dxgiAdapter.GetAddressOf());
-        if (FAILED(hr))
-            return hr;
+            ComPtr<IDXGIAdapter> dxgiAdapter;
+            hr = dxgiDevice->GetAdapter(dxgiAdapter.GetAddressOf());
+            if (FAILED(hr))
+                return hr;
 
-        ComPtr<IDXGIFactory1> dxgiFactory;
-        hr = dxgiAdapter->GetParent(IID_PPV_ARGS(dxgiFactory.GetAddressOf()));
-        if (FAILED(hr))
-            return hr;
+            ComPtr<IDXGIFactory1> dxgiFactory;
+            hr = dxgiAdapter->GetParent(IID_PPV_ARGS(dxgiFactory.GetAddressOf()));
+            if (FAILED(hr))
+                return hr;
 
-        ComPtr<IDXGIFactory2> dxgiFactory2;
-        hr = dxgiFactory.As(&dxgiFactory2);
-        if (FAILED(hr))
-            return hr;
+            ComPtr<IDXGIFactory2> dxgiFactory2;
+            hr = dxgiFactory.As(&dxgiFactory2);
+            if (FAILED(hr))
+                return hr;
 
-        DXGI_SWAP_CHAIN_DESC1 sd = {};
-        sd.Width = RENDER_WIDTH;
-        sd.Height = RENDER_HEIGHT;
-        sd.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-        sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-        sd.BufferCount = 2;
-        sd.SampleDesc.Count = 1;
-        sd.Scaling = DXGI_SCALING_STRETCH;
-        sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-        sd.AlphaMode = DXGI_ALPHA_MODE_IGNORE;
+            DXGI_SWAP_CHAIN_DESC1 sd = {};
+            sd.Width = RENDER_WIDTH;
+            sd.Height = RENDER_HEIGHT;
+            sd.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+            sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+            sd.BufferCount = 2;
+            sd.SampleDesc.Count = 1;
+            sd.Scaling = DXGI_SCALING_STRETCH;
+            sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+            sd.AlphaMode = DXGI_ALPHA_MODE_IGNORE;
 
-        DXGI_SWAP_CHAIN_FULLSCREEN_DESC fs = {};
-        fs.Windowed = TRUE;
+            DXGI_SWAP_CHAIN_FULLSCREEN_DESC fs = {};
+            fs.Windowed = TRUE;
 
-        hr = dxgiFactory2->CreateSwapChainForHwnd(device.Get(), g_hWnd, &sd, &fs, nullptr, &g_pSwapChain);
-        if (FAILED(hr))
-            return hr;
+            hr = dxgiFactory2->CreateSwapChainForHwnd(device.Get(), g_hWnd, &sd, &fs, nullptr, &g_pSwapChain);
+            if (FAILED(hr))
+                return hr;
 
-        hr = dxgiFactory2->MakeWindowAssociation(g_hWnd, DXGI_MWA_NO_ALT_ENTER);
+            hr = dxgiFactory2->MakeWindowAssociation(g_hWnd, DXGI_MWA_NO_ALT_ENTER);
+            if (FAILED(hr))
+                return hr;
+        }
+
+        hr = g_pSwapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
         if (FAILED(hr))
             return hr;
     }
-
-    // Create a render target view
-    ComPtr<ID3D11Texture2D> pBackBuffer;
-    hr = g_pSwapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
-    if (FAILED(hr))
-        return hr;
+    else
+    {
+        D3D11_TEXTURE2D_DESC desc = {};
+        desc.Width = RENDER_WIDTH;
+        desc.Height = RENDER_HEIGHT;
+        desc.MipLevels = 1;
+        desc.ArraySize = 1;
+        desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        desc.SampleDesc.Count = 1;
+        desc.Usage = D3D11_USAGE_DEFAULT;
+        desc.BindFlags = D3D11_BIND_RENDER_TARGET;
+        hr = device->CreateTexture2D(&desc, nullptr, pBackBuffer.GetAddressOf());
+        if (FAILED(hr))
+            return hr;
+    }
 
     hr = g_pd3dDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &g_pRenderTargetView);
     if (FAILED(hr))
@@ -641,6 +667,7 @@ void RenderTest(const TexMetadata& metadata, ID3D11ShaderResourceView* pSRV)
         g_pImmediateContext->PSSetShaderResources(0, 0, nullptr);
 #pragma warning(pop)
 }
+
 
 
 //-------------------------------------------------------------------------------------
