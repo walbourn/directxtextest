@@ -522,6 +522,19 @@ bool Test01()
                 }
 
                 img = *srcimage.GetImage(0, 0, 0);
+                img.format = MakeTypeless(img.format);
+                
+                if (img.format != srcimage.GetMetadata().format)
+                {
+                    hr = Decompress(img, DXGI_FORMAT_UNKNOWN, image);
+                    if (FAILED(hr))
+                    {
+                        success = false;
+                        printe("Failed typeless source format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                    }
+                }
+
+                img = *srcimage.GetImage(0, 0, 0);
                 img.format = DXGI_FORMAT_R8G8B8A8_UNORM;
                 hr = Decompress(img, DXGI_FORMAT_UNKNOWN, image);
                 if (hr != E_INVALIDARG)
@@ -558,6 +571,19 @@ bool Test01()
                 {
                     success = false;
                     printe("Failed invalid source format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                }
+
+                mdata = srcimage.GetMetadata();
+                mdata.format = MakeTypeless(mdata.format);
+                
+                if (mdata.format != srcimage.GetMetadata().format)
+                {
+                    hr = Decompress(srcimage.GetImages(), srcimage.GetImageCount(), mdata, DXGI_FORMAT_UNKNOWN, image);
+                    if (FAILED(hr))
+                    {
+                        success = false;
+                        printe("Failed typeless source format test (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+                    }
                 }
 
                 mdata = srcimage.GetMetadata();
