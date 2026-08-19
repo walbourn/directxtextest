@@ -522,24 +522,7 @@ bool Test01()
                 }
 
                 img = *srcimage.GetImage(0, 0, 0);
-                switch(img.format)
-                {
-                case DXGI_FORMAT_BC1_UNORM:
-                case DXGI_FORMAT_BC1_UNORM_SRGB: img.format = DXGI_FORMAT_BC1_TYPELESS; break;
-                case DXGI_FORMAT_BC2_UNORM:
-                case DXGI_FORMAT_BC2_UNORM_SRGB: img.format = DXGI_FORMAT_BC2_TYPELESS; break;
-                case DXGI_FORMAT_BC3_UNORM:
-                case DXGI_FORMAT_BC3_UNORM_SRGB: img.format = DXGI_FORMAT_BC3_TYPELESS; break;
-                case DXGI_FORMAT_BC4_UNORM:
-                case DXGI_FORMAT_BC4_SNORM: img.format = DXGI_FORMAT_BC4_TYPELESS; break;
-                case DXGI_FORMAT_BC5_UNORM:
-                case DXGI_FORMAT_BC5_SNORM: img.format = DXGI_FORMAT_BC5_TYPELESS; break;
-                case DXGI_FORMAT_BC6H_UF16:
-                case DXGI_FORMAT_BC6H_SF16: img.format = DXGI_FORMAT_BC6H_TYPELESS; break;
-                case DXGI_FORMAT_BC7_UNORM:
-                case DXGI_FORMAT_BC7_UNORM_SRGB: img.format = DXGI_FORMAT_BC7_TYPELESS; break;
-                default: break;
-                }
+                img.format = MakeTypeless(img.format);
                 
                 if (img.format != srcimage.GetMetadata().format)
                 {
@@ -591,24 +574,7 @@ bool Test01()
                 }
 
                 mdata = srcimage.GetMetadata();
-                switch(mdata.format)
-                {
-                case DXGI_FORMAT_BC1_UNORM:
-                case DXGI_FORMAT_BC1_UNORM_SRGB: mdata.format = DXGI_FORMAT_BC1_TYPELESS; break;
-                case DXGI_FORMAT_BC2_UNORM:
-                case DXGI_FORMAT_BC2_UNORM_SRGB: mdata.format = DXGI_FORMAT_BC2_TYPELESS; break;
-                case DXGI_FORMAT_BC3_UNORM:
-                case DXGI_FORMAT_BC3_UNORM_SRGB: mdata.format = DXGI_FORMAT_BC3_TYPELESS; break;
-                case DXGI_FORMAT_BC4_UNORM:
-                case DXGI_FORMAT_BC4_SNORM: mdata.format = DXGI_FORMAT_BC4_TYPELESS; break;
-                case DXGI_FORMAT_BC5_UNORM:
-                case DXGI_FORMAT_BC5_SNORM: mdata.format = DXGI_FORMAT_BC5_TYPELESS; break;
-                case DXGI_FORMAT_BC6H_UF16:
-                case DXGI_FORMAT_BC6H_SF16: mdata.format = DXGI_FORMAT_BC6H_TYPELESS; break;
-                case DXGI_FORMAT_BC7_UNORM:
-                case DXGI_FORMAT_BC7_UNORM_SRGB: mdata.format = DXGI_FORMAT_BC7_TYPELESS; break;
-                default: break;
-                }
+                mdata.format = MakeTypeless(mdata.format);
                 
                 if (mdata.format != srcimage.GetMetadata().format)
                 {
