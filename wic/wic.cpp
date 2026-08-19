@@ -1325,25 +1325,35 @@ bool WICTest::Test04()
         }
 
         // Test extra flags with a valid file
-        hr = LoadFromWICFile(MEDIA_PATH L"fishingboat.jpg", WIC_FLAGS_NO_16BPP, nullptr, image);
-        if (FAILED(hr))
+        wchar_t szPath[MAX_PATH] = {};
+        DWORD ret = ExpandEnvironmentStringsW(MEDIA_PATH L"fishingboat.jpg", szPath, MAX_PATH);
+        if ( !ret || ret > MAX_PATH )
         {
+            printe( "ERROR: ExpandEnvironmentStrings (2) FAILED\n" );
             success = false;
-            printe("Failed LoadFromWICFile with WIC_FLAGS_NO_16BPP (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
         }
-        
-        hr = LoadFromWICFile(MEDIA_PATH L"fishingboat.jpg", WIC_FLAGS_IGNORE_SRGB, nullptr, image);
-        if (FAILED(hr))
+        else
         {
-            success = false;
-            printe("Failed LoadFromWICFile with WIC_FLAGS_IGNORE_SRGB (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
-        }
+            hr = LoadFromWICFile(szPath, WIC_FLAGS_NO_16BPP, nullptr, image);
+            if (FAILED(hr))
+            {
+                success = false;
+                printe("Failed LoadFromWICFile with WIC_FLAGS_NO_16BPP (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+            }
 
-        hr = LoadFromWICFile(MEDIA_PATH L"fishingboat.jpg", WIC_FLAGS_NO_X2_BIAS, nullptr, image);
-        if (FAILED(hr))
-        {
-            success = false;
-            printe("Failed LoadFromWICFile with WIC_FLAGS_NO_X2_BIAS (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+            hr = LoadFromWICFile(szPath, WIC_FLAGS_IGNORE_SRGB, nullptr, image);
+            if (FAILED(hr))
+            {
+                success = false;
+                printe("Failed LoadFromWICFile with WIC_FLAGS_IGNORE_SRGB (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+            }
+
+            hr = LoadFromWICFile(szPath, WIC_FLAGS_NO_X2_BIAS, nullptr, image);
+            if (FAILED(hr))
+            {
+                success = false;
+                printe("Failed LoadFromWICFile with WIC_FLAGS_NO_X2_BIAS (HRESULT: %08X)\n", static_cast<unsigned int>(hr));
+            }
         }
     #pragma warning(pop)
     }
