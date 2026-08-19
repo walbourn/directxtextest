@@ -1720,7 +1720,7 @@ bool WICTest::Test05()
                 (void)props->Write(1, &options, &varValue);
             };
 
-            hr = SaveToWICMemory(image.GetImages(), image.GetImageCount(), WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_TIFF), blob, customProps);
+            hr = SaveToWICMemory(image.GetImages(), image.GetImageCount(), WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_TIFF), blob, nullptr, customProps);
             if (FAILED(hr))
             {
                 success = false;
