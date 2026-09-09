@@ -1747,7 +1747,7 @@ bool WICTest::Test05()
             // Custom properties for MF
             std::function<void(IPropertyBag2*)> customProps = [](IPropertyBag2* props)
             {
-                PROPBAG2 options = { 0 };
+                PROPBAG2 options = {};
                 options.pstrName = const_cast<LPOLESTR>(L"TiffCompressionMethod");
                 VARIANT varValue;
                 VariantInit(&varValue);
