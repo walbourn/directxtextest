@@ -32,7 +32,7 @@
 #include <memory>
 #include <new>
 
-#include <wrl\client.h>
+#include <wrl/client.h>
 
 #include <d3d11.h>
 #include <dxgi.h>
