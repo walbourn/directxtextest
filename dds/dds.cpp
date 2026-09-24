@@ -7,6 +7,7 @@
 #include "directxtest.h"
 
 #include "DirectXTexP.h"
+#include "DDS.h"
 
 using namespace DirectX;
 
@@ -1007,6 +1008,59 @@ namespace
 
         return true;
     }
+
+    bool TestCubemapArrayCountOverflow()
+    {
+        alignas(uint32_t) uint8_t buffer[DDS_DX10_HEADER_SIZE + 24] = {};
+        *reinterpret_cast<uint32_t*>(buffer) = DDS_MAGIC;
+
+        auto header = reinterpret_cast<DDS_HEADER*>(buffer + sizeof(uint32_t));
+        header->size = sizeof(DDS_HEADER);
+        header->flags = DDS_HEADER_FLAGS_TEXTURE;
+        header->height = header->width = 1;
+        header->mipMapCount = 1;
+        header->ddspf = DDSPF_DX10;
+        header->caps = DDS_SURFACE_FLAGS_TEXTURE;
+
+        auto ext = reinterpret_cast<DDS_HEADER_DXT10*>(buffer + DDS_MIN_HEADER_SIZE);
+        ext->dxgiFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
+        ext->resourceDimension = DDS_DIMENSION_TEXTURE2D;
+        ext->miscFlag = DDS_RESOURCE_MISC_TEXTURECUBE;
+
+        // Keep the ordinary zero-count normalization and complete one-cube load behavior covered.
+        ext->arraySize = 0;
+        TexMetadata metadata = {};
+        HRESULT hr = GetMetadataFromDDSMemory(buffer, DDS_DX10_HEADER_SIZE, DDS_FLAGS_NONE, metadata);
+        if (FAILED(hr) || metadata.arraySize != 6)
+        {
+            printe("Failed zero-count cubemap metadata test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+            return false;
+        }
+
+        ScratchImage image;
+        hr = LoadFromDDSMemory(buffer, sizeof(buffer), DDS_FLAGS_NONE, &metadata, image);
+        if (FAILED(hr) || image.GetPixelsSize() != 24)
+        {
+            printe("Failed zero-count cubemap load test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+            return false;
+        }
+
+    #if defined(_M_IX86) || defined(_M_ARM) || defined(_M_HYBRID_X86_ARM64)
+        // Metadata-only: this header intentionally has no payload for the impossible array count.
+        ext->arraySize = 715827883u;
+        for (const auto flags : { DDS_FLAGS_NONE, DDS_FLAGS_ALLOW_LARGE_FILES })
+        {
+            metadata = {};
+            hr = GetMetadataFromDDSMemory(buffer, DDS_DX10_HEADER_SIZE, flags, metadata);
+            if (hr != HRESULT_E_ARITHMETIC_OVERFLOW)
+            {
+                printe("Failed cubemap array-count overflow metadata test (HRESULT %08X)\n", static_cast<unsigned int>(hr));
+                return false;
+            }
+        }
+    #endif
+        return true;
+    }
 }
 
 //-------------------------------------------------------------------------------------
@@ -1190,6 +1244,11 @@ bool Test01()
     }
 
     print("%zu images tested, %zu images passed ", ncount, npass);
+
+    if (!TestCubemapArrayCountOverflow())
+    {
+        success = false;
+    }
 
     // invalid args
     {
