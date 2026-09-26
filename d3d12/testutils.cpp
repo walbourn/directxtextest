@@ -42,6 +42,9 @@ using Microsoft::WRL::ComPtr;
 
 #define RENDER_TEST_MS_DELAY 5000
 
+extern bool g_headless;
+extern bool g_useWarp;
+
 #define RENDER_WIDTH 640
 #define RENDER_HEIGHT 480
 
@@ -214,22 +217,25 @@ HRESULT CreateDevice( ID3D12Device** pDev )
 #endif
 
     ComPtr<IDXGIAdapter1> adapter;
-    for (UINT adapterIndex = 0; DXGI_ERROR_NOT_FOUND != g_pdxgiFactory->EnumAdapters1(adapterIndex, adapter.ReleaseAndGetAddressOf()); ++adapterIndex)
+    if (!g_useWarp)
     {
-        DXGI_ADAPTER_DESC1 desc;
-        if (SUCCEEDED(adapter->GetDesc1(&desc)))
+        for (UINT adapterIndex = 0; DXGI_ERROR_NOT_FOUND != g_pdxgiFactory->EnumAdapters1(adapterIndex, adapter.ReleaseAndGetAddressOf()); ++adapterIndex)
         {
-            if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
+            DXGI_ADAPTER_DESC1 desc;
+            if (SUCCEEDED(adapter->GetDesc1(&desc)))
             {
-                // Don't select the Basic Render Driver adapter.
-                continue;
+                if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
+                {
+                    // Don't select the Basic Render Driver adapter.
+                    continue;
+                }
             }
-        }
 
-        // Check to see if the adapter supports Direct3D 12, but don't create the actual device yet.
-        if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_ID3D12Device, nullptr)))
-        {
-            break;
+            // Check to see if the adapter supports Direct3D 12, but don't create the actual device yet.
+            if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_ID3D12Device, nullptr)))
+            {
+                break;
+            }
         }
     }
 
@@ -343,10 +349,14 @@ HRESULT SetupRenderTest(ID3D12Device** pDev, ID3D12CommandQueue** pCommandQ, ID3
     AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
     g_hWnd = CreateWindowW(L"DirectXTexClass", L"DirectXTex (D3D12)", WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, nullptr, nullptr);
-    if (!g_hWnd)
-        return E_FAIL;
+        
+    if (!g_headless)
+    {
+        if (!g_hWnd)
+            return E_FAIL;
 
-    ShowWindow(g_hWnd, SW_SHOWDEFAULT);
+        ShowWindow(g_hWnd, SW_SHOWDEFAULT);
+    }
 
     //--- Setup device ----------------------------------------------------------------
     HRESULT hr = CreateDevice(&g_pd3dDevice);
@@ -398,25 +408,58 @@ HRESULT SetupRenderTest(ID3D12Device** pDev, ID3D12CommandQueue** pCommandQ, ID3
         sd.SampleDesc.Count = 1;
         sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 
-        DXGI_SWAP_CHAIN_FULLSCREEN_DESC fs = {};
-        fs.Windowed = TRUE;
+        if (!g_headless)
+        {
+            DXGI_SWAP_CHAIN_FULLSCREEN_DESC fs = {};
+            fs.Windowed = TRUE;
 
-        ComPtr<IDXGISwapChain1> swapChain;
-        hr = g_pdxgiFactory->CreateSwapChainForHwnd(g_pd3dCommandQueue, g_hWnd, &sd, &fs, nullptr, swapChain.GetAddressOf());
-        if (FAILED(hr))
-            return hr;
+            ComPtr<IDXGISwapChain1> swapChain;
+            hr = g_pdxgiFactory->CreateSwapChainForHwnd(g_pd3dCommandQueue, g_hWnd, &sd, &fs, nullptr, swapChain.GetAddressOf());
+            if (FAILED(hr))
+                return hr;
 
-        hr = g_pdxgiFactory->MakeWindowAssociation(g_hWnd, DXGI_MWA_NO_ALT_ENTER);
-        if (FAILED(hr))
-            return hr;
+            hr = g_pdxgiFactory->MakeWindowAssociation(g_hWnd, DXGI_MWA_NO_ALT_ENTER);
+            if (FAILED(hr))
+                return hr;
 
-        hr = swapChain->GetBuffer(0, IID_PPV_ARGS(&g_pRenderTarget[0]));
-        if (FAILED(hr))
-            return hr;
+            hr = swapChain->GetBuffer(0, IID_PPV_ARGS(&g_pRenderTarget[0]));
+            if (FAILED(hr))
+                return hr;
 
-        hr = swapChain->GetBuffer(1, IID_PPV_ARGS(&g_pRenderTarget[1]));
-        if (FAILED(hr))
-            return hr;
+            hr = swapChain->GetBuffer(1, IID_PPV_ARGS(&g_pRenderTarget[1]));
+            if (FAILED(hr))
+                return hr;
+
+            hr = swapChain->QueryInterface(IID_PPV_ARGS(&g_pSwapChain));
+            if (FAILED(hr))
+                return hr;
+
+            g_backBufferIndex = g_pSwapChain->GetCurrentBackBufferIndex();
+        }
+        else
+        {
+            D3D12_RESOURCE_DESC desc = {};
+            desc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+            desc.Width = RENDER_WIDTH;
+            desc.Height = RENDER_HEIGHT;
+            desc.DepthOrArraySize = 1;
+            desc.MipLevels = 1;
+            desc.Format = sd.Format;
+            desc.SampleDesc.Count = 1;
+            desc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+            desc.Flags = D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
+
+            D3D12_HEAP_PROPERTIES heapProps = {};
+            heapProps.Type = D3D12_HEAP_TYPE_DEFAULT;
+
+            for (UINT n = 0; n < 2; ++n)
+            {
+                hr = g_pd3dDevice->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATE_RENDER_TARGET, nullptr, IID_PPV_ARGS(&g_pRenderTarget[n]));
+                if (FAILED(hr))
+                    return hr;
+            }
+            g_backBufferIndex = 0;
+        }
 
         D3D12_RENDER_TARGET_VIEW_DESC rtvDesc = {};
         rtvDesc.Format = sd.Format;
@@ -436,12 +479,6 @@ HRESULT SetupRenderTest(ID3D12Device** pDev, ID3D12CommandQueue** pCommandQ, ID3
 
         CD3DX12_CPU_DESCRIPTOR_HANDLE rtvDescriptor1(hcpu, 1, g_rtvDescriptorSize);
         g_pd3dDevice->CreateRenderTargetView(g_pRenderTarget[1], &rtvDesc, rtvDescriptor1);
-
-        hr = swapChain->QueryInterface(IID_PPV_ARGS(&g_pSwapChain));
-        if (FAILED(hr))
-            return hr;
-
-        g_backBufferIndex = g_pSwapChain->GetCurrentBackBufferIndex();
     }
 
     //--- Setup depth buffer ----------------------------------------------------------
