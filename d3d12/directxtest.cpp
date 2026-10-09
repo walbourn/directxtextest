@@ -13,6 +13,9 @@ using namespace DirectX;
 //-------------------------------------------------------------------------------------
 // Types and globals
 
+bool g_headless = false;
+bool g_useWarp = false;
+
 typedef bool (*TestFN)();
 
 struct TestInfo
@@ -75,8 +78,19 @@ bool RunTests()
 
 
 //-------------------------------------------------------------------------------------
-int __cdecl wmain()
+int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
 {
+    for (int i = 1; i < argc; ++i)
+    {
+        if (!_wcsicmp(argv[i], L"-warp"))
+        {
+            g_useWarp = true;
+        }
+        else if (!_wcsicmp(argv[i], L"-headless"))
+        {
+            g_headless = true;
+        }
+    }
     print("**************************************************************\n");
     print("*** " _DIRECTX_TEST_NAME_ " test\n" );
     print("*** Library Version %03d\n", DIRECTX_TEX_VERSION );

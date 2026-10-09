@@ -11,6 +11,9 @@ using namespace DX;
 
 using Microsoft::WRL::ComPtr;
 
+extern bool g_useWarp;
+extern bool g_headless;
+
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"
 #pragma clang diagnostic ignored "-Wswitch-enum"
@@ -172,7 +175,10 @@ void DeviceResources::CreateDeviceResources()
     }
 
     ComPtr<IDXGIAdapter1> adapter;
-    GetHardwareAdapter(adapter.GetAddressOf());
+    if (!g_useWarp)
+    {
+        GetHardwareAdapter(adapter.GetAddressOf());
+    }
 
     // Create the Direct3D 11 API device object and a corresponding context.
     ComPtr<ID3D11Device> device;
@@ -194,17 +200,9 @@ void DeviceResources::CreateDeviceResources()
             context.GetAddressOf()  // Returns the device immediate context.
             );
     }
-#if defined(NDEBUG)
-    else
-    {
-        throw std::runtime_error("No Direct3D hardware device found");
-    }
-#else
+    
     if (FAILED(hr))
     {
-        // If the initialization fails, fall back to the WARP device.
-        // For more information on WARP, see:
-        // http://go.microsoft.com/fwlink/?LinkId=286690
         hr = D3D11CreateDevice(
             nullptr,
             D3D_DRIVER_TYPE_WARP, // Create a WARP device instead of a hardware device.
@@ -223,7 +221,6 @@ void DeviceResources::CreateDeviceResources()
             OutputDebugStringA("Direct3D Adapter - WARP\n");
         }
     }
-#endif
 
     ThrowIfFailed(hr);
 
@@ -307,7 +304,7 @@ void DeviceResources::CreateWindowSizeDependentResources()
             ThrowIfFailed(hr);
         }
     }
-    else
+    else if (!g_headless)
     {
         // Create a descriptor for the swap chain.
         DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
@@ -332,7 +329,8 @@ void DeviceResources::CreateWindowSizeDependentResources()
             m_window,
             &swapChainDesc,
             &fsSwapChainDesc,
-            nullptr, m_swapChain.ReleaseAndGetAddressOf()
+            nullptr,
+            m_swapChain.ReleaseAndGetAddressOf()
             ));
 
         // This class does not support exclusive full-screen mode and prevents DXGI from responding to the ALT+ENTER shortcut
@@ -343,12 +341,28 @@ void DeviceResources::CreateWindowSizeDependentResources()
     UpdateColorSpace();
 
     // Create a render target view of the swap chain back buffer.
-    ThrowIfFailed(m_swapChain->GetBuffer(0, IID_PPV_ARGS(m_renderTarget.ReleaseAndGetAddressOf())));
+    ComPtr<ID3D11Texture2D> backBuffer;
+    if (m_swapChain)
+    {
+        ThrowIfFailed(m_swapChain->GetBuffer(0, IID_PPV_ARGS(backBuffer.GetAddressOf())));
+    }
+    else if (g_headless)
+    {
+        D3D11_TEXTURE2D_DESC desc = {};
+        desc.Width = backBufferWidth;
+        desc.Height = backBufferHeight;
+        desc.MipLevels = 1;
+        desc.ArraySize = 1;
+        desc.Format = backBufferFormat;
+        desc.SampleDesc.Count = 1;
+        desc.Usage = D3D11_USAGE_DEFAULT;
+        desc.BindFlags = D3D11_BIND_RENDER_TARGET;
+        ThrowIfFailed(m_d3dDevice->CreateTexture2D(&desc, nullptr, backBuffer.GetAddressOf()));
+    }
 
-    CD3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc(D3D11_RTV_DIMENSION_TEXTURE2D, m_backBufferFormat);
     ThrowIfFailed(m_d3dDevice->CreateRenderTargetView(
-        m_renderTarget.Get(),
-        &renderTargetViewDesc,
+        backBuffer.Get(),
+        nullptr,
         m_d3dRenderTargetView.ReleaseAndGetAddressOf()
         ));
 
@@ -394,7 +408,7 @@ void DeviceResources::SetWindow(HWND window, int width, int height) noexcept
 // This method is called when the Win32 window changes size
 bool DeviceResources::WindowSizeChanged(int width, int height)
 {
-    if (!m_window)
+    if (!m_window && !g_headless)
         return false;
 
     RECT newRc;
@@ -455,13 +469,10 @@ void DeviceResources::HandleDeviceLost()
 // Present the contents of the swap chain to the screen.
 void DeviceResources::Present()
 {
+    if (g_headless) return;
+
     HRESULT hr = E_FAIL;
-    if (m_options & c_AllowTearing)
-    {
-        // Recommended to always use tearing if supported when using a sync interval of 0.
-        hr = m_swapChain->Present(0, DXGI_PRESENT_ALLOW_TEARING);
-    }
-    else
+    if (m_swapChain)
     {
         // The first argument instructs DXGI to block until VSync, putting the application
         // to sleep until the next VSync. This ensures we don't waste any cycles rendering
