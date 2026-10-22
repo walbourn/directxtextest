@@ -38,6 +38,7 @@ namespace
         FLAGS_YUV = 0x1,
         FLAGS_OPTIONAL = 0x2,
         FLAGS_SRGB = 0x4,
+        FLAGS_DEPTH = 0x8,
     };
 
     struct TestMedia
@@ -93,6 +94,9 @@ namespace
           | FLAGS_OPTIONAL, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_P016, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenaP016.dds" },
         { FLAGS_YUV
            | FLAGS_OPTIONAL, { 200, 200, 1, 1, 1, 0, 0, DXGI_FORMAT_NV11, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"lenanv11.dds" },
+        { FLAGS_DEPTH, { 1280, 720, 1, 1, 1, 0, 0, DXGI_FORMAT_D16_UNORM, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"depthimageD16.dds" },
+        { FLAGS_DEPTH, { 1280, 720, 1, 1, 1, 0, 0, DXGI_FORMAT_R24_UNORM_X8_TYPELESS, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"depthimageD24.dds" },
+        { FLAGS_DEPTH, { 1280, 720, 1, 1, 1, 0, 0, DXGI_FORMAT_D32_FLOAT, TEX_DIMENSION_TEXTURE2D }, MEDIA_PATH L"depthimageD32.dds" },
     };
 }
 
@@ -693,7 +697,8 @@ bool Test04()
         else
         {
             std::vector<D3D12_SUBRESOURCE_DATA> subresources;
-            hr = PrepareUpload(device.Get(), image.GetImages(), image.GetImageCount(), metadata, subresources);
+            Blob planarData;
+            hr = PrepareUploadEx(device.Get(), image.GetImages(), image.GetImageCount(), metadata, subresources, planarData);
             if (FAILED(hr))
             {
                 success = false;
@@ -865,6 +870,14 @@ bool Test05()
             continue;
         }
 
+
+        if (g_TestMedia[index].metadata.format == DXGI_FORMAT_D16_UNORM
+            || g_TestMedia[index].metadata.format == DXGI_FORMAT_D32_FLOAT)
+        {
+            // Depth formats can't be used for shader resource views
+            continue;
+        }
+
         wchar_t szPath[MAX_PATH];
         DWORD ret = ExpandEnvironmentStringsW(g_TestMedia[index].fname, szPath, MAX_PATH);
         if (!ret || ret > MAX_PATH)
@@ -918,7 +931,8 @@ bool Test05()
             else
             {
                 std::vector<D3D12_SUBRESOURCE_DATA> subresources;
-                hr = PrepareUpload(device.Get(), image.GetImages(), image.GetImageCount(), metadata, subresources);
+                Blob planarData;
+                hr = PrepareUploadEx(device.Get(), image.GetImages(), image.GetImageCount(), metadata, subresources, planarData);
                 if (FAILED(hr))
                 {
                     success = false;
@@ -1020,6 +1034,12 @@ bool Test06()
         if (g_TestMedia[index].options & FLAGS_YUV)
         {
             // Skip video textures which need special options to render
+            continue;
+        }
+
+        if ((g_TestMedia[index].options & FLAGS_DEPTH) && IsPlanar(g_TestMedia[index].metadata.format, true))
+        {
+            // CaptureTexture does not support planar depth/stencil
             continue;
         }
 
