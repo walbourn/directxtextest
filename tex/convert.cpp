@@ -393,7 +393,7 @@ namespace
         { DXGI_FORMAT_R8G8B8A8_SNORM, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 4, { 0x7F,0x7F,0x7F,0x7F } },
         { DXGI_FORMAT_R8G8B8A8_SNORM, XMFLOAT4(0.25f, 0.5f, 0.75f, 1.0f), 4, { 0x1F,0x3F,0x5F,0x7F} },
         { DXGI_FORMAT_R8G8B8A8_SNORM, XMFLOAT4(-1.0f, -1.0f, -1.0f, -1.0f), 4, { 0x81,0x81,0x81,0x81 } },
-    #if defined(_M_ARM64) || defined(_M_ARM64EC)
+    #if (DIRECTX_MATH_VERSION >= 322) || defined(_M_ARM64) || defined(_M_ARM64EC)
         { DXGI_FORMAT_R8G8B8A8_SNORM, XMFLOAT4(-0.5f, -0.5f, -0.5f, -0.5f), 4, { 0xC1,0xC1,0xC1,0xC1 } },
         { DXGI_FORMAT_R8G8B8A8_SNORM, XMFLOAT4(-0.25f, -0.5f, -0.75f, -1.0f), 4, { 0xE1,0xC1,0xA1,0x81 } },
     #else
