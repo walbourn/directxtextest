@@ -306,7 +306,7 @@ namespace
         { DXGI_FORMAT_R16G16B16A16_SNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 8, { 0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0 } },
         { DXGI_FORMAT_R16G16B16A16_SNORM, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 8, { 0xFF,0x7F,0xFF,0x7F,0xFF,0x7F,0xFF,0x7F } },
         { DXGI_FORMAT_R16G16B16A16_SNORM, XMFLOAT4(-1.0f, -1.0f, -1.0f, -1.0f), 8, { 0x01,0x80,0x01,0x80,0x01,0x80,0x01,0x80 } },
-    #if defined(_M_ARM64) || defined(_M_ARM64EC)
+    #if (DIRECTX_MATH_VERSION < 322) && (defined(_M_ARM64) || defined(_M_ARM64EC))
         { DXGI_FORMAT_R16G16B16A16_SNORM, XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f), 8, { 0xFF,0x3F,0xFF,0x3F,0xFF,0x3F,0xFF,0x3F } },
         { DXGI_FORMAT_R16G16B16A16_SNORM, XMFLOAT4(0.25f, 0.5f, 0.75f, 1.0f), 8, { 0xFF,0x1F,0xFF,0x3F,0xFF,0x5F,0xFF,0x7F } },
         { DXGI_FORMAT_R16G16B16A16_SNORM, XMFLOAT4(-0.5f, -0.5f, -0.5f, -0.5f), 8, {0x01,0xC0,0x01,0xC0,0x01,0xC0,0x01,0xC0 } },
@@ -433,7 +433,7 @@ namespace
         { DXGI_FORMAT_R16G16_SNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f), 4, { 0x00,0x00,0x00,0x00 } },
         { DXGI_FORMAT_R16G16_SNORM, XMFLOAT4(1.0f, 1.0f, 0.0f, 1.f), 4, { 0xFF,0x7F,0xFF,0x7F } },
         { DXGI_FORMAT_R16G16_SNORM, XMFLOAT4(-1.0f, -1.0f, 0.0f, 1.f), 4, { 0x01,0x80,0x01,0x80 } },
-    #if defined(_M_ARM64) || defined(_M_ARM64EC)
+    #if (DIRECTX_MATH_VERSION < 322) && (defined(_M_ARM64) || defined(_M_ARM64EC))
         { DXGI_FORMAT_R16G16_SNORM, XMFLOAT4(0.5f, 0.5f, 0.0f, 1.f), 4, { 0xFF,0x3F,0xFF,0x3F } },
         { DXGI_FORMAT_R16G16_SNORM, XMFLOAT4(0.25f, 0.5f, 0.0f, 1.f), 4, { 0xFF,0x1F,0xFF,0x3F } },
         { DXGI_FORMAT_R16G16_SNORM, XMFLOAT4(-0.5f, -0.5f, 0.0f, 1.f), 4, { 0x01,0xC0,0x01,0xC0 } },
@@ -499,7 +499,7 @@ namespace
         { DXGI_FORMAT_R8G8_SNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f), 2, { 0x00,0x00 } },
         { DXGI_FORMAT_R8G8_SNORM, XMFLOAT4(1.0f, 1.0f, 0.0f, 1.f), 2, { 0x7F,0x7F } },
         { DXGI_FORMAT_R8G8_SNORM, XMFLOAT4(-1.0f, -1.0f, 0.0f, 1.f), 2, { 0x81,0x81 } },
-    #if defined(_M_ARM64) || defined(_M_ARM64EC)
+    #if (DIRECTX_MATH_VERSION < 322) && (defined(_M_ARM64) || defined(_M_ARM64EC))
         { DXGI_FORMAT_R8G8_SNORM, XMFLOAT4(0.5f, 0.5f, 0.0f, 1.f), 2, { 0x3F,0x3F } },
         { DXGI_FORMAT_R8G8_SNORM, XMFLOAT4(0.25f, 0.5f, 0.0f, 1.f), 2, { 0x1F,0x3F } },
         { DXGI_FORMAT_R8G8_SNORM, XMFLOAT4(-0.5f, -0.5f, 0.0f, 1.f), 2, { 0xC1,0xC1 } },
@@ -611,7 +611,7 @@ namespace
         { DXGI_FORMAT_B5G6R5_UNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f), 2, { 0x0, 0x0 } },
         { DXGI_FORMAT_B5G6R5_UNORM, XMFLOAT4(0.516129f, 0.507937f, 0.516129f, 1.f), 2, { 0x10, 0x84 } },
         { DXGI_FORMAT_B5G6R5_UNORM, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.f), 2, { 0xFF, 0xFF } },
-    #if defined(_M_ARM64) || defined(_M_ARM64EC)
+    #if (DIRECTX_MATH_VERSION < 322) && (defined(_M_ARM64) || defined(_M_ARM64EC))
         { DXGI_FORMAT_B5G6R5_UNORM, XMFLOAT4(0.225806f, 0.507937f, 0.74193f, 1.f), 2, { 0x17, 0x3C } },
     #else
         { DXGI_FORMAT_B5G6R5_UNORM, XMFLOAT4(0.25f, 0.507937f, 0.75f, 1.f), 2, { 0x17, 0x44 } },
@@ -619,7 +619,7 @@ namespace
         // DXGI_FORMAT_B5G5R5A1_UNORM
         { DXGI_FORMAT_B5G5R5A1_UNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 2, { 0x0, 0x0 } },
         { DXGI_FORMAT_B5G5R5A1_UNORM, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 2, { 0xFF, 0xFF } },
-    #if defined(_M_ARM64) || defined(_M_ARM64EC)
+    #if (DIRECTX_MATH_VERSION < 322) && (defined(_M_ARM64) || defined(_M_ARM64EC))
         { DXGI_FORMAT_B5G5R5A1_UNORM, XMFLOAT4(0.516129f, 0.516129f, 0.516129f, 1.f), 2, { 0x10, 0xC2 } },
         { DXGI_FORMAT_B5G5R5A1_UNORM, XMFLOAT4(0.258065f, 0.516129f, 0.709667f, 1.0f), 2, { 0x16, 0xA2 } },
     #else
@@ -646,7 +646,7 @@ namespace
         // DXGI_FORMAT_B4G4R4A4_UNORM
         { DXGI_FORMAT_B4G4R4A4_UNORM, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 2, { 0x0, 0x0 } },
         { DXGI_FORMAT_B4G4R4A4_UNORM, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 2, { 0xFF, 0xFF } },
-    #if defined(_M_ARM64) || defined(_M_ARM64EC)
+    #if (DIRECTX_MATH_VERSION < 322) && (defined(_M_ARM64) || defined(_M_ARM64EC))
         { DXGI_FORMAT_B4G4R4A4_UNORM, XMFLOAT4(0.466667f, 0.466667f, 0.466667f, 0.466667f), 2, { 0x77, 0x77 } },
         { DXGI_FORMAT_B4G4R4A4_UNORM, XMFLOAT4(0.266667f, 0.466667f, 0.666667f, 1.0f), 2, { 0x7A, 0xF4 } },
     #else
